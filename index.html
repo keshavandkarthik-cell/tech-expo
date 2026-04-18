@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Veda — AI Study Companion | veda-net.com</title>
@@ -63,7 +61,7 @@ onAuthStateChanged(_auth, async user => {
 });
 </script>
 <!-- duplicate Firebase block removed -->
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 :root {
   --navy: #0a0e1a;
@@ -1358,6 +1356,30 @@ body.fs-large { font-size: 17px; }
 .ob-feature { background: rgba(255,255,255,.04); border: 1px solid rgba(77,159,255,.15); border-radius: 12px; padding: 14px 10px; text-align: center; }
 .ob-feature .ofi { font-size: 1.4rem; margin-bottom: 6px; }
 .ob-feature .ofn { font-family: var(--exo); font-size: .72rem; color: var(--silver2); }
+.ob-chip-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; margin-bottom: 6px; }
+.ob-chip {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(77,159,255,.2);
+  border-radius: 999px; padding: 8px 16px;
+  font-family: var(--exo); font-size: .8rem; color: var(--silver2);
+  cursor: pointer; transition: all .15s; letter-spacing: .3px;
+  user-select: none;
+}
+.ob-chip:hover { border-color: rgba(77,159,255,.5); color: var(--accent2); background: rgba(77,159,255,.08); }
+.ob-chip.on { background: linear-gradient(135deg,rgba(77,159,255,.18),rgba(0,212,170,.1)); border-color: var(--accent); color: var(--accent2); box-shadow: 0 0 10px rgba(77,159,255,.15); }
+.ob-chip.ob-multi.on { background: linear-gradient(135deg,rgba(0,212,170,.15),rgba(77,159,255,.1)); border-color: var(--teal); color: var(--teal2); }
+.ob-label-sm { font-family: var(--exo); font-size: .68rem; color: var(--teal); letter-spacing: 1.5px; text-transform: uppercase; width: 100%; text-align: left; margin-bottom: 6px; }
+
+/* ── AI PROFILE SETTINGS ── */
+.aip-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; margin-bottom: 4px; }
+.aip-chip {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(77,159,255,.18);
+  border-radius: 999px; padding: 5px 13px;
+  font-family: var(--exo); font-size: .75rem; color: var(--silver2);
+  cursor: pointer; transition: all .15s; user-select: none;
+}
+.aip-chip:hover { border-color: rgba(77,159,255,.4); color: var(--accent2); }
+.aip-chip.on { background: rgba(77,159,255,.15); border-color: var(--accent); color: var(--accent2); }
+.aip-chip.aip-multi.on { background: rgba(0,212,170,.12); border-color: var(--teal); color: var(--teal2); }
 
 /* ── HOME REDESIGN ── */
 .home-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -1443,73 +1465,203 @@ body.fs-large { font-size: 17px; }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
 </style>
 </head>
-<body>
+<body style="background: linear-gradient(135deg, rgb(6, 12, 18) 0%, rgb(12, 20, 32) 100%);">
 
 <!-- ONBOARDING -->
 <div id="onboarding" style="display:none;">
+
+  <!-- Progress bar -->
+  <div style="position:fixed;top:0;left:0;right:0;height:2px;background:rgba(77,159,255,.1);z-index:10;">
+    <div id="ob-progress" style="height:100%;background:linear-gradient(90deg,var(--accent),var(--teal));transition:width .4s ease;width:0%;"></div>
+  </div>
+
   <div class="ob-dots" id="ob-dots">
     <div class="ob-dot on"></div>
     <div class="ob-dot"></div>
     <div class="ob-dot"></div>
     <div class="ob-dot"></div>
+    <div class="ob-dot"></div>
+    <div class="ob-dot"></div>
+    <div class="ob-dot"></div>
+    <div class="ob-dot"></div>
   </div>
 
-  <!-- Slide 1: Welcome -->
+  <!-- Slide 0: Welcome -->
   <div class="ob-slide active" id="ob-slide-0">
     <div class="ob-emoji">🚀</div>
     <div class="ob-title">Welcome to VEDA</div>
-    <div class="ob-desc">Your AI-powered study companion. Smarter studying, better results, all in one place.</div>
-    <button class="ob-btn" onclick="obNext()">GET STARTED →</button>
+    <div class="ob-desc">Your AI-powered study companion — personalised to <em>you</em>.<br>Take 60 seconds to set up your profile and Veda's AI will be tuned exactly to how you study.</div>
+    <button class="ob-btn" onclick="obNext()">LET'S GO →</button>
   </div>
 
-  <!-- Slide 2: Name + Avatar -->
+  <!-- Slide 1: Name + Avatar -->
   <div class="ob-slide" id="ob-slide-1">
     <div class="ob-emoji">👤</div>
-    <div class="ob-title">What's your name?</div>
-    <div class="ob-desc">Let's set up your profile so Veda knows who it's helping.</div>
+    <div class="ob-title">What should we call you?</div>
+    <div class="ob-desc">Veda will use this across the whole app.</div>
     <input class="ob-input" id="ob-name" placeholder="Your name..." maxlength="20" onkeydown="if(event.key==='Enter')obNext()">
     <div class="ob-avatar-row">
-      <div class="ob-avatar-opt on" id="ob-av-0" onclick="selectObAvatar(this,'🎓')">🎓</div>
-      <div class="ob-avatar-opt" id="ob-av-1" onclick="selectObAvatar(this,'📚')">📚</div>
-      <div class="ob-avatar-opt" id="ob-av-2" onclick="selectObAvatar(this,'🧠')">🧠</div>
-      <div class="ob-avatar-opt" id="ob-av-3" onclick="selectObAvatar(this,'⚡')">⚡</div>
-      <div class="ob-avatar-opt" id="ob-av-4" onclick="selectObAvatar(this,'🌟')">🌟</div>
-      <div class="ob-avatar-opt" id="ob-av-5" onclick="selectObAvatar(this,'🔥')">🔥</div>
-      <div class="ob-avatar-opt" id="ob-av-6" onclick="selectObAvatar(this,'💎')">💎</div>
-      <div class="ob-avatar-opt" id="ob-av-7" onclick="selectObAvatar(this,'🦋')">🦋</div>
+      <div class="ob-avatar-opt on" onclick="selectObAvatar(this,'🎓')">🎓</div>
+      <div class="ob-avatar-opt" onclick="selectObAvatar(this,'📚')">📚</div>
+      <div class="ob-avatar-opt" onclick="selectObAvatar(this,'🧠')">🧠</div>
+      <div class="ob-avatar-opt" onclick="selectObAvatar(this,'⚡')">⚡</div>
+      <div class="ob-avatar-opt" onclick="selectObAvatar(this,'🌟')">🌟</div>
+      <div class="ob-avatar-opt" onclick="selectObAvatar(this,'🔥')">🔥</div>
+      <div class="ob-avatar-opt" onclick="selectObAvatar(this,'💎')">💎</div>
+      <div class="ob-avatar-opt" onclick="selectObAvatar(this,'🦋')">🦋</div>
     </div>
     <button class="ob-btn" onclick="obNext()">NEXT →</button>
   </div>
 
-  <!-- Slide 3: Feature tour -->
+  <!-- Slide 2: Curriculum -->
   <div class="ob-slide" id="ob-slide-2">
-    <div class="ob-emoji">✨</div>
-    <div class="ob-title">Everything you need</div>
-    <div class="ob-desc">Veda has tools for every part of your study life.</div>
-    <div class="ob-feature-grid">
-      <div class="ob-feature"><div class="ofi">📚</div><div class="ofn">Homework AI</div></div>
-      <div class="ob-feature"><div class="ofi">🧠</div><div class="ofn">Smart Study</div></div>
-      <div class="ob-feature"><div class="ofi">🎮</div><div class="ofn">Study Games</div></div>
-      <div class="ob-feature"><div class="ofi">💬</div><div class="ofn">AI Companion</div></div>
-      <div class="ob-feature"><div class="ofi">📝</div><div class="ofn">Notes AI</div></div>
-      <div class="ob-feature"><div class="ofi">💎</div><div class="ofn">Gems & Badges</div></div>
+    <div class="ob-emoji">🏫</div>
+    <div class="ob-title">What's your curriculum?</div>
+    <div class="ob-desc">Veda will tailor explanations, examples and exam tips to your syllabus.</div>
+    <div class="ob-chip-grid" id="ob-curriculum-grid">
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','SPM')">🇲🇾 SPM</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','STPM')">🇲🇾 STPM</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','PT3')">🇲🇾 PT3</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','IGCSE')">🌍 IGCSE</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','A-Levels')">🌍 A-Levels</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','IB')">🌍 IB</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','University')">🎓 University</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Other')">Other</div>
     </div>
-    <button class="ob-btn" onclick="obNext()">AWESOME →</button>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="ob-btn secondary" onclick="obPrev()">← Back</button>
+      <button class="ob-btn" onclick="obNext()">NEXT →</button>
+    </div>
   </div>
 
-  <!-- Slide 4: API Key -->
+  <!-- Slide 3: Year / Grade -->
   <div class="ob-slide" id="ob-slide-3">
+    <div class="ob-emoji">📅</div>
+    <div class="ob-title">What year are you in?</div>
+    <div class="ob-desc">So Veda knows where you are in your academic journey.</div>
+    <div class="ob-chip-grid" id="ob-year-grid">
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Form 1')">Form 1</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Form 2')">Form 2</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Form 3')">Form 3</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Form 4')">Form 4</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Form 5')">Form 5</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Form 6')">Form 6</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Year 1')">Year 1</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Year 2')">Year 2</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Year 3')">Year 3</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Other')">Other</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="ob-btn secondary" onclick="obPrev()">← Back</button>
+      <button class="ob-btn" onclick="obNext()">NEXT →</button>
+    </div>
+  </div>
+
+  <!-- Slide 4: Subjects -->
+  <div class="ob-slide" id="ob-slide-4">
+    <div class="ob-emoji">📖</div>
+    <div class="ob-title">Which subjects are you taking?</div>
+    <div class="ob-desc">Pick all that apply — Veda will use these for flashcards, quizzes and homework help.</div>
+    <div class="ob-chip-grid" id="ob-subjects-grid" style="max-height:200px;overflow-y:auto;">
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Mathematics')">📐 Mathematics</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Add Maths')">➕ Add Maths</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'English')">🇬🇧 English</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Bahasa Malaysia')">🇲🇾 BM</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Physics')">⚛️ Physics</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Chemistry')">🧪 Chemistry</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Biology')">🧬 Biology</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'History')">📜 History</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Geography')">🌏 Geography</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Economics')">📈 Economics</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Computer Science')">💻 CS</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Accounting')">🧾 Accounting</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Literature')">📚 Literature</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Art')">🎨 Art</div>
+      <div class="ob-chip ob-multi" onclick="obMultiToggle(this,'Music')">🎵 Music</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="ob-btn secondary" onclick="obPrev()">← Back</button>
+      <button class="ob-btn" onclick="obNext()">NEXT →</button>
+    </div>
+  </div>
+
+  <!-- Slide 5: Learning style -->
+  <div class="ob-slide" id="ob-slide-5">
+    <div class="ob-emoji">🧠</div>
+    <div class="ob-title">How do you like to learn?</div>
+    <div class="ob-desc">This shapes how Veda explains things to you.</div>
+    <div class="ob-chip-grid" id="ob-style-grid">
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-style-grid','Simple &amp; short — get to the point')">⚡ Simple &amp; short</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-style-grid','Detailed &amp; thorough — explain everything')">📖 Detailed &amp; thorough</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-style-grid','Examples first — show me before explaining')">💡 Examples first</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-style-grid','Step-by-step — walk me through it')">🪜 Step-by-step</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-style-grid','Visual &amp; diagram-style descriptions')">📊 Visual style</div>
+    </div>
+    <div class="ob-label-sm" style="margin-top:14px;margin-bottom:8px;">Preferred language</div>
+    <div class="ob-chip-grid" id="ob-lang-grid">
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-lang-grid','English')">🇬🇧 English</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-lang-grid','Bahasa Malaysia')">🇲🇾 BM</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-lang-grid','Casual Manglish (English + BM mix)')">🤙 Manglish</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="ob-btn secondary" onclick="obPrev()">← Back</button>
+      <button class="ob-btn" onclick="obNext()">NEXT →</button>
+    </div>
+  </div>
+
+  <!-- Slide 6: Student personality -->
+  <div class="ob-slide" id="ob-slide-6">
+    <div class="ob-emoji">🎯</div>
+    <div class="ob-title">Tell Veda about yourself</div>
+    <div class="ob-desc">Be honest — the more accurate this is, the better Veda can help.</div>
+
+    <div class="ob-label-sm">Study habit</div>
+    <div class="ob-chip-grid" id="ob-habit-grid" style="margin-bottom:12px;">
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-habit-grid','Last-minute crammer')">🏃 Last-minute</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-habit-grid','Steady and consistent planner')">📅 Steady planner</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-habit-grid','Inconsistent — good days and bad days')">🎲 Inconsistent</div>
+    </div>
+
+    <div class="ob-label-sm">Biggest struggle</div>
+    <div class="ob-chip-grid" id="ob-struggle-grid" style="margin-bottom:12px;">
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-struggle-grid','Understanding concepts')">🤔 Understanding</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-struggle-grid','Memorising facts')">🧠 Memorising</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-struggle-grid','Exam technique &amp; answering style')">📝 Exam technique</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-struggle-grid','Staying motivated')">💤 Motivation</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-struggle-grid','Time management')">⏱️ Time management</div>
+    </div>
+
+    <div class="ob-label-sm">Pressure level right now</div>
+    <div class="ob-chip-grid" id="ob-pressure-grid">
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-pressure-grid','Low — just keeping up')">😌 Low</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-pressure-grid','Moderate — exams coming soon')">😐 Moderate</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-pressure-grid','High — major exams very soon')">😰 High pressure</div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="ob-btn secondary" onclick="obPrev()">← Back</button>
+      <button class="ob-btn" onclick="obNext()">NEXT →</button>
+    </div>
+  </div>
+
+  <!-- Slide 7: API Key -->
+  <div class="ob-slide" id="ob-slide-7">
     <div class="ob-emoji">🔑</div>
-    <div class="ob-title">One last thing</div>
-    <div class="ob-desc">Veda uses Google's free Gemini AI. Get your free key at <span style="color:var(--accent2)">aistudio.google.com</span> — no credit card needed.</div>
+    <div class="ob-title">Almost there!</div>
+    <div class="ob-desc">Veda uses Google's free Gemini AI. Get your key at <span style="color:var(--accent2)">aistudio.google.com</span> — no credit card needed.</div>
     <input class="ob-input" id="ob-key" type="password" placeholder="Paste your Gemini API key..." onkeydown="if(event.key==='Enter')obFinish()">
+    <div style="background:rgba(0,212,170,.06);border:1px solid rgba(0,212,170,.2);border-radius:12px;padding:12px 16px;margin-bottom:16px;width:100%;text-align:left;">
+      <div style="font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:1px;margin-bottom:6px;">✓ YOUR AI PROFILE IS READY</div>
+      <div id="ob-profile-preview" style="font-family:var(--exo);font-size:.78rem;color:var(--silver);line-height:1.7;"></div>
+    </div>
     <button class="ob-btn" onclick="obFinish()" style="margin-bottom:10px;">LAUNCH VEDA 🚀</button>
     <button class="ob-btn secondary" onclick="obSkipKey()">Skip for now</button>
   </div>
+
 </div>
 
 <!-- API KEY SPLASH -->
-<div id="splash">
+<div id="splash" style="display: none;">
   <img src="image_1.png" alt="Veda" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:16px;box-shadow:0 0 40px rgba(77,159,255,0.3);">
   <div class="splash-logo">VEDA</div>
   <div class="splash-sub">ज्ञानं परमं ध्येयम् · AI Study Companion</div>
@@ -1517,8 +1669,8 @@ body.fs-large { font-size: 17px; }
     <div class="corner-tl"></div><div class="corner-tr"></div>
 
     <!-- Google Sign-In -->
-    <button onclick="window._fb&&window._fb.signIn().catch(e=>showToast('❌ '+e.message))" style="width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:none;border-radius:10px;padding:13px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:600;color:#1f1f1f;cursor:pointer;margin-bottom:16px;transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.35);" onmouseover="this.style.boxShadow='0 6px 22px rgba(0,0,0,.45)';this.style.transform='translateY(-1px)'" onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,.35)';this.style.transform=''">
-      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    <button onclick="window._fb&amp;&amp;window._fb.signIn().catch(e=&gt;showToast('❌ '+e.message))" style="width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:none;border-radius:10px;padding:13px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:600;color:#1f1f1f;cursor:pointer;margin-bottom:16px;transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.35);" onmouseover="this.style.boxShadow='0 6px 22px rgba(0,0,0,.45)';this.style.transform='translateY(-1px)'" onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,.35)';this.style.transform=''">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>
       Continue with Google
     </button>
 
@@ -1539,7 +1691,7 @@ body.fs-large { font-size: 17px; }
 </div>
 
 <!-- APP -->
-<div id="app">
+<div id="app" style="display: flex;">
   <div id="hdr">
     <div class="hdr-logo"><img src="image_1.png" alt="Veda" style="height:32px;width:32px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;">VEDA</div>
     <div class="hdr-right">
@@ -1551,7 +1703,7 @@ body.fs-large { font-size: 17px; }
         <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       </div>
-      <div class="hdr-time" id="clk">--:--</div>
+      <div class="hdr-time" id="clk">21:11</div>
     </div>
   </div>
   <div id="body">
@@ -1562,19 +1714,16 @@ body.fs-large { font-size: 17px; }
       <!-- Input row -->
       <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(77,159,255,.1);">
         <span style="font-size:1.1rem;opacity:.6;">🔍</span>
-        <input id="search-input" placeholder="Search notes, journal, topics, pages…" autocomplete="off"
-          oninput="onSearchInput(this.value)"
-          onkeydown="onSearchKey(event)"
-          style="flex:1;background:none;border:none;outline:none;font-family:var(--raj);font-size:1rem;color:var(--text);letter-spacing:.3px;">
+        <input id="search-input" placeholder="Search notes, journal, topics, pages…" autocomplete="off" oninput="onSearchInput(this.value)" onkeydown="onSearchKey(event)" style="flex:1;background:none;border:none;outline:none;font-family:var(--raj);font-size:1rem;color:var(--text);letter-spacing:.3px;">
         <kbd onclick="closeSearch()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:2px 8px;font-family:var(--exo);font-size:.7rem;color:var(--silver);cursor:pointer;">Esc</kbd>
       </div>
       <!-- Filter pills -->
       <div style="display:flex;gap:6px;padding:10px 18px;border-bottom:1px solid rgba(77,159,255,.07);flex-wrap:wrap;">
-        <button class="srch-filter on" data-filter="all"    onclick="setSearchFilter('all',this)">All</button>
-        <button class="srch-filter"    data-filter="pages"  onclick="setSearchFilter('pages',this)">📄 Pages</button>
-        <button class="srch-filter"    data-filter="journal" onclick="setSearchFilter('journal',this)">📓 Journal</button>
-        <button class="srch-filter"    data-filter="topics" onclick="setSearchFilter('topics',this)">🗂 Topics</button>
-        <button class="srch-filter"    data-filter="todo"   onclick="setSearchFilter('todo',this)">✅ Tasks</button>
+        <button class="srch-filter on" data-filter="all" onclick="setSearchFilter('all',this)">All</button>
+        <button class="srch-filter" data-filter="pages" onclick="setSearchFilter('pages',this)">📄 Pages</button>
+        <button class="srch-filter" data-filter="journal" onclick="setSearchFilter('journal',this)">📓 Journal</button>
+        <button class="srch-filter" data-filter="topics" onclick="setSearchFilter('topics',this)">🗂 Topics</button>
+        <button class="srch-filter" data-filter="todo" onclick="setSearchFilter('todo',this)">✅ Tasks</button>
       </div>
       <!-- Results -->
       <div id="search-results" style="max-height:420px;overflow-y:auto;padding:8px 0;"></div>
@@ -1585,9 +1734,7 @@ body.fs-large { font-size: 17px; }
     <div id="msearch-modal" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:801;width:min(580px,94vw);background:linear-gradient(145deg,rgba(12,17,34,.99),rgba(8,12,24,.99));border:1px solid rgba(77,159,255,.28);border-radius:18px;box-shadow:0 28px 70px rgba(0,0,0,.65);overflow:hidden;">
       <div style="display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid rgba(77,159,255,.1);">
         <span style="font-size:1.1rem;">🎵</span>
-        <input id="msearch-input" placeholder="Search music — artist, album, vibe…" autocomplete="off"
-          onkeydown="if(event.key==='Enter')doMusicSearch()"
-          style="flex:1;background:none;border:none;outline:none;font-family:var(--raj);font-size:.95rem;color:var(--text);">
+        <input id="msearch-input" placeholder="Search music — artist, album, vibe…" autocomplete="off" onkeydown="if(event.key==='Enter')doMusicSearch()" style="flex:1;background:none;border:none;outline:none;font-family:var(--raj);font-size:.95rem;color:var(--text);">
         <button onclick="doMusicSearch()" style="background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:9px;padding:7px 16px;color:#fff;font-family:var(--orb);font-size:.58rem;letter-spacing:1.5px;cursor:pointer;flex-shrink:0;font-weight:700;">SEARCH</button>
         <kbd onclick="closeMusicSearch()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:2px 8px;font-family:var(--exo);font-size:.7rem;color:var(--silver);cursor:pointer;">Esc</kbd>
       </div>
@@ -1606,7 +1753,7 @@ body.fs-large { font-size: 17px; }
       </div>
       <button id="tog" onclick="toggleSb()">◀</button>
       <nav>
-        <button class="nb on" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
+        <button class="nb" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
         <button class="nb" onclick="go('homework')"><span class="ni">📚</span><span class="nl">Homework</span></button>
         <button class="nb" onclick="go('library')"><span class="ni">🗂️</span><span class="nl">Topic Library</span></button>
         <button class="nb" onclick="go('notes')"><span class="ni">📝</span><span class="nl">Notes</span></button>
@@ -1621,7 +1768,7 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
+        <button class="nb on" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
         <div class="sb-foot-text" id="key-indicator">KEY: ACTIVE</div>
@@ -1637,7 +1784,7 @@ body.fs-large { font-size: 17px; }
     <div id="content">
 
       <!-- HOME — DESKTOP OS -->
-      <div class="tab on" id="tab-home">
+      <div class="tab" id="tab-home">
         <div class="desktop-wallpaper"></div>
 
 
@@ -1659,16 +1806,14 @@ body.fs-large { font-size: 17px; }
           <!-- Clock widget -->
           <!-- Daily Brief widget -->
           <div class="dt-widget dt-widget-wide" id="daily-brief-widget">
-            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;"></span></div>
-            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;">
-              <span style="color:var(--silver);font-style:italic;">Loading your daily brief...</span>
-            </div>
+            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Sat Apr 18 2026</span></div>
+            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Keshav, fantastic start with your 1-day streak! Even without gems yet, every single study session builds incredible momentum. Just focus on mastering one small topic today, and watch your progress grow.</div>
             <button onclick="refreshDailyBrief(true)" style="margin-top:8px;background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.65rem;cursor:pointer;padding:0;opacity:.6;transition:opacity .15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">↻ refresh</button>
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">--:--</div>
-            <div class="dt-clock-date" id="dt-clock-date">Loading...</div>
+            <div class="dt-clock-big" id="dt-clock-big">21:11</div>
+            <div class="dt-clock-date" id="dt-clock-date">Saturday, Apr 18</div>
           </div>
 
           <!-- Stats widget -->
@@ -1734,7 +1879,7 @@ body.fs-large { font-size: 17px; }
               </div>
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">🔥</div>
-                <div><div class="dt-reward-val" id="dt-streak-big">0 days</div><div class="dt-reward-label">Study streak</div></div>
+                <div><div class="dt-reward-val" id="dt-streak-big">1 days</div><div class="dt-reward-label">Study streak</div></div>
               </div>
             </div>
           </div>
@@ -1752,7 +1897,11 @@ body.fs-large { font-size: 17px; }
             </div>
 
             <!-- Playlist tabs -->
-            <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-top:8px;"></div>
+            <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-top:8px;">
+      <button class="music-pl-btn " data-plid="69AaAkdktFGnk9POmHENkT" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Lo-fi">Lo-fi</button>
+      <button class="music-pl-btn " data-plid="37i9dQZF1DX8Uebhn9wzrS" onclick="playPlaylist({&quot;name&quot;:&quot;Focus Flow&quot;,&quot;id&quot;:&quot;37i9dQZF1DX8Uebhn9wzrS&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Focus Flow">Focus Flow</button>
+      <button class="music-pl-btn on" data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
+      <button class="music-pl-btn " data-plid="7a78GiEowpaCa7ZJs44xUU" onclick="playPlaylist({&quot;name&quot;:&quot;Interstellar OST&quot;,&quot;id&quot;:&quot;7a78GiEowpaCa7ZJs44xUU&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Soundtrack&quot;})" title="Interstellar OST">Interstellar OST</button></div>
 
             <!-- Spotify login nudge -->
             <div id="spotify-nudge" style="display:none;background:linear-gradient(135deg,rgba(30,215,96,.08),rgba(30,215,96,.04));border:1px solid rgba(30,215,96,.25);border-radius:10px;padding:10px 14px;margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -1767,9 +1916,7 @@ body.fs-large { font-size: 17px; }
 
             <!-- Spotify iframe -->
             <div id="spotify-player" style="display:block;">
-              <iframe id="spotify-frame" src="about:blank" width="100%" height="100" frameborder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy" style="border-radius:10px;margin-top:8px;display:block;transition:height .3s ease;"></iframe>
+              <iframe id="spotify-frame" src="https://open.spotify.com/embed/album/2e7HNQJ0BcMoqwsVDwDhK8?utm_source=generator&amp;theme=0" width="100%" height="100" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:10px;margin-top:8px;display:block;transition:height .3s ease;"></iframe>
             </div>
 
 
@@ -1790,9 +1937,9 @@ body.fs-large { font-size: 17px; }
           <!-- Greeting -->
           <div>
             <div class="mh-greeting-time" id="mh-timeofday">Good evening</div>
-            <div class="mh-greeting-name">Hey, <span id="mh-name">Scholar</span></div>
+            <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
             <div class="mh-pills">
-              <div class="mh-pill">🔥 <span id="mh-streak">0</span> day streak</div>
+              <div class="mh-pill">🔥 <span id="mh-streak">1</span> day streak</div>
               <div class="mh-pill">💎 <span id="mh-gems">0</span> gems</div>
             </div>
           </div>
@@ -1800,9 +1947,7 @@ body.fs-large { font-size: 17px; }
           <!-- Daily Brief -->
           <div class="mh-card">
             <div class="mh-card-label">Daily Brief</div>
-            <div class="mh-brief-text" id="mh-brief-text">
-              <span style="color:var(--silver);font-style:italic;opacity:.6;">Loading...</span>
-            </div>
+            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">✨</span> Keshav, fantastic start with your 1-day streak! Even without gems yet, every single study session builds incredible momentum. Just focus on mastering one small topic today, and watch your progress grow.</div>
             <button class="mh-brief-refresh" onclick="refreshDailyBrief(true)">↻ refresh</button>
           </div>
 
@@ -1837,7 +1982,7 @@ body.fs-large { font-size: 17px; }
               <div id="mh-sc-icon" style="font-size:2.2rem;line-height:1;">📚</div>
               <div>
                 <div id="mh-sc-label" style="font-family:var(--raj);font-size:1rem;font-weight:700;color:var(--text);">Homework</div>
-                <div id="mh-sc-sub" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:2px;">Tap to open →</div>
+                <div id="mh-sc-sub" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:2px;">Ask anything →</div>
               </div>
             </div>
           </div>
@@ -1860,7 +2005,7 @@ body.fs-large { font-size: 17px; }
       <!-- HOMEWORK -->
       <div class="tab" id="tab-homework">
         <div class="ttl">📚 Homework Helper</div>
-        <div class="tsub"><span class="prm">›</span>Select subject, ask anything or upload a photo — I'll break it down step by step</div>
+        <div class="tsub"><span class="prm">›</span>Ask any question and get a step-by-step answer</div>
         <div class="trow">
           <button class="chip" onclick="setTopic(this,'Maths')">Maths</button>
           <button class="chip" onclick="setTopic(this,'Science')">Science</button>
@@ -1886,9 +2031,9 @@ body.fs-large { font-size: 17px; }
             📷
             <input type="file" id="hw-img-in" accept="image/*" style="display:none;" onchange="handleHwImage(this)">
           </label>
-          <input class="chat-in" id="hw-in" placeholder="Type your question here..." onkeydown="if(event.key==='Enter')sendHw()">
+          <input class="chat-in" id="hw-in" placeholder="Ask any question..." onkeydown="if(event.key==='Enter')sendHw()">
           <button id="hw-voice-btn" onclick="voiceInput('hw-in','hw-voice-btn')" title="Voice input" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:12px;padding:0 14px;color:var(--silver2);font-size:1rem;cursor:pointer;transition:all .15s;flex-shrink:0;">🎙️</button>
-          <button class="send-btn" onclick="sendHw()">SEND →</button>
+          <button class="send-btn" onclick="sendHw()">ASK VEDA →</button>
         </div>
       </div>
 
@@ -1907,10 +2052,256 @@ body.fs-large { font-size: 17px; }
         </div>
 
         <!-- Subject filter -->
-        <div class="lib-cats" id="lib-cats"></div>
+        <div class="lib-cats" id="lib-cats"><button class="lib-cat on" onclick="setLibCat(this,'All')">All</button><button class="lib-cat" onclick="setLibCat(this,'History')">History</button><button class="lib-cat" onclick="setLibCat(this,'Biology')">Biology</button><button class="lib-cat" onclick="setLibCat(this,'Chemistry')">Chemistry</button><button class="lib-cat" onclick="setLibCat(this,'Physics')">Physics</button><button class="lib-cat" onclick="setLibCat(this,'Maths')">Maths</button><button class="lib-cat" onclick="setLibCat(this,'English')">English</button><button class="lib-cat" onclick="setLibCat(this,'Geography')">Geography</button></div>
 
         <!-- Topic grid -->
-        <div class="lib-grid" id="lib-grid"></div>
+        <div class="lib-grid" id="lib-grid">
+    <div class="lib-card" style="--lib-color:#fb923c" onclick="openLibTopic(0)">
+      <div class="lib-card-icon">⚔️</div>
+      <div class="lib-card-name">World War 1</div>
+      <div class="lib-card-sub">Causes, key battles, aftermath</div>
+      <div class="lib-card-tag" style="color:#fb923c;border-color:#fb923c44;background:#fb923c11;">History</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fb923c" onclick="openLibTopic(1)">
+      <div class="lib-card-icon">💣</div>
+      <div class="lib-card-name">World War 2</div>
+      <div class="lib-card-sub">Rise of Hitler, Holocaust, D-Day, VE Day</div>
+      <div class="lib-card-tag" style="color:#fb923c;border-color:#fb923c44;background:#fb923c11;">History</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fb923c" onclick="openLibTopic(2)">
+      <div class="lib-card-icon">🥶</div>
+      <div class="lib-card-name">The Cold War</div>
+      <div class="lib-card-sub">USA vs USSR, Cuban Missile Crisis, Berlin Wall</div>
+      <div class="lib-card-tag" style="color:#fb923c;border-color:#fb923c44;background:#fb923c11;">History</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fb923c" onclick="openLibTopic(3)">
+      <div class="lib-card-icon">🏛️</div>
+      <div class="lib-card-name">The Roman Empire</div>
+      <div class="lib-card-sub">Rise, expansion, fall of Rome</div>
+      <div class="lib-card-tag" style="color:#fb923c;border-color:#fb923c44;background:#fb923c11;">History</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fb923c" onclick="openLibTopic(4)">
+      <div class="lib-card-icon">👑</div>
+      <div class="lib-card-name">The French Revolution</div>
+      <div class="lib-card-sub">Causes, key events, Napoleon</div>
+      <div class="lib-card-tag" style="color:#fb923c;border-color:#fb923c44;background:#fb923c11;">History</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fb923c" onclick="openLibTopic(5)">
+      <div class="lib-card-icon">⛓️</div>
+      <div class="lib-card-name">The Slave Trade</div>
+      <div class="lib-card-sub">Transatlantic slavery, abolition</div>
+      <div class="lib-card-tag" style="color:#fb923c;border-color:#fb923c44;background:#fb923c11;">History</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fb923c" onclick="openLibTopic(6)">
+      <div class="lib-card-icon">🌍</div>
+      <div class="lib-card-name">The British Empire</div>
+      <div class="lib-card-sub">Colonialism, expansion, legacy</div>
+      <div class="lib-card-tag" style="color:#fb923c;border-color:#fb923c44;background:#fb923c11;">History</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fb923c" onclick="openLibTopic(7)">
+      <div class="lib-card-icon">🔴</div>
+      <div class="lib-card-name">The Russian Revolution</div>
+      <div class="lib-card-sub">Tsar Nicholas II, Lenin, Bolsheviks</div>
+      <div class="lib-card-tag" style="color:#fb923c;border-color:#fb923c44;background:#fb923c11;">History</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(8)">
+      <div class="lib-card-icon">❤️</div>
+      <div class="lib-card-name">The Circulatory System</div>
+      <div class="lib-card-sub">Heart, blood, arteries &amp; veins</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(9)">
+      <div class="lib-card-icon">🫁</div>
+      <div class="lib-card-name">The Respiratory System</div>
+      <div class="lib-card-sub">Lungs, gas exchange, breathing</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(10)">
+      <div class="lib-card-icon">🧠</div>
+      <div class="lib-card-name">The Nervous System</div>
+      <div class="lib-card-sub">Brain, neurons, reflexes</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(11)">
+      <div class="lib-card-icon">🦴</div>
+      <div class="lib-card-name">The Skeletal System</div>
+      <div class="lib-card-sub">Bones, joints, cartilage</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(12)">
+      <div class="lib-card-icon">💪</div>
+      <div class="lib-card-name">The Muscular System</div>
+      <div class="lib-card-sub">Muscles, tendons, movement</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(13)">
+      <div class="lib-card-icon">🍽️</div>
+      <div class="lib-card-name">The Digestive System</div>
+      <div class="lib-card-sub">Gut, enzymes, nutrient absorption</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(14)">
+      <div class="lib-card-icon">🧬</div>
+      <div class="lib-card-name">DNA &amp; Genetics</div>
+      <div class="lib-card-sub">Genes, inheritance, mutations</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(15)">
+      <div class="lib-card-icon">🌿</div>
+      <div class="lib-card-name">Photosynthesis</div>
+      <div class="lib-card-sub">Light reaction, Calvin cycle, chlorophyll</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#f472b6" onclick="openLibTopic(16)">
+      <div class="lib-card-icon">⚡</div>
+      <div class="lib-card-name">Cell Respiration</div>
+      <div class="lib-card-sub">Aerobic, anaerobic, ATP</div>
+      <div class="lib-card-tag" style="color:#f472b6;border-color:#f472b644;background:#f472b611;">Biology</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#4d9fff" onclick="openLibTopic(17)">
+      <div class="lib-card-icon">⚛️</div>
+      <div class="lib-card-name">Atomic Structure</div>
+      <div class="lib-card-sub">Protons, neutrons, electrons, isotopes</div>
+      <div class="lib-card-tag" style="color:#4d9fff;border-color:#4d9fff44;background:#4d9fff11;">Chemistry</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#4d9fff" onclick="openLibTopic(18)">
+      <div class="lib-card-icon">🧪</div>
+      <div class="lib-card-name">Chemical Bonding</div>
+      <div class="lib-card-sub">Ionic, covalent, metallic bonds</div>
+      <div class="lib-card-tag" style="color:#4d9fff;border-color:#4d9fff44;background:#4d9fff11;">Chemistry</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#4d9fff" onclick="openLibTopic(19)">
+      <div class="lib-card-icon">🔋</div>
+      <div class="lib-card-name">Electrochemistry</div>
+      <div class="lib-card-sub">Electrolysis, redox reactions</div>
+      <div class="lib-card-tag" style="color:#4d9fff;border-color:#4d9fff44;background:#4d9fff11;">Chemistry</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#4d9fff" onclick="openLibTopic(20)">
+      <div class="lib-card-icon">🌡️</div>
+      <div class="lib-card-name">Rates of Reaction</div>
+      <div class="lib-card-sub">Catalysts, temperature, concentration</div>
+      <div class="lib-card-tag" style="color:#4d9fff;border-color:#4d9fff44;background:#4d9fff11;">Chemistry</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#4d9fff" onclick="openLibTopic(21)">
+      <div class="lib-card-icon">⚖️</div>
+      <div class="lib-card-name">The Mole &amp; Stoichiometry</div>
+      <div class="lib-card-sub">Molar mass, calculations, equations</div>
+      <div class="lib-card-tag" style="color:#4d9fff;border-color:#4d9fff44;background:#4d9fff11;">Chemistry</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#4d9fff" onclick="openLibTopic(22)">
+      <div class="lib-card-icon">🧴</div>
+      <div class="lib-card-name">Organic Chemistry</div>
+      <div class="lib-card-sub">Alkanes, alkenes, alcohols, polymers</div>
+      <div class="lib-card-tag" style="color:#4d9fff;border-color:#4d9fff44;background:#4d9fff11;">Chemistry</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#00d4aa" onclick="openLibTopic(23)">
+      <div class="lib-card-icon">🚀</div>
+      <div class="lib-card-name">Forces &amp; Motion</div>
+      <div class="lib-card-sub">Newton's laws, velocity, acceleration</div>
+      <div class="lib-card-tag" style="color:#00d4aa;border-color:#00d4aa44;background:#00d4aa11;">Physics</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#00d4aa" onclick="openLibTopic(24)">
+      <div class="lib-card-icon">💡</div>
+      <div class="lib-card-name">Electricity &amp; Circuits</div>
+      <div class="lib-card-sub">Current, voltage, resistance, Ohm's law</div>
+      <div class="lib-card-tag" style="color:#00d4aa;border-color:#00d4aa44;background:#00d4aa11;">Physics</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#00d4aa" onclick="openLibTopic(25)">
+      <div class="lib-card-icon">🌊</div>
+      <div class="lib-card-name">Waves &amp; Sound</div>
+      <div class="lib-card-sub">Frequency, wavelength, reflection</div>
+      <div class="lib-card-tag" style="color:#00d4aa;border-color:#00d4aa44;background:#00d4aa11;">Physics</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#00d4aa" onclick="openLibTopic(26)">
+      <div class="lib-card-icon">☢️</div>
+      <div class="lib-card-name">Radioactivity</div>
+      <div class="lib-card-sub">Alpha, beta, gamma, half-life</div>
+      <div class="lib-card-tag" style="color:#00d4aa;border-color:#00d4aa44;background:#00d4aa11;">Physics</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#00d4aa" onclick="openLibTopic(27)">
+      <div class="lib-card-icon">🌌</div>
+      <div class="lib-card-name">Space &amp; The Universe</div>
+      <div class="lib-card-sub">Solar system, stars, Big Bang</div>
+      <div class="lib-card-tag" style="color:#00d4aa;border-color:#00d4aa44;background:#00d4aa11;">Physics</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#00d4aa" onclick="openLibTopic(28)">
+      <div class="lib-card-icon">🔥</div>
+      <div class="lib-card-name">Thermal Physics</div>
+      <div class="lib-card-sub">Heat transfer, specific heat capacity</div>
+      <div class="lib-card-tag" style="color:#00d4aa;border-color:#00d4aa44;background:#00d4aa11;">Physics</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#c084fc" onclick="openLibTopic(29)">
+      <div class="lib-card-icon">📐</div>
+      <div class="lib-card-name">Algebra</div>
+      <div class="lib-card-sub">Equations, inequalities, quadratics</div>
+      <div class="lib-card-tag" style="color:#c084fc;border-color:#c084fc44;background:#c084fc11;">Maths</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#c084fc" onclick="openLibTopic(30)">
+      <div class="lib-card-icon">📏</div>
+      <div class="lib-card-name">Geometry &amp; Trigonometry</div>
+      <div class="lib-card-sub">Angles, Pythagoras, sin/cos/tan</div>
+      <div class="lib-card-tag" style="color:#c084fc;border-color:#c084fc44;background:#c084fc11;">Maths</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#c084fc" onclick="openLibTopic(31)">
+      <div class="lib-card-icon">📊</div>
+      <div class="lib-card-name">Statistics &amp; Probability</div>
+      <div class="lib-card-sub">Mean, median, distributions</div>
+      <div class="lib-card-tag" style="color:#c084fc;border-color:#c084fc44;background:#c084fc11;">Maths</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#c084fc" onclick="openLibTopic(32)">
+      <div class="lib-card-icon">∫</div>
+      <div class="lib-card-name">Calculus</div>
+      <div class="lib-card-sub">Differentiation, integration, limits</div>
+      <div class="lib-card-tag" style="color:#c084fc;border-color:#c084fc44;background:#c084fc11;">Maths</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fbbf24" onclick="openLibTopic(33)">
+      <div class="lib-card-icon">📖</div>
+      <div class="lib-card-name">Romeo &amp; Juliet</div>
+      <div class="lib-card-sub">Themes, characters, key quotes</div>
+      <div class="lib-card-tag" style="color:#fbbf24;border-color:#fbbf2444;background:#fbbf2411;">English</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fbbf24" onclick="openLibTopic(34)">
+      <div class="lib-card-icon">📜</div>
+      <div class="lib-card-name">Macbeth</div>
+      <div class="lib-card-sub">Ambition, power, guilt — key analysis</div>
+      <div class="lib-card-tag" style="color:#fbbf24;border-color:#fbbf2444;background:#fbbf2411;">English</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fbbf24" onclick="openLibTopic(35)">
+      <div class="lib-card-icon">✍️</div>
+      <div class="lib-card-name">Writing Techniques</div>
+      <div class="lib-card-sub">Imagery, structure, tone, rhetoric</div>
+      <div class="lib-card-tag" style="color:#fbbf24;border-color:#fbbf2444;background:#fbbf2411;">English</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#fbbf24" onclick="openLibTopic(36)">
+      <div class="lib-card-icon">🗣️</div>
+      <div class="lib-card-name">Language &amp; Linguistics</div>
+      <div class="lib-card-sub">Phonology, semantics, pragmatics</div>
+      <div class="lib-card-tag" style="color:#fbbf24;border-color:#fbbf2444;background:#fbbf2411;">English</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#34d399" onclick="openLibTopic(37)">
+      <div class="lib-card-icon">🌋</div>
+      <div class="lib-card-name">Plate Tectonics</div>
+      <div class="lib-card-sub">Earthquakes, volcanoes, tectonic plates</div>
+      <div class="lib-card-tag" style="color:#34d399;border-color:#34d39944;background:#34d39911;">Geography</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#34d399" onclick="openLibTopic(38)">
+      <div class="lib-card-icon">🌧️</div>
+      <div class="lib-card-name">The Water Cycle</div>
+      <div class="lib-card-sub">Evaporation, precipitation, runoff</div>
+      <div class="lib-card-tag" style="color:#34d399;border-color:#34d39944;background:#34d39911;">Geography</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#34d399" onclick="openLibTopic(39)">
+      <div class="lib-card-icon">🌡️</div>
+      <div class="lib-card-name">Climate Change</div>
+      <div class="lib-card-sub">Causes, effects, solutions</div>
+      <div class="lib-card-tag" style="color:#34d399;border-color:#34d39944;background:#34d39911;">Geography</div>
+    </div>
+    <div class="lib-card" style="--lib-color:#34d399" onclick="openLibTopic(40)">
+      <div class="lib-card-icon">🏙️</div>
+      <div class="lib-card-name">Urbanisation</div>
+      <div class="lib-card-sub">Push &amp; pull factors, mega-cities</div>
+      <div class="lib-card-tag" style="color:#34d399;border-color:#34d39944;background:#34d39911;">Geography</div>
+    </div></div>
 
         <!-- Notes output -->
         <div id="lib-out" style="display:none;">
@@ -1949,9 +2340,7 @@ body.fs-large { font-size: 17px; }
         </div>
 
         <div id="music-tab-spotify-player">
-          <iframe id="music-tab-spotify-frame" src="about:blank" width="100%" height="500" frameborder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy" style="border-radius:14px;display:block;"></iframe>
+          <iframe id="music-tab-spotify-frame" src="about:blank" width="100%" height="500" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:14px;display:block;"></iframe>
         </div>
 
         <div id="music-tab-empty" style="display:none;padding:40px 0;text-align:center;font-family:var(--exo);font-size:.88rem;color:var(--silver);opacity:.6;">
@@ -1961,14 +2350,14 @@ body.fs-large { font-size: 17px; }
 
       <!-- NOTES -->
       <div class="tab" id="tab-notes">
-        <div class="ttl">📝 Notes Summariser</div>
-        <div class="tsub"><span class="prm">›</span>Paste messy notes or upload a photo — get clean, structured output</div>
+        <div class="ttl">📝 Smart Notes</div>
+        <div class="tsub"><span class="prm">›</span>Paste your text and get smart AI-powered notes</div>
         <div id="notes-img-preview" style="display:none;margin-bottom:10px;padding:8px 12px;background:rgba(77,159,255,.06);border:1px solid rgba(77,159,255,.2);border-radius:10px;align-items:center;gap:10px;">
           <img id="notes-img-thumb" style="height:48px;width:auto;border-radius:6px;object-fit:cover;" src="" alt="">
           <div style="flex:1;font-family:var(--exo);font-size:.75rem;color:var(--silver);">Image attached — text will be extracted from it</div>
           <button onclick="clearNotesImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1.1rem;">✕</button>
         </div>
-        <textarea class="nta" id="notes-in" placeholder="Paste your notes here...&#10;&#10;Or upload a photo of your notes below 📷"></textarea>
+        <textarea class="nta" id="notes-in" placeholder="Paste your notes, textbook content, or anything you want to study..."></textarea>
         <div class="brow">
           <button class="abtn" onclick="doNotes('summary')">✨ Summarise</button>
           <button class="abtn" onclick="doNotes('bullets')">• Bullet Points</button>
@@ -2135,9 +2524,11 @@ body.fs-large { font-size: 17px; }
         <div class="journal-wrap">
           <div class="journal-editor">
             <input class="journal-title-in" id="journal-title" placeholder="Entry title (optional)...">
-            <textarea class="journal-body-in" id="journal-body" placeholder="What's on your mind today?&#10;&#10;Write about your study session, how you're feeling, goals for tomorrow..."></textarea>
+            <textarea class="journal-body-in" id="journal-body" placeholder="What's on your mind today?
+
+Write about your study session, how you're feeling, goals for tomorrow..."></textarea>
             <div class="journal-actions">
-              <div class="journal-date" id="journal-date"></div>
+              <div class="journal-date" id="journal-date">Saturday, 18 April 2026</div>
               <div style="display:flex;gap:8px;">
                 <button class="abtn sec" onclick="clearJournal()">Clear</button>
                 <button class="abtn" onclick="saveJournal()">💾 Save Entry</button>
@@ -2150,7 +2541,7 @@ body.fs-large { font-size: 17px; }
           <button class="journal-filter" id="jf-today" onclick="setJournalFilter('today',this)">Today</button>
           <button class="journal-filter" id="jf-week" onclick="setJournalFilter('week',this)">This Week</button>
         </div>
-        <div class="journal-list" id="journal-list"></div>
+        <div class="journal-list" id="journal-list"><div class="journal-empty">No entries yet — write your first one above ✏️</div></div>
         </div>
       </div>
 
@@ -2159,7 +2550,7 @@ body.fs-large { font-size: 17px; }
         <div class="ttl">🌈 Themes</div>
         <div class="tsub"><span class="prm">›</span>Hover to preview · Click to apply · 💎 Shop for exclusives</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"></div>
+          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
           <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
         </div>
         <div id="shop-panel" style="display:none;margin-bottom:16px;">
@@ -2173,31 +2564,32 @@ body.fs-large { font-size: 17px; }
       </div>
 
       <!-- PROFILE & SETTINGS (merged) -->
-      <div class="tab" id="tab-settings">
+      <div class="tab on" id="tab-settings">
 
         <!-- SUB-NAV -->
         <div class="ps-subnav">
-          <button class="ps-tab on" onclick="psGo('profile',this)">👤 Profile</button>
+          <button class="ps-tab" onclick="psGo('profile',this)">👤 Profile</button>
           <button class="ps-tab" onclick="psGo('stats',this)">📊 Stats</button>
           <button class="ps-tab" onclick="psGo('badges',this)">🏅 Badges</button>
           <button class="ps-tab" onclick="psGo('goals',this)">🎯 Goals</button>
           <button class="ps-tab" onclick="psGo('appearance',this)">🎨 Appearance</button>
+          <button class="ps-tab on" onclick="psGo('aiprofile',this);renderAIProfilePanel()">set_aiprofile</button>
           <button class="ps-tab" onclick="psGo('apikey',this)">🔑 API Key</button>
         </div>
 
         <!-- ── PROFILE PANEL ── -->
-        <div class="ps-panel on" id="ps-profile">
+        <div class="ps-panel" id="ps-profile">
           <div class="ps-hero">
             <div class="ps-avatar-wrap">
-              <div class="ps-avatar" id="acct-avatar">🎓</div>
+              <div class="ps-avatar" id="acct-avatar">☀️</div>
               <div class="ps-avatar-ring"></div>
             </div>
             <div class="ps-hero-right">
-              <div class="ps-name" id="acct-name">Student</div>
+              <div class="ps-name" id="acct-name">Keshav</div>
               <div class="ps-tagline" id="acct-tagline">Level 1 Scholar</div>
               <div class="ps-badges-row">
                 <div class="ps-pill gem">💎 <span id="acct-gems">0</span> Gems</div>
-                <div class="ps-pill streak">🔥 <span id="acct-streak">0</span> day streak</div>
+                <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
               </div>
             </div>
           </div>
@@ -2239,7 +2631,7 @@ body.fs-large { font-size: 17px; }
                   <span class="ps-form-label" id="ps-level-title">Scholar</span>
                   <span class="ps-form-label"><span id="ps-gems-cur">0</span> / <span id="ps-gems-next">50</span> gems</span>
                 </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar"></div></div>
+                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 0%;"></div></div>
                 <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Apprentice</div>
               </div>
             </div>
@@ -2416,7 +2808,7 @@ body.fs-large { font-size: 17px; }
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// THEME</div>
             <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
-              <div class="set-info-box" id="set-theme-name">Default</div>
+              <div class="set-info-box" id="set-theme-name">Blizzard</div>
               <button class="ps-save-btn" style="margin-top:0;" onclick="go('themes')">Browse Themes →</button>
             </div>
           </div>
@@ -2444,6 +2836,133 @@ body.fs-large { font-size: 17px; }
 
         <!-- ── API KEY PANEL ── -->
         <!-- GOOGLE ACCOUNT PANEL (injected above API key panel) -->
+        <!-- ── AI PROFILE PANEL ── -->
+        <div class="ps-panel on" id="ps-aiprofile">
+          <div class="ps-card">
+            <div class="ps-card-label">// AI STUDENT PROFILE</div>
+            <div class="ps-form-label" style="margin-bottom:16px;line-height:1.7;">
+              This profile is fed to Veda's AI on every request — homework help, flashcards, companion chat and more — so responses are always tailored to you.
+            </div>
+
+            <!-- Curriculum -->
+            <div class="ps-form-group">
+              <div class="ps-form-label">Curriculum</div>
+              <div class="aip-chip-row" id="aip-curriculum">
+                <div class="aip-chip" data-val="SPM">🇲🇾 SPM</div>
+                <div class="aip-chip" data-val="STPM">🇲🇾 STPM</div>
+                <div class="aip-chip" data-val="PT3">🇲🇾 PT3</div>
+                <div class="aip-chip on" data-val="IGCSE">🌍 IGCSE</div>
+                <div class="aip-chip" data-val="A-Levels">🌍 A-Levels</div>
+                <div class="aip-chip" data-val="IB">🌍 IB</div>
+                <div class="aip-chip" data-val="University">🎓 University</div>
+                <div class="aip-chip" data-val="Other">Other</div>
+              </div>
+            </div>
+
+            <!-- Year -->
+            <div class="ps-form-group">
+              <div class="ps-form-label">Year / Grade</div>
+              <div class="aip-chip-row" id="aip-year">
+                <div class="aip-chip" data-val="Form 1">F1</div>
+                <div class="aip-chip" data-val="Form 2">F2</div>
+                <div class="aip-chip on" data-val="Form 3">F3</div>
+                <div class="aip-chip" data-val="Form 4">F4</div>
+                <div class="aip-chip" data-val="Form 5">F5</div>
+                <div class="aip-chip" data-val="Form 6">F6</div>
+                <div class="aip-chip" data-val="Year 1">Y1</div>
+                <div class="aip-chip" data-val="Year 2">Y2</div>
+                <div class="aip-chip" data-val="Year 3">Y3</div>
+                <div class="aip-chip" data-val="Other">Other</div>
+              </div>
+            </div>
+
+            <!-- Subjects -->
+            <div class="ps-form-group">
+              <div class="ps-form-label">Subjects <span style="opacity:.5;font-size:.7em;">(multi-select)</span></div>
+              <div class="aip-chip-row" id="aip-subjects" style="max-height:100px;overflow-y:auto;">
+                <div class="aip-chip aip-multi on" data-val="Mathematics">📐 Maths</div>
+                <div class="aip-chip aip-multi" data-val="Add Maths">➕ Add Maths</div>
+                <div class="aip-chip aip-multi on" data-val="English">🇬🇧 English</div>
+                <div class="aip-chip aip-multi" data-val="Bahasa Malaysia">🇲🇾 BM</div>
+                <div class="aip-chip aip-multi on" data-val="Physics">⚛️ Physics</div>
+                <div class="aip-chip aip-multi on" data-val="Chemistry">🧪 Chemistry</div>
+                <div class="aip-chip aip-multi on" data-val="Biology">🧬 Biology</div>
+                <div class="aip-chip aip-multi on" data-val="History">📜 History</div>
+                <div class="aip-chip aip-multi on" data-val="Geography">🌏 Geography</div>
+                <div class="aip-chip aip-multi on" data-val="Economics">📈 Economics</div>
+                <div class="aip-chip aip-multi on" data-val="Computer Science">💻 CS</div>
+                <div class="aip-chip aip-multi on" data-val="Accounting">🧾 Accounting</div>
+                <div class="aip-chip aip-multi on" data-val="Literature">📚 Literature</div>
+                <div class="aip-chip aip-multi on" data-val="Art">🎨 Art</div>
+                <div class="aip-chip aip-multi" data-val="Music">🎵 Music</div>
+              </div>
+            </div>
+
+            <!-- Learning style -->
+            <div class="ps-form-group">
+              <div class="ps-form-label">Explanation style</div>
+              <div class="aip-chip-row" id="aip-style">
+                <div class="aip-chip" data-val="Simple &amp; short — get to the point">⚡ Simple</div>
+                <div class="aip-chip on" data-val="Detailed &amp; thorough — explain everything">📖 Detailed</div>
+                <div class="aip-chip" data-val="Examples first — show me before explaining">💡 Examples first</div>
+                <div class="aip-chip" data-val="Step-by-step — walk me through it">🪜 Step-by-step</div>
+                <div class="aip-chip" data-val="Visual &amp; diagram-style descriptions">📊 Visual</div>
+              </div>
+            </div>
+
+            <!-- Language -->
+            <div class="ps-form-group">
+              <div class="ps-form-label">Response language</div>
+              <div class="aip-chip-row" id="aip-language">
+                <div class="aip-chip on" data-val="English">🇬🇧 English</div>
+                <div class="aip-chip" data-val="Bahasa Malaysia">🇲🇾 BM</div>
+                <div class="aip-chip" data-val="Casual Manglish (English + BM mix)">🤙 Manglish</div>
+              </div>
+            </div>
+
+            <!-- Study habit -->
+            <div class="ps-form-group">
+              <div class="ps-form-label">Study habit</div>
+              <div class="aip-chip-row" id="aip-habit">
+                <div class="aip-chip" data-val="Last-minute crammer">🏃 Last-minute</div>
+                <div class="aip-chip" data-val="Steady and consistent planner">📅 Consistent</div>
+                <div class="aip-chip on" data-val="Inconsistent — good days and bad days">🎲 Inconsistent</div>
+              </div>
+            </div>
+
+            <!-- Struggle -->
+            <div class="ps-form-group">
+              <div class="ps-form-label">Biggest struggle</div>
+              <div class="aip-chip-row" id="aip-struggle">
+                <div class="aip-chip" data-val="Understanding concepts">🤔 Understanding</div>
+                <div class="aip-chip on" data-val="Memorising facts">🧠 Memorising</div>
+                <div class="aip-chip" data-val="Exam technique &amp; answering style">📝 Exam technique</div>
+                <div class="aip-chip" data-val="Staying motivated">💤 Motivation</div>
+                <div class="aip-chip" data-val="Time management">⏱️ Time management</div>
+              </div>
+            </div>
+
+            <!-- Pressure -->
+            <div class="ps-form-group">
+              <div class="ps-form-label">Current pressure level</div>
+              <div class="aip-chip-row" id="aip-pressure">
+                <div class="aip-chip" data-val="Low — just keeping up">😌 Low</div>
+                <div class="aip-chip on" data-val="Moderate — exams coming soon">😐 Moderate</div>
+                <div class="aip-chip" data-val="High — major exams very soon">😰 High</div>
+              </div>
+            </div>
+
+            <!-- Preview -->
+            <div id="aip-preview" style="background: rgba(0, 212, 170, 0.06); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: 10px; padding: 12px 14px; margin-top: 4px; margin-bottom: 14px; display: block;">
+              <div style="font-family:var(--exo);font-size:.65rem;color:var(--teal);letter-spacing:1.5px;margin-bottom:6px;">// AI SEES THIS</div>
+              <div id="aip-preview-text" style="font-family:var(--exo);font-size:.78rem;color:var(--silver);line-height:1.7;">Tutoring Keshav — Form 3 IGCSE student · Subjects: Mathematics, English, Physics, Chemistry, Biology · Detailed &amp; thorough · Language: English · Inconsistent — good days and bad days · Struggles with: Memorising facts · Pressure: Moderate</div>
+            </div>
+
+            <button class="set-btn accent" onclick="saveAIProfile()" style="width:100%;">✦ Save AI Profile</button>
+          </div>
+        </div>
+
+        <!-- ── API KEY PANEL ── -->
         <div class="ps-panel" id="ps-apikey">
           <!-- Signed-in card -->
           <div class="ps-card" id="fb-card-in" style="display:none;margin-bottom:12px;">
@@ -2461,11 +2980,11 @@ body.fs-large { font-size: 17px; }
             </div>
           </div>
           <!-- Signed-out card -->
-          <div class="ps-card" id="fb-card-out" style="margin-bottom:12px;">
+          <div class="ps-card" id="fb-card-out" style="margin-bottom: 12px; display: block;">
             <div class="ps-card-label">// GOOGLE ACCOUNT</div>
             <div class="ps-form-label" style="margin-bottom:14px;line-height:1.7;">Sign in with Google to sync your API key, profile, gems, journal, chats and settings across all devices.</div>
-            <button onclick="window._fb&&window._fb.signIn().catch(e=>showToast('❌ '+e.message))" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:none;border-radius:10px;padding:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:600;color:#1f1f1f;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.25);">
-              <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            <button onclick="window._fb&amp;&amp;window._fb.signIn().catch(e=&gt;showToast('❌ '+e.message))" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:none;border-radius:10px;padding:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:600;color:#1f1f1f;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.25);">
+              <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>
               Sign in with Google
             </button>
           </div>
@@ -2479,14 +2998,14 @@ body.fs-large { font-size: 17px; }
             </div>
 
             <div class="ps-key-status" id="ps-key-status">
-              <div class="ps-key-dot" id="ps-key-dot"></div>
-              <span id="ps-key-label">Checking...</span>
+              <div class="ps-key-dot active" id="ps-key-dot"></div>
+              <span id="ps-key-label">API key is active — AI features enabled</span>
             </div>
 
             <div class="ps-form-group" style="margin-top:16px;">
               <div class="ps-form-label">Current Key</div>
               <div class="set-row" style="margin-top:6px;">
-                <input class="set-input" id="set-key-display" type="password" placeholder="No key saved" readonly>
+                <input class="set-input" id="set-key-display" type="password" placeholder="No key saved" readonly="">
                 <button class="set-btn" onclick="toggleKeyVisibility()">👁 Show</button>
               </div>
             </div>
@@ -2564,7 +3083,7 @@ body.fs-large { font-size: 17px; }
               <div class="game-icon">🔢</div>
               <div class="game-name">Sudoku</div>
               <div class="game-desc">Classic 9×9 number puzzle</div>
-              <div class="game-hi" id="hi-sudoku">Best: 0</div>
+              <div class="game-hi" id="hi-sudoku">Not solved yet</div>
             </div>
           </div>
         </div>
@@ -2573,7 +3092,7 @@ body.fs-large { font-size: 17px; }
 
       <!-- ══ EXAM PAPERS TAB ══ -->
       <div class="tab" id="tab-exam">
-        <div class="ttl">📄 Exam Paper Generator</div>
+        <div class="ttl">📄 Exam Papers</div>
         <div class="tsub"><span class="prm">›</span>Build a custom mock exam paper — choose your subject, question types, and difficulty</div>
 
         <!-- BUILDER UI -->
@@ -2751,7 +3270,7 @@ body.fs-large { font-size: 17px; }
           </div>
           <div class="planner-view-toggle">
             <button class="pv-btn on" id="pv-week" onclick="setPlannerView('week',this)">Week</button>
-            <button class="pv-btn" id="pv-day"  onclick="setPlannerView('day',this)">Day</button>
+            <button class="pv-btn" id="pv-day" onclick="setPlannerView('day',this)">Day</button>
             <button class="pv-btn" id="pv-list" onclick="setPlannerView('list',this)">List</button>
           </div>
           <button class="planner-add-btn" onclick="openPlannerModal()">+ Add Session</button>
@@ -3179,7 +3698,7 @@ function applyLang() {
     if (moodKeys[i]) chip.textContent = t(moodKeys[i]);
   });
   // Settings sub-nav
-  const psTabMap = [{key:'set_profile'},{key:'set_stats'},{key:'set_badges'},{key:'set_goals'},{key:'set_appearance'},{key:'set_apikey'}];
+  const psTabMap = [{key:'set_profile'},{key:'set_stats'},{key:'set_badges'},{key:'set_goals'},{key:'set_appearance'},{key:'set_aiprofile'},{key:'set_apikey'}];
   document.querySelectorAll('.ps-tab').forEach((tab, i) => {
     if (psTabMap[i]) tab.textContent = t(psTabMap[i].key);
   });
@@ -3299,7 +3818,9 @@ async function gemini(prompt, imageData) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
   const parts = [];
   if (imageData) parts.push({ inline_data: { mime_type: imageData.mimeType, data: imageData.base64 } });
-  parts.push({ text: prompt });
+  // Prepend student profile context to every AI call
+  const profileCtx = buildAIContext();
+  parts.push({ text: profileCtx + prompt });
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -5111,6 +5632,98 @@ function renderWeekChart(stats) {
   }).join('');
 }
 
+// ── AI PROFILE SETTINGS PANEL ──
+function aipChipClick(el, rowId) {
+  document.querySelectorAll('#' + rowId + ' .aip-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  aipUpdatePreview();
+}
+
+function aipMultiClick(el) {
+  el.classList.toggle('on');
+  aipUpdatePreview();
+}
+
+function aipGetVal(rowId) {
+  const el = document.querySelector('#' + rowId + ' .aip-chip.on');
+  return el ? el.dataset.val : '';
+}
+
+function aipGetMulti(rowId) {
+  return Array.from(document.querySelectorAll('#' + rowId + ' .aip-chip.on')).map(e => e.dataset.val);
+}
+
+function aipUpdatePreview() {
+  const p = {
+    curriculum: aipGetVal('aip-curriculum'),
+    year:       aipGetVal('aip-year'),
+    subjects:   aipGetMulti('aip-subjects'),
+    learnStyle: aipGetVal('aip-style'),
+    language:   aipGetVal('aip-language'),
+    studyHabit: aipGetVal('aip-habit'),
+    struggle:   aipGetVal('aip-struggle'),
+    pressure:   aipGetVal('aip-pressure'),
+  };
+  const name = getAcct().name || 'Student';
+  const parts = [
+    p.curriculum && p.year ? `${p.year} ${p.curriculum} student` : (p.curriculum || p.year || ''),
+    p.subjects.length ? `Subjects: ${p.subjects.slice(0,5).join(', ')}` : '',
+    p.learnStyle ? p.learnStyle.split('—')[0].trim() : '',
+    p.language ? `Language: ${p.language}` : '',
+    p.studyHabit || '',
+    p.struggle ? `Struggles with: ${p.struggle}` : '',
+    p.pressure ? `Pressure: ${p.pressure.split('—')[0].trim()}` : '',
+  ].filter(Boolean);
+  const preview = document.getElementById('aip-preview');
+  const previewText = document.getElementById('aip-preview-text');
+  if (preview && previewText) {
+    preview.style.display = parts.length ? 'block' : 'none';
+    previewText.textContent = `Tutoring ${name} — ` + parts.join(' · ');
+  }
+}
+
+function renderAIProfilePanel() {
+  const p = getStudentProfile();
+  // Single-select rows
+  const singles = {
+    'aip-curriculum': p.curriculum,
+    'aip-year':       p.year,
+    'aip-style':      p.learnStyle,
+    'aip-language':   p.language,
+    'aip-habit':      p.studyHabit,
+    'aip-struggle':   p.struggle,
+    'aip-pressure':   p.pressure,
+  };
+  for (const [rowId, val] of Object.entries(singles)) {
+    document.querySelectorAll('#' + rowId + ' .aip-chip').forEach(c => {
+      c.classList.toggle('on', c.dataset.val === val);
+      c.onclick = () => aipChipClick(c, rowId);
+    });
+  }
+  // Multi-select subjects
+  const subs = new Set(p.subjects || []);
+  document.querySelectorAll('#aip-subjects .aip-chip').forEach(c => {
+    c.classList.toggle('on', subs.has(c.dataset.val));
+    c.onclick = () => aipMultiClick(c);
+  });
+  aipUpdatePreview();
+}
+
+function saveAIProfile() {
+  const p = {
+    curriculum: aipGetVal('aip-curriculum'),
+    year:       aipGetVal('aip-year'),
+    subjects:   aipGetMulti('aip-subjects'),
+    learnStyle: aipGetVal('aip-style'),
+    language:   aipGetVal('aip-language'),
+    studyHabit: aipGetVal('aip-habit'),
+    struggle:   aipGetVal('aip-struggle'),
+    pressure:   aipGetVal('aip-pressure'),
+  };
+  localStorage.setItem('veda_student_profile', JSON.stringify(p));
+  showToast('🤖 AI Profile saved! All AI responses are now personalised.');
+}
+
 function renderBadgesPanel() {
   const a = getAcct();
   const bg = document.getElementById('badges-grid');
@@ -6450,23 +7063,49 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── ONBOARDING ──
 let obSlide = 0;
 let obAvatar = '🎓';
-const OB_SLIDES = 4;
+const OB_SLIDES = 8;
+
+// Track multi-select subjects
+let obSubjects = new Set();
 
 function obShowSlide(n) {
   document.querySelectorAll('.ob-slide').forEach((s,i) => s.classList.toggle('active', i===n));
   document.querySelectorAll('.ob-dot').forEach((d,i) => d.classList.toggle('on', i===n));
+  const prog = document.getElementById('ob-progress');
+  if (prog) prog.style.width = ((n / (OB_SLIDES - 1)) * 100) + '%';
   obSlide = n;
+  // Populate profile preview on last slide
+  if (n === OB_SLIDES - 1) obRenderPreview();
+}
+
+function obChipSelect(el, gridId, value) {
+  document.querySelectorAll('#' + gridId + ' .ob-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  el.dataset.value = value;
+}
+
+function obGetChipValue(gridId) {
+  const el = document.querySelector('#' + gridId + ' .ob-chip.on');
+  return el ? (el.dataset.value || el.textContent.trim()) : '';
+}
+
+function obMultiToggle(el, value) {
+  el.classList.toggle('on');
+  if (el.classList.contains('on')) obSubjects.add(value);
+  else obSubjects.delete(value);
 }
 
 function obNext() {
   if (obSlide === 1) {
     const name = document.getElementById('ob-name').value.trim();
     if (!name) { document.getElementById('ob-name').focus(); document.getElementById('ob-name').style.borderColor='#ff6680'; return; }
-    const a = getAcct();
-    a.name = name; a.avatar = obAvatar;
-    saveAcct(a);
+    const a = getAcct(); a.name = name; a.avatar = obAvatar; saveAcct(a);
   }
   if (obSlide < OB_SLIDES - 1) obShowSlide(obSlide + 1);
+}
+
+function obPrev() {
+  if (obSlide > 0) obShowSlide(obSlide - 1);
 }
 
 function selectObAvatar(el, emoji) {
@@ -6475,9 +7114,64 @@ function selectObAvatar(el, emoji) {
   obAvatar = emoji;
 }
 
+function obBuildProfile() {
+  return {
+    curriculum:  obGetChipValue('ob-curriculum-grid'),
+    year:        obGetChipValue('ob-year-grid'),
+    subjects:    Array.from(obSubjects),
+    learnStyle:  obGetChipValue('ob-style-grid'),
+    language:    obGetChipValue('ob-lang-grid'),
+    studyHabit:  obGetChipValue('ob-habit-grid'),
+    struggle:    obGetChipValue('ob-struggle-grid'),
+    pressure:    obGetChipValue('ob-pressure-grid'),
+  };
+}
+
+function obRenderPreview() {
+  const p = obBuildProfile();
+  const name = getAcct().name || 'Student';
+  const parts = [];
+  if (p.curriculum) parts.push(p.curriculum);
+  if (p.year)       parts.push(p.year);
+  if (p.subjects.length) parts.push(p.subjects.slice(0,4).join(', ') + (p.subjects.length > 4 ? ' +more' : ''));
+  if (p.learnStyle) parts.push(p.learnStyle.split('—')[0].trim());
+  if (p.language)   parts.push(p.language);
+  const el = document.getElementById('ob-profile-preview');
+  if (el) el.innerHTML = parts.map(x => `<span style="color:var(--accent2)">${x}</span>`).join(' · ');
+}
+
+function obSaveProfile() {
+  const p = obBuildProfile();
+  localStorage.setItem('veda_student_profile', JSON.stringify(p));
+}
+
+function getStudentProfile() {
+  try { return JSON.parse(localStorage.getItem('veda_student_profile') || '{}'); } catch { return {}; }
+}
+
+function buildAIContext() {
+  const p = getStudentProfile();
+  const a = getAcct();
+  if (!p.curriculum && !p.year) return ''; // No profile set yet
+  const name = a.name || 'the student';
+  const subjectStr = p.subjects && p.subjects.length ? p.subjects.join(', ') : 'general subjects';
+  const parts = [
+    `You are tutoring ${name}, a ${p.year || ''} ${p.curriculum || ''} student.`,
+    p.subjects && p.subjects.length ? `Their subjects: ${subjectStr}.` : '',
+    p.learnStyle ? `Explanation style preference: ${p.learnStyle}.` : '',
+    p.language ? `Respond in: ${p.language}.` : '',
+    p.studyHabit ? `Study habit: ${p.studyHabit}.` : '',
+    p.struggle ? `Biggest struggle: ${p.struggle}.` : '',
+    p.pressure ? `Current pressure level: ${p.pressure}.` : '',
+    'Always tailor your tone, examples and depth to match this profile.',
+  ].filter(Boolean);
+  return '\n\n[STUDENT PROFILE]\n' + parts.join(' ') + '\n[/STUDENT PROFILE]\n\n';
+}
+
 function obFinish() {
   const key = document.getElementById('ob-key').value.trim();
   if (key) { API_KEY = key; localStorage.setItem('studly_key', key); }
+  obSaveProfile();
   localStorage.setItem('studly_onboarded', '1');
   document.getElementById('onboarding').style.opacity = '0';
   document.getElementById('onboarding').style.transition = 'opacity .4s';
@@ -6490,6 +7184,7 @@ function obFinish() {
 }
 
 function obSkipKey() {
+  obSaveProfile();
   localStorage.setItem('studly_onboarded', '1');
   document.getElementById('onboarding').style.opacity = '0';
   document.getElementById('onboarding').style.transition = 'opacity .4s';
@@ -8789,10 +9484,8 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
             <div id="mgr-spotify-panel">
               <div style="background:rgba(77,159,255,.05);border:1px solid rgba(77,159,255,.15);border-radius:12px;padding:16px;margin-bottom:18px;">
                 <div style="font-family:var(--exo);font-size:.68rem;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">// ADD SPOTIFY PLAYLIST</div>
-                <input id="pl-name-in" placeholder="Name (e.g. Lo-fi Beats)" maxlength="24"
-                  style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.2);border-radius:9px;padding:9px 13px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;margin-bottom:8px;transition:border .2s;">
-                <input id="pl-url-in" placeholder="Paste Spotify link — playlist, album or track"
-                  style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.2);border-radius:9px;padding:9px 13px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;margin-bottom:10px;transition:border .2s;">
+                <input id="pl-name-in" placeholder="Name (e.g. Lo-fi Beats)" maxlength="24" style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.2);border-radius:9px;padding:9px 13px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;margin-bottom:8px;transition:border .2s;">
+                <input id="pl-url-in" placeholder="Paste Spotify link — playlist, album or track" style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.2);border-radius:9px;padding:9px 13px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;margin-bottom:10px;transition:border .2s;">
                 <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);opacity:.65;margin-bottom:10px;line-height:1.6;">
                   Share → Copy link from Spotify app or open.spotify.com
                 </div>
@@ -8804,5 +9497,5 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
               <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;opacity:.7;">// YOUR SPOTIFY PLAYLISTS</div>
               <div id="pl-saved-list" style="display:flex;flex-direction:column;gap:6px;"></div>
             </div>
-</body>
-</html>
+
+</div></body></html>
