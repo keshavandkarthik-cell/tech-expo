@@ -1620,6 +1620,7 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('profile')"><span class="ni">👤</span><span class="nl">Profile</span></button>
         <button class="nb" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
+        <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
         <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
@@ -2732,6 +2733,36 @@ body.fs-large { font-size: 17px; }
         </div>
       </div>
 
+      <!-- STUDY PLANNER -->
+      <div class="tab" id="tab-planner">
+        <div class="ttl">📅 Study Planner</div>
+        <div class="tsub"><span class="prm">›</span>Build your weekly timetable — colour-code subjects, set recurring sessions</div>
+
+        <!-- Summary cards -->
+        <div class="planner-summary" id="planner-summary"></div>
+
+        <!-- Toolbar -->
+        <div class="planner-toolbar" style="margin-bottom:12px;">
+          <div class="planner-week-nav">
+            <button class="pw-btn" onclick="plannerPrevWeek()">← Prev</button>
+            <div class="pw-week-label" id="planner-week-label">Week of —</div>
+            <button class="pw-btn" onclick="plannerNextWeek()">Next →</button>
+            <button class="pw-btn" onclick="plannerGoToday()" style="border-color:rgba(0,212,170,.3);color:var(--teal2);">Today</button>
+          </div>
+          <div class="planner-view-toggle">
+            <button class="pv-btn on" id="pv-week" onclick="setPlannerView('week',this)">Week</button>
+            <button class="pv-btn" id="pv-day"  onclick="setPlannerView('day',this)">Day</button>
+            <button class="pv-btn" id="pv-list" onclick="setPlannerView('list',this)">List</button>
+          </div>
+          <button class="planner-add-btn" onclick="openPlannerModal()">+ Add Session</button>
+          <button class="pw-btn" onclick="plannerPrint()" style="margin-left:4px;">🖨️ Print</button>
+          <button class="pw-btn" onclick="clearAllPlannerEvents()" style="border-color:rgba(255,102,128,.2);color:#ff8899;">🗑 Clear All</button>
+        </div>
+
+        <!-- View area -->
+        <div class="planner-grid-wrap" id="planner-view-area"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -2799,6 +2830,10 @@ body.fs-large { font-size: 17px; }
     <div class="drawer-app" onclick="closeDrawer();go('settings')">
       <div class="drawer-app-icon">👤</div>
       <div class="drawer-app-label">Profile</div>
+    </div>
+    <div class="drawer-app" onclick="closeDrawer();go('planner')">
+      <div class="drawer-app-icon">📅</div>
+      <div class="drawer-app-label">Planner</div>
     </div>
     <div class="drawer-app" onclick="closeDrawer();go('home')">
       <div class="drawer-app-icon">⊞</div>
@@ -3234,6 +3269,7 @@ function go(name) {
   }
   if (name === 'library') setTimeout(initLibrary, 0);
   if (name === 'todo') setTimeout(renderTodos, 0);
+  if (name === 'planner') setTimeout(renderPlanner, 30);
   // track unique tabs visited for Explorer badge
   try {
     const a = getAcct();
@@ -6934,6 +6970,441 @@ function nwCloudSave_silent() {
   window._fb.save(user.uid, nwSnapshot()).catch(e => console.warn('Auto-save:', e));
 }
 // Save on tab close
+
+// ══════════════════════════════════════════
+// VEDA STUDY PLANNER
+// ══════════════════════════════════════════
+
+let plannerWeekOffset = 0;
+let plannerView       = 'week';
+let plannerDayOffset  = 0;
+let editingEventId    = null;
+
+const PLANNER_DAYS    = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const PLANNER_HOURS   = Array.from({length:18}, (_,i) => i + 7); // 07:00–00:00
+const PLANNER_MONTHS  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const PLANNER_SUBJECTS = [
+  'Mathematics','English','Science','Biology','Chemistry','Physics',
+  'History','Geography','Computer Science','Economics','Languages',
+  'Art & Design','Music','Physical Education','Break / Lunch','Revision','Other'
+];
+const SUBJ_COLOR_MAP = {
+  'Mathematics':'ec-maths','English':'ec-english','Science':'ec-science',
+  'Biology':'ec-science','Chemistry':'ec-science','Physics':'ec-science',
+  'History':'ec-history','Geography':'ec-history','Computer Science':'ec-maths',
+  'Economics':'ec-history','Languages':'ec-english','Art & Design':'ec-sport',
+  'Music':'ec-sport','Physical Education':'ec-sport',
+  'Break / Lunch':'ec-break','Revision':'ec-revision','Other':'ec-other'
+};
+const PL_COLORS = [
+  {cls:'ec-maths',   hex:'#4d9fff'},
+  {cls:'ec-science', hex:'#00d4aa'},
+  {cls:'ec-english', hex:'#c084fc'},
+  {cls:'ec-history', hex:'#fbbf24'},
+  {cls:'ec-break',   hex:'#22c55e'},
+  {cls:'ec-revision',hex:'#fb923c'},
+  {cls:'ec-sport',   hex:'#f472b6'},
+  {cls:'ec-other',   hex:'#6366f1'},
+];
+
+function getPlannerEvents()   { try { return JSON.parse(localStorage.getItem('veda_planner')||'[]'); } catch { return []; } }
+function savePlannerEvents(a) { localStorage.setItem('veda_planner', JSON.stringify(a)); }
+
+function getPlannerMonday(offset) {
+  const d = new Date(); const day = d.getDay();
+  d.setDate(d.getDate() + ((day===0?-6:1-day) + offset*7));
+  d.setHours(0,0,0,0); return d;
+}
+function plannerFmtDate(d) { return d.toISOString().slice(0,10); }
+function plannerTodayStr()  { return plannerFmtDate(new Date()); }
+function getPlannerWeekDates(offset) {
+  const mon = getPlannerMonday(offset);
+  return Array.from({length:7}, (_,i) => { const d=new Date(mon); d.setDate(mon.getDate()+i); return d; });
+}
+
+function renderPlanner() {
+  renderPlannerSummary();
+  updatePlannerWeekLabel();
+  if      (plannerView==='week') renderPlannerWeekGrid();
+  else if (plannerView==='day')  renderPlannerDayView();
+  else                           renderPlannerListView();
+}
+
+function updatePlannerWeekLabel() {
+  const ds = getPlannerWeekDates(plannerWeekOffset);
+  const el = document.getElementById('planner-week-label');
+  if (el) el.textContent = `${ds[0].getDate()} ${PLANNER_MONTHS[ds[0].getMonth()]} – ${ds[6].getDate()} ${PLANNER_MONTHS[ds[6].getMonth()]} ${ds[6].getFullYear()}`;
+}
+
+function renderPlannerSummary() {
+  const el = document.getElementById('planner-summary'); if (!el) return;
+  const events = getPlannerEvents();
+  const weekDs = getPlannerWeekDates(plannerWeekOffset).map(plannerFmtDate);
+  const weekEvts = events.filter(e => weekDs.includes(e.date));
+  const weekMins = weekEvts.reduce((a,e)=>a+(e.dur||0),0);
+  const todayEvts = events.filter(e=>e.date===plannerTodayStr()).length;
+
+  el.innerHTML = `
+    <div class="pl-sum-card"><div class="pl-sum-icon">⏱️</div><div class="pl-sum-val">${(weekMins/60).toFixed(1)}h</div><div class="pl-sum-lbl">Study hrs this week</div></div>
+    <div class="pl-sum-card"><div class="pl-sum-icon">📚</div><div class="pl-sum-val">${weekEvts.length}</div><div class="pl-sum-lbl">Sessions this week</div></div>
+    <div class="pl-sum-card"><div class="pl-sum-icon">📅</div><div class="pl-sum-val">${todayEvts}</div><div class="pl-sum-lbl">Sessions today</div></div>
+    <div class="pl-sum-card"><div class="pl-sum-icon">📊</div><div class="pl-sum-val">${events.length}</div><div class="pl-sum-lbl">Total scheduled</div></div>`;
+
+  // Subject breakdown
+  const sm={};
+  weekEvts.forEach(e=>{ sm[e.subject]=(sm[e.subject]||0)+(e.dur||0); });
+  const entries=Object.entries(sm).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if (entries.length) {
+    const maxM = entries[0][1]||1;
+    const colMap={}; PL_COLORS.forEach(c=>colMap[c.cls]=c.hex);
+    el.innerHTML += `<div class="pl-sum-card" style="grid-column:span 2;text-align:left;">
+      <div style="font-family:var(--exo);font-size:.55rem;color:var(--teal);letter-spacing:2px;margin-bottom:10px;">// SUBJECT BREAKDOWN</div>
+      <div class="subj-bars">${entries.map(([s,m])=>{
+        const hex=colMap[SUBJ_COLOR_MAP[s]||'ec-other']||'#4d9fff';
+        return `<div class="subj-bar-row">
+          <div class="subj-bar-label">${escPl(s)}</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:${(m/maxM*100).toFixed(0)}%;background:${hex};"></div></div>
+          <div class="subj-bar-hrs">${(m/60).toFixed(1)}h</div>
+        </div>`;}).join('')}
+      </div></div>`;
+  }
+}
+
+// ── WEEK GRID ──
+function renderPlannerWeekGrid() {
+  const area = document.getElementById('planner-view-area'); if (!area) return;
+  const dates  = getPlannerWeekDates(plannerWeekOffset);
+  const events = getPlannerEvents();
+  const today  = plannerTodayStr();
+
+  let html = `<div class="planner-week-grid">`;
+  html += `<div class="pgrid-corner"><span style="font-family:var(--exo);font-size:.5rem;color:var(--silver);opacity:.4;">GMT</span></div>`;
+  dates.forEach((d,i) => {
+    const isT = plannerFmtDate(d)===today;
+    html += `<div class="pgrid-day-head ${isT?'today-head':''}" onclick="setPlannerView('day',null,${i})">
+      <div class="pgrid-day-name">${PLANNER_DAYS[i]}</div>
+      <div class="pgrid-day-num">${d.getDate()}<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">${PLANNER_MONTHS[d.getMonth()]}</span></div>
+    </div>`;
+  });
+
+  PLANNER_HOURS.forEach(hr => {
+    const hStr = String(hr).padStart(2,'0')+':00';
+    html += `<div class="pgrid-time-col"><div class="pgrid-time-slot">${hStr}</div></div>`;
+    dates.forEach((d,di) => {
+      const dateStr = plannerFmtDate(d);
+      const isT = dateStr===today;
+      const dayEvts = events.filter(e => e.date===dateStr && parseInt((e.startTime||'').split(':')[0])===hr);
+      html += `<div class="pgrid-cell-col">
+        <div class="pgrid-cell ${isT?'today-col':''}" onclick="openPlannerModal(null,'${dateStr}',${hr})">
+          ${dayEvts.map(e=>plannerEventBadge(e)).join('')}
+        </div></div>`;
+    });
+  });
+  html += `</div>`;
+  area.innerHTML = html;
+}
+
+function plannerEventBadge(e) {
+  const cc  = e.cc || SUBJ_COLOR_MAP[e.subject] || 'ec-other';
+  const startM = parseInt((e.startTime||'00:00').split(':')[1]||0);
+  const top  = (startM/60)*52;
+  const ht   = Math.max(20, ((e.dur||60)/60)*52 - 2);
+  const pri  = e.priority==='high'?' 🔥':e.priority==='low'?' 📋':'';
+  return `<div class="plan-event ${cc}" style="top:${top}px;height:${ht}px;" onclick="event.stopPropagation();openPlannerModal('${e.id}')">
+    <div class="plan-event-title">${escPl(e.subject)}${pri}</div>
+    ${ht>36?`<div class="plan-event-sub">${e.startTime} · ${Math.floor((e.dur||60)/60)}h${(e.dur||60)%60?(e.dur||60)%60+'m':''}</div>`:''}
+  </div>`;
+}
+
+// ── DAY VIEW ──
+function renderPlannerDayView() {
+  const area = document.getElementById('planner-view-area'); if (!area) return;
+  const dates  = getPlannerWeekDates(plannerWeekOffset);
+  const di     = Math.max(0,Math.min(6,plannerDayOffset));
+  const d      = dates[di];
+  const dStr   = plannerFmtDate(d);
+  const today  = plannerTodayStr();
+  const events = getPlannerEvents().filter(e=>e.date===dStr).sort((a,b)=>(a.startTime||'').localeCompare(b.startTime||''));
+  const isT    = dStr===today;
+
+  let html = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+    <button class="pw-btn" onclick="plannerDayPrev()">← ${PLANNER_DAYS[(di+6)%7]}</button>
+    <div style="flex:1;text-align:center;font-family:var(--orb);font-size:.9rem;font-weight:800;color:${isT?'var(--accent2)':'var(--text)'};letter-spacing:1px;">
+      ${PLANNER_DAYS[di]} &nbsp;${d.getDate()} ${PLANNER_MONTHS[d.getMonth()]} ${d.getFullYear()}
+      ${isT?'<span style="font-family:var(--exo);font-size:.55rem;color:var(--teal);letter-spacing:1px;margin-left:8px;">TODAY</span>':''}
+    </div>
+    <button class="pw-btn" onclick="plannerDayNext()">${PLANNER_DAYS[(di+1)%7]} →</button>
+  </div>`;
+
+  if (!events.length) {
+    html += `<div style="text-align:center;padding:48px 0;font-family:var(--exo);font-size:.85rem;color:var(--silver);opacity:.5;">No sessions — click <strong style="color:var(--accent2);">+ Add Session</strong> above.</div>`;
+  } else {
+    html += `<div class="planner-day-list">`;
+    events.forEach(e => {
+      const cc  = e.cc || SUBJ_COLOR_MAP[e.subject] || 'ec-other';
+      const hex = (PL_COLORS.find(c=>c.cls===cc)||PL_COLORS[0]).hex;
+      const dur = e.dur||60;
+      const pri = e.priority==='high'?' 🔥':e.priority==='low'?' 📋':'';
+      html += `<div class="pdl-event" onclick="openPlannerModal('${e.id}')">
+        <div class="pdl-bar" style="background:${hex};"></div>
+        <div class="pdl-time">${e.startTime||'--:--'}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="pdl-subj">${escPl(e.subject)}${pri}</div>
+          ${e.notes?`<div class="pdl-note">${escPl(e.notes)}</div>`:''}
+        </div>
+        <div class="pdl-dur">${Math.floor(dur/60)}h${dur%60?dur%60+'m':''}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  area.innerHTML = html;
+}
+
+// ── LIST VIEW ──
+function renderPlannerListView() {
+  const area = document.getElementById('planner-view-area'); if (!area) return;
+  const events = getPlannerEvents().sort((a,b)=>{
+    if(a.date!==b.date) return a.date.localeCompare(b.date);
+    return (a.startTime||'').localeCompare(b.startTime||'');
+  });
+  if (!events.length) {
+    area.innerHTML = `<div style="text-align:center;padding:48px;font-family:var(--exo);font-size:.85rem;color:var(--silver);opacity:.5;">No sessions scheduled yet.</div>`;
+    return;
+  }
+  const groups={};
+  events.forEach(e=>{ if(!groups[e.date]) groups[e.date]=[]; groups[e.date].push(e); });
+  const today = plannerTodayStr();
+  const dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html = `<div class="planner-day-list">`;
+  Object.entries(groups).forEach(([date,evts]) => {
+    const d  = new Date(date+'T12:00:00');
+    const isT = date===today;
+    html += `<div class="pdl-section-head">${dayNames[d.getDay()]} ${d.getDate()} ${PLANNER_MONTHS[d.getMonth()]} ${d.getFullYear()}${isT?' · TODAY':''}</div>`;
+    evts.forEach(e => {
+      const cc  = e.cc || SUBJ_COLOR_MAP[e.subject] || 'ec-other';
+      const hex = (PL_COLORS.find(c=>c.cls===cc)||PL_COLORS[0]).hex;
+      const dur = e.dur||60;
+      const pri = e.priority==='high'?' 🔥':e.priority==='low'?' 📋':'';
+      html += `<div class="pdl-event" onclick="openPlannerModal('${e.id}')">
+        <div class="pdl-bar" style="background:${hex};"></div>
+        <div class="pdl-time">${e.startTime||'--:--'}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="pdl-subj">${escPl(e.subject)}${pri}</div>
+          ${e.notes?`<div class="pdl-note">${escPl(e.notes)}</div>`:''}
+        </div>
+        <div class="pdl-dur">${Math.floor(dur/60)}h${dur%60?dur%60+'m':''}</div>
+      </div>`;
+    });
+  });
+  html += `</div>`;
+  area.innerHTML = html;
+}
+
+function escPl(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── ADD / EDIT MODAL ──
+function openPlannerModal(eventId, prefillDate, prefillHour) {
+  editingEventId = eventId || null;
+  const events   = getPlannerEvents();
+  const ex       = eventId ? events.find(e=>e.id==eventId) : null;
+
+  // Build time options 07:00–23:45 in 15min steps
+  const times=[];
+  for(let h=7;h<24;h++) for(let m=0;m<60;m+=15)
+    times.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+
+  const prefillTime = prefillHour!=null ? `${String(prefillHour).padStart(2,'0')}:00` : '09:00';
+  const today = plannerTodayStr();
+
+  const colorChips = PL_COLORS.map(c => {
+    const isOn = ex ? ex.cc===c.cls : c.cls==='ec-maths';
+    return `<div class="pm-color-chip ${isOn?'on':''}" style="background:${c.hex};" data-cls="${c.cls}" onclick="plSelectColor(this)" title="${c.cls.replace('ec-','')}"></div>`;
+  }).join('');
+
+  const dayBtns = PLANNER_DAYS.map((d,i) => {
+    const on = ex?.repeatDays?.includes(i)?'on':'';
+    return `<div class="pm-day-btn ${on}" data-di="${i}" onclick="this.classList.toggle('on')">${d}</div>`;
+  }).join('');
+
+  const durations = [15,30,45,60,75,90,105,120,150,180];
+
+  const ov = document.createElement('div');
+  ov.className = 'planner-modal-overlay';
+  ov.id = 'pm-overlay';
+  ov.innerHTML = `
+    <div class="planner-modal">
+      <div class="pm-title">// ${ex?'EDIT SESSION':'ADD STUDY SESSION'}</div>
+
+      <div class="pm-form-group">
+        <div class="pm-label">Subject</div>
+        <select class="pm-select" id="pm-subject">
+          ${PLANNER_SUBJECTS.map(s=>`<option value="${s}" ${ex?.subject===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="pm-form-row">
+        <div class="pm-form-group">
+          <div class="pm-label">Date</div>
+          <input class="pm-input" type="date" id="pm-date" value="${ex?.date||prefillDate||today}">
+        </div>
+        <div class="pm-form-group">
+          <div class="pm-label">Start Time</div>
+          <select class="pm-select" id="pm-time">
+            ${times.map(t=>`<option value="${t}" ${(ex?.startTime||prefillTime)===t?'selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="pm-form-row">
+        <div class="pm-form-group">
+          <div class="pm-label">Duration</div>
+          <select class="pm-select" id="pm-dur">
+            ${durations.map(m=>`<option value="${m}" ${(ex?.dur||60)===m?'selected':''}>${m>=60?Math.floor(m/60)+'h'+(m%60?m%60+'m':''):m+'m'}</option>`).join('')}
+          </select>
+        </div>
+        <div class="pm-form-group">
+          <div class="pm-label">Priority</div>
+          <select class="pm-select" id="pm-priority">
+            <option value="normal" ${(!ex||ex.priority==='normal')?'selected':''}>Normal</option>
+            <option value="high"   ${ex?.priority==='high'?'selected':''}>🔥 High</option>
+            <option value="low"    ${ex?.priority==='low'?'selected':''}>📋 Low</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pm-form-group">
+        <div class="pm-label">Notes (optional)</div>
+        <input class="pm-input" id="pm-notes" placeholder="e.g. Chapter 4, past paper…" value="${escPl(ex?.notes||'')}">
+      </div>
+
+      <div class="pm-label" style="margin-bottom:8px;">Colour</div>
+      <div class="pm-color-row" id="pm-color-row">${colorChips}</div>
+
+      <div class="pm-label" style="margin-bottom:8px;">Repeat weekly on days (leave blank = one-off)</div>
+      <div class="pm-days-row" id="pm-days-row">${dayBtns}</div>
+
+      <div class="pm-actions">
+        ${ex?`<button class="pm-delete-btn" onclick="deletePlannerEvent('${ex.id}')">🗑 Delete</button>`:''}
+        <button class="pm-cancel-btn" onclick="closePlannerModal()">Cancel</button>
+        <button class="pm-save-btn" onclick="savePlannerEvent()">✦ Save</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(ov);
+  ov.addEventListener('click', e => { if(e.target===ov) closePlannerModal(); });
+
+  // Auto-update colour when subject changes
+  document.getElementById('pm-subject').addEventListener('change', function() {
+    const cls = SUBJ_COLOR_MAP[this.value]||'ec-other';
+    document.querySelectorAll('#pm-color-row .pm-color-chip').forEach(c => c.classList.toggle('on',c.dataset.cls===cls));
+  });
+}
+
+function plSelectColor(el) {
+  document.querySelectorAll('#pm-color-row .pm-color-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function closePlannerModal() {
+  const ov = document.getElementById('pm-overlay');
+  if (ov) ov.remove();
+  editingEventId = null;
+}
+
+function savePlannerEvent() {
+  const subject  = document.getElementById('pm-subject').value;
+  const date     = document.getElementById('pm-date').value;
+  const time     = document.getElementById('pm-time').value;
+  const dur      = parseInt(document.getElementById('pm-dur').value);
+  const notes    = document.getElementById('pm-notes').value.trim();
+  const priority = document.getElementById('pm-priority').value;
+  if (!date) { showToast('⚠️ Please pick a date'); return; }
+
+  const ccEl = document.querySelector('#pm-color-row .pm-color-chip.on');
+  const cc   = ccEl?.dataset.cls || SUBJ_COLOR_MAP[subject] || 'ec-other';
+  const repeatDays = Array.from(document.querySelectorAll('#pm-days-row .pm-day-btn.on')).map(b=>parseInt(b.dataset.di));
+
+  const events = getPlannerEvents();
+  if (editingEventId) {
+    const idx = events.findIndex(e=>e.id==editingEventId);
+    if (idx>-1) events[idx]={...events[idx],subject,date,startTime:time,dur,notes,cc,priority,repeatDays};
+  } else {
+    const base = {id:Date.now(), subject, date, startTime:time, dur, notes, cc, priority, repeatDays};
+    events.push(base);
+    // Recurring: add for next 12 weeks
+    if (repeatDays.length>0) {
+      const baseD = new Date(date+'T12:00:00');
+      const baseDow = (baseD.getDay()+6)%7; // Mon=0
+      for (let w=1;w<=12;w++) {
+        repeatDays.forEach(di => {
+          const diff = (di - baseDow + 7)%7 || 7;
+          const nd = new Date(baseD);
+          nd.setDate(baseD.getDate() + w*7 + (di - baseDow));
+          events.push({...base, id:Date.now()+Math.random()*9999|0, date:plannerFmtDate(nd), repeatDays:[]});
+        });
+      }
+    }
+  }
+  savePlannerEvents(events);
+  closePlannerModal();
+  renderPlanner();
+  showToast('📅 Session saved! +1 💎');
+  try { const a=getAcct(); a.gems=(a.gems||0)+1; saveAcct(a); checkBadges(); renderAcctPage(); } catch(e){}
+}
+
+function deletePlannerEvent(id) {
+  savePlannerEvents(getPlannerEvents().filter(e=>e.id!=id));
+  closePlannerModal();
+  renderPlanner();
+  showToast('🗑 Session removed');
+}
+
+function clearAllPlannerEvents() {
+  confirm2('Clear All Sessions','This will delete every session in your planner. Cannot be undone.', () => {
+    savePlannerEvents([]); renderPlanner(); showToast('🗑 Planner cleared');
+  });
+}
+
+function plannerPrevWeek()  { plannerWeekOffset--; renderPlanner(); }
+function plannerNextWeek()  { plannerWeekOffset++; renderPlanner(); }
+function plannerGoToday()   { plannerWeekOffset=0; plannerDayOffset=(new Date().getDay()+6)%7; renderPlanner(); }
+function plannerDayNext()   { plannerDayOffset=(plannerDayOffset+1)%7; if(plannerDayOffset===0) plannerWeekOffset++; renderPlanner(); }
+function plannerDayPrev()   { plannerDayOffset=(plannerDayOffset+6)%7; if(plannerDayOffset===6) plannerWeekOffset--; renderPlanner(); }
+function plannerPrint()     { window.print(); }
+
+function setPlannerView(view, btn, dayIdx) {
+  plannerView = view;
+  if (dayIdx!=null) plannerDayOffset = dayIdx;
+  document.querySelectorAll('.pv-btn').forEach(b=>b.classList.remove('on'));
+  const t = document.getElementById('pv-'+view);
+  if (t) t.classList.add('on'); else if (btn) btn.classList.add('on');
+  renderPlanner();
+}
+
+// Seed sample data for first launch
+(function plannerSeed() {
+  if (getPlannerEvents().length>0) return;
+  const mon = getPlannerMonday(0);
+  const seed=[
+    {s:'Mathematics',    di:0,hr:9, m:0,  dur:90},
+    {s:'English',        di:0,hr:11,m:0,  dur:60},
+    {s:'Break / Lunch',  di:0,hr:13,m:0,  dur:60},
+    {s:'Physics',        di:1,hr:9, m:0,  dur:90},
+    {s:'Revision',       di:1,hr:14,m:0,  dur:60},
+    {s:'History',        di:2,hr:10,m:0,  dur:60},
+    {s:'Chemistry',      di:3,hr:9, m:30, dur:90},
+    {s:'Mathematics',    di:4,hr:10,m:0,  dur:60},
+    {s:'Revision',       di:4,hr:15,m:0,  dur:120},
+  ];
+  const evts = seed.map((x,i)=>{
+    const d=new Date(mon); d.setDate(mon.getDate()+x.di);
+    return {id:Date.now()+i,subject:x.s,date:plannerFmtDate(d),startTime:`${String(x.hr).padStart(2,'0')}:${String(x.m).padStart(2,'0')}`,dur:x.dur,cc:SUBJ_COLOR_MAP[x.s]||'ec-other',notes:'',priority:'normal',repeatDays:[]};
+  });
+  savePlannerEvents(evts);
+})();
+// ══════════════ END PLANNER ══════════════
+
 window.addEventListener('beforeunload', () => { if (window._fbUser) nwCloudSave_silent(); });
 
 // Close support QR popup when clicking anywhere outside it
@@ -8001,6 +8472,101 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
 [style*="font-size:.6"], [style*="font-size: .6"] {
   font-size: .8rem !important;
 }
+
+/* ══════════════ STUDY PLANNER CSS ══════════════ */
+.planner-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.planner-week-nav{display:flex;align-items:center;gap:8px;}
+.pw-btn{background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 12px;color:var(--accent2);font-family:var(--exo);font-size:.8rem;cursor:pointer;transition:all .15s;}
+.pw-btn:hover{background:rgba(77,159,255,.12);border-color:var(--accent);}
+.pw-week-label{font-family:var(--orb);font-size:.6rem;color:var(--text);letter-spacing:1px;min-width:170px;text-align:center;}
+.planner-view-toggle{display:flex;gap:4px;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.12);border-radius:8px;padding:3px;}
+.pv-btn{background:none;border:none;border-radius:6px;padding:5px 12px;font-family:var(--exo);font-size:.72rem;color:var(--silver);cursor:pointer;transition:all .15s;}
+.pv-btn.on{background:rgba(77,159,255,.2);color:var(--accent2);}
+.planner-add-btn{margin-left:auto;background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:10px;padding:8px 18px;color:#fff;font-family:var(--orb);font-size:.55rem;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .18s;}
+.planner-add-btn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(77,159,255,.3);}
+.planner-grid-wrap{flex:1;overflow:auto;min-height:0;}
+.planner-week-grid{display:grid;grid-template-columns:54px repeat(7,1fr);border:1px solid rgba(77,159,255,.15);border-radius:14px;overflow:hidden;min-width:580px;}
+.pgrid-corner{background:rgba(5,8,18,.8);border-bottom:1px solid rgba(77,159,255,.15);border-right:1px solid rgba(77,159,255,.1);display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;}
+.pgrid-day-head{background:rgba(5,8,18,.8);border-bottom:1px solid rgba(77,159,255,.15);border-right:1px solid rgba(77,159,255,.08);padding:10px 4px;text-align:center;cursor:pointer;transition:background .15s;}
+.pgrid-day-head:last-child{border-right:none;}
+.pgrid-day-head:hover{background:rgba(77,159,255,.06);}
+.pgrid-day-name{font-family:var(--orb);font-size:.45rem;color:var(--silver);letter-spacing:1.5px;text-transform:uppercase;}
+.pgrid-day-num{font-family:var(--orb);font-size:.95rem;font-weight:700;color:var(--text);line-height:1.3;}
+.pgrid-day-head.today-head .pgrid-day-num{color:var(--accent2);}
+.pgrid-day-head.today-head .pgrid-day-name{color:var(--accent);}
+.pgrid-day-head.today-head{background:rgba(77,159,255,.08);}
+.pgrid-time-col{background:rgba(5,8,18,.6);border-right:1px solid rgba(77,159,255,.1);}
+.pgrid-time-slot{height:52px;display:flex;align-items:flex-start;justify-content:center;padding-top:6px;border-bottom:1px solid rgba(77,159,255,.06);font-family:var(--exo);font-size:.58rem;color:var(--silver);opacity:.7;}
+.pgrid-cell-col{position:relative;border-right:1px solid rgba(77,159,255,.05);}
+.pgrid-cell-col:last-child{border-right:none;}
+.pgrid-cell{height:52px;border-bottom:1px solid rgba(77,159,255,.04);cursor:pointer;transition:background .1s;position:relative;}
+.pgrid-cell:hover{background:rgba(77,159,255,.06);}
+.pgrid-cell.today-col{background:rgba(77,159,255,.025);}
+.plan-event{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 6px;cursor:pointer;z-index:2;overflow:hidden;transition:all .15s;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.plan-event:hover{transform:scale(1.03);z-index:10;box-shadow:0 4px 16px rgba(0,0,0,.5);}
+.plan-event-title{font-family:var(--exo);font-size:.63rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;}
+.plan-event-sub{font-family:var(--exo);font-size:.57rem;opacity:.7;margin-top:1px;}
+/* event colours */
+.ec-maths    {background:rgba(77,159,255,.28);border-left:3px solid #4d9fff;color:#c0dcff;}
+.ec-science  {background:rgba(0,212,170,.24);border-left:3px solid #00d4aa;color:#8ffce8;}
+.ec-english  {background:rgba(192,132,252,.24);border-left:3px solid #c084fc;color:#e4c0ff;}
+.ec-history  {background:rgba(251,191,36,.22);border-left:3px solid #fbbf24;color:#fde68a;}
+.ec-break    {background:rgba(34,197,94,.2);border-left:3px solid #22c55e;color:#86efac;}
+.ec-revision {background:rgba(251,146,60,.22);border-left:3px solid #fb923c;color:#fed7aa;}
+.ec-sport    {background:rgba(244,114,182,.22);border-left:3px solid #f472b6;color:#fce4f0;}
+.ec-other    {background:rgba(99,102,241,.22);border-left:3px solid #6366f1;color:#c7d2fe;}
+/* day list view */
+.planner-day-list{display:flex;flex-direction:column;gap:8px;}
+.pdl-section-head{font-family:var(--orb);font-size:.5rem;color:var(--silver);letter-spacing:2px;text-transform:uppercase;padding:12px 0 6px;border-bottom:1px solid rgba(77,159,255,.1);margin-bottom:4px;}
+.pdl-event{display:flex;align-items:center;gap:12px;background:var(--panel-bg);border:1px solid var(--panel-border);border-radius:12px;padding:12px 16px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
+.pdl-event::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(77,159,255,.3),transparent);}
+.pdl-event:hover{border-color:rgba(77,159,255,.4);transform:translateX(3px);}
+.pdl-bar{width:4px;height:36px;border-radius:2px;flex-shrink:0;}
+.pdl-time{font-family:var(--exo);font-size:.72rem;color:var(--silver);min-width:76px;}
+.pdl-subj{font-family:var(--raj);font-size:.9rem;color:var(--text);font-weight:600;}
+.pdl-note{font-family:var(--exo);font-size:.72rem;color:var(--silver2);margin-top:2px;}
+.pdl-dur{font-family:var(--exo);font-size:.65rem;color:var(--silver);background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.15);border-radius:999px;padding:2px 10px;flex-shrink:0;white-space:nowrap;}
+/* summary */
+.planner-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:14px;}
+.pl-sum-card{background:var(--panel-bg);border:1px solid var(--panel-border);border-radius:12px;padding:14px 12px;text-align:center;position:relative;overflow:hidden;}
+.pl-sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(77,159,255,.3),transparent);}
+.pl-sum-icon{font-size:1.2rem;margin-bottom:5px;}
+.pl-sum-val{font-family:var(--orb);font-size:1.3rem;font-weight:800;color:var(--accent2);margin-bottom:2px;}
+.pl-sum-lbl{font-family:var(--exo);font-size:.6rem;color:var(--silver);letter-spacing:.5px;line-height:1.3;}
+.subj-bars{display:flex;flex-direction:column;gap:7px;margin-top:4px;}
+.subj-bar-row{display:flex;align-items:center;gap:9px;}
+.subj-bar-label{font-family:var(--exo);font-size:.75rem;color:var(--text2);min-width:90px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.subj-bar-track{flex:1;height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+.subj-bar-fill{height:100%;border-radius:4px;transition:width .5s ease;}
+.subj-bar-hrs{font-family:var(--exo);font-size:.63rem;color:var(--silver);min-width:36px;text-align:right;}
+/* modal */
+.planner-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:600;display:flex;align-items:center;justify-content:center;animation:tIn .2s ease;}
+.planner-modal{background:var(--panel-bg);border:1px solid rgba(77,159,255,.3);border-radius:18px;padding:28px 30px;width:min(500px,93vw);position:relative;box-shadow:0 0 60px rgba(77,159,255,.12);max-height:90vh;overflow-y:auto;}
+.planner-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--teal),transparent);border-radius:18px 18px 0 0;}
+.pm-title{font-family:var(--orb);font-size:.65rem;color:var(--accent2);letter-spacing:2px;margin-bottom:18px;}
+.pm-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.pm-form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.pm-label{font-family:var(--exo);font-size:.72rem;color:var(--silver);letter-spacing:.5px;}
+.pm-input,.pm-select{background:rgba(5,8,18,.7);border:1px solid rgba(77,159,255,.2);border-radius:10px;padding:10px 14px;color:var(--text);font-family:var(--exo);font-size:.88rem;outline:none;transition:border .2s;width:100%;}
+.pm-input:focus,.pm-select:focus{border-color:var(--accent);}
+.pm-input::placeholder{color:var(--silver);opacity:.45;}
+.pm-select option{background:#0f1528;color:var(--text);}
+.pm-color-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.pm-color-chip{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;}
+.pm-color-chip:hover,.pm-color-chip.on{border-color:#fff;transform:scale(1.18);}
+.pm-days-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.pm-day-btn{background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.15);border-radius:8px;padding:6px 10px;font-family:var(--exo);font-size:.72rem;color:var(--silver);cursor:pointer;transition:all .15s;min-width:38px;text-align:center;}
+.pm-day-btn.on{background:rgba(77,159,255,.2);border-color:var(--accent);color:var(--accent2);}
+.pm-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:6px;flex-wrap:wrap;}
+.pm-save-btn{background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:10px;padding:10px 24px;color:#fff;font-family:var(--orb);font-size:.58rem;letter-spacing:1.5px;cursor:pointer;transition:all .18s;font-weight:700;}
+.pm-save-btn:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(77,159,255,.3);}
+.pm-cancel-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 20px;color:var(--silver);font-family:var(--raj);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .15s;}
+.pm-cancel-btn:hover{background:rgba(255,255,255,.1);color:var(--text);}
+.pm-delete-btn{background:rgba(255,102,128,.08);border:1px solid rgba(255,102,128,.2);border-radius:10px;padding:10px 16px;color:#ff8899;font-family:var(--exo);font-size:.78rem;cursor:pointer;transition:all .15s;}
+.pm-delete-btn:hover{background:rgba(255,102,128,.18);}
+@media(max-width:600px){.pm-form-row{grid-template-columns:1fr!important;}}
+@media print{.planner-toolbar,.planner-add-btn,.planner-view-toggle,.pw-btn{display:none!important;}.planner-week-grid{border:1px solid #334!important;min-width:unset!important;}}
+/* ══════════════ END PLANNER CSS ══════════════ */
 </style><!-- MOBILE MODE JS -->
 <script>
 (function () {
