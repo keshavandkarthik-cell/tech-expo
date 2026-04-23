@@ -1,4 +1,4 @@
-<html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc;"><head>
+<html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc; font-size: 17px;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Veda — AI Study Companion</title>
@@ -1035,6 +1035,99 @@ body.mobile-mode #mobile-dock { display: flex; }
 .corner-tr { top:8px; right:8px; border-top:1px solid; border-right:1px solid; }
 
 /* ── UI STYLE MODES ── */
+
+/* HACKER / TERMINAL */
+body.style-hacker {
+  --navy: #020c02; --navy2: #041504; --navy3: #061a06;
+  --accent: #00ff41; --accent2: #39ff14; --teal: #ffb000; --teal2: #ffd060;
+  --silver: #2a6b2a; --silver2: #3d9e3d; --text: #b8ffb8; --text2: #5a995a;
+  --glow: rgba(0,255,65,0.18); --glow2: rgba(255,176,0,0.1);
+  --panel-bg: linear-gradient(145deg, rgba(4,21,4,0.97), rgba(2,12,2,0.99));
+  --panel-border: rgba(0,255,65,0.2);
+  --orb: 'DM Mono', monospace; --raj: 'DM Mono', monospace; --exo: 'DM Mono', monospace;
+}
+body.style-hacker {
+  background:
+    repeating-linear-gradient(0deg, rgba(0,255,65,0.03) 0px, transparent 2px, transparent 4px),
+    linear-gradient(rgba(0,255,65,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,65,0.02) 1px, transparent 1px),
+    #020c02;
+  background-size: 100% 4px, 20px 20px, 20px 20px, 100%;
+}
+body.style-hacker .tab-bar, body.style-hacker .sidebar { border-color: rgba(0,255,65,0.15) !important; }
+body.style-hacker .card, body.style-hacker .ps-card { border-radius: 2px !important; border-left: 2px solid var(--accent) !important; }
+body.style-hacker .ttl::before { content: '> '; color: var(--accent); }
+body.style-hacker button, body.style-hacker .btn { border-radius: 2px !important; }
+body.style-hacker .ps-tab { border-radius: 2px !important; }
+body.style-hacker * { text-shadow: 0 0 8px rgba(0,255,65,0.3); }
+body.style-hacker .ps-card-label::before { content: '// '; }
+body.style-hacker .ps-card-label { content: ''; }
+
+/* GLASSMORPHISM / FROSTED */
+body.style-glass {
+  --navy: #0d1117; --navy2: #161b22; --navy3: #1c2128;
+  --accent: #a78bfa; --accent2: #c4b5fd; --teal: #67e8f9; --teal2: #a5f3fc;
+  --silver: #7c8ea8; --silver2: #a0b0c8; --text: #e2e8f0; --text2: #94a3b8;
+  --glow: rgba(167,139,250,0.15); --glow2: rgba(103,232,249,0.1);
+  --panel-bg: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  --panel-border: rgba(255,255,255,0.12);
+  --orb: 'Space Grotesk', sans-serif; --raj: 'Space Grotesk', sans-serif; --exo: 'DM Mono', monospace;
+}
+body.style-glass {
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(167,139,250,0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(103,232,249,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(236,72,153,0.08) 0%, transparent 60%),
+    #0d1117;
+}
+body.style-glass .ps-card, body.style-glass .card {
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 20px !important;
+}
+body.style-glass .sb { backdrop-filter: blur(30px) !important; background: rgba(13,17,23,0.6) !important; }
+
+/* SYNTHWAVE / NEON */
+body.style-synthwave {
+  --navy: #0a0015; --navy2: #0f0020; --navy3: #15002e;
+  --accent: #ff2d78; --accent2: #ff6ba8; --teal: #bf00ff; --teal2: #d966ff;
+  --silver: #7b3f8c; --silver2: #a855b8; --text: #ffcce8; --text2: #cc88aa;
+  --glow: rgba(255,45,120,0.2); --glow2: rgba(191,0,255,0.15);
+  --panel-bg: linear-gradient(145deg, rgba(15,0,32,0.95), rgba(10,0,21,0.98));
+  --panel-border: rgba(255,45,120,0.25);
+  --orb: 'Syne', sans-serif; --raj: 'Space Grotesk', sans-serif; --exo: 'DM Mono', monospace;
+}
+body.style-synthwave {
+  background:
+    linear-gradient(180deg, #0a0015 0%, #0a0015 60%, #1a0030 80%, #2a0050 100%),
+    repeating-linear-gradient(90deg, rgba(255,45,120,0.03) 0px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(0deg, rgba(191,0,255,0.03) 0px, transparent 1px, transparent 40px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+}
+body.style-synthwave::after {
+  content: '';
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 35vh;
+  background:
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,45,120,0.15) 40px),
+    repeating-linear-gradient(180deg, transparent, transparent 39px, rgba(255,45,120,0.08) 40px),
+    linear-gradient(180deg, transparent 0%, rgba(191,0,255,0.1) 100%);
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: bottom center;
+  pointer-events: none;
+  z-index: 0;
+}
+body.style-synthwave .ps-card, body.style-synthwave .card {
+  border-radius: 6px !important;
+  box-shadow: 0 0 20px rgba(255,45,120,0.1), 0 0 40px rgba(191,0,255,0.05), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+body.style-synthwave * { text-shadow: 0 0 10px rgba(255,45,120,0.4); }
+body.style-synthwave .ttl { text-shadow: 0 0 20px rgba(255,45,120,0.8) !important; }
+
+/* keep old aliases for backward compat */
 body.style-futuristic {
   --accent: #00f5ff; --accent2: #66ffff; --teal: #ff00aa; --teal2: #ff66cc;
   --silver: #6688aa; --silver2: #88aacc; --text: #ccffff; --panel-border: rgba(0,245,255,0.25);
@@ -1058,6 +1151,8 @@ body.style-minimal {
 /* font size modes */
 body.fs-small { font-size: 13px; }
 body.fs-large { font-size: 17px; }
+:root:has(body.fs-small) { font-size: 13px; }
+:root:has(body.fs-large) { font-size: 17px; }
 
 /* ── PROFILE & SETTINGS ── */
 .ps-subnav {
@@ -1272,6 +1367,39 @@ body.fs-large { font-size: 17px; }
 .style-pill .sp-icon { font-size: 1.2rem; }
 .style-pill .sp-name { font-family: var(--exo); font-size: .65rem; color: var(--silver2); letter-spacing: .5px; }
 .style-pill.on .sp-name { color: var(--accent2); }
+
+/* ── SKIN CARDS ── */
+.skin-card {
+  cursor: pointer; border-radius: 10px; overflow: hidden;
+  border: 2px solid rgba(255,255,255,.08); transition: all .2s;
+  background: rgba(255,255,255,.03);
+}
+.skin-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.skin-card.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 4px 16px rgba(77,159,255,.2); }
+.skin-preview {
+  height: 52px; width: 100%; position: relative; overflow: hidden;
+}
+.skin-label {
+  font-family: var(--exo); font-size: .65rem; color: var(--silver2);
+  text-align: center; padding: 5px 4px; letter-spacing: .3px;
+}
+.skin-card.on .skin-label { color: var(--accent2); }
+
+/* skin preview thumbnails */
+.skin-prev-default { background: linear-gradient(135deg, #0a0e1a 40%, #1a3a6e 100%); }
+.skin-prev-default::after { content:''; position:absolute; bottom:6px; left:8px; right:8px; height:8px; border-radius:2px; background:rgba(77,159,255,.4); }
+.skin-prev-hacker { background: #020c02; }
+.skin-prev-hacker::after { content:'> _'; position:absolute; bottom:8px; left:8px; font-family:'DM Mono',monospace; font-size:9px; color:#00ff41; text-shadow:0 0 6px #00ff41; }
+
+
+.skin-prev-glass { background: radial-gradient(ellipse at 30% 30%, rgba(167,139,250,.4), transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(103,232,249,.3), transparent 60%), #0d1117; }
+.skin-prev-glass::after { content:''; position:absolute; bottom:6px; left:8px; right:8px; height:16px; border-radius:8px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); backdrop-filter:blur(4px); }
+
+
+
+
+.skin-prev-synthwave { background: linear-gradient(180deg, #0a0015 40%, #2a0050 100%); }
+.skin-prev-synthwave::after { content:''; position:absolute; bottom:0; left:0; right:0; height:16px; background: repeating-linear-gradient(90deg, transparent, transparent 7px, rgba(255,45,120,.4) 8px); }
 .color-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .color-swatch {
   width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
@@ -1480,7 +1608,7 @@ body.fs-large { font-size: 17px; }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
 </style>
 </head>
-<body style="background: linear-gradient(135deg, rgb(6, 12, 18) 0%, rgb(12, 20, 32) 100%);">
+<body style="background: linear-gradient(135deg, rgb(22, 14, 2) 0%, rgb(34, 22, 4) 100%);" class="style-synthwave fs-large">
 
 <!-- ONBOARDING -->
 <div id="onboarding" style="display:none;">
@@ -1718,7 +1846,7 @@ body.fs-large { font-size: 17px; }
         <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       </div>
-      <div class="hdr-time" id="clk">10:17</div>
+      <div class="hdr-time" id="clk">16:04</div>
     </div>
   </div>
   <div id="body">
@@ -1761,32 +1889,31 @@ body.fs-large { font-size: 17px; }
     </div>
 
     <!-- SIDEBAR -->
-    <aside id="sb">
+    <aside id="sb" class="">
       <div class="sb-top">
         <div style="font-family:var(--orb);font-size:.75rem;color:var(--accent2);letter-spacing:2px;display:flex;align-items:center;gap:8px;"><img src="image_1.png" alt="V" style="height:24px;width:24px;border-radius:50%;object-fit:cover;">VEDA</div>
         <div class="sb-ver">// AI STUDY SYSTEM</div>
       </div>
-      <button id="tog" onclick="toggleSb()">◀</button>
+      <button id="tog" onclick="toggleSb()" style="left: 188px;">◀</button>
       <nav>
         <button class="nb" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
         <button class="nb" onclick="go('homework')"><span class="ni">📚</span><span class="nl">Homework</span></button>
         <button class="nb" onclick="go('library')"><span class="ni">🗂️</span><span class="nl">Topic Library</span></button>
         <button class="nb" onclick="go('notes')"><span class="ni">📝</span><span class="nl">Notes</span></button>
         <button class="nb" onclick="go('study')"><span class="ni">🧠</span><span class="nl">Smart Study</span></button>
-        <button class="nb" onclick="go('themes')"><span class="ni">🌈</span><span class="nl">Themes</span></button>
         <button class="nb" onclick="go('calc')"><span class="ni">🔢</span><span class="nl">Calculator</span></button>
         <button class="nb" onclick="go('chat')"><span class="ni">💬</span><span class="nl">Companion</span></button>
         <button class="nb" id="nb-music" onclick="go('music')" style="display: none; opacity: 0; transform: translateX(-12px);"><span class="ni">🎵</span><span class="nl">Music</span></button>
         <button class="nb" onclick="go('todo')"><span class="ni">✅</span><span class="nl">To-Do List</span></button>
         <button class="nb" onclick="go('journal')"><span class="ni">📓</span><span class="nl">Journal</span></button>
         <button class="nb" onclick="go('profile')"><span class="ni">👤</span><span class="nl">Profile</span></button>
-        <button class="nb on" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
+        <button class="nb" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
+        <button class="nb on" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
-        <div class="sb-foot-text" id="key-indicator">NO KEY SET</div>
+        <div class="sb-foot-text" id="key-indicator">KEY: ACTIVE</div>
         <div class="sb-bar">
           <div class="sb-bar-seg"></div><div class="sb-bar-seg"></div>
           <div class="sb-bar-seg"></div><div class="sb-bar-seg"></div>
@@ -1827,7 +1954,7 @@ body.fs-large { font-size: 17px; }
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">10:17</div>
+            <div class="dt-clock-big" id="dt-clock-big">16:04</div>
             <div class="dt-clock-date" id="dt-clock-date">Thursday, Apr 23</div>
           </div>
 
@@ -1838,23 +1965,23 @@ body.fs-large { font-size: 17px; }
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Questions asked</span>
-                  <span class="dt-stat-val" id="dt-stat-q">0</span>
+                  <span class="dt-stat-val" id="dt-stat-q">94</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width:0%"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width: 100%;"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Games played</span>
-                  <span class="dt-stat-val" id="dt-stat-g">0</span>
+                  <span class="dt-stat-val" id="dt-stat-g">66</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width:0%;background:linear-gradient(90deg,var(--teal),var(--teal2))"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 100%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Journal entries</span>
-                  <span class="dt-stat-val" id="dt-stat-j">0</span>
+                  <span class="dt-stat-val" id="dt-stat-j">12</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-j" style="width:0%;background:linear-gradient(90deg,#c084fc,#e879f9)"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-j" style="width: 60%; background: linear-gradient(90deg, rgb(192, 132, 252), rgb(232, 121, 249));"></div></div>
               </div>
             </div>
           </div>
@@ -1885,16 +2012,16 @@ body.fs-large { font-size: 17px; }
           </div>
 
           <!-- Gems/streak widget -->
-          <div class="dt-widget clickable" onclick="go('settings');psGo('profile',null)">
+          <div class="dt-widget clickable" onclick="go('profile')">
             <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Rewards</div>
             <div class="dt-reward">
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">💎</div>
-                <div><div class="dt-reward-val" id="dt-gems-big">62</div><div class="dt-reward-label">Gems earned</div></div>
+                <div><div class="dt-reward-val" id="dt-gems-big">1241</div><div class="dt-reward-label">Gems earned</div></div>
               </div>
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">🔥</div>
-                <div><div class="dt-reward-val" id="dt-streak-big">1 days</div><div class="dt-reward-label">Study streak</div></div>
+                <div><div class="dt-reward-val" id="dt-streak-big">30 days</div><div class="dt-reward-label">Study streak</div></div>
               </div>
             </div>
           </div>
@@ -1913,10 +2040,9 @@ body.fs-large { font-size: 17px; }
 
             <!-- Playlist tabs -->
             <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-top:8px;">
-      <button class="music-pl-btn " data-plid="69AaAkdktFGnk9POmHENkT" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Lo-fi">Lo-fi</button>
-      <button class="music-pl-btn " data-plid="37i9dQZF1DX8Uebhn9wzrS" onclick="playPlaylist({&quot;name&quot;:&quot;Focus Flow&quot;,&quot;id&quot;:&quot;37i9dQZF1DX8Uebhn9wzrS&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Focus Flow">Focus Flow</button>
-      <button class="music-pl-btn " data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
-      <button class="music-pl-btn " data-plid="7a78GiEowpaCa7ZJs44xUU" onclick="playPlaylist({&quot;name&quot;:&quot;Interstellar OST&quot;,&quot;id&quot;:&quot;7a78GiEowpaCa7ZJs44xUU&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Soundtrack&quot;})" title="Interstellar OST">Interstellar OST</button></div>
+      <button class="music-pl-btn " data-plid="37i9dQZF1DWWQRwui0ExPn" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi Study&quot;,&quot;id&quot;:&quot;37i9dQZF1DWWQRwui0ExPn&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Lo-fi Study">Lo-fi Study</button>
+      <button class="music-pl-btn " data-plid="37i9dQZF1DX9sIqqvKsjEK" onclick="playPlaylist({&quot;name&quot;:&quot;Deep Focus&quot;,&quot;id&quot;:&quot;37i9dQZF1DX9sIqqvKsjEK&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Deep Focus">Deep Focus</button>
+      <button class="music-pl-btn " data-plid="37i9dQZF1DX5trt9i14X7j" onclick="playPlaylist({&quot;name&quot;:&quot;Coding Vibes&quot;,&quot;id&quot;:&quot;37i9dQZF1DX5trt9i14X7j&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Coding Vibes">Coding Vibes</button></div>
 
             <!-- Spotify login nudge -->
             <div id="spotify-nudge" style="background: linear-gradient(135deg, rgba(30, 215, 96, 0.08), rgba(30, 215, 96, 0.04)); border: 1px solid rgba(30, 215, 96, 0.25); border-radius: 10px; padding: 10px 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -1951,11 +2077,11 @@ body.fs-large { font-size: 17px; }
 
           <!-- Greeting -->
           <div>
-            <div class="mh-greeting-time" id="mh-timeofday">Good morning</div>
-            <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
+            <div class="mh-greeting-time" id="mh-timeofday">Good afternoon</div>
+            <div class="mh-greeting-name">Hey, <span id="mh-name">User</span></div>
             <div class="mh-pills">
-              <div class="mh-pill">🔥 <span id="mh-streak">1</span> day streak</div>
-              <div class="mh-pill">💎 <span id="mh-gems">24</span> gems</div>
+              <div class="mh-pill">🔥 <span id="mh-streak">30</span> day streak</div>
+              <div class="mh-pill">💎 <span id="mh-gems">1240</span> gems</div>
             </div>
           </div>
 
@@ -2559,230 +2685,173 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <button class="journal-filter" id="jf-today" onclick="setJournalFilter('today',this)">Today</button>
           <button class="journal-filter" id="jf-week" onclick="setJournalFilter('week',this)">This Week</button>
         </div>
-        <div class="journal-list" id="journal-list"><div class="journal-empty">No entries yet — write your first one above ✏️</div></div>
+        <div class="journal-list" id="journal-list"><div class="jentry" id="jentry-1776912460332">
+      <div class="jentry-header">
+        <div class="jentry-title">Pre-exam anxiety is real</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460332"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460332)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460332)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460332)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460331">
+      <div class="jentry-header">
+        <div class="jentry-title">Chemistry win!</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460331"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460331)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460331)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460331)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460330">
+      <div class="jentry-header">
+        <div class="jentry-title">Running on empty</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460330"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460330)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460330)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460330)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460329">
+      <div class="jentry-header">
+        <div class="jentry-title">In the zone — 4 hour session</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460329"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460329)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460329)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460329)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460328">
+      <div class="jentry-header">
+        <div class="jentry-title">Meh kind of day</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460328"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460328)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460328)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460328)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460327">
+      <div class="jentry-header">
+        <div class="jentry-title">Library study + flag quiz wins</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460327"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460327)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460327)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460327)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460326">
+      <div class="jentry-header">
+        <div class="jentry-title">Three assessments incoming</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460326"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460326)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460326)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460326)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460325">
+      <div class="jentry-header">
+        <div class="jentry-title">Essay done and submitted</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460325"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460325)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460325)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460325)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460324">
+      <div class="jentry-header">
+        <div class="jentry-title">Two weeks in and loving it</div>
+        <div class="jentry-meta">4 Nov 2026 · 00:00</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460324"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460324)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460324)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460324)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460323">
+      <div class="jentry-header">
+        <div class="jentry-title">Rest day (needed it)</div>
+        <div class="jentry-meta">4 Sept 2026 · 00:00</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460323"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460323)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460323)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460323)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460322">
+      <div class="jentry-header">
+        <div class="jentry-title">93% on mock — personal best!</div>
+        <div class="jentry-meta">4 Jun 2026 · 00:00</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460322"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460322)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460322)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460322)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460321">
+      <div class="jentry-header">
+        <div class="jentry-title">Day 1 — new term, new goals</div>
+        <div class="jentry-meta">4 Mar 2026 · 00:00</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460321"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460321)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460321)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460321)">🗑 Delete</button>
+      </div>
+    </div></div>
         </div>
       </div>
 
       <!-- THEMES -->
-      <div class="tab" id="tab-themes">
-        <div class="ttl">🌈 Themes</div>
-        <div class="tsub"><span class="prm">›</span>Hover to preview · Click to apply · 💎 Shop for exclusives</div>
-        <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
-          <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
-        </div>
-        <div id="shop-panel" style="display:none;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-            <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:2px;">// GEM SHOP</div>
-            <div style="font-family:var(--orb);font-size:.55rem;color:var(--teal2);">💎 <span id="shop-gems-display">0</span> gems</div>
-          </div>
-          <div class="shop-grid" id="shop-grid"></div>
-        </div>
-        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
-      </div>
-
-      <!-- PROFILE & SETTINGS (merged) -->
-      <div class="tab" id="tab-settings">
+      <!-- SETTINGS — Appearance + API Key only -->
+      <div class="tab on" id="tab-settings">
 
         <!-- SUB-NAV -->
         <div class="ps-subnav">
-          <button class="ps-tab on" onclick="psGo('profile',this)">👤 Profile</button>
-          <button class="ps-tab" onclick="psGo('stats',this)">📊 Stats</button>
-          <button class="ps-tab" onclick="psGo('badges',this)">🏅 Badges</button>
-          <button class="ps-tab" onclick="psGo('goals',this)">🎯 Goals</button>
-          <button class="ps-tab" onclick="psGo('appearance',this)">🎨 Appearance</button>
-          <button class="ps-tab" onclick="psGo('aiprofile',this);renderAIProfilePanel()">set_aiprofile</button>
-          <button class="ps-tab" onclick="psGo('apikey',this)">🔑 API Key</button>
-        </div>
-
-        <!-- ── PROFILE PANEL ── -->
-        <div class="ps-panel on" id="ps-profile">
-          <div class="ps-hero">
-            <div class="ps-avatar-wrap">
-              <div class="ps-avatar" id="acct-avatar">🎓</div>
-              <div class="ps-avatar-ring"></div>
-            </div>
-            <div class="ps-hero-right">
-              <div class="ps-name" id="acct-name">Keshav</div>
-              <div class="ps-tagline" id="acct-tagline">Level 2 Apprentice</div>
-              <div class="ps-badges-row">
-                <div class="ps-pill gem">💎 <span id="acct-gems">62</span> Gems</div>
-                <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Edit form inline -->
-          <div class="ps-card" style="margin-top:16px;">
-            <div class="ps-card-label">// EDIT PROFILE</div>
-            <div class="ps-form-grid">
-              <div class="ps-form-group">
-                <div class="ps-form-label">Display Name</div>
-                <input class="ps-input" id="ps-name-in" placeholder="Your name..." maxlength="20">
-              </div>
-              <div class="ps-form-group">
-                <div class="ps-form-label">Avatar Emoji</div>
-                <input class="ps-input" id="ps-avatar-in" placeholder="🎓" maxlength="4" style="font-size:1.4rem;text-align:center;letter-spacing:2px;">
-              </div>
-            </div>
-            <div class="ps-avatar-picker">
-              <div class="ps-form-label" style="margin-bottom:8px;">Quick Pick</div>
-              <div class="ps-avatar-opts">
-                <span onclick="pickAvatar(this,'🎓')">🎓</span><span onclick="pickAvatar(this,'📚')">📚</span>
-                <span onclick="pickAvatar(this,'🧠')">🧠</span><span onclick="pickAvatar(this,'⚡')">⚡</span>
-                <span onclick="pickAvatar(this,'🌟')">🌟</span><span onclick="pickAvatar(this,'🔥')">🔥</span>
-                <span onclick="pickAvatar(this,'💎')">💎</span><span onclick="pickAvatar(this,'🦋')">🦋</span>
-                <span onclick="pickAvatar(this,'🚀')">🚀</span><span onclick="pickAvatar(this,'🎵')">🎵</span>
-                <span onclick="pickAvatar(this,'🌙')">🌙</span><span onclick="pickAvatar(this,'☀️')">☀️</span>
-              </div>
-            </div>
-            <button class="ps-save-btn" onclick="saveProfileInline()">Save Profile</button>
-          </div>
-
-          <!-- Level progress -->
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// LEVEL PROGRESS</div>
-            <div class="ps-level-row">
-              <div class="ps-level-num" id="ps-level">2</div>
-              <div style="flex:1;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <span class="ps-form-label" id="ps-level-title">Apprentice</span>
-                  <span class="ps-form-label"><span id="ps-gems-cur">12</span> / <span id="ps-gems-next">50</span> gems</span>
-                </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 24%;"></div></div>
-                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Thinker</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Danger zone -->
-          <div class="ps-card ps-danger" style="margin-top:12px;">
-            <div class="ps-card-label" style="color:#ff6680;">// DANGER ZONE</div>
-            <div class="ps-danger-row">
-              <button class="ps-danger-btn" onclick="resetKey()">🗝 Clear API Key</button>
-              <button class="ps-danger-btn" onclick="resetTheme()">🎨 Reset Theme</button>
-              <button class="ps-danger-btn" onclick="resetAll()">⚠️ Reset Everything</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── STATS PANEL ── -->
-        <div class="ps-panel" id="ps-stats">
-          <div class="ps-stats-grid" id="ps-stats-grid">
-            <div class="ps-stat-card"><div class="ps-stat-icon">📚</div><div class="ps-stat-val" id="pss-questions">0</div><div class="ps-stat-lbl">Questions Asked</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">📝</div><div class="ps-stat-val" id="pss-notes">0</div><div class="ps-stat-lbl">Notes Summarised</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🃏</div><div class="ps-stat-val" id="pss-flashcards">0</div><div class="ps-stat-lbl">Flashcard Sets</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🎮</div><div class="ps-stat-val" id="pss-games">0</div><div class="ps-stat-lbl">Games Played</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">📓</div><div class="ps-stat-val" id="pss-journal">0</div><div class="ps-stat-lbl">Journal Entries</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🔥</div><div class="ps-stat-val" id="pss-streak">0</div><div class="ps-stat-lbl">Day Streak</div></div>
-          </div>
-
-          <!-- Activity chart -->
-          <div class="ps-card" style="margin-top:16px;">
-            <div class="ps-card-label">// ACTIVITY THIS WEEK</div>
-            <div class="ps-chart" id="ps-chart"></div>
-            <div class="ps-chart-legend">
-              <span><span class="ps-dot" style="background:var(--accent)"></span>Questions</span>
-              <span><span class="ps-dot" style="background:var(--teal)"></span>Journal</span>
-              <span><span class="ps-dot" style="background:#c084fc"></span>Games</span>
-            </div>
-          </div>
-
-          <!-- High scores -->
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// GAME HIGH SCORES</div>
-            <div class="ps-hiscore-list" id="ps-hiscores"></div>
-          </div>
-        </div>
-
-        <!-- ── BADGES PANEL ── -->
-        <div class="ps-panel" id="ps-badges">
-          <div class="ps-badges-header">
-            <div>
-              <div class="ps-card-label">// ACHIEVEMENTS</div>
-              <div class="ps-form-label" id="ps-badges-count" style="margin-top:4px;">0 of 8 unlocked</div>
-            </div>
-          </div>
-          <div class="ps-badges-full" id="badges-grid"></div>
-        </div>
-
-        <!-- ── GOALS PANEL ── -->
-        <div class="ps-panel" id="ps-goals">
-          <div class="ps-card">
-            <div class="ps-card-label">// DAILY STUDY GOALS</div>
-            <div class="ps-form-label" style="margin-bottom:16px;">Set targets — progress tracked automatically each day</div>
-            <div class="ps-goals-list">
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">📚</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name">Questions to ask</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-q" style="background:var(--accent)"></div></div>
-                  <div class="ps-form-label" id="goal-label-q" style="margin-top:4px;">0 / 5 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('questions',-1)">−</button>
-                  <span class="ps-goal-val" id="goal-val-questions">5</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('questions',1)">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">📓</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name">Journal entries</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-journal" style="background:#c084fc"></div></div>
-                  <div class="ps-form-label" id="goal-label-journal" style="margin-top:4px;">0 / 1 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('journal',-1)">−</button>
-                  <span class="ps-goal-val" id="goal-val-journal">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('journal',1)">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">🃏</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name">Flashcard sets</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-flashcards" style="background:var(--teal)"></div></div>
-                  <div class="ps-form-label" id="goal-label-flashcards" style="margin-top:4px;">0 / 2 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',-1)">−</button>
-                  <span class="ps-goal-val" id="goal-val-flashcards">2</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',1)">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">🎮</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name">Games to play</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-games" style="background:#fb923c"></div></div>
-                  <div class="ps-form-label" id="goal-label-games" style="margin-top:4px;">0 / 1 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('games',-1)">−</button>
-                  <span class="ps-goal-val" id="goal-val-games">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('games',1)">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// TODAY'S SUMMARY</div>
-            <div id="ps-goals-summary" class="ps-goals-summary"></div>
-          </div>
+          <button class="ps-tab on" onclick="psGo('appearance',this)">🎨 Appearance</button>
+          <button class="ps-tab" onclick="psGo('apikey',this)">🔑 API</button>
         </div>
 
         <!-- ── APPEARANCE PANEL ── -->
-        <div class="ps-panel" id="ps-appearance">
+        <div class="ps-panel on" id="ps-appearance">
           <div class="ps-card">
-            <div class="ps-card-label">// UI STYLE</div>
-            <div class="pers-row" style="flex-wrap:wrap;gap:8px;">
-              <div class="style-pill on" id="style-default" onclick="setUIStyle('default',this)"><span class="sp-icon">🖥️</span><span class="sp-name">Default</span></div>
-              <div class="style-pill" id="style-futuristic" onclick="setUIStyle('futuristic',this)"><span class="sp-icon">🚀</span><span class="sp-name">Futuristic</span></div>
-              <div class="style-pill" id="style-retro" onclick="setUIStyle('retro',this)"><span class="sp-icon">📺</span><span class="sp-name">Retro</span></div>
-              <div class="style-pill" id="style-terminal" onclick="setUIStyle('terminal',this)"><span class="sp-icon">💻</span><span class="sp-name">Terminal</span></div>
-              <div class="style-pill" id="style-minimal" onclick="setUIStyle('minimal',this)"><span class="sp-icon">◻️</span><span class="sp-name">Minimal</span></div>
+            <div class="ps-card-label">// UI SKIN</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
+              <div class="skin-card" id="style-default" onclick="setUIStyle('default',this)">
+                <div class="skin-preview skin-prev-default"></div>
+                <div class="skin-label">🖥️ Default</div>
+              </div>
+              <div class="skin-card" id="style-hacker" onclick="setUIStyle('hacker',this)">
+                <div class="skin-preview skin-prev-hacker"></div>
+                <div class="skin-label">💻 Hacker</div>
+              </div>
+              <div class="skin-card" id="style-glass" onclick="setUIStyle('glass',this)">
+                <div class="skin-preview skin-prev-glass"></div>
+                <div class="skin-label">🔮 Frosted</div>
+              </div>
+              <div class="skin-card on" id="style-synthwave" onclick="setUIStyle('synthwave',this)">
+                <div class="skin-preview skin-prev-synthwave"></div>
+                <div class="skin-label">🌆 Synthwave</div>
+              </div>
             </div>
           </div>
 
@@ -2809,8 +2878,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-card-label">// FONT SIZE</div>
               <div class="pers-row" style="margin-top:8px;">
                 <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
-                <button class="pers-btn on" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
-                <button class="pers-btn" id="fs-large" onclick="setFontSize('large',this)">Large</button>
+                <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
+                <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
               </div>
             </div>
             <div class="ps-card">
@@ -2823,12 +2892,22 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             </div>
           </div>
 
+
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// THEME</div>
-            <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
-              <div class="set-info-box" id="set-theme-name">Blizzard</div>
-              <button class="ps-save-btn" style="margin-top:0;" onclick="go('themes')">Browse Themes →</button>
-            </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
+          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat on">◻️ Minimal</button></div>
+          <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
+        </div>
+        <div id="shop-panel" style="display:none;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:2px;">// GEM SHOP</div>
+            <div style="font-family:var(--orb);font-size:.55rem;color:var(--teal2);">💎 <span id="shop-gems-display">0</span> gems</div>
+          </div>
+          <div class="shop-grid" id="shop-grid"></div>
+        </div>
+        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 8, 8), rgb(15, 15, 15));"><div class="tname" style="color: rgb(99, 102, 241);">Pure Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(17, 17, 17), rgb(26, 26, 26));"><div class="tname" style="color: rgb(129, 140, 248);">Charcoal</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 20, 20), rgb(30, 30, 30));"><div class="tname" style="color: rgb(148, 163, 184);">Graphite</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 10, 10), rgb(20, 20, 20));"><div class="tname" style="color: rgb(192, 132, 252);">Obsidian</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 7, 18), rgb(15, 15, 30));"><div class="tname" style="color: rgb(96, 165, 250);">Midnight</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 8, 12), rgb(8, 12, 18));"><div class="tname" style="color: rgb(52, 211, 153);">Abyss</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 24, 24), rgb(34, 34, 34));"><div class="tname" style="color: rgb(226, 232, 240);">Smoke</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(248, 249, 255), rgb(240, 242, 255));"><div class="tname" style="color: rgb(59, 130, 246);">Soft White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(250, 247, 240), rgb(240, 235, 224));"><div class="tname" style="color: rgb(180, 83, 9);">Warm Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(255, 251, 240), rgb(248, 243, 232));"><div class="tname" style="color: rgb(124, 58, 237);">Cream</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 244, 248), rgb(232, 237, 242));"><div class="tname" style="color: rgb(8, 145, 178);">Cool Gray</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 245, 240), rgb(232, 240, 232));"><div class="tname" style="color: rgb(6, 95, 70);">Soft Sage</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(253, 240, 245), rgb(250, 232, 240));"><div class="tname" style="color: rgb(190, 24, 93);">Blush</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 249, 255), rgb(232, 244, 255));"><div class="tname" style="color: rgb(29, 78, 216);">Sky White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(245, 240, 255), rgb(237, 232, 255));"><div class="tname" style="color: rgb(109, 40, 217);">Lavender Mist</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 25, 23), rgb(41, 37, 36));"><div class="tname" style="color: rgb(55, 65, 81);">Warm Slate</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 12, 27), rgb(5, 16, 32));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Navy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 18, 8), rgb(12, 28, 14));"><div class="tname" style="color: rgb(34, 197, 94);">Forest Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 8, 8), rgb(42, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Burgundy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(12, 14, 24), rgb(20, 22, 34));"><div class="tname" style="color: rgb(165, 180, 252);">Slate Blue</div></div></div>
+      
           </div>
 
           <div class="ps-card" style="margin-top:12px;">
@@ -3049,8 +3128,199 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       <!-- keep old account tab as alias so any go('account') calls still work -->
       <div class="tab" id="tab-account" style="display:none!important;"></div>
 
+      <!-- PROFILE (standalone tab) -->
+      <div class="tab" id="tab-profile">
+
+        <!-- SUB-NAV -->
+        <div class="ps-subnav">
+          <button class="ps-tab on" onclick="psGo('profile',this)">👤 Details</button>
+          <button class="ps-tab" onclick="psGo('stats',this)">📊 Stats</button>
+          <button class="ps-tab" onclick="psGo('badges',this)">🏅 Badge</button>
+          <button class="ps-tab" onclick="psGo('goals',this)">🎯 Goal Set</button>
+        </div>
+
+        <!-- ── PROFILE PANEL ── -->
+        <div class="ps-panel on" id="ps-profile">
+          <div class="ps-hero">
+            <div class="ps-avatar-wrap">
+              <div class="ps-avatar" id="acct-avatar">🎓</div>
+              <div class="ps-avatar-ring"></div>
+            </div>
+            <div class="ps-hero-right">
+              <div class="ps-name" id="acct-name">User</div>
+              <div class="ps-tagline" id="acct-tagline">Level 25 Legend</div>
+              <div class="ps-badges-row">
+                <div class="ps-pill gem">💎 <span id="acct-gems">1241</span> Gems</div>
+                <div class="ps-pill streak">🔥 <span id="acct-streak">30</span> day streak</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit form inline -->
+          <div class="ps-card" style="margin-top:16px;">
+            <div class="ps-card-label">// EDIT PROFILE</div>
+            <div class="ps-form-grid">
+              <div class="ps-form-group">
+                <div class="ps-form-label">Display Name</div>
+                <input class="ps-input" id="ps-name-in" placeholder="Your name..." maxlength="20">
+              </div>
+              <div class="ps-form-group">
+                <div class="ps-form-label">Avatar Emoji</div>
+                <input class="ps-input" id="ps-avatar-in" placeholder="🎓" maxlength="4" style="font-size:1.4rem;text-align:center;letter-spacing:2px;">
+              </div>
+            </div>
+            <div class="ps-avatar-picker">
+              <div class="ps-form-label" style="margin-bottom:8px;">Quick Pick</div>
+              <div class="ps-avatar-opts">
+                <span onclick="pickAvatar(this,'🎓')">🎓</span><span onclick="pickAvatar(this,'📚')">📚</span>
+                <span onclick="pickAvatar(this,'🧠')">🧠</span><span onclick="pickAvatar(this,'⚡')">⚡</span>
+                <span onclick="pickAvatar(this,'🌟')">🌟</span><span onclick="pickAvatar(this,'🔥')">🔥</span>
+                <span onclick="pickAvatar(this,'💎')">💎</span><span onclick="pickAvatar(this,'🦋')">🦋</span>
+                <span onclick="pickAvatar(this,'🚀')">🚀</span><span onclick="pickAvatar(this,'🎵')">🎵</span>
+                <span onclick="pickAvatar(this,'🌙')">🌙</span><span onclick="pickAvatar(this,'☀️')">☀️</span>
+              </div>
+            </div>
+            <button class="ps-save-btn" onclick="saveProfileInline()">Save Profile</button>
+          </div>
+
+          <!-- Level progress -->
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label">// LEVEL PROGRESS</div>
+            <div class="ps-level-row">
+              <div class="ps-level-num" id="ps-level">25</div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                  <span class="ps-form-label" id="ps-level-title">Legend</span>
+                  <span class="ps-form-label"><span id="ps-gems-cur">41</span> / <span id="ps-gems-next">50</span> gems</span>
+                </div>
+                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 82%;"></div></div>
+                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">🏆 Max Level!</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger zone -->
+          <div class="ps-card ps-danger" style="margin-top:12px;">
+            <div class="ps-card-label" style="color:#ff6680;">// DANGER ZONE</div>
+            <div class="ps-danger-row">
+              <button class="ps-danger-btn" onclick="resetKey()">🗝 Clear API Key</button>
+              <button class="ps-danger-btn" onclick="resetTheme()">🎨 Reset Theme</button>
+              <button class="ps-danger-btn" onclick="resetAll()">⚠️ Reset Everything</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STATS PANEL ── -->
+        <div class="ps-panel" id="ps-stats">
+          <div class="ps-stats-grid" id="ps-stats-grid">
+            <div class="ps-stat-card"><div class="ps-stat-icon">📚</div><div class="ps-stat-val" id="pss-questions">0</div><div class="ps-stat-lbl">Questions Asked</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">📝</div><div class="ps-stat-val" id="pss-notes">0</div><div class="ps-stat-lbl">Notes Summarised</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🃏</div><div class="ps-stat-val" id="pss-flashcards">0</div><div class="ps-stat-lbl">Flashcard Sets</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🎮</div><div class="ps-stat-val" id="pss-games">0</div><div class="ps-stat-lbl">Games Played</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">📓</div><div class="ps-stat-val" id="pss-journal">0</div><div class="ps-stat-lbl">Journal Entries</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🔥</div><div class="ps-stat-val" id="pss-streak">0</div><div class="ps-stat-lbl">Day Streak</div></div>
+          </div>
+
+          <!-- Activity chart -->
+          <div class="ps-card" style="margin-top:16px;">
+            <div class="ps-card-label">// ACTIVITY THIS WEEK</div>
+            <div class="ps-chart" id="ps-chart"></div>
+            <div class="ps-chart-legend">
+              <span><span class="ps-dot" style="background:var(--accent)"></span>Questions</span>
+              <span><span class="ps-dot" style="background:var(--teal)"></span>Journal</span>
+              <span><span class="ps-dot" style="background:#c084fc"></span>Games</span>
+            </div>
+          </div>
+
+          <!-- High scores -->
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label">// GAME HIGH SCORES</div>
+            <div class="ps-hiscore-list" id="ps-hiscores"></div>
+          </div>
+        </div>
+
+        <!-- ── BADGES PANEL ── -->
+        <div class="ps-panel" id="ps-badges">
+          <div class="ps-badges-header">
+            <div>
+              <div class="ps-card-label">// ACHIEVEMENTS</div>
+              <div class="ps-form-label" id="ps-badges-count" style="margin-top:4px;">0 of 8 unlocked</div>
+            </div>
+          </div>
+          <div class="ps-badges-full" id="badges-grid"></div>
+        </div>
+
+        <!-- ── GOALS PANEL ── -->
+        <div class="ps-panel" id="ps-goals">
+          <div class="ps-card">
+            <div class="ps-card-label">// DAILY STUDY GOALS</div>
+            <div class="ps-form-label" style="margin-bottom:16px;">Set targets — progress tracked automatically each day</div>
+            <div class="ps-goals-list">
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">📚</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name">Questions to ask</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-q" style="background:var(--accent)"></div></div>
+                  <div class="ps-form-label" id="goal-label-q" style="margin-top:4px;">0 / 5 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('questions',-1)">−</button>
+                  <span class="ps-goal-val" id="goal-val-questions">5</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('questions',1)">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">📓</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name">Journal entries</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-journal" style="background:#c084fc"></div></div>
+                  <div class="ps-form-label" id="goal-label-journal" style="margin-top:4px;">0 / 1 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('journal',-1)">−</button>
+                  <span class="ps-goal-val" id="goal-val-journal">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('journal',1)">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">🃏</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name">Flashcard sets</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-flashcards" style="background:var(--teal)"></div></div>
+                  <div class="ps-form-label" id="goal-label-flashcards" style="margin-top:4px;">0 / 2 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',-1)">−</button>
+                  <span class="ps-goal-val" id="goal-val-flashcards">2</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',1)">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">🎮</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name">Games to play</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-games" style="background:#fb923c"></div></div>
+                  <div class="ps-form-label" id="goal-label-games" style="margin-top:4px;">0 / 1 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('games',-1)">−</button>
+                  <span class="ps-goal-val" id="goal-val-games">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('games',1)">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label">// TODAY'S SUMMARY</div>
+            <div id="ps-goals-summary" class="ps-goals-summary"></div>
+          </div>
+        </div>
+
+      </div>
+
       <!-- GAMES -->
-      <div class="tab on" id="tab-games">
+      <div class="tab" id="tab-games">
         <div class="ttl">🎮 Games</div>
         <div class="tsub"><span class="prm">›</span>Play to earn gems — high scores get rewarded</div>
         <div id="games-menu" style="display: none;">
@@ -3070,13 +3340,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">🐍</div>
               <div class="game-name">Snake</div>
               <div class="game-desc">Classic snake — don't crash!</div>
-              <div class="game-hi" id="hi-snake">Best: 0</div>
+              <div class="game-hi" id="hi-snake">Best: 420</div>
             </div>
             <div class="game-card" data-cat="arcade" onclick="startGame('bubble')">
               <div class="game-icon">🫧</div>
               <div class="game-name">Bubble Pop</div>
               <div class="game-desc">Pop bubbles as fast as you can</div>
-              <div class="game-hi" id="hi-bubble">Best: 0</div>
+              <div class="game-hi" id="hi-bubble">Best: 73</div>
             </div>
             <div class="game-card" data-cat="arcade" onclick="startGame('brickbreaker')">
               <div class="game-icon">🧱</div>
@@ -3112,7 +3382,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">🏓</div>
               <div class="game-name">Pong</div>
               <div class="game-desc">Classic paddle vs AI — don't miss!</div>
-              <div class="game-hi" id="hi-pong">Best: 1</div>
+              <div class="game-hi" id="hi-pong">Best: 2</div>
             </div>
             <div class="game-card" data-cat="arcade" onclick="startGame('asteroids')">
               <div class="game-icon">☄️</div>
@@ -3129,25 +3399,25 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
 
           <!-- PUZZLE -->
-          <div class="game-cat-label" data-cat="puzzle" style="display: none;">🧩 Puzzle</div>
-          <div class="games-grid" data-cat="puzzle" style="display: none;">
+          <div class="game-cat-label" data-cat="puzzle" style="">🧩 Puzzle</div>
+          <div class="games-grid" data-cat="puzzle" style="display: grid;">
             <div class="game-card" data-cat="puzzle" onclick="startGame('sudoku')">
               <div class="game-icon">🔢</div>
               <div class="game-name">Sudoku</div>
               <div class="game-desc">Classic 9×9 number puzzle</div>
-              <div class="game-hi" id="hi-sudoku">Not solved yet</div>
+              <div class="game-hi" id="hi-sudoku">Best score: 950</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('math')">
               <div class="game-icon">➗</div>
               <div class="game-name">Maths Blitz</div>
               <div class="game-desc">Quick fire maths questions</div>
-              <div class="game-hi" id="hi-math">Best: 0</div>
+              <div class="game-hi" id="hi-math">Best: 34</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('scramble')">
               <div class="game-icon">🔤</div>
               <div class="game-name">Word Scramble</div>
               <div class="game-desc">Unscramble the study words</div>
-              <div class="game-hi" id="hi-scramble">Best: 0</div>
+              <div class="game-hi" id="hi-scramble">Best: 18</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('hangman')">
               <div class="game-icon">🪢</div>
@@ -3182,19 +3452,19 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
 
           <!-- REFLEX -->
-          <div class="game-cat-label" data-cat="reflex" style="display: none;">⚡ Reflex</div>
-          <div class="games-grid" data-cat="reflex" style="display: none;">
+          <div class="game-cat-label" data-cat="reflex" style="">⚡ Reflex</div>
+          <div class="games-grid" data-cat="reflex" style="display: grid;">
             <div class="game-card" data-cat="reflex" onclick="startGame('reaction')">
               <div class="game-icon">⚡</div>
               <div class="game-name">Reaction Time</div>
               <div class="game-desc">Tap when the signal fires!</div>
-              <div class="game-hi" id="hi-reaction">Best: 0 ms</div>
+              <div class="game-hi" id="hi-reaction">Best: 214 ms</div>
             </div>
             <div class="game-card" data-cat="reflex" onclick="startGame('typing')">
               <div class="game-icon">⌨️</div>
               <div class="game-name">Typing Speed</div>
               <div class="game-desc">How fast can you type?</div>
-              <div class="game-hi" id="hi-typing">Best: 33 WPM</div>
+              <div class="game-hi" id="hi-typing">Best: 87 WPM</div>
             </div>
             <div class="game-card" data-cat="reflex" onclick="startGame('aimtrainer')">
               <div class="game-icon">🎯</div>
@@ -3217,13 +3487,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
 
           <!-- QUIZ -->
-          <div class="game-cat-label" data-cat="quiz" style="display: none;">🌍 Quiz</div>
-          <div class="games-grid" data-cat="quiz" style="display: none;">
+          <div class="game-cat-label" data-cat="quiz" style="">🌍 Quiz</div>
+          <div class="games-grid" data-cat="quiz" style="display: grid;">
             <div class="game-card" data-cat="quiz" onclick="startGame('flags')">
               <div class="game-icon">🌍</div>
               <div class="game-name">Flag Quiz</div>
               <div class="game-desc">Name that country's flag!</div>
-              <div class="game-hi" id="hi-flags">Best: 7</div>
+              <div class="game-hi" id="hi-flags">Best: 22</div>
             </div>
             <div class="game-card" data-cat="quiz" onclick="startGame('capitals')">
               <div class="game-icon">🏛️</div>
@@ -3247,7 +3517,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
         <div id="game-play-area" class="game-area active">
     <div class="game-result">
-      <div class="game-result-score">1</div>
+      <div class="game-result-score">2</div>
       <div class="game-result-msg"></div>
       <div class="game-result-gems">Score higher to earn gems!</div>
       <div style="color:var(--teal2);font-family:var(--orb);font-size:.6rem;letter-spacing:1px;margin-bottom:12px;">🏆 NEW HIGH SCORE!</div>
@@ -3411,52 +3681,52 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <!-- Task list -->
         <div id="todo-list" style="display:flex;flex-direction:column;gap:6px;">
     <div class="todo-item done">
-      <div class="todo-check" onclick="toggleTodo(1776825482827)">✅</div>
+      <div class="todo-check" onclick="toggleTodo(1776912460233)">✅</div>
       <div class="todo-text">Complete biology past papers (x3)</div>
-      <div class="todo-date">17/04/2026</div>
-      <button class="todo-del" onclick="deleteTodo(1776825482827)">✕</button>
-    </div>
-    <div class="todo-item done">
-      <div class="todo-check" onclick="toggleTodo(1776825482826)">✅</div>
-      <div class="todo-text">Submit English essay on Macbeth</div>
-      <div class="todo-date">12/04/2026</div>
-      <button class="todo-del" onclick="deleteTodo(1776825482826)">✕</button>
-    </div>
-    <div class="todo-item done">
-      <div class="todo-check" onclick="toggleTodo(1776825482825)">✅</div>
-      <div class="todo-text">Review French Revolution notes</div>
       <div class="todo-date">18/04/2026</div>
-      <button class="todo-del" onclick="deleteTodo(1776825482825)">✕</button>
+      <button class="todo-del" onclick="deleteTodo(1776912460233)">✕</button>
     </div>
     <div class="todo-item done">
-      <div class="todo-check" onclick="toggleTodo(1776825482824)">✅</div>
-      <div class="todo-text">Make Chemistry flashcards — bonding chapter</div>
+      <div class="todo-check" onclick="toggleTodo(1776912460232)">✅</div>
+      <div class="todo-text">Submit English essay on Macbeth</div>
+      <div class="todo-date">13/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776912460232)">✕</button>
+    </div>
+    <div class="todo-item done">
+      <div class="todo-check" onclick="toggleTodo(1776912460231)">✅</div>
+      <div class="todo-text">Review French Revolution notes</div>
       <div class="todo-date">19/04/2026</div>
-      <button class="todo-del" onclick="deleteTodo(1776825482824)">✕</button>
+      <button class="todo-del" onclick="deleteTodo(1776912460231)">✕</button>
     </div>
     <div class="todo-item done">
-      <div class="todo-check" onclick="toggleTodo(1776825482823)">✅</div>
+      <div class="todo-check" onclick="toggleTodo(1776912460230)">✅</div>
+      <div class="todo-text">Make Chemistry flashcards — bonding chapter</div>
+      <div class="todo-date">20/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776912460230)">✕</button>
+    </div>
+    <div class="todo-item done">
+      <div class="todo-check" onclick="toggleTodo(1776912460229)">✅</div>
       <div class="todo-text">Pomodoro session: 4 blocks</div>
-      <div class="todo-date">21/04/2026</div>
-      <button class="todo-del" onclick="deleteTodo(1776825482823)">✕</button>
+      <div class="todo-date">22/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776912460229)">✕</button>
     </div>
     <div class="todo-item ">
-      <div class="todo-check" onclick="toggleTodo(1776825482822)">⬜</div>
+      <div class="todo-check" onclick="toggleTodo(1776912460228)">⬜</div>
       <div class="todo-text">Revise electricity formulas for Physics exam</div>
-      <div class="todo-date">22/04/2026</div>
-      <button class="todo-del" onclick="deleteTodo(1776825482822)">✕</button>
+      <div class="todo-date">23/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776912460228)">✕</button>
     </div>
     <div class="todo-item ">
-      <div class="todo-check" onclick="toggleTodo(1776825482821)">⬜</div>
+      <div class="todo-check" onclick="toggleTodo(1776912460227)">⬜</div>
       <div class="todo-text">Read chapters 5-7 for English lit</div>
-      <div class="todo-date">22/04/2026</div>
-      <button class="todo-del" onclick="deleteTodo(1776825482821)">✕</button>
+      <div class="todo-date">23/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776912460227)">✕</button>
     </div>
     <div class="todo-item ">
-      <div class="todo-check" onclick="toggleTodo(1776825482820)">⬜</div>
+      <div class="todo-check" onclick="toggleTodo(1776912460226)">⬜</div>
       <div class="todo-text">Email Mr. Hassan about coursework deadline</div>
-      <div class="todo-date">21/04/2026</div>
-      <button class="todo-del" onclick="deleteTodo(1776825482820)">✕</button>
+      <div class="todo-date">22/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776912460226)">✕</button>
     </div></div>
 
         <!-- Clear done -->
@@ -3472,8 +3742,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
         <!-- Summary cards -->
         <div class="planner-summary" id="planner-summary">
-    <div class="pl-sum-card"><div class="pl-sum-icon">⏱️</div><div class="pl-sum-val">18.8h</div><div class="pl-sum-lbl">Study hrs this week</div></div>
-    <div class="pl-sum-card"><div class="pl-sum-icon">📚</div><div class="pl-sum-val">15</div><div class="pl-sum-lbl">Sessions this week</div></div>
+    <div class="pl-sum-card"><div class="pl-sum-icon">⏱️</div><div class="pl-sum-val">19.5h</div><div class="pl-sum-lbl">Study hrs this week</div></div>
+    <div class="pl-sum-card"><div class="pl-sum-icon">📚</div><div class="pl-sum-val">16</div><div class="pl-sum-lbl">Sessions this week</div></div>
     <div class="pl-sum-card"><div class="pl-sum-icon">📅</div><div class="pl-sum-val">2</div><div class="pl-sum-lbl">Sessions today</div></div>
     <div class="pl-sum-card"><div class="pl-sum-icon">📊</div><div class="pl-sum-val">30</div><div class="pl-sum-lbl">Total scheduled</div></div><div class="pl-sum-card" style="grid-column:span 2;text-align:left;">
       <div style="font-family:var(--exo);font-size:.55rem;color:var(--teal);letter-spacing:2px;margin-bottom:10px;">// SUBJECT BREAKDOWN</div>
@@ -3482,21 +3752,21 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="subj-bar-track"><div class="subj-bar-fill" style="width:100%;background:#fb923c;"></div></div>
           <div class="subj-bar-hrs">4.5h</div>
         </div><div class="subj-bar-row">
-          <div class="subj-bar-label">Mathematics</div>
-          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:78%;background:#4d9fff;"></div></div>
-          <div class="subj-bar-hrs">3.5h</div>
+          <div class="subj-bar-label">Biology</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:56%;background:#00d4aa;"></div></div>
+          <div class="subj-bar-hrs">2.5h</div>
         </div><div class="subj-bar-row">
           <div class="subj-bar-label">English</div>
           <div class="subj-bar-track"><div class="subj-bar-fill" style="width:56%;background:#c084fc;"></div></div>
           <div class="subj-bar-hrs">2.5h</div>
         </div><div class="subj-bar-row">
-          <div class="subj-bar-label">Chemistry</div>
-          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:50%;background:#00d4aa;"></div></div>
+          <div class="subj-bar-label">History</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:50%;background:#fbbf24;"></div></div>
           <div class="subj-bar-hrs">2.3h</div>
         </div><div class="subj-bar-row">
-          <div class="subj-bar-label">Computer Science</div>
-          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:33%;background:#4d9fff;"></div></div>
-          <div class="subj-bar-hrs">1.5h</div>
+          <div class="subj-bar-label">Mathematics</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:44%;background:#4d9fff;"></div></div>
+          <div class="subj-bar-hrs">2.0h</div>
         </div>
       </div></div></div>
 
@@ -3519,30 +3789,454 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
 
         <!-- View area -->
-        <div class="planner-grid-wrap" id="planner-view-area"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-    <button class="pw-btn" onclick="plannerDayPrev()">← Sun</button>
-    <div style="flex:1;text-align:center;font-family:var(--orb);font-size:.9rem;font-weight:800;color:var(--text);letter-spacing:1px;">
-      Mon &nbsp;20 Apr 2026
-      
-    </div>
-    <button class="pw-btn" onclick="plannerDayNext()">Tue →</button>
-  </div><div class="planner-day-list"><div class="pdl-event" onclick="openPlannerModal('1776825482935')">
-        <div class="pdl-bar" style="background:#fb923c;"></div>
-        <div class="pdl-time">10:00</div>
-        <div style="flex:1;min-width:0;">
-          <div class="pdl-subj">Revision 🔥</div>
-          <div class="pdl-note">Full chemistry mock paper under timed conditions</div>
-        </div>
-        <div class="pdl-dur">2h</div>
-      </div><div class="pdl-event" onclick="openPlannerModal('1776825482936')">
-        <div class="pdl-bar" style="background:#4d9fff;"></div>
-        <div class="pdl-time">13:00</div>
-        <div style="flex:1;min-width:0;">
-          <div class="pdl-subj">Mathematics</div>
-          <div class="pdl-note">Statistics — probability tree diagrams</div>
-        </div>
-        <div class="pdl-dur">1h</div>
-      </div></div></div>
+        <div class="planner-grid-wrap" id="planner-view-area"><div class="planner-week-grid"><div class="pgrid-corner"><span style="font-family:var(--exo);font-size:.5rem;color:var(--silver);opacity:.4;">GMT</span></div><div class="pgrid-day-head " onclick="setPlannerView('day',null,0)">
+      <div class="pgrid-day-name">Mon</div>
+      <div class="pgrid-day-num">20<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+    </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,1)">
+      <div class="pgrid-day-name">Tue</div>
+      <div class="pgrid-day-num">21<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+    </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,2)">
+      <div class="pgrid-day-name">Wed</div>
+      <div class="pgrid-day-num">22<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+    </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,3)">
+      <div class="pgrid-day-name">Thu</div>
+      <div class="pgrid-day-num">23<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+    </div><div class="pgrid-day-head today-head" onclick="setPlannerView('day',null,4)">
+      <div class="pgrid-day-name">Fri</div>
+      <div class="pgrid-day-num">24<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+    </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,5)">
+      <div class="pgrid-day-name">Sat</div>
+      <div class="pgrid-day-num">25<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+    </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,6)">
+      <div class="pgrid-day-name">Sun</div>
+      <div class="pgrid-day-num">26<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+    </div><div class="pgrid-time-col"><div class="pgrid-time-slot">07:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',7)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',7)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',7)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',7)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',7)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',7)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',7)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">08:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',8)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',8)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',8)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',8)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',8)">
+          <div class="plan-event ec-science" style="top:26px;height:76px;" onclick="event.stopPropagation();openPlannerModal('1776912460348')">
+    <div class="plan-event-title">Physics 🔥</div>
+    <div class="plan-event-sub">08:30 · 1h30m</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',8)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',8)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">09:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',9)">
+          <div class="plan-event ec-history" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776912460338')">
+    <div class="plan-event-title">History</div>
+    <div class="plan-event-sub">09:00 · 1h</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',9)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',9)">
+          <div class="plan-event ec-maths" style="top:0px;height:76px;" onclick="event.stopPropagation();openPlannerModal('1776912460343')">
+    <div class="plan-event-title">Computer Science</div>
+    <div class="plan-event-sub">09:00 · 1h30m</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',9)">
+          <div class="plan-event ec-revision" style="top:26px;height:76px;" onclick="event.stopPropagation();openPlannerModal('1776912460345')">
+    <div class="plan-event-title">Revision 🔥</div>
+    <div class="plan-event-sub">09:30 · 1h30m</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',9)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',9)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',9)">
+          <div class="plan-event ec-english" style="top:0px;height:76px;" onclick="event.stopPropagation();openPlannerModal('1776912460352')">
+    <div class="plan-event-title">English 🔥</div>
+    <div class="plan-event-sub">09:00 · 1h30m</div>
+  </div>
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">10:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',10)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',10)">
+          <div class="plan-event ec-revision" style="top:0px;height:102px;" onclick="event.stopPropagation();openPlannerModal('1776912460341')">
+    <div class="plan-event-title">Revision 🔥</div>
+    <div class="plan-event-sub">10:00 · 2h</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',10)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',10)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',10)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',10)">
+          <div class="plan-event ec-history" style="top:0px;height:63px;" onclick="event.stopPropagation();openPlannerModal('1776912460350')">
+    <div class="plan-event-title">History 🔥</div>
+    <div class="plan-event-sub">10:00 · 1h15m</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',10)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">11:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',11)">
+          <div class="plan-event ec-science" style="top:0px;height:76px;" onclick="event.stopPropagation();openPlannerModal('1776912460339')">
+    <div class="plan-event-title">Biology 🔥</div>
+    <div class="plan-event-sub">11:00 · 1h30m</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',11)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',11)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',11)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',11)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',11)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',11)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">12:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',12)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',12)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',12)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',12)">
+          <div class="plan-event ec-break" style="top:0px;height:37px;" onclick="event.stopPropagation();openPlannerModal('1776912460346')">
+    <div class="plan-event-title">Break / Lunch 📋</div>
+    <div class="plan-event-sub">12:00 · 0h45m</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',12)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',12)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',12)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">13:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',13)">
+          <div class="plan-event ec-break" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776912460340')">
+    <div class="plan-event-title">Break / Lunch 📋</div>
+    <div class="plan-event-sub">13:00 · 1h</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',13)">
+          <div class="plan-event ec-maths" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776912460342')">
+    <div class="plan-event-title">Mathematics</div>
+    <div class="plan-event-sub">13:00 · 1h</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',13)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',13)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',13)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',13)">
+          <div class="plan-event ec-science" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776912460351')">
+    <div class="plan-event-title">Biology</div>
+    <div class="plan-event-sub">13:00 · 1h</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',13)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">14:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',14)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',14)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',14)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',14)">
+          <div class="plan-event ec-science" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776912460347')">
+    <div class="plan-event-title">Chemistry</div>
+    <div class="plan-event-sub">14:00 · 1h</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',14)">
+          <div class="plan-event ec-maths" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776912460349')">
+    <div class="plan-event-title">Mathematics 📋</div>
+    <div class="plan-event-sub">14:00 · 1h</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',14)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',14)">
+          <div class="plan-event ec-revision" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776912460353')">
+    <div class="plan-event-title">Revision</div>
+    <div class="plan-event-sub">14:00 · 1h</div>
+  </div>
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">15:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',15)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',15)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',15)">
+          <div class="plan-event ec-english" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776912460344')">
+    <div class="plan-event-title">English</div>
+    <div class="plan-event-sub">15:00 · 1h</div>
+  </div>
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',15)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',15)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',15)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',15)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">16:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',16)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',16)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',16)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',16)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',16)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',16)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',16)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">17:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',17)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',17)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',17)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',17)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',17)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',17)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',17)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">18:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',18)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',18)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',18)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',18)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',18)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',18)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',18)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">19:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',19)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',19)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',19)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',19)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',19)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',19)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',19)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">20:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',20)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',20)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',20)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',20)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',20)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',20)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',20)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">21:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',21)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',21)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',21)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',21)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',21)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',21)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',21)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">22:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',22)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',22)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',22)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',22)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',22)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',22)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',22)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">23:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',23)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',23)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',23)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',23)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',23)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',23)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',23)">
+          
+        </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">24:00</div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',24)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',24)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',24)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',24)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-23',24)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',24)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-25',24)">
+          
+        </div></div></div></div>
       </div>
 
     </div>
@@ -3605,7 +4299,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       <div class="drawer-app-icon">📄</div>
       <div class="drawer-app-label">Exams</div>
     </div>
-    <div class="drawer-app" onclick="closeDrawer();go('themes')">
+    <div class="drawer-app" onclick="closeDrawer();go('settings')">
       <div class="drawer-app-icon">🌈</div>
       <div class="drawer-app-label">Themes</div>
     </div>
@@ -3670,9 +4364,13 @@ const LANGS = {
   en: {
     // Nav
     nav_home: 'Home', nav_homework: 'Homework', nav_library: 'Topic Library',
-    nav_notes: 'Notes', nav_study: 'Smart Study', nav_themes: 'Themes',
+    nav_notes: 'Notes', nav_study: 'Smart Study',
     nav_calc: 'Calculator', nav_chat: 'Companion', nav_journal: 'Journal',
     nav_profile: 'Profile', nav_games: 'Games', nav_exam: 'Exam Papers', nav_settings: 'Settings',
+    nav_music: 'Music', nav_todo: 'To-Do List', nav_planner: 'Study Planner',
+    ttl_music: '🎵 Music', ttl_todo: '✅ To-Do List', ttl_planner: '📅 Study Planner',
+    sub_todo: '› Track tasks — complete them to earn 💎 gems',
+    sub_planner: '› Build your weekly timetable — colour-code subjects, set recurring sessions',
     // Header
     hdr_status: 'AI ONLINE', hdr_sb_ver: '// AI STUDY SYSTEM',
     // Home
@@ -3680,8 +4378,7 @@ const LANGS = {
     // Tab titles
     ttl_homework: '📚 Homework Helper', ttl_notes: '📝 Smart Notes',
     ttl_study: '🧠 Smart Study', ttl_calc: '🔢 Calculator',
-    ttl_chat: '💬 Companion', ttl_journal: '📓 Journal',
-    ttl_themes: '🌈 Themes', ttl_games: '🎮 Games', ttl_exam: '📄 Exam Papers',
+    ttl_chat: '💬 Companion', ttl_journal: '📓 Journal', ttl_games: '🎮 Games', ttl_exam: '📄 Exam Papers',
     // Subtitles
     sub_homework: '› Ask any question and get a step-by-step answer',
     sub_notes: '› Paste your text and get smart AI-powered notes',
@@ -3689,7 +4386,6 @@ const LANGS = {
     sub_calc: '› Scientific calculator — tap or type',
     sub_chat: '› Talk about anything — stress, feelings, study life',
     sub_journal: '› Write freely — your entries are saved locally',
-    sub_themes: '› Hover to preview · Click to apply · 💎 Shop for exclusives',
     sub_games: '› Play to earn gems — high scores get rewarded',
     // Buttons
     btn_generate: 'GENERATE', btn_send: 'SEND →', btn_save: '💾 Save Entry', btn_clear: 'Clear',
@@ -3714,8 +4410,8 @@ const LANGS = {
     jf_all: 'All', jf_today: 'Today', jf_week: 'This Week',
     // Settings
     lang_section: '// LANGUAGE',
-    set_profile: '👤 Profile', set_stats: '📊 Stats', set_badges: '🏅 Badges',
-    set_goals: '🎯 Goals', set_appearance: '🎨 Appearance', set_apikey: '🔑 API Key',
+    set_profile: '👤 Details', set_stats: '📊 Stats', set_badges: '🏅 Badge',
+    set_goals: '🎯 Goal Set', set_appearance: '🎨 Appearance', set_apikey: '🔑 API',
     // Splash
     splash_google: 'Continue with Google',
     splash_or: 'OR USE API KEY',
@@ -3729,22 +4425,24 @@ const LANGS = {
   },
   es: {
     nav_home: 'Inicio', nav_homework: 'Tareas', nav_library: 'Biblioteca',
-    nav_notes: 'Notas', nav_study: 'Estudio', nav_themes: 'Temas',
+    nav_notes: 'Notas', nav_study: 'Estudio',
     nav_calc: 'Calculadora', nav_chat: 'Compañero', nav_journal: 'Diario',
     nav_profile: 'Perfil', nav_games: 'Juegos', nav_exam: 'Exámenes', nav_settings: 'Ajustes',
+    nav_music: 'Música', nav_todo: 'Lista de Tareas', nav_planner: 'Planificador',
+    ttl_music: '🎵 Música', ttl_todo: '✅ Lista de Tareas', ttl_planner: '📅 Planificador',
+    sub_todo: '› Rastrea tareas — complétalas para ganar 💎 gemas',
+    sub_planner: '› Construye tu horario semanal — codifica materias por color',
     hdr_status: 'IA EN LÍNEA', hdr_sb_ver: '// SISTEMA DE ESTUDIO IA',
     home_streak: 'días seguidos',
     ttl_homework: '📚 Ayuda con Tareas', ttl_notes: '📝 Notas Inteligentes',
     ttl_study: '🧠 Estudio Inteligente', ttl_calc: '🔢 Calculadora',
-    ttl_chat: '💬 Compañero', ttl_journal: '📓 Diario',
-    ttl_themes: '🌈 Temas', ttl_games: '🎮 Juegos', ttl_exam: '📄 Exámenes',
+    ttl_chat: '💬 Compañero', ttl_journal: '📓 Diario', ttl_games: '🎮 Juegos', ttl_exam: '📄 Exámenes',
     sub_homework: '› Haz cualquier pregunta y obtén una respuesta paso a paso',
     sub_notes: '› Pega tu texto y obtén notas inteligentes con IA',
     sub_study: '› Genera tarjetas o preguntas de cualquier tema',
     sub_calc: '› Calculadora científica — toca o escribe',
     sub_chat: '› Habla de cualquier cosa — estrés, sentimientos, vida estudiantil',
     sub_journal: '› Escribe libremente — tus entradas se guardan localmente',
-    sub_themes: '› Pasa el cursor para previsualizar · Haz clic para aplicar',
     sub_games: '› Juega para ganar gemas — las mejores puntuaciones se recompensan',
     btn_generate: 'GENERAR', btn_send: 'ENVIAR →', btn_save: '💾 Guardar', btn_clear: 'Borrar',
     btn_ask: 'PREGUNTAR →', btn_browse_themes: 'Ver Temas →',
@@ -3761,7 +4459,7 @@ const LANGS = {
     jf_all: 'Todo', jf_today: 'Hoy', jf_week: 'Esta Semana',
     lang_section: '// IDIOMA',
     set_profile: '👤 Perfil', set_stats: '📊 Estadísticas', set_badges: '🏅 Insignias',
-    set_goals: '🎯 Metas', set_appearance: '🎨 Apariencia', set_apikey: '🔑 Clave API',
+    set_goals: '🎯 Metas', set_appearance: '🎨 Apariencia', set_apikey: '🔑 API',
     splash_google: 'Continuar con Google', splash_or: 'O USA CLAVE API',
     splash_key_label: '// Clave API de Gemini',
     splash_launch: 'INICIAR SIN CUENTA', splash_browse: 'Navegar sin IA →',
@@ -3770,22 +4468,24 @@ const LANGS = {
   },
   ms: {
     nav_home: 'Utama', nav_homework: 'Kerja Rumah', nav_library: 'Perpustakaan',
-    nav_notes: 'Nota', nav_study: 'Kajian Pintar', nav_themes: 'Tema',
+    nav_notes: 'Nota', nav_study: 'Kajian Pintar',
     nav_calc: 'Kalkulator', nav_chat: 'Teman', nav_journal: 'Jurnal',
     nav_profile: 'Profil', nav_games: 'Permainan', nav_exam: 'Kertas Peperiksaan', nav_settings: 'Tetapan',
+    nav_music: 'Muzik', nav_todo: 'Senarai Tugasan', nav_planner: 'Perancang Belajar',
+    ttl_music: '🎵 Muzik', ttl_todo: '✅ Senarai Tugasan', ttl_planner: '📅 Perancang Belajar',
+    sub_todo: '› Jejak tugasan — lengkapkan untuk earn 💎 permata',
+    sub_planner: '› Bina jadual mingguan anda — kod warna subjek',
     hdr_status: 'AI DALAM TALIAN', hdr_sb_ver: '// SISTEM KAJIAN AI',
     home_streak: 'hari berturut',
     ttl_homework: '📚 Pembantu Kerja Rumah', ttl_notes: '📝 Nota Pintar',
     ttl_study: '🧠 Kajian Pintar', ttl_calc: '🔢 Kalkulator',
-    ttl_chat: '💬 Teman', ttl_journal: '📓 Jurnal',
-    ttl_themes: '🌈 Tema', ttl_games: '🎮 Permainan', ttl_exam: '📄 Kertas Peperiksaan',
+    ttl_chat: '💬 Teman', ttl_journal: '📓 Jurnal', ttl_games: '🎮 Permainan', ttl_exam: '📄 Kertas Peperiksaan',
     sub_homework: '› Tanya apa sahaja dan dapatkan jawapan langkah demi langkah',
     sub_notes: '› Tampal teks anda dan dapatkan nota pintar berkuasa AI',
     sub_study: '› Jana kad imbas atau soalan kuiz daripada mana-mana topik',
     sub_calc: '› Kalkulator saintifik — ketik atau taip',
     sub_chat: '› Bercakap tentang apa sahaja — tekanan, perasaan, kehidupan pelajar',
     sub_journal: '› Tulis dengan bebas — entri anda disimpan secara tempatan',
-    sub_themes: '› Layang untuk pratonton · Klik untuk pakai',
     sub_games: '› Main untuk earn permata — skor tinggi diberi ganjaran',
     btn_generate: 'JANA', btn_send: 'HANTAR →', btn_save: '💾 Simpan', btn_clear: 'Padam',
     btn_ask: 'TANYA VEDA →', btn_browse_themes: 'Lihat Tema →',
@@ -3802,7 +4502,7 @@ const LANGS = {
     jf_all: 'Semua', jf_today: 'Hari Ini', jf_week: 'Minggu Ini',
     lang_section: '// BAHASA',
     set_profile: '👤 Profil', set_stats: '📊 Statistik', set_badges: '🏅 Lencana',
-    set_goals: '🎯 Matlamat', set_appearance: '🎨 Penampilan', set_apikey: '🔑 Kunci API',
+    set_goals: '🎯 Matlamat', set_appearance: '🎨 Penampilan', set_apikey: '🔑 API',
     splash_google: 'Teruskan dengan Google', splash_or: 'ATAU GUNA KUNCI API',
     splash_key_label: '// Kunci API Gemini',
     splash_launch: 'LANCAR TANPA AKAUN', splash_browse: 'Semak tanpa AI →',
@@ -3811,22 +4511,24 @@ const LANGS = {
   },
   zh: {
     nav_home: '主页', nav_homework: '作业', nav_library: '题库',
-    nav_notes: '笔记', nav_study: '智能学习', nav_themes: '主题',
+    nav_notes: '笔记', nav_study: '智能学习',
     nav_calc: '计算器', nav_chat: '学伴', nav_journal: '日记',
     nav_profile: '档案', nav_games: '游戏', nav_exam: '试卷', nav_settings: '设置',
+    nav_music: '音乐', nav_todo: '待办清单', nav_planner: '学习计划',
+    ttl_music: '🎵 音乐', ttl_todo: '✅ 待办清单', ttl_planner: '📅 学习计划',
+    sub_todo: '› 追踪任务 — 完成任务赚取 💎 宝石',
+    sub_planner: '› 建立每周时间表 — 按科目颜色分类',
     hdr_status: 'AI 在线', hdr_sb_ver: '// AI 学习系统',
     home_streak: '天连续',
     ttl_homework: '📚 作业助手', ttl_notes: '📝 智能笔记',
     ttl_study: '🧠 智能学习', ttl_calc: '🔢 计算器',
-    ttl_chat: '💬 学伴', ttl_journal: '📓 日记',
-    ttl_themes: '🌈 主题', ttl_games: '🎮 游戏', ttl_exam: '📄 试卷',
+    ttl_chat: '💬 学伴', ttl_journal: '📓 日记', ttl_games: '🎮 游戏', ttl_exam: '📄 试卷',
     sub_homework: '› 提问任何问题，获得逐步解答',
     sub_notes: '› 粘贴文本，获得AI智能笔记',
     sub_study: '› 从任何主题生成闪卡或测验题',
     sub_calc: '› 科学计算器 — 点击或输入',
     sub_chat: '› 聊任何事 — 压力、感受、学习生活',
     sub_journal: '› 自由书写 — 条目保存在本地',
-    sub_themes: '› 悬停预览 · 点击应用',
     sub_games: '› 游戏赚宝石 — 高分获奖励',
     btn_generate: '生成', btn_send: '发送 →', btn_save: '💾 保存', btn_clear: '清除',
     btn_ask: '问 VEDA →', btn_browse_themes: '浏览主题 →',
@@ -3843,7 +4545,7 @@ const LANGS = {
     jf_all: '全部', jf_today: '今天', jf_week: '本周',
     lang_section: '// 语言',
     set_profile: '👤 档案', set_stats: '📊 统计', set_badges: '🏅 徽章',
-    set_goals: '🎯 目标', set_appearance: '🎨 外观', set_apikey: '🔑 API密钥',
+    set_goals: '🎯 目标', set_appearance: '🎨 外观', set_apikey: '🔑 API',
     splash_google: '使用 Google 继续', splash_or: '或使用 API 密钥',
     splash_key_label: '// Gemini API 密钥',
     splash_launch: '无账号启动', splash_browse: '无 AI 浏览 →',
@@ -3852,22 +4554,24 @@ const LANGS = {
   },
   ja: {
     nav_home: 'ホーム', nav_homework: '宿題', nav_library: 'ライブラリ',
-    nav_notes: 'ノート', nav_study: 'スマート学習', nav_themes: 'テーマ',
+    nav_notes: 'ノート', nav_study: 'スマート学習',
     nav_calc: '電卓', nav_chat: '仲間', nav_journal: '日記',
     nav_profile: 'プロフィール', nav_games: 'ゲーム', nav_exam: '試験問題', nav_settings: '設定',
+    nav_music: '音楽', nav_todo: 'ToDoリスト', nav_planner: '学習プランナー',
+    ttl_music: '🎵 音楽', ttl_todo: '✅ ToDoリスト', ttl_planner: '📅 学習プランナー',
+    sub_todo: '› タスクを管理 — 完了して 💎 ジェムを獲得',
+    sub_planner: '› 週間時間割を作成 — 科目ごとに色分け',
     hdr_status: 'AI オンライン', hdr_sb_ver: '// AI 学習システム',
     home_streak: '日連続',
     ttl_homework: '📚 宿題ヘルパー', ttl_notes: '📝 スマートノート',
     ttl_study: '🧠 スマート学習', ttl_calc: '🔢 電卓',
-    ttl_chat: '💬 仲間', ttl_journal: '📓 日記',
-    ttl_themes: '🌈 テーマ', ttl_games: '🎮 ゲーム', ttl_exam: '📄 試験問題',
+    ttl_chat: '💬 仲間', ttl_journal: '📓 日記', ttl_games: '🎮 ゲーム', ttl_exam: '📄 試験問題',
     sub_homework: '› 何でも質問してステップごとの答えをもらおう',
     sub_notes: '› テキストを貼り付けてAIノートを作成',
     sub_study: '› 任意のトピックからフラッシュカードやクイズを生成',
     sub_calc: '› 関数電卓 — タップまたは入力',
     sub_chat: '› 何でも話して — ストレス、気持ち、学生生活',
     sub_journal: '› 自由に書いて — エントリーはローカルに保存',
-    sub_themes: '› ホバーしてプレビュー · クリックして適用',
     sub_games: '› ゲームでジェムを獲得 — 高得点は報酬あり',
     btn_generate: '生成', btn_send: '送信 →', btn_save: '💾 保存', btn_clear: '消去',
     btn_ask: 'VEDAに聞く →', btn_browse_themes: 'テーマを見る →',
@@ -3884,7 +4588,7 @@ const LANGS = {
     jf_all: '全て', jf_today: '今日', jf_week: '今週',
     lang_section: '// 言語',
     set_profile: '👤 プロフィール', set_stats: '📊 統計', set_badges: '🏅 バッジ',
-    set_goals: '🎯 目標', set_appearance: '🎨 外観', set_apikey: '🔑 APIキー',
+    set_goals: '🎯 目標', set_appearance: '🎨 外観', set_apikey: '🔑 API',
     splash_google: 'Google で続ける', splash_or: 'または API キーを使用',
     splash_key_label: '// Gemini APIキー',
     splash_launch: 'アカウントなしで起動', splash_browse: 'AIなしで閲覧 →',
@@ -3900,7 +4604,7 @@ function t(key) {
 function applyLang() {
   const L = currentLang;
   // Nav buttons
-  const navMap = {home:'nav_home',homework:'nav_homework',library:'nav_library',notes:'nav_notes',study:'nav_study',themes:'nav_themes',calc:'nav_calc',chat:'nav_chat',journal:'nav_journal',profile:'nav_profile',games:'nav_games',exam:'nav_exam',settings:'nav_settings'};
+  const navMap = {home:'nav_home',homework:'nav_homework',library:'nav_library',notes:'nav_notes',study:'nav_study',calc:'nav_calc',chat:'nav_chat',journal:'nav_journal',profile:'nav_profile',games:'nav_games',exam:'nav_exam',settings:'nav_settings',music:'nav_music',todo:'nav_todo',planner:'nav_planner'};
   document.querySelectorAll('.nb').forEach(btn => {
     const fn = btn.getAttribute('onclick') || '';
     const match = fn.match(/go\('(\w+)'\)/);
@@ -3915,8 +4619,8 @@ function applyLang() {
   const sbVer = document.querySelector('.sb-ver');
   if (sbVer) sbVer.textContent = t('hdr_sb_ver');
   // Tab titles & subtitles
-  const tabTitleMap = {homework:'ttl_homework',notes:'ttl_notes',study:'ttl_study',calc:'ttl_calc',chat:'ttl_chat',journal:'ttl_journal',themes:'ttl_themes',games:'ttl_games',exam:'ttl_exam'};
-  const tabSubMap = {homework:'sub_homework',notes:'sub_notes',study:'sub_study',calc:'sub_calc',chat:'sub_chat',journal:'sub_journal',themes:'sub_themes',games:'sub_games'};
+  const tabTitleMap = {homework:'ttl_homework',notes:'ttl_notes',study:'ttl_study',calc:'ttl_calc',chat:'ttl_chat',journal:'ttl_journal',games:'ttl_games',exam:'ttl_exam',music:'ttl_music',todo:'ttl_todo',planner:'ttl_planner'};
+  const tabSubMap = {homework:'sub_homework',notes:'sub_notes',study:'sub_study',calc:'sub_calc',chat:'sub_chat',journal:'sub_journal',games:'sub_games',todo:'sub_todo',planner:'sub_planner'};
   Object.entries(tabTitleMap).forEach(([tab, key]) => {
     const el = document.querySelector(`#tab-${tab} .ttl`);
     if (el) el.textContent = t(key);
@@ -3960,11 +4664,13 @@ function applyLang() {
   document.querySelectorAll('.mood-chip').forEach((chip, i) => {
     if (moodKeys[i]) chip.textContent = t(moodKeys[i]);
   });
-  // Settings sub-nav
-  const psTabMap = [{key:'set_profile'},{key:'set_stats'},{key:'set_badges'},{key:'set_goals'},{key:'set_appearance'},{key:'set_aiprofile'},{key:'set_apikey'}];
-  document.querySelectorAll('.ps-tab').forEach((tab, i) => {
-    if (psTabMap[i]) tab.textContent = t(psTabMap[i].key);
-  });
+  // Settings sub-nav (scoped per parent tab)
+  const profileTabMap = [{key:'set_profile'},{key:'set_stats'},{key:'set_badges'},{key:'set_goals'}];
+  const settingsTabMap = [{key:'set_appearance'},{key:'set_apikey'}];
+  const profileTab = document.getElementById('tab-profile');
+  const settingsTab = document.getElementById('tab-settings');
+  if (profileTab) profileTab.querySelectorAll('.ps-tab').forEach((tab, i) => { if (profileTabMap[i]) tab.textContent = t(profileTabMap[i].key); });
+  if (settingsTab) settingsTab.querySelectorAll('.ps-tab').forEach((tab, i) => { if (settingsTabMap[i]) tab.textContent = t(settingsTabMap[i].key); });
   // Home streak
   const homeStreak = document.getElementById('home-streak');
   if (homeStreak) {
@@ -3999,8 +4705,7 @@ function updateClock() {
   const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
   const el = document.getElementById('clk');
   if (el) el.textContent = t;
-  const dt = document.getElementById('dt-clock');
-  if (dt) dt.style.display = 'none';
+
 }
 setInterval(updateClock, 1000);
 updateClock();
@@ -4023,13 +4728,15 @@ if (!sbOpen) {
 
 // ── TABS ──
 function go(name) {
-  // 'account' and 'profile' both open the settings tab at profile sub-panel
-  if (name === 'account' || name === 'profile') {
-    go('settings');
-    setTimeout(() => {
-      const activeTab = document.querySelector('.ps-tab.on') || document.querySelector('.ps-tab');
-      psGo('profile', activeTab);
-    }, 0);
+  // 'account' redirects to profile page; profile opens its own standalone tab
+  if (name === 'account') { name = 'profile'; }
+  if (name === 'profile') {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+    const profileTab = document.getElementById('tab-profile');
+    if (profileTab) profileTab.classList.add('on');
+    document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'profile'")) b.classList.add('on'); });
+    setTimeout(renderProfilePanel, 0);
     return;
   }
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
@@ -4037,7 +4744,7 @@ function go(name) {
   const tabEl = document.getElementById('tab-' + name);
   if (tabEl) tabEl.classList.add('on');
   document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'" + name + "'")) b.classList.add('on'); });
-  if (name === 'settings') { loadSettingsPage(); setTimeout(renderProfileTab, 0); }
+  if (name === 'settings') { loadSettingsPage(); }
   if (name === 'home') setTimeout(updateHomeStats, 0);
   if (name === 'music') setTimeout(initMusicTab, 0);
   // Hide music nav again when navigating away from it
@@ -4241,7 +4948,7 @@ async function doNotes(mode) {
     }
   ]
 }
-Rules: 3-6 branches, 2-4 children each, keep labels short (max 5 words), pick distinct colors per branch from: #4d9fff #00d4aa #c084fc #f472b6 #fb923c #fbbf24 #34d399 #60a5fa
+Rules: 4-6 branches, 2-4 children each. Labels MUST be concise (branch: 1-3 words max, children: 1-4 words max). Pick distinct vivid colors per branch from: #4d9fff #00d4aa #c084fc #f472b6 #fb923c #fbbf24 #34d399 #60a5fa. Never repeat a color.
 Notes: ${notesText}`;
     const imageToSend = notesImageData;
     if (notesImageData) clearNotesImage();
@@ -4361,108 +5068,244 @@ function renderMindMap(data) {
   const svg = document.getElementById('mindmap-svg');
   if (!svg) return;
 
-  // Wait for layout to settle
   requestAnimationFrame(() => {
-    const W = svg.clientWidth || 800;
-    const H = svg.clientHeight || 500;
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const W = svg.clientWidth  || 920;
+    const H = svg.clientHeight || 580;
     mmScale = 1; mmOffX = 0; mmOffY = 0;
-
     const cx = W / 2, cy = H / 2;
     const branches = data.branches || [];
     const n = branches.length;
 
-    // Dynamic radii based on canvas size
-    const branchR = Math.min(W, H) * 0.30;
-    const childR  = Math.min(W, H) * 0.16;
+    /* ── constants ───────────────────────────────────────── */
+    const BR_FONT = 13, CH_FONT = 11;
+    const BR_CW = 7.2, CH_CW = 6.4, LINE_H = 18;
+    const BR_PX = 20, BR_PY = 11, CH_PX = 13, CH_PY = 8;
+    const BR_RX = 14, CH_RX = 9;
+    const MAX_BR_W = 150, MAX_CH_W = 128;
+    const CH_GAP = 10;       // vertical gap between child nodes
+    const BRANCH_R = Math.min(W, H) * 0.30; // center→branch radius
 
-    // Node size helpers
-    const nodeW = (text, pad) => Math.max(80, text.length * 7.5 + pad);
-    const BRANCH_H = 34, CHILD_H = 26;
+    /* ── text helpers ────────────────────────────────────── */
+    function wrap(text, maxCh) {
+      const words = String(text).split(' ');
+      const out = []; let line = '';
+      for (const w of words) {
+        const t = line ? line + ' ' + w : w;
+        if (t.length <= maxCh) line = t;
+        else { if (line) out.push(line); line = w; }
+      }
+      if (line) out.push(line);
+      return out.length ? out : [String(text)];
+    }
 
-    let html = `<defs>
-      <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="4" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="glow-sm" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="2" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-    <g id="mm-root">`;
+    function meas(text, px, py, maxW, cw) {
+      const mc = Math.floor((maxW - px*2) / cw);
+      const lines = wrap(text, Math.max(5, mc));
+      const w = Math.min(maxW, Math.max(72, lines.reduce((m,l)=>Math.max(m,l.length*cw),0)+px*2));
+      const h = lines.length * LINE_H + py*2;
+      return { lines, w, h };
+    }
 
-    branches.forEach((branch, i) => {
-      const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
-      const bx = cx + Math.cos(angle) * branchR;
-      const by = cy + Math.sin(angle) * branchR;
-      const color = branch.color || '#4d9fff';
-      const label = String(branch.label || '');
-      const bW = nodeW(label, 28);
-
-      // Curved path from center to branch
-      const midX = (cx + bx) / 2;
-      const midY = (cy + by) / 2;
-      html += `<path d="M${cx},${cy} Q${midX},${midY} ${bx},${by}"
-        fill="none" stroke="${color}" stroke-width="2" stroke-opacity="0.5" stroke-dasharray="6,4"/>`;
-
-      // Children
-      const kids = branch.children || [];
-      const kn = kids.length;
-      // Spread children in a fan pointing away from center
-      const fanSpread = Math.min(0.9, 0.3 * kn);
-      const kidAngles = kn === 1
-        ? [angle]
-        : Array.from({length: kn}, (_, j) => angle - fanSpread/2 + (fanSpread/(kn-1)) * j);
-
-      kids.forEach((child, j) => {
-        const kAngle = kidAngles[j];
-        const kx = bx + Math.cos(kAngle) * childR;
-        const ky = by + Math.sin(kAngle) * childR;
-        const cText = String(child);
-        const cW = nodeW(cText, 20);
-
-        // Line from branch to child
-        html += `<line x1="${bx}" y1="${by}" x2="${kx}" y2="${ky}"
-          stroke="${color}" stroke-width="1.5" stroke-opacity="0.35"/>`;
-
-        // Child node
-        html += `
-          <rect x="${kx - cW/2}" y="${ky - CHILD_H/2}" width="${cW}" height="${CHILD_H}" rx="7"
-            fill="${color}18" stroke="${color}" stroke-width="1" stroke-opacity="0.55"/>
-          <text x="${kx}" y="${ky + 4}" text-anchor="middle"
-            font-family="'DM Mono',monospace" font-size="11.5" fill="${color}" fill-opacity="0.95"
-            style="pointer-events:none">${escMM(cText)}</text>`;
+    function svgTxt(x, y, lines, fs, ff, fw, fill, op=1) {
+      const fy = y - (lines.length * LINE_H)/2 + LINE_H*0.74;
+      let s = `<text text-anchor="middle" font-family="${ff}" font-size="${fs}"
+        font-weight="${fw}" fill="${fill}" fill-opacity="${op}" style="pointer-events:none">`;
+      lines.forEach((l,i) => {
+        s += i===0 ? `<tspan x="${x}" y="${fy}">${escMM(l)}</tspan>`
+                   : `<tspan x="${x}" dy="${LINE_H}">${escMM(l)}</tspan>`;
       });
+      return s + '</text>';
+    }
 
-      // Branch node (drawn after children so it's on top)
-      html += `
-        <rect x="${bx - bW/2}" y="${by - BRANCH_H/2}" width="${bW}" height="${BRANCH_H}" rx="10"
-          fill="${color}28" stroke="${color}" stroke-width="2" filter="url(#glow-sm)"/>
-        <text x="${bx}" y="${by + 5}" text-anchor="middle"
-          font-family="'Syne',sans-serif" font-size="13" font-weight="700" fill="${color}"
-          style="pointer-events:none">${escMM(label)}</text>`;
+    /* ── pre-measure everything ──────────────────────────── */
+    const BD = branches.map((b, i) => {
+      const ang   = (Math.PI*2/n)*i - Math.PI/2 + (n%2===0 ? Math.PI/n : 0);
+      const color = b.color || '#4d9fff';
+      const label = String(b.label || '');
+      const bNode = meas(label, BR_PX, BR_PY, MAX_BR_W, BR_CW);
+      const kids  = (b.children||[]).map(String);
+      const kNodes= kids.map(k => meas(k, CH_PX, CH_PY, MAX_CH_W, CH_CW));
+      // total height of child stack
+      const stackH = kNodes.reduce((s,k)=>s+k.h,0) + CH_GAP*(kids.length-1);
+      return { ang, color, label, bNode, kids, kNodes, stackH };
     });
 
-    // Center node — drawn last, always on top
-    const cLabel = String(data.center || 'Topic');
-    const centerR = Math.max(52, cLabel.length * 5 + 18);
-    html += `
-      <circle cx="${cx}" cy="${cy}" r="${centerR + 10}" fill="rgba(77,159,255,0.06)" stroke="var(--accent)" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="5,5"/>
-      <circle cx="${cx}" cy="${cy}" r="${centerR}" fill="rgba(10,14,26,0.9)" stroke="var(--accent)" stroke-width="2.5" filter="url(#glow)"/>
-      <text x="${cx}" y="${cy + 5}" text-anchor="middle"
-        font-family="'Syne',sans-serif" font-size="14" font-weight="800" fill="var(--accent2)"
-        style="pointer-events:none">${escMM(cLabel)}</text>`;
+    /* ── position branch nodes ───────────────────────────── */
+    BD.forEach(d => {
+      d.bx = cx + Math.cos(d.ang) * BRANCH_R;
+      d.by = cy + Math.sin(d.ang) * BRANCH_R;
+    });
 
-    html += `</g>`;
+    /* ── position children: stacked vertically, offset outward ── */
+    BD.forEach(d => {
+      const { bx, by, ang, kids, kNodes, stackH, bNode } = d;
+      // How far outward from branch center to place child column
+      const outDist = bNode.w/2 + 16 + MAX_CH_W/2;
+      // Outward direction unit vector
+      const ux = Math.cos(ang), uy = Math.sin(ang);
+      // Column centre point
+      const colX = bx + ux * outDist;
+      const colY = by;
+
+      // Stack children top-to-bottom, centred on colY
+      d.kPos = [];
+      let yOff = -stackH/2;
+      kNodes.forEach((kn, j) => {
+        d.kPos.push({ x: colX, y: colY + yOff + kn.h/2 });
+        yOff += kn.h + CH_GAP;
+      });
+    });
+
+    /* ── defs ────────────────────────────────────────────── */
+    let html = `<defs>`;
+    BD.forEach(({ color }, i) => {
+      html += `
+        <linearGradient id="gbr${i}" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0.12"/>
+        </linearGradient>
+        <linearGradient id="gch${i}" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0.06"/>
+        </linearGradient>`;
+    });
+    html += `
+      <radialGradient id="gctr" cx="50%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#1e3d70"/>
+        <stop offset="100%" stop-color="#050810"/>
+      </radialGradient>
+      <filter id="fg" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="7" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="fgm" x="-35%" y="-35%" width="170%" height="170%">
+        <feGaussianBlur stdDeviation="3.5" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="fsh" x="-25%" y="-25%" width="150%" height="150%">
+        <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000" flood-opacity=".65"/>
+      </filter>
+    </defs><g id="mm-root">`;
+
+    /* ── PASS 1: trunk lines center → branch ─────────────── */
+    BD.forEach(({ bx, by, ang, color }) => {
+      const c1x = cx + Math.cos(ang)*BRANCH_R*0.5;
+      const c1y = cy + Math.sin(ang)*BRANCH_R*0.5;
+      html += `<path d="M${cx},${cy} C${c1x},${c1y} ${c1x},${c1y} ${bx},${by}"
+        fill="none" stroke="${color}" stroke-width="3" stroke-opacity="0.4" stroke-linecap="round"/>`;
+    });
+
+    /* ── PASS 2: branch → child connectors (elbow style) ─── */
+    BD.forEach(({ bx, by, color, kids, kPos, bNode }) => {
+      kids.forEach((_, j) => {
+        const { x: kx, y: ky } = kPos[j];
+        // Elbow: horizontal out from branch edge, then to child
+        const ex = bx + (kx > bx ? 1 : -1) * bNode.w/2 + (kx > bx ? 8 : -8);
+        html += `<path d="M${ex},${by} C${ex+(kx-ex)*0.5},${by} ${ex+(kx-ex)*0.5},${ky} ${kx},${ky}"
+          fill="none" stroke="${color}" stroke-width="1.8" stroke-opacity="0.32" stroke-linecap="round"/>`;
+        html += `<circle cx="${kx}" cy="${ky}" r="2.8" fill="${color}" fill-opacity="0.45"/>`;
+      });
+    });
+
+    /* ── PASS 3: child nodes ─────────────────────────────── */
+    BD.forEach(({ color, kids, kPos, kNodes }, i) => {
+      kids.forEach((child, j) => {
+        const { x: kx, y: ky } = kPos[j];
+        const cn = kNodes[j];
+        html += `<rect x="${kx-cn.w/2}" y="${ky-cn.h/2}" width="${cn.w}" height="${cn.h}"
+          rx="${CH_RX}" fill="url(#gch${i})" stroke="${color}"
+          stroke-width="1.3" stroke-opacity="0.55" filter="url(#fsh)"/>`;
+        html += svgTxt(kx, ky, cn.lines, CH_FONT, "'Plus Jakarta Sans',sans-serif", '500', color, 0.93);
+      });
+    });
+
+    /* ── PASS 4: branch nodes ────────────────────────────── */
+    BD.forEach(({ bx, by, color, bNode }, i) => {
+      html += `<rect x="${bx-bNode.w/2}" y="${by-bNode.h/2}" width="${bNode.w}" height="${bNode.h}"
+        rx="${BR_RX}" fill="url(#gbr${i})" stroke="${color}" stroke-width="2.2" filter="url(#fgm)"/>`;
+      html += `<rect x="${bx-bNode.w/2+3}" y="${by-bNode.h/2+2.5}" width="${bNode.w-6}" height="2.5"
+        rx="2" fill="${color}" fill-opacity="0.4"/>`;
+      html += svgTxt(bx, by, bNode.lines, BR_FONT, "'Syne',sans-serif", '700', '#fff', 0.96);
+    });
+
+    /* ── center node ─────────────────────────────────────── */
+    const cLabel = String(data.center || 'Topic');
+    const cLines = wrap(cLabel, 11);
+    const cR     = Math.max(58, cLines.reduce((m,l)=>Math.max(m,l.length*7),0)/2 + 28);
+    const cTextH = cLines.length * LINE_H;
+    html += `
+      <circle cx="${cx}" cy="${cy}" r="${cR+20}"
+        fill="none" stroke="rgba(77,159,255,0.1)" stroke-width="1.5" stroke-dasharray="4,8"/>
+      <circle cx="${cx}" cy="${cy}" r="${cR+8}"
+        fill="none" stroke="rgba(77,159,255,0.18)" stroke-width="1"/>
+      <circle cx="${cx}" cy="${cy}" r="${cR}"
+        fill="url(#gctr)" stroke="#4d9fff" stroke-width="2.5" filter="url(#fg)"/>`;
+    const cfy = cy - cTextH/2 + LINE_H*0.74;
+    html += `<text text-anchor="middle" font-family="'Syne',sans-serif"
+      font-size="15" font-weight="800" fill="#fff" fill-opacity=".97"
+      style="pointer-events:none;letter-spacing:.5px">`;
+    cLines.forEach((l,i) => {
+      html += i===0 ? `<tspan x="${cx}" y="${cfy}">${escMM(l)}</tspan>`
+                    : `<tspan x="${cx}" dy="${LINE_H}">${escMM(l)}</tspan>`;
+    });
+    html += `</text></g>`;
+
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.innerHTML = html;
 
-    // Pan
-    svg.onmousedown = e => { mmDragging = true; mmDragStart = {x: e.clientX - mmOffX, y: e.clientY - mmOffY}; svg.style.cursor = 'grabbing'; };
-    svg.onmousemove = e => { if (!mmDragging) return; mmOffX = e.clientX - mmDragStart.x; mmOffY = e.clientY - mmDragStart.y; applyMmTransform(); };
+    /* ── auto-fit ─────────────────────────────────────────── */
+    // compute real bounding box of all placed nodes
+    let minX=cx, maxX=cx, minY=cy, maxY=cy;
+    BD.forEach(({ bx, by, bNode, kPos, kNodes }) => {
+      minX = Math.min(minX, bx-bNode.w/2); maxX = Math.max(maxX, bx+bNode.w/2);
+      minY = Math.min(minY, by-bNode.h/2); maxY = Math.max(maxY, by+bNode.h/2);
+      kPos.forEach(({ x, y }, j) => {
+        const kn = kNodes[j];
+        minX = Math.min(minX, x-kn.w/2); maxX = Math.max(maxX, x+kn.w/2);
+        minY = Math.min(minY, y-kn.h/2); maxY = Math.max(maxY, y+kn.h/2);
+      });
+    });
+    const pad = 22;
+    const scaleX = (W - pad*2) / (maxX - minX);
+    const scaleY = (H - pad*2) / (maxY - minY);
+    mmScale = Math.min(scaleX, scaleY, 1);
+    // offset so bounding box is centred
+    mmOffX = (W - (maxX+minX)*mmScale) / 2;
+    mmOffY = (H - (maxY+minY)*mmScale) / 2;
+    applyMmTransform();
+
+    // ── pan / zoom interactions ───────────────────────────────
+    svg.onmousedown = e => {
+      mmDragging = true;
+      mmDragStart = {x: e.clientX - mmOffX, y: e.clientY - mmOffY};
+      svg.style.cursor = 'grabbing';
+    };
+    svg.onmousemove = e => {
+      if (!mmDragging) return;
+      mmOffX = e.clientX - mmDragStart.x;
+      mmOffY = e.clientY - mmDragStart.y;
+      applyMmTransform();
+    };
     svg.onmouseup = svg.onmouseleave = () => { mmDragging = false; svg.style.cursor = 'grab'; };
-    svg.ontouchstart = e => { const t = e.touches[0]; mmDragging = true; mmDragStart = {x: t.clientX - mmOffX, y: t.clientY - mmOffY}; };
-    svg.ontouchmove = e => { if (!mmDragging) return; const t = e.touches[0]; mmOffX = t.clientX - mmDragStart.x; mmOffY = t.clientY - mmDragStart.y; applyMmTransform(); e.preventDefault(); };
+    svg.onwheel = e => {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.12 : 0.89;
+      mmScale = Math.max(0.25, Math.min(4, mmScale * factor));
+      applyMmTransform();
+    };
+    svg.ontouchstart = e => {
+      const t = e.touches[0];
+      mmDragging = true;
+      mmDragStart = {x: t.clientX - mmOffX, y: t.clientY - mmOffY};
+    };
+    svg.ontouchmove = e => {
+      if (!mmDragging) return;
+      const t = e.touches[0];
+      mmOffX = t.clientX - mmDragStart.x;
+      mmOffY = t.clientY - mmDragStart.y;
+      applyMmTransform();
+      e.preventDefault();
+    };
     svg.ontouchend = () => { mmDragging = false; };
   });
 }
@@ -5358,7 +6201,7 @@ function showToast(msg) {
 
 
 // ── PLAYLIST MANAGER ──
-let musicSource = 'spotify';
+let musicSource = localStorage.getItem('studly_music_src') || 'spotify';
 
 // ── Spotify presets ──
 const PL_PRESETS = [
@@ -5772,13 +6615,16 @@ function checkBadges() {
 
 // ── PROFILE SUB-NAV ──
 function psGo(panel, btn) {
-  document.querySelectorAll('.ps-panel').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.ps-tab').forEach(b => b.classList.remove('on'));
+  // Scope to the parent tab so settings and profile subnavs don't interfere
+  const parentTab = btn ? btn.closest('.tab') : document.querySelector('.tab.on');
+  const scope = parentTab || document;
+  scope.querySelectorAll('.ps-panel').forEach(p => p.classList.remove('on'));
+  scope.querySelectorAll('.ps-tab').forEach(b => b.classList.remove('on'));
   const p = document.getElementById('ps-' + panel);
   if (p) p.classList.add('on');
   if (btn) btn.classList.add('on');
   else {
-    document.querySelectorAll('.ps-tab').forEach(b => { if (b.getAttribute('onclick')?.includes("'" + panel + "'")) b.classList.add('on'); });
+    scope.querySelectorAll('.ps-tab').forEach(b => { if (b.getAttribute('onclick')?.includes("'" + panel + "'")) b.classList.add('on'); });
   }
   if (panel === 'stats') renderStatsPanel();
   if (panel === 'badges') renderBadgesPanel();
@@ -7917,10 +8763,11 @@ function startIcyTower(area) {
 
 // ── PERSONALIZATION ──
 function setUIStyle(style, el) {
-  document.querySelectorAll('.style-pill').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.style-pill,.skin-card').forEach(p => p.classList.remove('on'));
   if (el) el.classList.add('on');
+  else { const s = document.getElementById('style-' + style); if (s) s.classList.add('on'); }
   const body = document.body;
-  ['style-futuristic','style-retro','style-terminal','style-minimal'].forEach(c => body.classList.remove(c));
+  ['style-futuristic','style-retro','style-terminal','style-minimal','style-hacker','style-glass','style-synthwave'].forEach(c => body.classList.remove(c));
   if (style !== 'default') body.classList.add('style-' + style);
   localStorage.setItem('studly_uistyle', style);
 }
@@ -7939,6 +8786,8 @@ function setFontSize(size, el) {
   if (el) el.classList.add('on');
   document.body.classList.remove('fs-small','fs-large');
   if (size !== 'medium') document.body.classList.add('fs-' + size);
+  const sizeMap = { small: '13px', medium: '16px', large: '17px' };
+  document.documentElement.style.fontSize = sizeMap[size] || '16px';
   localStorage.setItem('studly_fontsize', size);
 }
 
@@ -7955,7 +8804,7 @@ function loadPersonalizePrefs() {
   const style = localStorage.getItem('studly_uistyle') || 'default';
   const styleEl = document.getElementById('style-' + style);
   if (styleEl) { document.querySelectorAll('.style-pill').forEach(p=>p.classList.remove('on')); styleEl.classList.add('on'); }
-  ['style-futuristic','style-retro','style-terminal','style-minimal'].forEach(c => document.body.classList.remove(c));
+  ['style-futuristic','style-retro','style-terminal','style-minimal','style-hacker','style-glass','style-synthwave'].forEach(c => document.body.classList.remove(c));
   if (style !== 'default') document.body.classList.add('style-' + style);
   // Accent
   const accent = localStorage.getItem('studly_accent');
@@ -7970,12 +8819,31 @@ function loadPersonalizePrefs() {
   const fs = localStorage.getItem('studly_fontsize') || 'medium';
   document.body.classList.remove('fs-small','fs-large');
   if (fs !== 'medium') document.body.classList.add('fs-' + fs);
+  const fsSizeMap = { small: '13px', medium: '16px', large: '17px' };
+  document.documentElement.style.fontSize = fsSizeMap[fs] || '16px';
   const fsEl = document.getElementById('fs-' + fs);
   if (fsEl) { document.querySelectorAll('#fs-small,#fs-medium,#fs-large').forEach(b=>b.classList.remove('on')); fsEl.classList.add('on'); }
   // Sidebar pref
   const sbp = localStorage.getItem('studly_sbpref') || 'auto';
   const sbpEl = document.getElementById('sb-' + sbp);
   if (sbpEl) { document.querySelectorAll('#sb-auto,#sb-open,#sb-closed').forEach(b=>b.classList.remove('on')); sbpEl.classList.add('on'); }
+  // Avatar border restore
+  const border = localStorage.getItem('studly_border');
+  if (border) {
+    setTimeout(() => {
+      const avatar = document.getElementById('acct-avatar');
+      if (avatar) {
+        if (border === 'rainbow') {
+          avatar.style.border = '3px solid';
+          avatar.style.borderColor = 'transparent';
+          avatar.style.boxShadow = '0 0 0 3px transparent, 0 0 0 3px #f00, 0 0 0 4px #ff0';
+        } else {
+          avatar.style.borderColor = border;
+          avatar.style.boxShadow = '0 0 16px ' + border + '66';
+        }
+      }
+    }, 0);
+  }
 }
 
 // Hook into go() for account/personalize
@@ -7998,10 +8866,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dateStr = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
     const cb = document.getElementById('dt-clock-big');
     const cd = document.getElementById('dt-clock-date');
-    const ct = document.getElementById('dt-clock');
     if (cb) cb.textContent = timeStr;
     if (cd) cd.textContent = dateStr;
-    if (ct) ct.textContent = timeStr;
   }
   updateDtClock();
   setInterval(updateDtClock, 1000);
@@ -8176,22 +9042,32 @@ function checkOnboarding() {
 // ── HOME STATS UPDATE ──
 function updateHomeStats() {
   const a = getAcct();
-  const nameEl = document.getElementById('home-name');
-  const subEl = document.getElementById('home-sub');
-  const gemsEl = document.getElementById('home-gems');
-  const streakEl = document.getElementById('home-streak');
-  if (nameEl) nameEl.textContent = (a.name || 'Scholar');
-  if (subEl) {
-    const hrs = new Date().getHours();
-    const greeting = hrs < 12 ? 'Good morning!' : hrs < 17 ? 'Good afternoon!' : 'Good evening!';
-    subEl.textContent = greeting;
-  }
-  if (gemsEl) gemsEl.textContent = a.gems || 0;
-  if (streakEl) streakEl.textContent = a.streak || 0;
+  const s = a.stats || {};
+  // Rewards widget
   const dtGems = document.getElementById('dt-gems-big');
   const dtStreak = document.getElementById('dt-streak-big');
   if (dtGems) dtGems.textContent = a.gems || 0;
   if (dtStreak) dtStreak.textContent = (a.streak || 0) + ' days';
+  // Stats panel counters
+  const qEl = document.getElementById('dt-stat-q');
+  const gEl = document.getElementById('dt-stat-g');
+  const jEl = document.getElementById('dt-stat-j');
+  const qProg = document.getElementById('dt-prog-q');
+  const gProg = document.getElementById('dt-prog-g');
+  const jProg = document.getElementById('dt-prog-j');
+  const qv = s.questions || 0;
+  const gv = s.games || 0;
+  const jv = s.journal || 0;
+  if (qEl) qEl.textContent = qv;
+  if (gEl) gEl.textContent = gv;
+  if (jEl) jEl.textContent = jv;
+  // Progress bars — milestones: 50q, 20g, 20j
+  if (qProg) qProg.style.width = Math.min(100, Math.round((qv / 50) * 100)) + '%';
+  if (gProg) gProg.style.width = Math.min(100, Math.round((gv / 20) * 100)) + '%';
+  if (jProg) jProg.style.width = Math.min(100, Math.round((jv / 20) * 100)) + '%';
+  // Sidebar streak badge (exists in sidebar markup)
+  const streakEl = document.getElementById('home-streak');
+  if (streakEl) streakEl.textContent = a.streak || 0;
 }
 
 // ── COMPANION MEMORY ──
@@ -10824,5 +11700,7 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
             </div>
 
 </div><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
 </body></html>
