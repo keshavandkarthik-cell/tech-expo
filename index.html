@@ -1,7 +1,7 @@
 <html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Veda — AI Study Companion | veda-net.com</title>
+<title>Veda — AI Study Companion</title>
 <link rel="manifest" href="manifest.json">
 <!-- Firebase -->
 <script type="module">
@@ -1283,7 +1283,22 @@ body.fs-large { font-size: 17px; }
 .color-custom-wrap { position: relative; width: 30px; height: 30px; }
 
 /* ── GAMES TAB ── */
-.games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.game-cats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.game-cat-btn {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(77,159,255,.18);
+  border-radius: 999px; padding: 7px 16px;
+  font-family: var(--exo); font-size: .78rem; color: var(--silver2);
+  cursor: pointer; transition: all .15s; letter-spacing: .5px;
+}
+.game-cat-btn:hover, .game-cat-btn.on {
+  background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2);
+}
+.game-cat-label {
+  font-family: var(--exo); font-size: .63rem; color: var(--teal);
+  letter-spacing: 1.5px; text-transform: uppercase; margin: 4px 0 10px;
+  opacity: .85;
+}
+.games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
 .game-card {
   background: var(--panel-bg); border: 1px solid var(--panel-border);
   border-radius: 14px; padding: 20px 16px; cursor: pointer; transition: all .2s;
@@ -1703,7 +1718,7 @@ body.fs-large { font-size: 17px; }
         <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       </div>
-      <div class="hdr-time" id="clk">21:11</div>
+      <div class="hdr-time" id="clk">09:59</div>
     </div>
   </div>
   <div id="body">
@@ -1761,17 +1776,17 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('themes')"><span class="ni">🌈</span><span class="nl">Themes</span></button>
         <button class="nb" onclick="go('calc')"><span class="ni">🔢</span><span class="nl">Calculator</span></button>
         <button class="nb" onclick="go('chat')"><span class="ni">💬</span><span class="nl">Companion</span></button>
-        <button class="nb" id="nb-music" onclick="go('music')" style="display:none;"><span class="ni">🎵</span><span class="nl">Music</span></button>
+        <button class="nb" id="nb-music" onclick="go('music')" style="display: none; opacity: 0; transform: translateX(-12px);"><span class="ni">🎵</span><span class="nl">Music</span></button>
         <button class="nb" onclick="go('todo')"><span class="ni">✅</span><span class="nl">To-Do List</span></button>
         <button class="nb" onclick="go('journal')"><span class="ni">📓</span><span class="nl">Journal</span></button>
         <button class="nb" onclick="go('profile')"><span class="ni">👤</span><span class="nl">Profile</span></button>
-        <button class="nb" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
+        <button class="nb on" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb on" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
+        <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
-        <div class="sb-foot-text" id="key-indicator">KEY: ACTIVE</div>
+        <div class="sb-foot-text" id="key-indicator">NO KEY SET</div>
         <div class="sb-bar">
           <div class="sb-bar-seg"></div><div class="sb-bar-seg"></div>
           <div class="sb-bar-seg"></div><div class="sb-bar-seg"></div>
@@ -1806,14 +1821,14 @@ body.fs-large { font-size: 17px; }
           <!-- Clock widget -->
           <!-- Daily Brief widget -->
           <div class="dt-widget dt-widget-wide" id="daily-brief-widget">
-            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Sat Apr 18 2026</span></div>
-            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Keshav, fantastic start with your 1-day streak! Even without gems yet, every single study session builds incredible momentum. Just focus on mastering one small topic today, and watch your progress grow.</div>
+            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Thu Apr 23 2026</span></div>
+            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">🧠</span> Spaced repetition beats cramming. Reviewing material at increasing intervals locks it into long-term memory.</div>
             <button onclick="refreshDailyBrief(true)" style="margin-top:8px;background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.65rem;cursor:pointer;padding:0;opacity:.6;transition:opacity .15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">↻ refresh</button>
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">21:11</div>
-            <div class="dt-clock-date" id="dt-clock-date">Saturday, Apr 18</div>
+            <div class="dt-clock-big" id="dt-clock-big">09:59</div>
+            <div class="dt-clock-date" id="dt-clock-date">Thursday, Apr 23</div>
           </div>
 
           <!-- Stats widget -->
@@ -1854,15 +1869,15 @@ body.fs-large { font-size: 17px; }
           <div class="dt-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Focus Timer</div>
             <div style="text-align:center;">
-              <div id="pom-display" style="font-family:var(--orb);font-size:clamp(1.4rem,3vw,2rem);font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;line-height:1;margin:4px 0 2px;">25:00</div>
-              <div id="pom-label" style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-bottom:10px;">FOCUS SESSION</div>
+              <div id="pom-display" style="font-family:var(--orb);font-size:clamp(1.4rem,3vw,2rem);font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;line-height:1;margin:4px 0 2px;">05:00</div>
+              <div id="pom-label" style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-bottom:10px;">SHORT BREAK</div>
               <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
                 <button id="pom-btn" onclick="pomToggle()" style="background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:8px;padding:6px 18px;color:#fff;font-family:var(--orb);font-size:.55rem;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .15s;">START</button>
                 <button onclick="pomReset()" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 12px;color:var(--silver2);font-family:var(--exo);font-size:.65rem;cursor:pointer;transition:all .15s;">↺</button>
               </div>
               <div style="display:flex;gap:4px;justify-content:center;">
-                <button onclick="pomSetMode('focus')" id="pom-m-focus" style="border-radius:999px;padding:3px 10px;font-family:var(--exo);font-size:.6rem;cursor:pointer;border:1px solid var(--accent);background:rgba(77,159,255,.15);color:var(--accent2);transition:all .15s;">25 min</button>
-                <button onclick="pomSetMode('short')" id="pom-m-short" style="border-radius:999px;padding:3px 10px;font-family:var(--exo);font-size:.6rem;cursor:pointer;border:1px solid rgba(77,159,255,.2);background:transparent;color:var(--silver);transition:all .15s;">5 min</button>
+                <button onclick="pomSetMode('focus')" id="pom-m-focus" style="border-radius: 999px; padding: 3px 10px; font-family: var(--exo); font-size: 0.6rem; cursor: pointer; border-color: rgba(77, 159, 255, 0.2); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; background: transparent; color: var(--silver); transition: 0.15s;">25 min</button>
+                <button onclick="pomSetMode('short')" id="pom-m-short" style="border-radius: 999px; padding: 3px 10px; font-family: var(--exo); font-size: 0.6rem; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--accent); border-image: initial; background: rgba(77, 159, 255, 0.15); color: var(--accent2); transition: 0.15s;">5 min</button>
                 <button onclick="pomSetMode('long')" id="pom-m-long" style="border-radius:999px;padding:3px 10px;font-family:var(--exo);font-size:.6rem;cursor:pointer;border:1px solid rgba(77,159,255,.2);background:transparent;color:var(--silver);transition:all .15s;">15 min</button>
               </div>
               <div id="pom-sessions" style="font-family:var(--exo);font-size:.62rem;color:var(--teal);margin-top:6px;letter-spacing:.5px;"></div>
@@ -1875,7 +1890,7 @@ body.fs-large { font-size: 17px; }
             <div class="dt-reward">
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">💎</div>
-                <div><div class="dt-reward-val" id="dt-gems-big">0</div><div class="dt-reward-label">Gems earned</div></div>
+                <div><div class="dt-reward-val" id="dt-gems-big">24</div><div class="dt-reward-label">Gems earned</div></div>
               </div>
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">🔥</div>
@@ -1900,11 +1915,11 @@ body.fs-large { font-size: 17px; }
             <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-top:8px;">
       <button class="music-pl-btn " data-plid="69AaAkdktFGnk9POmHENkT" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Lo-fi">Lo-fi</button>
       <button class="music-pl-btn " data-plid="37i9dQZF1DX8Uebhn9wzrS" onclick="playPlaylist({&quot;name&quot;:&quot;Focus Flow&quot;,&quot;id&quot;:&quot;37i9dQZF1DX8Uebhn9wzrS&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Focus Flow">Focus Flow</button>
-      <button class="music-pl-btn on" data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
+      <button class="music-pl-btn " data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
       <button class="music-pl-btn " data-plid="7a78GiEowpaCa7ZJs44xUU" onclick="playPlaylist({&quot;name&quot;:&quot;Interstellar OST&quot;,&quot;id&quot;:&quot;7a78GiEowpaCa7ZJs44xUU&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Soundtrack&quot;})" title="Interstellar OST">Interstellar OST</button></div>
 
             <!-- Spotify login nudge -->
-            <div id="spotify-nudge" style="display:none;background:linear-gradient(135deg,rgba(30,215,96,.08),rgba(30,215,96,.04));border:1px solid rgba(30,215,96,.25);border-radius:10px;padding:10px 14px;margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div id="spotify-nudge" style="background: linear-gradient(135deg, rgba(30, 215, 96, 0.08), rgba(30, 215, 96, 0.04)); border: 1px solid rgba(30, 215, 96, 0.25); border-radius: 10px; padding: 10px 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
               <span style="font-size:1.1rem;">🎵</span>
               <div style="flex:1;min-width:160px;">
                 <div style="font-family:var(--raj);font-size:.8rem;color:#1ed760;font-weight:600;">Seeing 30s previews?</div>
@@ -1916,7 +1931,7 @@ body.fs-large { font-size: 17px; }
 
             <!-- Spotify iframe -->
             <div id="spotify-player" style="display:block;">
-              <iframe id="spotify-frame" src="https://open.spotify.com/embed/album/2e7HNQJ0BcMoqwsVDwDhK8?utm_source=generator&amp;theme=0" width="100%" height="100" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:10px;margin-top:8px;display:block;transition:height .3s ease;"></iframe>
+              <iframe id="spotify-frame" src="https://open.spotify.com/embed/album/69AaAkdktFGnk9POmHENkT?utm_source=generator&amp;theme=0" width="100%" height="100" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:10px;margin-top:8px;display:block;transition:height .3s ease;"></iframe>
             </div>
 
 
@@ -1936,18 +1951,18 @@ body.fs-large { font-size: 17px; }
 
           <!-- Greeting -->
           <div>
-            <div class="mh-greeting-time" id="mh-timeofday">Good evening</div>
+            <div class="mh-greeting-time" id="mh-timeofday">Good morning</div>
             <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
             <div class="mh-pills">
               <div class="mh-pill">🔥 <span id="mh-streak">1</span> day streak</div>
-              <div class="mh-pill">💎 <span id="mh-gems">0</span> gems</div>
+              <div class="mh-pill">💎 <span id="mh-gems">21</span> gems</div>
             </div>
           </div>
 
           <!-- Daily Brief -->
           <div class="mh-card">
             <div class="mh-card-label">Daily Brief</div>
-            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">✨</span> Keshav, fantastic start with your 1-day streak! Even without gems yet, every single study session builds incredible momentum. Just focus on mastering one small topic today, and watch your progress grow.</div>
+            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">🧠</span> Spaced repetition beats cramming. Reviewing material at increasing intervals locks it into long-term memory.</div>
             <button class="mh-brief-refresh" onclick="refreshDailyBrief(true)">↻ refresh</button>
           </div>
 
@@ -2327,7 +2342,10 @@ body.fs-large { font-size: 17px; }
         </div>
         <div class="tsub"><span class="prm">›</span>Plays in the background when you switch tabs</div>
 
-        <div class="music-playlists" id="music-tab-pl-tabs" style="flex-wrap:wrap;margin-top:12px;margin-bottom:12px;"></div>
+        <div class="music-playlists" id="music-tab-pl-tabs" style="flex-wrap:wrap;margin-top:12px;margin-bottom:12px;">
+      <button class="music-pl-btn " data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;,&quot;custom&quot;:true})" title="Dhurandhar">Dhurandhar</button>
+      <button class="music-pl-btn " data-plid="4jlyYLklV3kTBA6trX3bpj" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar: The Revenge&quot;,&quot;id&quot;:&quot;4jlyYLklV3kTBA6trX3bpj&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;,&quot;custom&quot;:true})" title="Dhurandhar: The Revenge">Dhurandhar: The Revenge</button>
+      <button class="music-pl-btn on" data-plid="69AaAkdktFGnk9POmHENkT" onclick="playPlaylist({&quot;name&quot;:&quot;JvKE&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;,&quot;custom&quot;:true})" title="JvKE">JvKE</button></div>
 
         <div id="music-tab-nudge" style="display:none;background:linear-gradient(135deg,rgba(30,215,96,.08),rgba(30,215,96,.04));border:1px solid rgba(30,215,96,.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;align-items:center;gap:10px;flex-wrap:wrap;">
           <span style="font-size:1.1rem;">🎵</span>
@@ -2339,8 +2357,8 @@ body.fs-large { font-size: 17px; }
           <button onclick="document.getElementById('music-tab-nudge').style.display='none'" style="background:none;border:none;color:var(--silver);font-size:.9rem;cursor:pointer;flex-shrink:0;opacity:.6;padding:0;">✕</button>
         </div>
 
-        <div id="music-tab-spotify-player">
-          <iframe id="music-tab-spotify-frame" src="about:blank" width="100%" height="500" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:14px;display:block;"></iframe>
+        <div id="music-tab-spotify-player" style="display: block;">
+          <iframe id="music-tab-spotify-frame" src="https://open.spotify.com/embed/album/69AaAkdktFGnk9POmHENkT?utm_source=generator&amp;theme=0" width="100%" height="500" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:14px;display:block;"></iframe>
         </div>
 
         <div id="music-tab-empty" style="display:none;padding:40px 0;text-align:center;font-family:var(--exo);font-size:.88rem;color:var(--silver);opacity:.6;">
@@ -2491,7 +2509,7 @@ body.fs-large { font-size: 17px; }
         <div id="comp-panel">
         <div class="chatwin" id="comp-win">
           <div class="bubble bot">Hey! I'm your study companion 🌟 How are you feeling today? You can talk to me about anything — stress, exams, or just life in general.</div>
-        </div>
+        <div class="bubble user" style="opacity: 0.6;">quiz me!</div><div class="bubble bot" style="opacity: 0.6;">Which war did France fund that left it nearly bankrupt — and why was that significant for the Revolution?</div><div class="bubble user" style="opacity: 0.6;">The American War of Independence? Because they spent loads of money?</div><div class="bubble bot" style="opacity: 0.6;">Exactly right. Key thing for your essay: France emerged victorious but economically devastated, so the government raised taxes, hitting the Third Estate hardest and fuelling resentment. That cause-and-effect link gets you top marks. Next: who made up the Third Estate and why were they angry?</div><div style="text-align: center; font-family: var(--exo); font-size: 0.7rem; color: var(--silver); opacity: 0.5; padding: 8px 0px;">— continuing from last time —</div></div>
         <div class="mood-row" id="mood-row">
           <button class="mood-chip" onclick="setMood(this,'😊 Good')">😊 Good</button>
           <button class="mood-chip" onclick="setMood(this,'😰 Stressed')">😰 Stressed</button>
@@ -2528,7 +2546,7 @@ body.fs-large { font-size: 17px; }
 
 Write about your study session, how you're feeling, goals for tomorrow..."></textarea>
             <div class="journal-actions">
-              <div class="journal-date" id="journal-date">Saturday, 18 April 2026</div>
+              <div class="journal-date" id="journal-date">Thursday, 23 April 2026</div>
               <div style="display:flex;gap:8px;">
                 <button class="abtn sec" onclick="clearJournal()">Clear</button>
                 <button class="abtn" onclick="saveJournal()">💾 Save Entry</button>
@@ -2550,7 +2568,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <div class="ttl">🌈 Themes</div>
         <div class="tsub"><span class="prm">›</span>Hover to preview · Click to apply · 💎 Shop for exclusives</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
+          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
           <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
         </div>
         <div id="shop-panel" style="display:none;margin-bottom:16px;">
@@ -2560,35 +2578,35 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
           <div class="shop-grid" id="shop-grid"></div>
         </div>
-        <div class="tgrid" id="tgrid"></div>
+        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
       </div>
 
       <!-- PROFILE & SETTINGS (merged) -->
-      <div class="tab on" id="tab-settings">
+      <div class="tab" id="tab-settings">
 
         <!-- SUB-NAV -->
         <div class="ps-subnav">
-          <button class="ps-tab" onclick="psGo('profile',this)">👤 Profile</button>
+          <button class="ps-tab on" onclick="psGo('profile',this)">👤 Profile</button>
           <button class="ps-tab" onclick="psGo('stats',this)">📊 Stats</button>
           <button class="ps-tab" onclick="psGo('badges',this)">🏅 Badges</button>
           <button class="ps-tab" onclick="psGo('goals',this)">🎯 Goals</button>
           <button class="ps-tab" onclick="psGo('appearance',this)">🎨 Appearance</button>
-          <button class="ps-tab on" onclick="psGo('aiprofile',this);renderAIProfilePanel()">set_aiprofile</button>
+          <button class="ps-tab" onclick="psGo('aiprofile',this);renderAIProfilePanel()">set_aiprofile</button>
           <button class="ps-tab" onclick="psGo('apikey',this)">🔑 API Key</button>
         </div>
 
         <!-- ── PROFILE PANEL ── -->
-        <div class="ps-panel" id="ps-profile">
+        <div class="ps-panel on" id="ps-profile">
           <div class="ps-hero">
             <div class="ps-avatar-wrap">
-              <div class="ps-avatar" id="acct-avatar">☀️</div>
+              <div class="ps-avatar" id="acct-avatar">🎓</div>
               <div class="ps-avatar-ring"></div>
             </div>
             <div class="ps-hero-right">
               <div class="ps-name" id="acct-name">Keshav</div>
               <div class="ps-tagline" id="acct-tagline">Level 1 Scholar</div>
               <div class="ps-badges-row">
-                <div class="ps-pill gem">💎 <span id="acct-gems">0</span> Gems</div>
+                <div class="ps-pill gem">💎 <span id="acct-gems">24</span> Gems</div>
                 <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
               </div>
             </div>
@@ -2629,9 +2647,9 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div style="flex:1;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
                   <span class="ps-form-label" id="ps-level-title">Scholar</span>
-                  <span class="ps-form-label"><span id="ps-gems-cur">0</span> / <span id="ps-gems-next">50</span> gems</span>
+                  <span class="ps-form-label"><span id="ps-gems-cur">24</span> / <span id="ps-gems-next">50</span> gems</span>
                 </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 0%;"></div></div>
+                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 48%;"></div></div>
                 <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Apprentice</div>
               </div>
             </div>
@@ -2837,7 +2855,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <!-- ── API KEY PANEL ── -->
         <!-- GOOGLE ACCOUNT PANEL (injected above API key panel) -->
         <!-- ── AI PROFILE PANEL ── -->
-        <div class="ps-panel on" id="ps-aiprofile">
+        <div class="ps-panel" id="ps-aiprofile">
           <div class="ps-card">
             <div class="ps-card-label">// AI STUDENT PROFILE</div>
             <div class="ps-form-label" style="margin-bottom:16px;line-height:1.7;">
@@ -3032,62 +3050,129 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       <div class="tab" id="tab-account" style="display:none!important;"></div>
 
       <!-- GAMES -->
-      <div class="tab" id="tab-games">
+      <div class="tab on" id="tab-games">
         <div class="ttl">🎮 Games</div>
         <div class="tsub"><span class="prm">›</span>Play to earn gems — high scores get rewarded</div>
-        <div id="games-menu">
-          <div class="games-grid">
-            <div class="game-card" onclick="startGame('bubble')">
-              <div class="game-icon">🫧</div>
-              <div class="game-name">Bubble Pop</div>
-              <div class="game-desc">Pop bubbles as fast as you can</div>
-              <div class="game-hi" id="hi-bubble">Best: 0</div>
-            </div>
-            <div class="game-card" onclick="startGame('scramble')">
-              <div class="game-icon">🔤</div>
-              <div class="game-name">Word Scramble</div>
-              <div class="game-desc">Unscramble the study words</div>
-              <div class="game-hi" id="hi-scramble">Best: 0</div>
-            </div>
-            <div class="game-card" onclick="startGame('math')">
-              <div class="game-icon">➗</div>
-              <div class="game-name">Maths Blitz</div>
-              <div class="game-desc">Quick fire maths questions</div>
-              <div class="game-hi" id="hi-math">Best: 0</div>
-            </div>
-            <div class="game-card" onclick="startGame('typing')">
-              <div class="game-icon">⌨️</div>
-              <div class="game-name">Typing Speed</div>
-              <div class="game-desc">How fast can you type?</div>
-              <div class="game-hi" id="hi-typing">Best: 0 WPM</div>
-            </div>
-            <div class="game-card" onclick="startGame('reaction')">
-              <div class="game-icon">⚡</div>
-              <div class="game-name">Reaction Time</div>
-              <div class="game-desc">Tap when the signal fires!</div>
-              <div class="game-hi" id="hi-reaction">Best: -- ms</div>
-            </div>
-            <div class="game-card" onclick="startGame('snake')">
+        <div id="games-menu" style="display: none;">
+          <!-- Category filter tabs -->
+          <div class="game-cats" id="game-cats">
+            <button class="game-cat-btn on" onclick="filterGames(this,'all')">All</button>
+            <button class="game-cat-btn" onclick="filterGames(this,'arcade')">🕹️ Arcade</button>
+            <button class="game-cat-btn" onclick="filterGames(this,'puzzle')">🧩 Puzzle</button>
+            <button class="game-cat-btn" onclick="filterGames(this,'reflex')">⚡ Reflex</button>
+            <button class="game-cat-btn" onclick="filterGames(this,'quiz')">🌍 Quiz</button>
+          </div>
+
+          <!-- ARCADE -->
+          <div class="game-cat-label" data-cat="arcade" style="">🕹️ Arcade</div>
+          <div class="games-grid" data-cat="arcade" style="display: grid;">
+            <div class="game-card" data-cat="arcade" onclick="startGame('snake')">
               <div class="game-icon">🐍</div>
               <div class="game-name">Snake</div>
               <div class="game-desc">Classic snake — don't crash!</div>
               <div class="game-hi" id="hi-snake">Best: 0</div>
             </div>
-            <div class="game-card" onclick="startGame('flags')">
-              <div class="game-icon">🌍</div>
-              <div class="game-name">Flag Quiz</div>
-              <div class="game-desc">Name that country's flag!</div>
-              <div class="game-hi" id="hi-flags">Best: 0</div>
+            <div class="game-card" data-cat="arcade" onclick="startGame('bubble')">
+              <div class="game-icon">🫧</div>
+              <div class="game-name">Bubble Pop</div>
+              <div class="game-desc">Pop bubbles as fast as you can</div>
+              <div class="game-hi" id="hi-bubble">Best: 0</div>
             </div>
-            <div class="game-card" onclick="startGame('sudoku')">
+            <div class="game-card" data-cat="arcade" onclick="startGame('brickbreaker')">
+              <div class="game-icon">🧱</div>
+              <div class="game-name">Brick Breaker</div>
+              <div class="game-desc">Smash all the bricks with your ball</div>
+              <div class="game-hi" id="hi-brickbreaker">Best: 170</div>
+            </div>
+            <div class="game-card" data-cat="arcade" onclick="startGame('tetris')">
+              <div class="game-icon">🟦</div>
+              <div class="game-name">Tetris</div>
+              <div class="game-desc">Stack falling blocks to clear lines</div>
+              <div class="game-hi" id="hi-tetris">Best: 0</div>
+            </div>
+            <div class="game-card" data-cat="arcade" onclick="startGame('icytower')">
+              <div class="game-icon">🏔️</div>
+              <div class="game-name">Icy Tower</div>
+              <div class="game-desc">Jump up the tower as high as you can!</div>
+              <div class="game-hi" id="hi-icytower">Best: 18</div>
+            </div>
+          </div>
+
+          <!-- PUZZLE -->
+          <div class="game-cat-label" data-cat="puzzle" style="">🧩 Puzzle</div>
+          <div class="games-grid" data-cat="puzzle" style="display: grid;">
+            <div class="game-card" data-cat="puzzle" onclick="startGame('sudoku')">
               <div class="game-icon">🔢</div>
               <div class="game-name">Sudoku</div>
               <div class="game-desc">Classic 9×9 number puzzle</div>
               <div class="game-hi" id="hi-sudoku">Not solved yet</div>
             </div>
+            <div class="game-card" data-cat="puzzle" onclick="startGame('math')">
+              <div class="game-icon">➗</div>
+              <div class="game-name">Maths Blitz</div>
+              <div class="game-desc">Quick fire maths questions</div>
+              <div class="game-hi" id="hi-math">Best: 0</div>
+            </div>
+            <div class="game-card" data-cat="puzzle" onclick="startGame('scramble')">
+              <div class="game-icon">🔤</div>
+              <div class="game-name">Word Scramble</div>
+              <div class="game-desc">Unscramble the study words</div>
+              <div class="game-hi" id="hi-scramble">Best: 0</div>
+            </div>
+            <div class="game-card" data-cat="puzzle" onclick="startGame('hangman')">
+              <div class="game-icon">🪢</div>
+              <div class="game-name">Hangman</div>
+              <div class="game-desc">Guess the hidden word letter by letter</div>
+              <div class="game-hi" id="hi-hangman">Best: 3</div>
+            </div>
+          </div>
+
+          <!-- REFLEX -->
+          <div class="game-cat-label" data-cat="reflex" style="">⚡ Reflex</div>
+          <div class="games-grid" data-cat="reflex" style="display: grid;">
+            <div class="game-card" data-cat="reflex" onclick="startGame('reaction')">
+              <div class="game-icon">⚡</div>
+              <div class="game-name">Reaction Time</div>
+              <div class="game-desc">Tap when the signal fires!</div>
+              <div class="game-hi" id="hi-reaction">Best: 0 ms</div>
+            </div>
+            <div class="game-card" data-cat="reflex" onclick="startGame('typing')">
+              <div class="game-icon">⌨️</div>
+              <div class="game-name">Typing Speed</div>
+              <div class="game-desc">How fast can you type?</div>
+              <div class="game-hi" id="hi-typing">Best: 33 WPM</div>
+            </div>
+          </div>
+
+          <!-- QUIZ -->
+          <div class="game-cat-label" data-cat="quiz" style="">🌍 Quiz</div>
+          <div class="games-grid" data-cat="quiz" style="display: grid;">
+            <div class="game-card" data-cat="quiz" onclick="startGame('flags')">
+              <div class="game-icon">🌍</div>
+              <div class="game-name">Flag Quiz</div>
+              <div class="game-desc">Name that country's flag!</div>
+              <div class="game-hi" id="hi-flags">Best: 7</div>
+            </div>
           </div>
         </div>
-        <div id="game-play-area" class="game-area"></div>
+        <div id="game-play-area" class="game-area active">
+    <div class="game-header">
+      <div class="game-score-row">
+        <div class="gscore">Floor: <span id="it-floor">8</span></div>
+        <div class="gscore">Best: <span id="it-best">18</span></div>
+        <div class="gscore" id="it-combo" style="color: var(--teal2); display: none;">Combo x<span id="it-comboval">2</span></div>
+      </div>
+      <button class="abtn sec" onclick="itQuit()">Quit</button>
+    </div>
+    <div style="display:flex;justify-content:center;">
+      <canvas id="it-canvas" width="380" height="520" style="border:1px solid var(--panel-border);border-radius:12px;background:linear-gradient(180deg,#050810 0%,#0a1428 100%);display:block;touch-action:none;"></canvas>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;">
+      <button class="abtn sec" style="padding:12px 28px;font-size:1.2rem;" id="it-left" onpointerdown="itKey(&quot;left&quot;,true)" onpointerup="itKey(&quot;left&quot;,false)">←</button>
+      <button class="abtn sec" style="padding:12px 28px;font-size:1.2rem;" id="it-jump" onpointerdown="itJumpBtn()">↑ Jump</button>
+      <button class="abtn sec" style="padding:12px 28px;font-size:1.2rem;" id="it-right" onpointerdown="itKey(&quot;right&quot;,true)" onpointerup="itKey(&quot;right&quot;,false)">→</button>
+    </div>
+    <div style="text-align:center;font-family:var(--exo);font-size:.7rem;color:var(--silver);margin-top:6px;">Arrow keys or A/D to move · Space / W / ↑ to jump</div></div>
       </div>
 
       <!-- ══ EXAM PAPERS TAB ══ -->
@@ -3228,10 +3313,10 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <div class="panel" style="margin-bottom:12px;padding:16px 20px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
             <div style="font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:1px;">// PROGRESS</div>
-            <div id="todo-progress-text" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);">No tasks yet</div>
+            <div id="todo-progress-text" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);">5/8 done</div>
           </div>
           <div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;">
-            <div id="todo-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--teal));border-radius:3px;transition:width .4s ease;box-shadow:0 0 8px rgba(0,212,170,.4);"></div>
+            <div id="todo-progress-bar" style="height: 100%; width: 63%; background: linear-gradient(90deg,var(--accent),var(--teal)); border-radius: 3px; transition: width 0.4s; box-shadow: rgba(0, 212, 170, 0.4) 0px 0px 8px;"></div>
           </div>
         </div>
 
@@ -3244,7 +3329,55 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
 
         <!-- Task list -->
-        <div id="todo-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+        <div id="todo-list" style="display:flex;flex-direction:column;gap:6px;">
+    <div class="todo-item done">
+      <div class="todo-check" onclick="toggleTodo(1776825482827)">✅</div>
+      <div class="todo-text">Complete biology past papers (x3)</div>
+      <div class="todo-date">17/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776825482827)">✕</button>
+    </div>
+    <div class="todo-item done">
+      <div class="todo-check" onclick="toggleTodo(1776825482826)">✅</div>
+      <div class="todo-text">Submit English essay on Macbeth</div>
+      <div class="todo-date">12/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776825482826)">✕</button>
+    </div>
+    <div class="todo-item done">
+      <div class="todo-check" onclick="toggleTodo(1776825482825)">✅</div>
+      <div class="todo-text">Review French Revolution notes</div>
+      <div class="todo-date">18/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776825482825)">✕</button>
+    </div>
+    <div class="todo-item done">
+      <div class="todo-check" onclick="toggleTodo(1776825482824)">✅</div>
+      <div class="todo-text">Make Chemistry flashcards — bonding chapter</div>
+      <div class="todo-date">19/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776825482824)">✕</button>
+    </div>
+    <div class="todo-item done">
+      <div class="todo-check" onclick="toggleTodo(1776825482823)">✅</div>
+      <div class="todo-text">Pomodoro session: 4 blocks</div>
+      <div class="todo-date">21/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776825482823)">✕</button>
+    </div>
+    <div class="todo-item ">
+      <div class="todo-check" onclick="toggleTodo(1776825482822)">⬜</div>
+      <div class="todo-text">Revise electricity formulas for Physics exam</div>
+      <div class="todo-date">22/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776825482822)">✕</button>
+    </div>
+    <div class="todo-item ">
+      <div class="todo-check" onclick="toggleTodo(1776825482821)">⬜</div>
+      <div class="todo-text">Read chapters 5-7 for English lit</div>
+      <div class="todo-date">22/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776825482821)">✕</button>
+    </div>
+    <div class="todo-item ">
+      <div class="todo-check" onclick="toggleTodo(1776825482820)">⬜</div>
+      <div class="todo-text">Email Mr. Hassan about coursework deadline</div>
+      <div class="todo-date">21/04/2026</div>
+      <button class="todo-del" onclick="deleteTodo(1776825482820)">✕</button>
+    </div></div>
 
         <!-- Clear done -->
         <div style="text-align:right;margin-top:10px;">
@@ -3258,19 +3391,46 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <div class="tsub"><span class="prm">›</span>Build your weekly timetable — colour-code subjects, set recurring sessions</div>
 
         <!-- Summary cards -->
-        <div class="planner-summary" id="planner-summary"></div>
+        <div class="planner-summary" id="planner-summary">
+    <div class="pl-sum-card"><div class="pl-sum-icon">⏱️</div><div class="pl-sum-val">18.8h</div><div class="pl-sum-lbl">Study hrs this week</div></div>
+    <div class="pl-sum-card"><div class="pl-sum-icon">📚</div><div class="pl-sum-val">15</div><div class="pl-sum-lbl">Sessions this week</div></div>
+    <div class="pl-sum-card"><div class="pl-sum-icon">📅</div><div class="pl-sum-val">2</div><div class="pl-sum-lbl">Sessions today</div></div>
+    <div class="pl-sum-card"><div class="pl-sum-icon">📊</div><div class="pl-sum-val">30</div><div class="pl-sum-lbl">Total scheduled</div></div><div class="pl-sum-card" style="grid-column:span 2;text-align:left;">
+      <div style="font-family:var(--exo);font-size:.55rem;color:var(--teal);letter-spacing:2px;margin-bottom:10px;">// SUBJECT BREAKDOWN</div>
+      <div class="subj-bars"><div class="subj-bar-row">
+          <div class="subj-bar-label">Revision</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:100%;background:#fb923c;"></div></div>
+          <div class="subj-bar-hrs">4.5h</div>
+        </div><div class="subj-bar-row">
+          <div class="subj-bar-label">Mathematics</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:78%;background:#4d9fff;"></div></div>
+          <div class="subj-bar-hrs">3.5h</div>
+        </div><div class="subj-bar-row">
+          <div class="subj-bar-label">English</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:56%;background:#c084fc;"></div></div>
+          <div class="subj-bar-hrs">2.5h</div>
+        </div><div class="subj-bar-row">
+          <div class="subj-bar-label">Chemistry</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:50%;background:#00d4aa;"></div></div>
+          <div class="subj-bar-hrs">2.3h</div>
+        </div><div class="subj-bar-row">
+          <div class="subj-bar-label">Computer Science</div>
+          <div class="subj-bar-track"><div class="subj-bar-fill" style="width:33%;background:#4d9fff;"></div></div>
+          <div class="subj-bar-hrs">1.5h</div>
+        </div>
+      </div></div></div>
 
         <!-- Toolbar -->
         <div class="planner-toolbar" style="margin-bottom:12px;">
           <div class="planner-week-nav">
             <button class="pw-btn" onclick="plannerPrevWeek()">← Prev</button>
-            <div class="pw-week-label" id="planner-week-label">Week of —</div>
+            <div class="pw-week-label" id="planner-week-label">20 Apr – 26 Apr 2026</div>
             <button class="pw-btn" onclick="plannerNextWeek()">Next →</button>
             <button class="pw-btn" onclick="plannerGoToday()" style="border-color:rgba(0,212,170,.3);color:var(--teal2);">Today</button>
           </div>
           <div class="planner-view-toggle">
-            <button class="pv-btn on" id="pv-week" onclick="setPlannerView('week',this)">Week</button>
-            <button class="pv-btn" id="pv-day" onclick="setPlannerView('day',this)">Day</button>
+            <button class="pv-btn" id="pv-week" onclick="setPlannerView('week',this)">Week</button>
+            <button class="pv-btn on" id="pv-day" onclick="setPlannerView('day',this)">Day</button>
             <button class="pv-btn" id="pv-list" onclick="setPlannerView('list',this)">List</button>
           </div>
           <button class="planner-add-btn" onclick="openPlannerModal()">+ Add Session</button>
@@ -3279,7 +3439,30 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
 
         <!-- View area -->
-        <div class="planner-grid-wrap" id="planner-view-area"></div>
+        <div class="planner-grid-wrap" id="planner-view-area"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+    <button class="pw-btn" onclick="plannerDayPrev()">← Sun</button>
+    <div style="flex:1;text-align:center;font-family:var(--orb);font-size:.9rem;font-weight:800;color:var(--text);letter-spacing:1px;">
+      Mon &nbsp;20 Apr 2026
+      
+    </div>
+    <button class="pw-btn" onclick="plannerDayNext()">Tue →</button>
+  </div><div class="planner-day-list"><div class="pdl-event" onclick="openPlannerModal('1776825482935')">
+        <div class="pdl-bar" style="background:#fb923c;"></div>
+        <div class="pdl-time">10:00</div>
+        <div style="flex:1;min-width:0;">
+          <div class="pdl-subj">Revision 🔥</div>
+          <div class="pdl-note">Full chemistry mock paper under timed conditions</div>
+        </div>
+        <div class="pdl-dur">2h</div>
+      </div><div class="pdl-event" onclick="openPlannerModal('1776825482936')">
+        <div class="pdl-bar" style="background:#4d9fff;"></div>
+        <div class="pdl-time">13:00</div>
+        <div style="flex:1;min-width:0;">
+          <div class="pdl-subj">Mathematics</div>
+          <div class="pdl-note">Statistics — probability tree diagrams</div>
+        </div>
+        <div class="pdl-dur">1h</div>
+      </div></div></div>
       </div>
 
     </div>
@@ -5839,6 +6022,19 @@ let activeGame = null;
 let gameScore = 0;
 let gameTimer = null;
 
+let _activeCat = 'all';
+function filterGames(btn, cat) {
+  _activeCat = cat;
+  document.querySelectorAll('.game-cat-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.game-cat-label').forEach(el => {
+    el.style.display = (cat === 'all' || el.dataset.cat === cat) ? '' : 'none';
+  });
+  document.querySelectorAll('#games-menu .games-grid').forEach(el => {
+    el.style.display = (cat === 'all' || el.dataset.cat === cat) ? 'grid' : 'none';
+  });
+}
+
 function startGame(type) {
   document.getElementById('games-menu').style.display = 'none';
   const area = document.getElementById('game-play-area');
@@ -5855,6 +6051,10 @@ function startGame(type) {
   else if (type === 'snake') startSnake(area);
   else if (type === 'flags') startFlags(area);
   else if (type === 'sudoku') startSudoku(area);
+  else if (type === 'hangman') startHangman(area);
+  else if (type === 'tetris') startTetris(area);
+  else if (type === 'brickbreaker') startBrickBreaker(area);
+  else if (type === 'icytower') startIcyTower(area);
 }
 
 function exitGame(score, gemEarned, label) {
@@ -5903,8 +6103,11 @@ function backToGames() {
   const area = document.getElementById('game-play-area');
   area.classList.remove('active');
   area.innerHTML = '';
+  // Restore active category filter
+  const activeBtn = document.querySelector('.game-cat-btn.on');
+  if (activeBtn) filterGames(activeBtn, _activeCat);
   // refresh hi scores
-  [{g:'bubble'},{g:'scramble'},{g:'math'},{g:'typing'},{g:'reaction'},{g:'snake'},{g:'flags'},{g:'sudoku'}].forEach(({g}) => {
+  [{g:'bubble'},{g:'scramble'},{g:'math'},{g:'typing'},{g:'reaction'},{g:'snake'},{g:'flags'},{g:'sudoku'},{g:'hangman'},{g:'tetris'},{g:'brickbreaker'},{g:'icytower'}].forEach(({g}) => {
     const el = document.getElementById('hi-'+g);
     const v = localStorage.getItem('hi_'+g) || 0;
     if (!el) return;
@@ -6948,6 +7151,672 @@ function startSudoku(area) {
     else if (e.key==='n'||e.key==='N') { window.toggleNotes(); }
   }
   document.addEventListener('keydown', onKey);
+}
+
+// ── HANGMAN GAME ──
+const HANGMAN_WORDS = [
+  {word:'photosynthesis',hint:'Plants use sunlight to make food'},
+  {word:'democracy',hint:'Government by the people'},
+  {word:'mitochondria',hint:'Powerhouse of the cell'},
+  {word:'hypothesis',hint:'A testable scientific prediction'},
+  {word:'renaissance',hint:'European cultural rebirth period'},
+  {word:'atmosphere',hint:'Layer of gases around Earth'},
+  {word:'algorithm',hint:'Step-by-step problem-solving procedure'},
+  {word:'parliament',hint:'Legislative body of government'},
+  {word:'chromosome',hint:'Carries genetic information'},
+  {word:'metabolism',hint:'Chemical processes in living organisms'},
+  {word:'calculus',hint:'Branch of mathematics'},
+  {word:'evolution',hint:'Gradual change in species over time'},
+  {word:'tectonic',hint:'Related to Earth\u2019s crust movement'},
+  {word:'inflation',hint:'Rise in prices over time'},
+  {word:'velocity',hint:'Speed with direction'},
+  {word:'polynomial',hint:'Algebraic expression with multiple terms'},
+  {word:'osmosis',hint:'Water moving through a membrane'},
+  {word:'frequency',hint:'Number of cycles per second'},
+  {word:'symmetry',hint:'Mirror-like balance in shape'},
+  {word:'periodic',hint:'Repeating pattern — like the element table'},
+];
+
+function startHangman(area) {
+  const MAX_WRONG = 6;
+  let wrong = 0, guessed = new Set(), score = 0, round = 1;
+  let wordObj, gameOver = false;
+
+  function pickWord() {
+    wordObj = HANGMAN_WORDS[Math.floor(Math.random() * HANGMAN_WORDS.length)];
+    wrong = 0; guessed = new Set(); gameOver = false;
+  }
+
+  function hangmanSVG(w) {
+    const parts = [
+      `<line x1="60" y1="180" x2="140" y2="180" stroke="var(--accent)" stroke-width="3"/>`,
+      `<line x1="100" y1="180" x2="100" y2="20" stroke="var(--accent)" stroke-width="3"/>`,
+      `<line x1="100" y1="20" x2="150" y2="20" stroke="var(--accent)" stroke-width="3"/>`,
+      `<line x1="150" y1="20" x2="150" y2="40" stroke="var(--accent)" stroke-width="2"/>`,
+      `<circle cx="150" cy="55" r="15" stroke="#ff6680" stroke-width="2.5" fill="none"/>`,
+      `<line x1="150" y1="70" x2="150" y2="120" stroke="#ff6680" stroke-width="2.5"/>`,
+      `<line x1="150" y1="85" x2="130" y2="105" stroke="#ff6680" stroke-width="2.5"/>`,
+      `<line x1="150" y1="85" x2="170" y2="105" stroke="#ff6680" stroke-width="2.5"/>`,
+      `<line x1="150" y1="120" x2="130" y2="150" stroke="#ff6680" stroke-width="2.5"/>`,
+      `<line x1="150" y1="120" x2="170" y2="150" stroke="#ff6680" stroke-width="2.5"/>`,
+    ];
+    return `<svg viewBox="0 0 220 200" width="180" height="160" style="margin:0 auto;display:block;">
+      ${parts.slice(0, 3 + w).join('')}
+    </svg>`;
+  }
+
+  function render() {
+    const word = wordObj.word;
+    const display = word.split('').map(l => guessed.has(l) ? `<span style="color:var(--teal2)">${l.toUpperCase()}</span>` : '_').join(' ');
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    const won = word.split('').every(l => guessed.has(l));
+    const lost = wrong >= MAX_WRONG;
+
+    area.innerHTML = `
+      <div class="game-header">
+        <div class="game-score-row">
+          <div class="gscore">Score: <span id="hm-score">${score}</span></div>
+          <div class="gscore">Round: ${round}</div>
+          <div class="gscore" style="color:${wrong>=4?'#ff6680':'var(--accent2)'}">❌ ${wrong}/${MAX_WRONG}</div>
+        </div>
+        <button class="abtn sec" onclick="exitGame(${score},'${score} words guessed','Final score')">Quit</button>
+      </div>
+      ${hangmanSVG(wrong)}
+      <div style="text-align:center;font-family:var(--orb);font-size:clamp(1.1rem,3vw,1.6rem);letter-spacing:8px;color:var(--text);margin:8px 0 4px;">${display}</div>
+      <div style="text-align:center;font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;">💡 ${wordObj.hint}</div>
+      ${won ? `<div style="text-align:center;margin-bottom:10px;"><span style="color:var(--teal2);font-family:var(--orb);font-size:.9rem;">✓ Correct! +1</span></div><button class="abtn" onclick="hmNext()" style="display:block;margin:0 auto;">Next Word →</button>` : ''}
+      ${lost ? `<div style="text-align:center;margin-bottom:10px;"><span style="color:#ff6680;font-family:var(--orb);font-size:.9rem;">The word was: ${word.toUpperCase()}</span></div><button class="abtn" onclick="exitGame(${score},'${score} words guessed','Game over!')" style="display:block;margin:0 auto;">See Results</button>` : ''}
+      ${!won && !lost ? `<div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;max-width:360px;margin:0 auto;">
+        ${alphabet.map(l => `<button onclick="hmGuess('${l}')" ${guessed.has(l)?'disabled':''} style="width:36px;height:36px;border-radius:8px;border:1px solid ${guessed.has(l)?(wordObj.word.includes(l)?'rgba(0,212,170,.4)':'rgba(255,102,128,.3)'):'rgba(77,159,255,.25)'};background:${guessed.has(l)?(wordObj.word.includes(l)?'rgba(0,212,170,.1)':'rgba(255,102,128,.08)'):'rgba(255,255,255,.04)'};color:${guessed.has(l)?(wordObj.word.includes(l)?'var(--teal2)':'#ff6680aa'):'var(--text)'};font-family:var(--orb);font-size:.75rem;cursor:${guessed.has(l)?'default':'pointer'};transition:all .12s;">${l.toUpperCase()}</button>`).join('')}
+      </div>` : ''}`;
+  }
+
+  window.hmGuess = function(letter) {
+    if (guessed.has(letter) || gameOver) return;
+    guessed.add(letter);
+    if (!wordObj.word.includes(letter)) wrong++;
+    const won = wordObj.word.split('').every(l => guessed.has(l));
+    if (won) { score++; document.getElementById('hm-score') && (document.getElementById('hm-score').textContent = score); }
+    render();
+  };
+
+  window.hmNext = function() { round++; pickWord(); render(); };
+
+  // Keyboard support
+  function hmKey(e) {
+    if (!document.getElementById('hm-score')) { document.removeEventListener('keydown', hmKey); return; }
+    const l = e.key.toLowerCase();
+    if (/^[a-z]$/.test(l)) window.hmGuess(l);
+  }
+  document.addEventListener('keydown', hmKey);
+
+  pickWord();
+  render();
+}
+
+// ── TETRIS GAME ──
+function startTetris(area) {
+  const COLS = 10, ROWS = 20, CELL = 28;
+  const COLORS = {
+    I:'#00d4aa', O:'#fbbf24', T:'#c084fc',
+    S:'#4ade80', Z:'#f87171', J:'#60a5fa', L:'#fb923c'
+  };
+  const PIECES = {
+    I:[[1,1,1,1]],
+    O:[[1,1],[1,1]],
+    T:[[0,1,0],[1,1,1]],
+    S:[[0,1,1],[1,1,0]],
+    Z:[[1,1,0],[0,1,1]],
+    J:[[1,0,0],[1,1,1]],
+    L:[[0,0,1],[1,1,1]]
+  };
+
+  area.innerHTML = `
+    <div class="game-header">
+      <div class="game-score-row">
+        <div class="gscore">Score: <span id="tet-score">0</span></div>
+        <div class="gscore">Lines: <span id="tet-lines">0</span></div>
+        <div class="gscore">Level: <span id="tet-level">1</span></div>
+      </div>
+      <button class="abtn sec" onclick="tetQuit()">Quit</button>
+    </div>
+    <div style="display:flex;gap:14px;justify-content:center;align-items:flex-start;">
+      <canvas id="tet-canvas" width="${COLS*CELL}" height="${ROWS*CELL}" style="border:1px solid var(--panel-border);border-radius:8px;background:rgba(5,8,18,.9);display:block;"></canvas>
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:90px;">
+        <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;">Next</div>
+        <canvas id="tet-next" width="90" height="80" style="border:1px solid rgba(77,159,255,.2);border-radius:8px;background:rgba(5,8,18,.8);"></canvas>
+        <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:8px;">Controls:</div>
+        <div style="font-family:var(--exo);font-size:.62rem;color:var(--silver2);line-height:1.9;">← → Move<br>↑ Rotate<br>↓ Soft drop<br>Space Hard drop</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap;">
+      <button class="abtn sec" style="padding:10px 18px;font-size:1.1rem;" onclick="tetMove(-1,0)">←</button>
+      <button class="abtn sec" style="padding:10px 18px;font-size:1.1rem;" onclick="tetRotate()">↻</button>
+      <button class="abtn sec" style="padding:10px 18px;font-size:1.1rem;" onclick="tetMove(1,0)">→</button>
+      <button class="abtn sec" style="padding:10px 18px;font-size:1.1rem;" onclick="tetDrop()">↓</button>
+      <button class="abtn sec" style="padding:10px 14px;font-size:.75rem;" onclick="tetHardDrop()">Hard ↓</button>
+    </div>`;
+
+  const canvas = document.getElementById('tet-canvas');
+  const ctx = canvas.getContext('2d');
+  const nextCanvas = document.getElementById('tet-next');
+  const nctx = nextCanvas.getContext('2d');
+
+  let board = Array.from({length:ROWS},()=>Array(COLS).fill(null));
+  let score = 0, lines = 0, level = 1, gameRunning = true;
+  let piece, next, px, py;
+
+  const keys = Object.keys(PIECES);
+  function randPiece() { return keys[Math.floor(Math.random()*keys.length)]; }
+
+  function newPiece() {
+    const type = next || randPiece();
+    next = randPiece();
+    piece = PIECES[type].map(r=>[...r]);
+    window._tetType = type;
+    window._tetNextType = next;
+    px = Math.floor((COLS - piece[0].length) / 2);
+    py = 0;
+    if (collides(piece, px, py)) { tetEnd(); }
+    drawNext();
+  }
+
+  function collides(p, x, y) {
+    for (let r=0;r<p.length;r++)
+      for (let c=0;c<p[r].length;c++)
+        if (p[r][c]) {
+          const nx=x+c, ny=y+r;
+          if (nx<0||nx>=COLS||ny>=ROWS) return true;
+          if (ny>=0 && board[ny][nx]) return true;
+        }
+    return false;
+  }
+
+  function rotate(p) {
+    return p[0].map((_,i)=>p.map(r=>r[i]).reverse());
+  }
+
+  window.tetMove = function(dx, dy) {
+    if (!gameRunning) return;
+    if (!collides(piece, px+dx, py+dy)) { px+=dx; py+=dy; draw(); }
+  };
+  window.tetRotate = function() {
+    if (!gameRunning) return;
+    const rot = rotate(piece);
+    if (!collides(rot, px, py)) { piece = rot; draw(); }
+    else if (!collides(rot, px+1, py)) { piece=rot; px++; draw(); }
+    else if (!collides(rot, px-1, py)) { piece=rot; px--; draw(); }
+  };
+  window.tetDrop = function() { window.tetMove(0,1); };
+  window.tetHardDrop = function() {
+    if (!gameRunning) return;
+    while (!collides(piece, px, py+1)) py++;
+    lock();
+  };
+
+  function lock() {
+    const type = window._tetType;
+    for (let r=0;r<piece.length;r++)
+      for (let c=0;c<piece[r].length;c++)
+        if (piece[r][c] && py+r>=0) board[py+r][px+c] = COLORS[type];
+    // Clear lines
+    let cleared = 0;
+    for (let r=ROWS-1;r>=0;r--) {
+      if (board[r].every(c=>c)) {
+        board.splice(r,1); board.unshift(Array(COLS).fill(null));
+        cleared++; r++;
+      }
+    }
+    if (cleared) {
+      const pts = [0,40,100,300,1200][cleared] * level;
+      score += pts; lines += cleared;
+      level = Math.floor(lines/10)+1;
+      document.getElementById('tet-score').textContent = score;
+      document.getElementById('tet-lines').textContent = lines;
+      document.getElementById('tet-level').textContent = level;
+    }
+    newPiece();
+    draw();
+  }
+
+  function drawNext() {
+    nctx.clearRect(0,0,90,80);
+    const p = PIECES[window._tetNextType];
+    const color = COLORS[window._tetNextType];
+    const offX = Math.floor((4-p[0].length)/2), offY = Math.floor((4-p.length)/2);
+    const cs = 18;
+    p.forEach((row,r)=>row.forEach((v,c)=>{
+      if (!v) return;
+      nctx.fillStyle = color;
+      nctx.shadowColor = color; nctx.shadowBlur = 6;
+      nctx.fillRect((offX+c)*cs+5,(offY+r)*cs+5,cs-2,cs-2);
+      nctx.shadowBlur = 0;
+    }));
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Grid
+    ctx.strokeStyle='rgba(77,159,255,.06)';
+    for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) ctx.strokeRect(c*CELL,r*CELL,CELL,CELL);
+    // Board
+    board.forEach((row,r)=>row.forEach((color,c)=>{
+      if(!color) return;
+      ctx.fillStyle=color; ctx.shadowColor=color; ctx.shadowBlur=6;
+      ctx.fillRect(c*CELL+1,r*CELL+1,CELL-2,CELL-2);
+      ctx.shadowBlur=0;
+    }));
+    // Ghost
+    let ghostY = py;
+    while (!collides(piece, px, ghostY+1)) ghostY++;
+    piece.forEach((row,r)=>row.forEach((v,c)=>{
+      if (!v) return;
+      ctx.fillStyle='rgba(255,255,255,.06)';
+      ctx.fillRect((px+c)*CELL+1,(ghostY+r)*CELL+1,CELL-2,CELL-2);
+    }));
+    // Active piece
+    const color = COLORS[window._tetType];
+    piece.forEach((row,r)=>row.forEach((v,c)=>{
+      if(!v||py+r<0) return;
+      ctx.fillStyle=color; ctx.shadowColor=color; ctx.shadowBlur=10;
+      ctx.fillRect((px+c)*CELL+1,(py+r)*CELL+1,CELL-2,CELL-2);
+      ctx.shadowBlur=0;
+    }));
+  }
+
+  function tetEnd() {
+    gameRunning = false;
+    clearInterval(window._tetInt);
+    document.removeEventListener('keydown', tetKey);
+    exitGame(score, `${lines} lines cleared · Level ${level}`, 'Game Over');
+  }
+
+  window.tetQuit = function() { gameRunning=false; clearInterval(window._tetInt); document.removeEventListener('keydown',tetKey); exitGame(score,'',''); };
+
+  function tetKey(e) {
+    if (!document.getElementById('tet-canvas')) { document.removeEventListener('keydown',tetKey); return; }
+    if (e.key==='ArrowLeft') { e.preventDefault(); window.tetMove(-1,0); }
+    else if (e.key==='ArrowRight') { e.preventDefault(); window.tetMove(1,0); }
+    else if (e.key==='ArrowDown') { e.preventDefault(); window.tetDrop(); }
+    else if (e.key==='ArrowUp') { e.preventDefault(); window.tetRotate(); }
+    else if (e.key===' ') { e.preventDefault(); window.tetHardDrop(); }
+  }
+  document.addEventListener('keydown', tetKey);
+
+  newPiece(); draw();
+  function tick() { if (!gameRunning) return; if (!collides(piece,px,py+1)) { py++; draw(); } else { lock(); } }
+  const delay = () => Math.max(80, 500 - (level-1)*40);
+  window._tetInt = setInterval(()=>{tick(); clearInterval(window._tetInt); window._tetInt=setInterval(()=>tick(), delay());}, delay());
+}
+
+// ── BRICK BREAKER GAME ──
+function startBrickBreaker(area) {
+  area.innerHTML = `
+    <div class="game-header">
+      <div class="game-score-row">
+        <div class="gscore">Score: <span id="bb-score">0</span></div>
+        <div class="gscore">Lives: <span id="bb-lives">3</span></div>
+        <div class="gscore">Level: <span id="bb-level">1</span></div>
+      </div>
+      <button class="abtn sec" onclick="bbQuit()">Quit</button>
+    </div>
+    <canvas id="bb-canvas" style="border:1px solid var(--panel-border);border-radius:8px;background:rgba(5,8,18,.9);display:block;width:100%;cursor:none;touch-action:none;"></canvas>
+    <div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">Move mouse or touch to control paddle · Click/tap to launch ball</div>`;
+
+  const canvas = document.getElementById('bb-canvas');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = Math.min(420, canvas.offsetWidth * 0.75);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  const PAD_W = W * 0.18, PAD_H = 12, BALL_R = 8;
+  const ROWS = 5, BRICK_COLS = 10;
+  const BRICK_W = (W - 20) / BRICK_COLS, BRICK_H = 20, BRICK_MARGIN = 2;
+  const COLORS = ['#ff6680','#fb923c','#fbbf24','#4ade80','#60a5fa'];
+
+  let score = 0, lives = 3, level = 1, running = true, launched = false;
+  let padX = W/2, ballX = W/2, ballY = H-60, ballDX = 3, ballDY = -4;
+  let bricks = [];
+
+  function initBricks() {
+    bricks = [];
+    for (let r=0;r<ROWS;r++)
+      for (let c=0;c<BRICK_COLS;c++)
+        bricks.push({x:10+c*BRICK_W, y:50+r*(BRICK_H+BRICK_MARGIN), w:BRICK_W-BRICK_MARGIN, h:BRICK_H, color:COLORS[r%COLORS.length], alive:true, hp: level>2?2:1});
+  }
+
+  function resetBall() {
+    ballX=padX; ballY=H-60; launched=false;
+    ballDX=3+level*0.3; ballDY=-(4+level*0.2);
+  }
+
+  function launch() {
+    if (!launched) { launched=true; ballDY=-(4+level*0.2); }
+  }
+
+  canvas.addEventListener('mousemove', e=>{
+    const rect=canvas.getBoundingClientRect();
+    padX=Math.max(PAD_W/2, Math.min(W-PAD_W/2, (e.clientX-rect.left)*(W/rect.width)));
+    if(!launched) { ballX=padX; }
+  });
+  canvas.addEventListener('touchmove', e=>{
+    e.preventDefault();
+    const rect=canvas.getBoundingClientRect();
+    padX=Math.max(PAD_W/2, Math.min(W-PAD_W/2, (e.touches[0].clientX-rect.left)*(W/rect.width)));
+    if(!launched) ballX=padX;
+  },{passive:false});
+  canvas.addEventListener('click', launch);
+  canvas.addEventListener('touchstart', e=>{ e.preventDefault(); launch(); },{passive:false});
+
+  initBricks(); resetBall();
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    // Bricks
+    bricks.forEach(b=>{
+      if(!b.alive) return;
+      ctx.fillStyle=b.color; ctx.shadowColor=b.color; ctx.shadowBlur=b.hp>1?10:4;
+      ctx.beginPath(); ctx.roundRect(b.x,b.y,b.w,b.h,4); ctx.fill();
+      ctx.shadowBlur=0;
+      if(b.hp>1){ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=1.5;ctx.beginPath();ctx.roundRect(b.x+2,b.y+2,b.w-4,b.h-4,3);ctx.stroke();}
+    });
+    // Paddle
+    const g=ctx.createLinearGradient(padX-PAD_W/2,0,padX+PAD_W/2,0);
+    g.addColorStop(0,'#4d9fff'); g.addColorStop(1,'#00d4aa');
+    ctx.fillStyle=g; ctx.shadowColor='#4d9fff'; ctx.shadowBlur=12;
+    ctx.beginPath(); ctx.roundRect(padX-PAD_W/2,H-PAD_H-10,PAD_W,PAD_H,PAD_H/2); ctx.fill();
+    ctx.shadowBlur=0;
+    // Ball
+    const bg=ctx.createRadialGradient(ballX-2,ballY-2,1,ballX,ballY,BALL_R);
+    bg.addColorStop(0,'#fff'); bg.addColorStop(1,'#00d4aa');
+    ctx.fillStyle=bg; ctx.shadowColor='#00d4aa'; ctx.shadowBlur=14;
+    ctx.beginPath(); ctx.arc(ballX,ballY,BALL_R,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+    if(!launched){
+      ctx.fillStyle='rgba(255,255,255,.5)';ctx.font=`${W*.03}px var(--raj)`;
+      ctx.textAlign='center'; ctx.fillText('Click / Tap to launch!',W/2,H/2+30);
+    }
+  }
+
+  function update() {
+    if(!running||!launched) return;
+    ballX+=ballDX; ballY+=ballDY;
+    // Walls
+    if(ballX-BALL_R<0){ballX=BALL_R;ballDX=Math.abs(ballDX);}
+    if(ballX+BALL_R>W){ballX=W-BALL_R;ballDX=-Math.abs(ballDX);}
+    if(ballY-BALL_R<0){ballY=BALL_R;ballDY=Math.abs(ballDY);}
+    // Paddle
+    if(ballY+BALL_R>H-PAD_H-10 && ballY+BALL_R<H-10+5 && ballX>padX-PAD_W/2-BALL_R && ballX<padX+PAD_W/2+BALL_R){
+      ballDY=-Math.abs(ballDY);
+      ballDX += (ballX-padX)/(PAD_W/2)*2.5;
+      ballDX = Math.max(-8,Math.min(8,ballDX));
+    }
+    // Bottom
+    if(ballY>H+BALL_R){
+      lives--; document.getElementById('bb-lives').textContent=lives;
+      if(lives<=0){running=false;clearInterval(window._bbInt);exitGame(score,'Bricks smashed!','Game Over');}
+      else resetBall();
+    }
+    // Bricks
+    for(const b of bricks){
+      if(!b.alive) continue;
+      if(ballX+BALL_R>b.x && ballX-BALL_R<b.x+b.w && ballY+BALL_R>b.y && ballY-BALL_R<b.y+b.h){
+        b.hp--; if(b.hp<=0){b.alive=false;score+=10*level;document.getElementById('bb-score').textContent=score;}
+        const fromLeft=Math.abs(ballX-(b.x+b.w)), fromRight=Math.abs(ballX-b.x);
+        const fromTop=Math.abs(ballY-(b.y+b.h)), fromBottom=Math.abs(ballY-b.y);
+        const minDist=Math.min(fromLeft,fromRight,fromTop,fromBottom);
+        if(minDist===fromTop||minDist===fromBottom) ballDY*=-1; else ballDX*=-1;
+        break;
+      }
+    }
+    // Level clear
+    if(bricks.every(b=>!b.alive)){
+      level++; document.getElementById('bb-level').textContent=level;
+      score+=level*50; document.getElementById('bb-score').textContent=score;
+      initBricks(); resetBall();
+    }
+  }
+
+  window.bbQuit = function(){running=false;clearInterval(window._bbInt);exitGame(score,'','');};
+  window._bbInt = setInterval(()=>{ update(); draw(); },16);
+}
+
+// ── ICY TOWER GAME ──
+function startIcyTower(area) {
+  const W = Math.min(380, window.innerWidth - 60), H = 520;
+  area.innerHTML = `
+    <div class="game-header">
+      <div class="game-score-row">
+        <div class="gscore">Floor: <span id="it-floor">0</span></div>
+        <div class="gscore">Best: <span id="it-best">0</span></div>
+        <div class="gscore" id="it-combo" style="color:var(--teal2);display:none;">Combo x<span id="it-comboval">1</span></div>
+      </div>
+      <button class="abtn sec" onclick="itQuit()">Quit</button>
+    </div>
+    <div style="display:flex;justify-content:center;">
+      <canvas id="it-canvas" width="${W}" height="${H}" style="border:1px solid var(--panel-border);border-radius:12px;background:linear-gradient(180deg,#050810 0%,#0a1428 100%);display:block;touch-action:none;"></canvas>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;">
+      <button class="abtn sec" style="padding:12px 28px;font-size:1.2rem;" id="it-left" onpointerdown="itKey(&quot;left&quot;,true)" onpointerup="itKey(&quot;left&quot;,false)">←</button>
+      <button class="abtn sec" style="padding:12px 28px;font-size:1.2rem;" id="it-jump" onpointerdown="itJumpBtn()">↑ Jump</button>
+      <button class="abtn sec" style="padding:12px 28px;font-size:1.2rem;" id="it-right" onpointerdown="itKey(&quot;right&quot;,true)" onpointerup="itKey(&quot;right&quot;,false)">→</button>
+    </div>
+    <div style="text-align:center;font-family:var(--exo);font-size:.7rem;color:var(--silver);margin-top:6px;">Arrow keys or A/D to move · Space / W / ↑ to jump</div>`;
+
+  const canvas = document.getElementById('it-canvas');
+  const ctx = canvas.getContext('2d');
+
+  const PLAT_H = 14, GRAVITY = 0.5, JUMP_F = -13, MAX_FALL = 18;
+  const PLAYER_W = 32, PLAYER_H = 38;
+  const COLORS_PLAT = ['#4d9fff','#00d4aa','#c084fc','#f472b6','#fb923c'];
+
+  let platforms = [], player, camY, floor, bestFloor, combo, comboTimer, gameOver, running;
+  const keys = {left:false, right:false, jump:false};
+
+  function initGame() {
+    platforms = [];
+    // Ground platform
+    platforms.push({x:0, y:H-30, w:W, color:'#4d9fff', landed:true});
+    // Generate initial platforms
+    for(let i=1;i<=40;i++) genPlatform(i);
+    player = {x:W/2-PLAYER_W/2, y:H-30-PLAYER_H, vx:0, vy:0, onGround:false, facing:1, run:0};
+    camY = 0; floor = 0; bestFloor = parseInt(localStorage.getItem('hi_icytower')||'0');
+    combo = 1; comboTimer = 0; gameOver = false; running = true;
+    document.getElementById('it-best').textContent = bestFloor;
+  }
+
+  function genPlatform(floorNum) {
+    const spacing = 90 + Math.random()*30;
+    const y = H - 30 - floorNum * spacing;
+    const minW = Math.max(60, 180 - floorNum*4);
+    const maxW = Math.max(80, 240 - floorNum*3);
+    const w = minW + Math.random()*(maxW-minW);
+    const x = Math.random()*(W-w);
+    platforms.push({x, y, w, color:COLORS_PLAT[floorNum%COLORS_PLAT.length], landed:false, floorNum});
+  }
+
+  function jump() {
+    if (!player.onGround || gameOver) return;
+    const speedBonus = Math.min(Math.abs(player.vx) * 0.6, 4);
+    player.vy = JUMP_F - speedBonus;
+    player.onGround = false;
+    combo++;
+    comboTimer = 90;
+    if (combo > 1) {
+      document.getElementById('it-combo').style.display = '';
+      document.getElementById('it-comboval').textContent = combo;
+    }
+  }
+
+  window.itKey = function(dir, down) { keys[dir] = down; };
+  window.itJumpBtn = function() { jump(); };
+
+  function itKeyDown(e) {
+    if (!document.getElementById('it-canvas')) { document.removeEventListener('keydown',itKeyDown); document.removeEventListener('keyup',itKeyUp); return; }
+    if (e.key==='ArrowLeft'||e.key==='a'||e.key==='A') keys.left=true;
+    if (e.key==='ArrowRight'||e.key==='d'||e.key==='D') keys.right=true;
+    if (e.key==='ArrowUp'||e.key===' '||e.key==='w'||e.key==='W') { e.preventDefault(); jump(); }
+  }
+  function itKeyUp(e) {
+    if (e.key==='ArrowLeft'||e.key==='a'||e.key==='A') keys.left=false;
+    if (e.key==='ArrowRight'||e.key==='d'||e.key==='D') keys.right=false;
+  }
+  document.addEventListener('keydown', itKeyDown);
+  document.addEventListener('keyup', itKeyUp);
+
+  function update() {
+    if (gameOver || !running) return;
+
+    // Movement
+    const accel = 0.9, friction = 0.78, maxSpeed = 7;
+    if (keys.left) { player.vx -= accel; player.facing = -1; player.run++; }
+    else if (keys.right) { player.vx += accel; player.facing = 1; player.run++; }
+    else { player.vx *= friction; player.run = 0; }
+    player.vx = Math.max(-maxSpeed, Math.min(maxSpeed, player.vx));
+
+    // Horizontal wrap
+    player.x += player.vx;
+    if (player.x + PLAYER_W < 0) player.x = W;
+    if (player.x > W) player.x = -PLAYER_W;
+
+    // Gravity
+    player.vy = Math.min(player.vy + GRAVITY, MAX_FALL);
+    player.y += player.vy;
+    player.onGround = false;
+
+    // Platform collision -- all coords in world space; camY only used for drawing
+    if (player.vy >= 0) {
+      for (const p of platforms) {
+        if (player.x + PLAYER_W > p.x + 4 && player.x < p.x + p.w - 4 &&
+            player.y + PLAYER_H >= p.y && player.y + PLAYER_H <= p.y + PLAT_H + player.vy + 2) {
+          player.y = p.y - PLAYER_H;
+          player.vy = 0;
+          player.onGround = true;
+          if (!p.landed && p.floorNum) {
+            p.landed = true;
+            if (p.floorNum > floor) {
+              floor = p.floorNum;
+              const flEl = document.getElementById('it-floor');
+              if (flEl) flEl.textContent = floor;
+              if (floor > bestFloor) {
+                bestFloor = floor;
+                localStorage.setItem('hi_icytower', bestFloor);
+                const beEl = document.getElementById('it-best');
+                if (beEl) beEl.textContent = bestFloor;
+              }
+              // Extend platforms upward safely (no spread operator on large arrays)
+              let topFloor = 0;
+              for (const pl of platforms) if (pl.floorNum && pl.floorNum > topFloor) topFloor = pl.floorNum;
+              while (topFloor < floor + 50) { topFloor++; genPlatform(topFloor); }
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    // Camera: smoothly follow player both UP and DOWN
+    const targetCamY = H * 0.45 - player.y;
+    camY += (targetCamY - camY) * 0.1;
+
+    // Combo timer
+    if (comboTimer > 0) { comboTimer--; }
+    else if (combo > 1) {
+      combo = 1;
+      const cel = document.getElementById('it-combo');
+      if (cel) cel.style.display = 'none';
+    }
+
+    // Fall death -- player falls well below the ground platform world Y
+    if (player.y > H - 30 + 300) {
+      gameOver = true; running = false;
+      clearInterval(window._itInt);
+      document.removeEventListener('keydown',itKeyDown);
+      document.removeEventListener('keyup',itKeyUp);
+      exitGame(floor, `Reached floor ${floor}!`, 'You fell! Game Over');
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Background stars
+    ctx.fillStyle='rgba(77,159,255,.12)';
+    for(let i=0;i<30;i++){
+      const sx=(i*137+Math.floor(camY/10)*13)%W;
+      const sy=(i*97+Math.floor(camY/10)*7)%H;
+      ctx.beginPath();ctx.arc(sx,sy,1,0,Math.PI*2);ctx.fill();
+    }
+
+    // Platforms
+    platforms.forEach(p => {
+      const screenY = p.y + camY;
+      if (screenY < -PLAT_H || screenY > H + 50) return;
+      // Icy platform with glow
+      const grad = ctx.createLinearGradient(p.x, screenY, p.x, screenY+PLAT_H);
+      grad.addColorStop(0, p.color+'ee');
+      grad.addColorStop(1, p.color+'66');
+      ctx.fillStyle = grad;
+      ctx.shadowColor = p.color; ctx.shadowBlur = p.landed ? 4 : 12;
+      ctx.beginPath(); ctx.roundRect(p.x, screenY, p.w, PLAT_H, 4); ctx.fill();
+      ctx.shadowBlur = 0;
+      // Shine
+      ctx.fillStyle='rgba(255,255,255,.25)';
+      ctx.beginPath();ctx.roundRect(p.x+4,screenY+2,Math.max(20,p.w-8),4,2);ctx.fill();
+      // Floor label
+      if (p.floorNum && p.w > 60) {
+        ctx.fillStyle='rgba(255,255,255,.4)';ctx.font=`bold 9px var(--exo)`;ctx.textAlign='center';
+        ctx.fillText(p.floorNum, p.x+p.w/2, screenY+PLAT_H-2);
+      }
+    });
+
+    // Player — convert world Y to screen Y using camY
+    const px = player.x, py = player.y + camY;
+    const run = Math.floor(player.run/8)%2;
+    // Shadow
+    ctx.fillStyle='rgba(0,0,0,.3)'; ctx.beginPath();ctx.ellipse(px+PLAYER_W/2,py+PLAYER_H+2,PLAYER_W/2,5,0,0,Math.PI*2);ctx.fill();
+    // Body
+    const bodyGrad = ctx.createLinearGradient(px,py,px,py+PLAYER_H);
+    bodyGrad.addColorStop(0,'#60a5fa'); bodyGrad.addColorStop(1,'#1d4ed8');
+    ctx.fillStyle=bodyGrad;ctx.shadowColor='#60a5fa';ctx.shadowBlur=8;
+    ctx.beginPath();ctx.roundRect(px+4,py+12,PLAYER_W-8,PLAYER_H-12,6);ctx.fill();ctx.shadowBlur=0;
+    // Head
+    ctx.fillStyle='#fde68a';ctx.beginPath();ctx.ellipse(px+PLAYER_W/2,py+8,10,11,0,0,Math.PI*2);ctx.fill();
+    // Hat
+    ctx.fillStyle='#1e3a8a';ctx.beginPath();ctx.roundRect(px+PLAYER_W/2-10,py-4,20,9,3);ctx.fill();
+    ctx.fillStyle='#2563eb';ctx.beginPath();ctx.roundRect(px+PLAYER_W/2-13,py+4,26,4,2);ctx.fill();
+    // Eyes
+    const eyeX = player.facing > 0 ? px+PLAYER_W/2+3 : px+PLAYER_W/2-3;
+    ctx.fillStyle='#1e293b';ctx.beginPath();ctx.arc(eyeX,py+8,2.5,0,Math.PI*2);ctx.fill();
+    // Legs (animated)
+    ctx.fillStyle='#1e40af';
+    if (player.onGround && (keys.left || keys.right)) {
+      ctx.fillRect(px+5+(run?4:0),py+PLAYER_H-6,8,8);
+      ctx.fillRect(px+PLAYER_W-13-(run?4:0),py+PLAYER_H-6,8,8);
+    } else {
+      ctx.fillRect(px+6,py+PLAYER_H-8,8,10);
+      ctx.fillRect(px+PLAYER_W-14,py+PLAYER_H-8,8,10);
+    }
+    // Scarf
+    ctx.fillStyle='#f87171';ctx.beginPath();ctx.roundRect(px+4,py+18,PLAYER_W-8,5,3);ctx.fill();
+
+    // HUD floor indicator at top
+    if(floor>0){
+      ctx.fillStyle='rgba(77,159,255,.15)';ctx.beginPath();ctx.roundRect(W/2-50,8,100,24,6);ctx.fill();
+      ctx.fillStyle='var(--accent2)';ctx.font='bold 13px var(--orb)';ctx.textAlign='center';
+      ctx.fillText(`Floor ${floor}`,W/2,25);
+    }
+  }
+
+  window.itQuit = function(){
+    running=false;clearInterval(window._itInt);
+    document.removeEventListener('keydown',itKeyDown);
+    document.removeEventListener('keyup',itKeyUp);
+    exitGame(floor,'','');
+  };
+
+  initGame();
+  window._itInt = setInterval(()=>{ update(); draw(); }, 16);
 }
 
 // ── PERSONALIZATION ──
@@ -9266,6 +10135,22 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
 <script>
 (function () {
 
+  // ── Pinnable Shortcut (defined first — used by loadShortcut below) ──
+  const ALL_APPS = [
+    { id: 'homework', icon: '📚', label: 'Homework', sub: 'Ask anything' },
+    { id: 'study',    icon: '🧠', label: 'Study',    sub: 'Flashcards & quizzes' },
+    { id: 'notes',    icon: '📝', label: 'Notes',    sub: 'Summarise' },
+    { id: 'todo',     icon: '✅', label: 'To-Do',    sub: 'Task list' },
+    { id: 'journal',  icon: '📓', label: 'Journal',  sub: 'Write it out' },
+    { id: 'chat',     icon: '💬', label: 'Companion',sub: 'Talk to Veda' },
+    { id: 'calc',     icon: '🔢', label: 'Calculator',sub: 'Crunch numbers' },
+    { id: 'games',    icon: '🎮', label: 'Games',    sub: 'Play & earn gems' },
+    { id: 'library',  icon: '🗂️', label: 'Library',  sub: 'Topic notes' },
+    { id: 'exam',     icon: '📄', label: 'Exams',    sub: 'Mock papers' },
+    { id: 'themes',   icon: '🌈', label: 'Themes',   sub: 'Customise' },
+    { id: 'settings', icon: '👤', label: 'Profile',  sub: 'Your account' },
+  ];
+
   // ── Mobile mode detection ──
   function applyMobileMode() {
     document.body.classList.toggle('mobile-mode', window.innerWidth < 650);
@@ -9380,21 +10265,6 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
   };
 
   // ── Pinnable Shortcut ──
-  const ALL_APPS = [
-    { id: 'homework', icon: '📚', label: 'Homework', sub: 'Ask anything' },
-    { id: 'study',    icon: '🧠', label: 'Study',    sub: 'Flashcards & quizzes' },
-    { id: 'notes',    icon: '📝', label: 'Notes',    sub: 'Summarise' },
-    { id: 'todo',     icon: '✅', label: 'To-Do',    sub: 'Task list' },
-    { id: 'journal',  icon: '📓', label: 'Journal',  sub: 'Write it out' },
-    { id: 'chat',     icon: '💬', label: 'Companion',sub: 'Talk to Veda' },
-    { id: 'calc',     icon: '🔢', label: 'Calculator',sub: 'Crunch numbers' },
-    { id: 'games',    icon: '🎮', label: 'Games',    sub: 'Play & earn gems' },
-    { id: 'library',  icon: '🗂️', label: 'Library',  sub: 'Topic notes' },
-    { id: 'exam',     icon: '📄', label: 'Exams',    sub: 'Mock papers' },
-    { id: 'themes',   icon: '🌈', label: 'Themes',   sub: 'Customise' },
-    { id: 'settings', icon: '👤', label: 'Profile',  sub: 'Your account' },
-  ];
-
   function loadShortcut() {
     const saved = JSON.parse(localStorage.getItem('veda_shortcut') || 'null') || ALL_APPS[0];
     document.getElementById('mh-sc-icon').textContent  = saved.icon;
@@ -9468,8 +10338,8 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
   </div>
 </div>
 <!-- Playlist Manager Modal -->
-          <div id="pl-manager-overlay" onclick="closePlaylistManager()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;backdrop-filter:blur(4px);"></div>
-          <div id="pl-manager" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:501;width:min(500px,92vw);background:linear-gradient(145deg,rgba(15,21,40,.98),rgba(10,14,26,.99));border:1px solid rgba(77,159,255,.3);border-radius:18px;padding:28px;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(77,159,255,.08);max-height:82vh;overflow-y:auto;">
+          <div id="pl-manager-overlay" onclick="closePlaylistManager()" style="display: none; position: fixed; inset: 0px; background: rgba(0, 0, 0, 0.6); z-index: 500; backdrop-filter: blur(4px);"></div>
+          <div id="pl-manager" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 501; width: min(500px, 92vw); background: linear-gradient(145deg, rgba(15, 21, 40, 0.98), rgba(10, 14, 26, 0.99)); border: 1px solid rgba(77, 159, 255, 0.3); border-radius: 18px; padding: 28px; box-shadow: rgba(0, 0, 0, 0.6) 0px 24px 80px, rgba(77, 159, 255, 0.08) 0px 0px 0px 1px; max-height: 82vh; overflow-y: auto;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
               <div style="font-family:var(--orb);font-size:.7rem;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;">🎵 // Playlist Manager</div>
               <button onclick="closePlaylistManager()" style="background:none;border:none;color:var(--silver);font-size:1.1rem;cursor:pointer;line-height:1;">✕</button>
@@ -9493,9 +10363,88 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
                 <div id="pl-add-err" style="display:none;margin-top:8px;font-family:var(--exo);font-size:.75rem;color:#ff6680;"></div>
               </div>
               <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;opacity:.7;">// PRESETS</div>
-              <div id="pl-presets" style="display:flex;flex-direction:column;margin-bottom:20px;"></div>
+              <div id="pl-presets" style="display:flex;flex-direction:column;margin-bottom:20px;">
+    <div style="font-family:var(--exo);font-size:.63rem;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin:10px 0 5px;opacity:.8;">Study</div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">💿</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--silver);">Lo-fi</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Lo-fi&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;})" disabled="" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 11px;color:var(--silver);font-family:var(--exo);font-size:.7rem;cursor:default;flex-shrink:0;transition:all .15s;">✓</button>
+      </div><div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">🎶</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Focus Flow</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Focus Flow&quot;,&quot;id&quot;:&quot;37i9dQZF1DX8Uebhn9wzrS&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div><div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">🎶</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Deep Work</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Deep Work&quot;,&quot;id&quot;:&quot;37i9dQZF1DWZeKCadgRdKQ&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div><div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">🎶</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Peaceful Piano</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Peaceful Piano&quot;,&quot;id&quot;:&quot;37i9dQZF1DX4sWSpwq3LiO&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div><div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">🎶</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Jazz Vibes</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Jazz Vibes&quot;,&quot;id&quot;:&quot;37i9dQZF1DXbITWG1ZJKYt&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div><div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">🎶</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Classical Focus</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Classical Focus&quot;,&quot;id&quot;:&quot;37i9dQZF1DWWEJlAGA9g88&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div><div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">🎶</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Rain &amp; Ambience</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Rain &amp; Ambience&quot;,&quot;id&quot;:&quot;37i9dQZF1DX4PP3DA4J0N8&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div><div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">🎶</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Hip-Hop Focus</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Hip-Hop Focus&quot;,&quot;id&quot;:&quot;37i9dQZF1DWZZbwlv3Vmtr&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div>
+    <div style="font-family:var(--exo);font-size:.63rem;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin:10px 0 5px;opacity:.8;">Bollywood</div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">💿</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--silver);">Dhurandhar</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" disabled="" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 11px;color:var(--silver);font-family:var(--exo);font-size:.7rem;cursor:default;flex-shrink:0;transition:all .15s;">✓</button>
+      </div><div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">💿</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--silver);">Dhurandhar: The Revenge</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Dhurandhar: The Revenge&quot;,&quot;id&quot;:&quot;4jlyYLklV3kTBA6trX3bpj&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" disabled="" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 11px;color:var(--silver);font-family:var(--exo);font-size:.7rem;cursor:default;flex-shrink:0;transition:all .15s;">✓</button>
+      </div>
+    <div style="font-family:var(--exo);font-size:.63rem;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin:10px 0 5px;opacity:.8;">Soundtrack</div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">💿</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Interstellar OST</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Interstellar OST&quot;,&quot;id&quot;:&quot;7a78GiEowpaCa7ZJs44xUU&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Soundtrack&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div>
+    <div style="font-family:var(--exo);font-size:.63rem;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin:10px 0 5px;opacity:.8;">Pop</div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid rgba(77,159,255,.1);border-radius:9px;padding:7px 12px;margin-bottom:4px;">
+        <div style="flex-shrink:0;">💿</div>
+        <div style="flex:1;font-family:var(--raj);font-size:.82rem;color:var(--text);">Coldplay · Moon Music</div>
+        <button onclick="addPresetPlaylist({&quot;name&quot;:&quot;Coldplay · Moon Music&quot;,&quot;id&quot;:&quot;5SGtrmYbIo0Dsg4kJ4qjM6&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Pop&quot;})" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:7px;padding:4px 11px;color:var(--accent2);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">+ Add</button>
+      </div></div>
               <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;opacity:.7;">// YOUR SPOTIFY PLAYLISTS</div>
-              <div id="pl-saved-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+              <div id="pl-saved-list" style="display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid rgba(77,159,255,.12);border-radius:10px;padding:9px 12px;">
+      <div style="font-size:.95rem;flex-shrink:0;">💿</div>
+      <div style="flex:1;min-width:0;"><div style="font-family:var(--raj);font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Dhurandhar</div><div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);opacity:.6;text-transform:capitalize;">album</div></div>
+      <button onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;,&quot;custom&quot;:true});closePlaylistManager()" title="Play" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:#4d9fff;font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">▶</button>
+      <button onclick="renamePlaylist('2e7HNQJ0BcMoqwsVDwDhK8')" title="Rename" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:var(--silver);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">✎</button>
+      <button onclick="deletePlaylist('2e7HNQJ0BcMoqwsVDwDhK8')" title="Remove" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:#ff6680;font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">✕</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid rgba(77,159,255,.12);border-radius:10px;padding:9px 12px;">
+      <div style="font-size:.95rem;flex-shrink:0;">💿</div>
+      <div style="flex:1;min-width:0;"><div style="font-family:var(--raj);font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Dhurandhar: The Revenge</div><div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);opacity:.6;text-transform:capitalize;">album</div></div>
+      <button onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar: The Revenge&quot;,&quot;id&quot;:&quot;4jlyYLklV3kTBA6trX3bpj&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;,&quot;custom&quot;:true});closePlaylistManager()" title="Play" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:#4d9fff;font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">▶</button>
+      <button onclick="renamePlaylist('4jlyYLklV3kTBA6trX3bpj')" title="Rename" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:var(--silver);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">✎</button>
+      <button onclick="deletePlaylist('4jlyYLklV3kTBA6trX3bpj')" title="Remove" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:#ff6680;font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">✕</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid rgba(77,159,255,.12);border-radius:10px;padding:9px 12px;">
+      <div style="font-size:.95rem;flex-shrink:0;">💿</div>
+      <div style="flex:1;min-width:0;"><div style="font-family:var(--raj);font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">JvKE</div><div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);opacity:.6;text-transform:capitalize;">album</div></div>
+      <button onclick="playPlaylist({&quot;name&quot;:&quot;JvKE&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;,&quot;custom&quot;:true});closePlaylistManager()" title="Play" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:#4d9fff;font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">▶</button>
+      <button onclick="renamePlaylist('69AaAkdktFGnk9POmHENkT')" title="Rename" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:var(--silver);font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">✎</button>
+      <button onclick="deletePlaylist('69AaAkdktFGnk9POmHENkT')" title="Remove" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 9px;color:#ff6680;font-family:var(--exo);font-size:.7rem;cursor:pointer;flex-shrink:0;transition:all .15s;">✕</button>
+    </div></div>
             </div>
 
-</div></body></html>
+</div><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+</body></html>
