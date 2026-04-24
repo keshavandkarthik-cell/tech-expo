@@ -1,4 +1,4 @@
-<html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc; font-size: 16px;"><head>
+<html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc; font-size: 17px;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Veda — AI Study Companion</title>
@@ -1631,7 +1631,7 @@ body.fs-large { font-size: 17px; }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
 </style>
 </head>
-<body style="background: linear-gradient(135deg, rgb(6, 12, 18) 0%, rgb(12, 20, 32) 100%);">
+<body style="background: linear-gradient(135deg, rgb(6, 8, 14) 0%, rgb(12, 16, 24) 100%);" class="fs-large">
 <!-- VEDA NOTIFICATION BAR -->
 <div id="veda-notif-bar" style="display:none;background:linear-gradient(135deg,rgba(0,212,170,.13),rgba(77,159,255,.08));border-bottom:1px solid rgba(0,212,170,.22);padding:9px 20px;align-items:center;gap:12px;flex-wrap:wrap;z-index:999;position:relative;">
   <span style="font-size:1rem;">🔔</span>
@@ -1876,7 +1876,7 @@ body.fs-large { font-size: 17px; }
         <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       </div>
-      <div class="hdr-time" id="clk">08:23</div>
+      <div class="hdr-time" id="clk">10:30</div>
     </div>
   </div>
   <div id="body">
@@ -1979,12 +1979,12 @@ body.fs-large { font-size: 17px; }
           <!-- Daily Brief widget -->
           <div class="dt-widget dt-widget-wide" id="daily-brief-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Fri Apr 24 2026</span></div>
-            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Keshav, to really conquer those facts you struggle with, try this today: after you read a small section, close your book and try to explain it out loud in your own words. This active recall is incredibly powerful for making information stick, strengthening your study habit, and will supercharge your new streak!</div>
+            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Keshav, that 2-day streak is fantastic – you're building great momentum! Today, pick just one small, achievable study task and conquer it early. That first win will energize you to keep going and make day three another success!</div>
             <button onclick="refreshDailyBrief(true)" style="margin-top:8px;background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.65rem;cursor:pointer;padding:0;opacity:.6;transition:opacity .15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">↻ refresh</button>
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">08:23</div>
+            <div class="dt-clock-big" id="dt-clock-big">10:30</div>
             <div class="dt-clock-date" id="dt-clock-date">Friday, Apr 24</div>
           </div>
 
@@ -1995,9 +1995,9 @@ body.fs-large { font-size: 17px; }
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Questions asked</span>
-                  <span class="dt-stat-val" id="dt-stat-q">2</span>
+                  <span class="dt-stat-val" id="dt-stat-q">0</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width: 4%;"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width: 0%;"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
@@ -2051,7 +2051,7 @@ body.fs-large { font-size: 17px; }
               </div>
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">🔥</div>
-                <div><div class="dt-reward-val" id="dt-streak-big">1 days</div><div class="dt-reward-label">Study streak</div></div>
+                <div><div class="dt-reward-val" id="dt-streak-big">2 days</div><div class="dt-reward-label">Study streak</div></div>
               </div>
             </div>
           </div>
@@ -2109,7 +2109,7 @@ body.fs-large { font-size: 17px; }
             <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-top:8px;">
       <button class="music-pl-btn " data-plid="69AaAkdktFGnk9POmHENkT" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Lo-fi">Lo-fi</button>
       <button class="music-pl-btn " data-plid="37i9dQZF1DX8Uebhn9wzrS" onclick="playPlaylist({&quot;name&quot;:&quot;Focus Flow&quot;,&quot;id&quot;:&quot;37i9dQZF1DX8Uebhn9wzrS&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Focus Flow">Focus Flow</button>
-      <button class="music-pl-btn on" data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
+      <button class="music-pl-btn " data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
       <button class="music-pl-btn " data-plid="7a78GiEowpaCa7ZJs44xUU" onclick="playPlaylist({&quot;name&quot;:&quot;Interstellar OST&quot;,&quot;id&quot;:&quot;7a78GiEowpaCa7ZJs44xUU&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Soundtrack&quot;})" title="Interstellar OST">Interstellar OST</button></div>
 
             <!-- Spotify login nudge -->
@@ -2148,7 +2148,7 @@ body.fs-large { font-size: 17px; }
             <div class="mh-greeting-time" id="mh-timeofday">Good morning</div>
             <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
             <div class="mh-pills">
-              <div class="mh-pill">🔥 <span id="mh-streak">1</span> day streak</div>
+              <div class="mh-pill">🔥 <span id="mh-streak">2</span> day streak</div>
               <div class="mh-pill">💎 <span id="mh-gems">0</span> gems</div>
             </div>
           </div>
@@ -2156,7 +2156,7 @@ body.fs-large { font-size: 17px; }
           <!-- Daily Brief -->
           <div class="mh-card">
             <div class="mh-card-label">Daily Brief</div>
-            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">✨</span> Keshav, to really conquer those facts you struggle with, try this today: after you read a small section, close your book and try to explain it out loud in your own words. This active recall is incredibly powerful for making information stick, strengthening your study habit, and will supercharge your new streak!</div>
+            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">✨</span> Keshav, that 2-day streak is fantastic – you're building great momentum! Today, pick just one small, achievable study task and conquer it early. That first win will energize you to keep going and make day three another success!</div>
             <button class="mh-brief-refresh" onclick="refreshDailyBrief(true)">↻ refresh</button>
           </div>
 
@@ -2854,15 +2854,15 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-card-label">// FONT SIZE</div>
               <div class="pers-row" style="margin-top:8px;">
                 <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
-                <button class="pers-btn on" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
-                <button class="pers-btn" id="fs-large" onclick="setFontSize('large',this)">Large</button>
+                <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
+                <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
               </div>
             </div>
             <div class="ps-card">
               <div class="ps-card-label">// SIDEBAR</div>
               <div class="pers-row" style="margin-top:8px;">
-                <button class="pers-btn on" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
-                <button class="pers-btn" id="sb-open" onclick="setSbPref('open',this)">Open</button>
+                <button class="pers-btn" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
+                <button class="pers-btn on" id="sb-open" onclick="setSbPref('open',this)">Open</button>
                 <button class="pers-btn" id="sb-closed" onclick="setSbPref('closed',this)">Closed</button>
               </div>
             </div>
@@ -2872,7 +2872,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// THEME</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
+          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
           <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
         </div>
         <div id="shop-panel" style="display:none;margin-bottom:16px;">
@@ -2882,7 +2882,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
           <div class="shop-grid" id="shop-grid"></div>
         </div>
-        <div class="tgrid" id="tgrid"></div>
+        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
       
           </div>
 
@@ -11388,10 +11388,7 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
 
 <!-- Support Widget -->
 <div id="support-widget" style="position:fixed;bottom:20px;right:20px;z-index:999;cursor:pointer;" onclick="event.stopPropagation();var p=document.getElementById('support-qr-popup');p.style.display=p.style.display==='block'?'none':'block'">
-  <div style="background:linear-gradient(135deg,rgba(15,21,40,0.95),rgba(10,14,26,0.98));border:1px solid rgba(0,212,170,0.35);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,212,170,0.15);transition:all .2s;" onmouseover="this.style.boxShadow='0 6px 28px rgba(0,212,170,0.28)'" onmouseout="this.style.boxShadow='0 4px 20px rgba(0,212,170,0.15)'">
-    <span style="font-size:.85rem;">💙</span>
-    <span style="font-family:var(--exo);font-size:.62rem;color:var(--teal2);letter-spacing:1px;">Support Us</span>
-  </div>
+  
   <div id="support-qr-popup" style="display:none;position:absolute;bottom:calc(100% + 10px);right:0;background:linear-gradient(145deg,rgba(15,21,40,0.98),rgba(10,14,26,0.99));border:1px solid rgba(0,212,170,0.3);border-radius:14px;padding:16px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.5),0 0 0 1px rgba(0,212,170,0.08);min-width:200px;">
     <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);border-radius:14px 14px 0 0;"></div>
     <div style="font-family:var(--exo);font-size:.6rem;color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">// Support the Creators</div>
@@ -11948,4 +11945,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
 </body></html>
