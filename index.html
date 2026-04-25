@@ -1,4 +1,4 @@
-<html lang="en" style="--accent: #00d4aa; --accent2: #00d4aacc; font-size: 16px;"><head>
+<html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc; font-size: 17px;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Veda — AI Study Companion</title>
@@ -9,7 +9,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc }
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc, updateDoc }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const _cfg = {
@@ -30,7 +30,12 @@ window._fb = {
   signIn:  () => signInWithPopup(_auth, _prov),
   signOut: () => signOut(_auth),
   save:    (uid, data) => setDoc(doc(_db,'users',uid), data, {merge:true}),
-  load:    async (uid) => { const s = await getDoc(doc(_db,'users',uid)); return s.exists()?s.data():null; }
+  load:    async (uid) => { const s = await getDoc(doc(_db,'users',uid)); return s.exists()?s.data():null; },
+  papersCol: (uid) => collection(_db,'users',uid,'papers'),
+  addPaper:  (uid, data) => addDoc(collection(_db,'users',uid,'papers'), data),
+  getPapers: async (uid) => { const s = await getDocs(collection(_db,'users',uid,'papers')); return s.docs.map(d=>({id:d.id,...d.data()})); },
+  deletePaper: (uid, pid) => deleteDoc(doc(_db,'users',uid,'papers',pid)),
+  updatePaper: (uid, pid, data) => updateDoc(doc(_db,'users',uid,'papers',pid), data),
 };
 
 onAuthStateChanged(_auth, async user => {
@@ -38,10 +43,18 @@ onAuthStateChanged(_auth, async user => {
   if (user) {
     /* load cloud data first, then update UI */
     /* guard against race: wait until regular scripts have defined these functions */
-    const waitForFn = (name, retries = 20) => new Promise((res, rej) => {
+    const waitForFn = (name, retries = 60) => new Promise((res, rej) => {
+      let warned = false;
       const check = (n) => {
         if (typeof window[name] === 'function') return res();
         if (n <= 0) return rej(new Error(name + ' not defined'));
+        // Show a hint after 2s so the user knows something is happening
+        if (!warned && n <= 40) {
+          warned = true;
+          const sp = document.getElementById('splash');
+          const hint = sp && sp.querySelector('.key-note');
+          if (hint) hint.textContent = 'Connecting… this can take a moment on slower connections.';
+        }
         setTimeout(() => check(n - 1), 100);
       };
       check(retries);
@@ -278,7 +291,7 @@ body {
 /* #tog left position is managed by JS toggleSB() — CSS sibling combinator can't reach inside #sb */
 body.sb-collapsed #tog { left: 40px; }
 
-nav { flex: 1; padding: 12px 8px; overflow: hidden; }
+nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(0,212,170,.2) transparent; }
 .nb {
   display: flex; align-items: center; gap: 10px;
   width: 100%; padding: 11px 12px;
@@ -1632,7 +1645,7 @@ body.fs-large { font-size: 17px; }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
 </style>
 </head>
-<body style="background: linear-gradient(135deg, rgb(7, 18, 8) 0%, rgb(12, 28, 14) 100%);" class="">
+<body style="background: linear-gradient(135deg, rgb(6, 16, 10) 0%, rgb(12, 30, 16) 100%);" class="fs-large">
 <!-- VEDA NOTIFICATION BAR -->
 <div id="veda-notif-bar" style="display:none;background:linear-gradient(135deg,rgba(0,212,170,.13),rgba(77,159,255,.08));border-bottom:1px solid rgba(0,212,170,.22);padding:9px 20px;align-items:center;gap:12px;flex-wrap:wrap;z-index:999;position:relative;">
   <span style="font-size:1rem;">🔔</span>
@@ -1877,7 +1890,7 @@ body.fs-large { font-size: 17px; }
         <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       </div>
-      <div class="hdr-time" id="clk">13:21</div>
+      <div class="hdr-time" id="clk">16:08</div>
     </div>
   </div>
   <div id="body">
@@ -1927,7 +1940,7 @@ body.fs-large { font-size: 17px; }
       </div>
       <button id="tog" onclick="toggleSb()">◀</button>
       <nav>
-        <button class="nb" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
+        <button class="nb on" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
         <button class="nb" onclick="go('homework')"><span class="ni">📚</span><span class="nl">Homework</span></button>
         <button class="nb" onclick="go('library')"><span class="ni">🗂️</span><span class="nl">Topic Library</span></button>
         <button class="nb" onclick="go('notes')"><span class="ni">📝</span><span class="nl">Notes</span></button>
@@ -1940,8 +1953,10 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('profile')"><span class="ni">👤</span><span class="nl">Profile</span></button>
         <button class="nb" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
+        <button class="nb" onclick="go('tracker')"><span class="ni">📊</span><span class="nl">Paper Tracker</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb on" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
+        <button class="nb" onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
+        <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
         <div class="sb-foot-text" id="key-indicator">KEY: ACTIVE</div>
@@ -1957,7 +1972,7 @@ body.fs-large { font-size: 17px; }
     <div id="content">
 
       <!-- HOME — DESKTOP OS -->
-      <div class="tab" id="tab-home">
+      <div class="tab on" id="tab-home">
         <div class="desktop-wallpaper"></div>
 
 
@@ -1980,12 +1995,12 @@ body.fs-large { font-size: 17px; }
           <!-- Daily Brief widget -->
           <div class="dt-widget dt-widget-wide" id="daily-brief-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Sat Apr 25 2026</span></div>
-            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> User, your impressive 32-day streak and 1305 gems are a testament to your consistent effort! Today, channel that fantastic momentum into taking one small, focused step towards your biggest goal. Even a short burst of concentrated effort can build incredible progress and keep that streak shining bright.</div>
+            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">📝</span> Writing notes by hand improves retention compared to typing — your brain processes it more deeply.</div>
             <button onclick="refreshDailyBrief(true)" style="margin-top:8px;background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.65rem;cursor:pointer;padding:0;opacity:.6;transition:opacity .15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">↻ refresh</button>
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">13:21</div>
+            <div class="dt-clock-big" id="dt-clock-big">16:08</div>
             <div class="dt-clock-date" id="dt-clock-date">Saturday, Apr 25</div>
           </div>
 
@@ -1996,23 +2011,23 @@ body.fs-large { font-size: 17px; }
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Questions asked</span>
-                  <span class="dt-stat-val" id="dt-stat-q">97</span>
+                  <span class="dt-stat-val" id="dt-stat-q">0</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width: 100%;"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width: 0%;"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Games played</span>
-                  <span class="dt-stat-val" id="dt-stat-g">93</span>
+                  <span class="dt-stat-val" id="dt-stat-g">4</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 100%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 20%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Journal entries</span>
-                  <span class="dt-stat-val" id="dt-stat-j">12</span>
+                  <span class="dt-stat-val" id="dt-stat-j">0</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-j" style="width: 60%; background: linear-gradient(90deg, rgb(192, 132, 252), rgb(232, 121, 249));"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-j" style="width: 0%; background: linear-gradient(90deg, rgb(192, 132, 252), rgb(232, 121, 249));"></div></div>
               </div>
             </div>
           </div>
@@ -2048,12 +2063,23 @@ body.fs-large { font-size: 17px; }
             <div class="dt-reward">
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">💎</div>
-                <div><div class="dt-reward-val" id="dt-gems-big">1324</div><div class="dt-reward-label">Gems earned</div></div>
+                <div><div class="dt-reward-val" id="dt-gems-big">18</div><div class="dt-reward-label">Gems earned</div></div>
               </div>
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">🔥</div>
-                <div><div class="dt-reward-val" id="dt-streak-big">32 days</div><div class="dt-reward-label">Study streak</div></div>
+                <div><div class="dt-reward-val" id="dt-streak-big">1 days</div><div class="dt-reward-label">Study streak</div></div>
               </div>
+            </div>
+          </div>
+
+          <!-- Leaderboard widget -->
+          <div class="dt-widget clickable" onclick="go('leaderboard')" id="lb-home-widget">
+            <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Leaderboard</div>
+            <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+              <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.5;text-align:center;padding:8px 0;">Loading...</div>
+            </div>
+            <div id="lb-home-rank" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(77,159,255,.1);font-family:var(--exo);font-size:.68rem;color:var(--silver);display:none;">
+              Your rank: <span id="lb-home-rank-val" style="color:var(--accent2);font-weight:700;"></span>
             </div>
           </div>
 
@@ -2088,14 +2114,14 @@ body.fs-large { font-size: 17px; }
               </div>
               <div id="dc-hint-text" style="display:none;font-family:var(--exo);font-size:.68rem;color:var(--teal2);opacity:.8;margin-top:6px;padding:4px 8px;background:rgba(0,212,170,.06);border-radius:6px;"></div>
             </div>
-            <div id="dc-result-wrap" style="display: none; text-align: center; padding: 8px 0px;">
-              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">❌</div>
-              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: Chloroplast</div>
-              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
-              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 10h 45m 42s</div>
+            <div id="dc-result-wrap" style="display: block; text-align: center; padding: 8px 0px;">
+              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">✅</div>
+              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Correct! +5 gems 💎</div>
+              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Great work! Come back tomorrow for the next one.</div>
+              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 51m 23s</div>
               <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;startGame('blitz'),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
             </div>
-            <div id="dc-no-key-msg" style="display: block; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
+            <div id="dc-no-key-msg" style="display: none; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
           </div>
 
           <!-- Music widget -->
@@ -2112,9 +2138,10 @@ body.fs-large { font-size: 17px; }
 
             <!-- Playlist tabs -->
             <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-top:8px;">
-      <button class="music-pl-btn " data-plid="37i9dQZF1DWWQRwui0ExPn" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi Study&quot;,&quot;id&quot;:&quot;37i9dQZF1DWWQRwui0ExPn&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Lo-fi Study">Lo-fi Study</button>
-      <button class="music-pl-btn " data-plid="37i9dQZF1DX9sIqqvKsjEK" onclick="playPlaylist({&quot;name&quot;:&quot;Deep Focus&quot;,&quot;id&quot;:&quot;37i9dQZF1DX9sIqqvKsjEK&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Deep Focus">Deep Focus</button>
-      <button class="music-pl-btn " data-plid="37i9dQZF1DX5trt9i14X7j" onclick="playPlaylist({&quot;name&quot;:&quot;Coding Vibes&quot;,&quot;id&quot;:&quot;37i9dQZF1DX5trt9i14X7j&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Coding Vibes">Coding Vibes</button></div>
+      <button class="music-pl-btn " data-plid="69AaAkdktFGnk9POmHENkT" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Lo-fi">Lo-fi</button>
+      <button class="music-pl-btn " data-plid="37i9dQZF1DX8Uebhn9wzrS" onclick="playPlaylist({&quot;name&quot;:&quot;Focus Flow&quot;,&quot;id&quot;:&quot;37i9dQZF1DX8Uebhn9wzrS&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Focus Flow">Focus Flow</button>
+      <button class="music-pl-btn " data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
+      <button class="music-pl-btn " data-plid="7a78GiEowpaCa7ZJs44xUU" onclick="playPlaylist({&quot;name&quot;:&quot;Interstellar OST&quot;,&quot;id&quot;:&quot;7a78GiEowpaCa7ZJs44xUU&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Soundtrack&quot;})" title="Interstellar OST">Interstellar OST</button></div>
 
             <!-- Spotify login nudge -->
             <div id="spotify-nudge" style="background: linear-gradient(135deg, rgba(30, 215, 96, 0.08), rgba(30, 215, 96, 0.04)); border: 1px solid rgba(30, 215, 96, 0.25); border-radius: 10px; padding: 10px 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -2150,17 +2177,17 @@ body.fs-large { font-size: 17px; }
           <!-- Greeting -->
           <div>
             <div class="mh-greeting-time" id="mh-timeofday">Good afternoon</div>
-            <div class="mh-greeting-name">Hey, <span id="mh-name">User</span></div>
+            <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
             <div class="mh-pills">
-              <div class="mh-pill">🔥 <span id="mh-streak">32</span> day streak</div>
-              <div class="mh-pill">💎 <span id="mh-gems">1324</span> gems</div>
+              <div class="mh-pill">🔥 <span id="mh-streak">1</span> day streak</div>
+              <div class="mh-pill">💎 <span id="mh-gems">18</span> gems</div>
             </div>
           </div>
 
           <!-- Daily Brief -->
           <div class="mh-card">
             <div class="mh-card-label">Daily Brief</div>
-            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">✨</span> User, your impressive 32-day streak and 1305 gems are a testament to your consistent effort! Today, channel that fantastic momentum into taking one small, focused step towards your biggest goal. Even a short burst of concentrated effort can build incredible progress and keep that streak shining bright.</div>
+            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">📝</span> Writing notes by hand improves retention compared to typing — your brain processes it more deeply.</div>
             <button class="mh-brief-refresh" onclick="refreshDailyBrief(true)">↻ refresh</button>
           </div>
 
@@ -2797,155 +2824,23 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <button class="journal-filter" id="jf-today" onclick="setJournalFilter('today',this)">Today</button>
           <button class="journal-filter" id="jf-week" onclick="setJournalFilter('week',this)">This Week</button>
         </div>
-        <div class="journal-list" id="journal-list"><div class="jentry" id="jentry-1776912460332">
-      <div class="jentry-header">
-        <div class="jentry-title">Pre-exam anxiety is real</div>
-        <div class="jentry-meta">Invalid Date · Invalid Date</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460332"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460332)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460332)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460332)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460331">
-      <div class="jentry-header">
-        <div class="jentry-title">Chemistry win!</div>
-        <div class="jentry-meta">Invalid Date · Invalid Date</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460331"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460331)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460331)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460331)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460330">
-      <div class="jentry-header">
-        <div class="jentry-title">Running on empty</div>
-        <div class="jentry-meta">Invalid Date · Invalid Date</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460330"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460330)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460330)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460330)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460329">
-      <div class="jentry-header">
-        <div class="jentry-title">In the zone — 4 hour session</div>
-        <div class="jentry-meta">Invalid Date · Invalid Date</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460329"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460329)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460329)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460329)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460328">
-      <div class="jentry-header">
-        <div class="jentry-title">Meh kind of day</div>
-        <div class="jentry-meta">Invalid Date · Invalid Date</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460328"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460328)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460328)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460328)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460327">
-      <div class="jentry-header">
-        <div class="jentry-title">Library study + flag quiz wins</div>
-        <div class="jentry-meta">Invalid Date · Invalid Date</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460327"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460327)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460327)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460327)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460326">
-      <div class="jentry-header">
-        <div class="jentry-title">Three assessments incoming</div>
-        <div class="jentry-meta">Invalid Date · Invalid Date</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460326"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460326)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460326)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460326)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460325">
-      <div class="jentry-header">
-        <div class="jentry-title">Essay done and submitted</div>
-        <div class="jentry-meta">Invalid Date · Invalid Date</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460325"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460325)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460325)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460325)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460324">
-      <div class="jentry-header">
-        <div class="jentry-title">Two weeks in and loving it</div>
-        <div class="jentry-meta">4 Nov 2026 · 00:00</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460324"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460324)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460324)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460324)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460323">
-      <div class="jentry-header">
-        <div class="jentry-title">Rest day (needed it)</div>
-        <div class="jentry-meta">4 Sept 2026 · 00:00</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460323"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460323)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460323)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460323)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460322">
-      <div class="jentry-header">
-        <div class="jentry-title">93% on mock — personal best!</div>
-        <div class="jentry-meta">4 Jun 2026 · 00:00</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460322"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460322)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460322)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460322)">🗑 Delete</button>
-      </div>
-    </div><div class="jentry" id="jentry-1776912460321">
-      <div class="jentry-header">
-        <div class="jentry-title">Day 1 — new term, new goals</div>
-        <div class="jentry-meta">4 Mar 2026 · 00:00</div>
-      </div>
-      <div class="jentry-body" id="jbody-1776912460321"></div>
-      <div class="jentry-footer">
-        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460321)">Read more</button>
-        <button class="jentry-btn" onclick="editJournalEntry(1776912460321)">✏️ Edit</button>
-        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460321)">🗑 Delete</button>
-      </div>
-    </div></div>
+        <div class="journal-list" id="journal-list"><div class="journal-empty">No entries yet — write your first one above ✏️</div></div>
         </div>
       </div>
 
       <!-- THEMES -->
       <!-- SETTINGS — Appearance + API Key only -->
-      <div class="tab on" id="tab-settings">
+      <div class="tab" id="tab-settings">
 
         <!-- SUB-NAV -->
         <div class="ps-subnav">
-          <button class="ps-tab on" onclick="psGo('appearance',this)">🎨 Appearance</button>
-          <button class="ps-tab" onclick="psGo('aiprofile',this)">🤖 AI Settings</button>
+          <button class="ps-tab" onclick="psGo('appearance',this)">🎨 Appearance</button>
+          <button class="ps-tab on" onclick="psGo('aiprofile',this)">🤖 AI Settings</button>
           <button class="ps-tab" onclick="psGo('apikey',this)">🔑 API</button>
         </div>
 
         <!-- ── APPEARANCE PANEL ── -->
-        <div class="ps-panel on" id="ps-appearance">
+        <div class="ps-panel" id="ps-appearance">
           <div class="ps-card">
             <div class="ps-card-label">// UI SKIN</div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
@@ -2971,8 +2866,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// ACCENT COLOR</div>
             <div class="color-row" style="flex-wrap:wrap;gap:10px;margin-top:4px;">
-              <div class="color-swatch" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
-              <div class="color-swatch on" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
+              <div class="color-swatch on" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
+              <div class="color-swatch" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
               <div class="color-swatch" style="background:#c084fc;" data-color="#c084fc" onclick="setAccent('#c084fc',this)"></div>
               <div class="color-swatch" style="background:#f472b6;" data-color="#f472b6" onclick="setAccent('#f472b6',this)"></div>
               <div class="color-swatch" style="background:#fb923c;" data-color="#fb923c" onclick="setAccent('#fb923c',this)"></div>
@@ -2991,16 +2886,16 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-card-label">// FONT SIZE</div>
               <div class="pers-row" style="margin-top:8px;">
                 <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
-                <button class="pers-btn on" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
-                <button class="pers-btn" id="fs-large" onclick="setFontSize('large',this)">Large</button>
+                <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
+                <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
                 <button class="pers-btn" id="fs-huge" onclick="setFontSize('huge',this)">Giant</button>
               </div>
             </div>
             <div class="ps-card">
               <div class="ps-card-label">// SIDEBAR</div>
               <div class="pers-row" style="margin-top:8px;">
-                <button class="pers-btn on" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
-                <button class="pers-btn" id="sb-open" onclick="setSbPref('open',this)">Open</button>
+                <button class="pers-btn" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
+                <button class="pers-btn on" id="sb-open" onclick="setSbPref('open',this)">Open</button>
                 <button class="pers-btn" id="sb-closed" onclick="setSbPref('closed',this)">Closed</button>
               </div>
             </div>
@@ -3010,7 +2905,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// THEME</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat on">◻️ Minimal</button></div>
+          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
           <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
         </div>
         <div id="shop-panel" style="display:none;margin-bottom:16px;">
@@ -3020,7 +2915,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
           <div class="shop-grid" id="shop-grid"></div>
         </div>
-        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 8, 8), rgb(15, 15, 15));"><div class="tname" style="color: rgb(99, 102, 241);">Pure Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(17, 17, 17), rgb(26, 26, 26));"><div class="tname" style="color: rgb(129, 140, 248);">Charcoal</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 20, 20), rgb(30, 30, 30));"><div class="tname" style="color: rgb(148, 163, 184);">Graphite</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 10, 10), rgb(20, 20, 20));"><div class="tname" style="color: rgb(192, 132, 252);">Obsidian</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 7, 18), rgb(15, 15, 30));"><div class="tname" style="color: rgb(96, 165, 250);">Midnight</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 8, 12), rgb(8, 12, 18));"><div class="tname" style="color: rgb(52, 211, 153);">Abyss</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 24, 24), rgb(34, 34, 34));"><div class="tname" style="color: rgb(226, 232, 240);">Smoke</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(248, 249, 255), rgb(240, 242, 255));"><div class="tname" style="color: rgb(59, 130, 246);">Soft White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(250, 247, 240), rgb(240, 235, 224));"><div class="tname" style="color: rgb(180, 83, 9);">Warm Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(255, 251, 240), rgb(248, 243, 232));"><div class="tname" style="color: rgb(124, 58, 237);">Cream</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 244, 248), rgb(232, 237, 242));"><div class="tname" style="color: rgb(8, 145, 178);">Cool Gray</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 245, 240), rgb(232, 240, 232));"><div class="tname" style="color: rgb(6, 95, 70);">Soft Sage</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(253, 240, 245), rgb(250, 232, 240));"><div class="tname" style="color: rgb(190, 24, 93);">Blush</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 249, 255), rgb(232, 244, 255));"><div class="tname" style="color: rgb(29, 78, 216);">Sky White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(245, 240, 255), rgb(237, 232, 255));"><div class="tname" style="color: rgb(109, 40, 217);">Lavender Mist</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 25, 23), rgb(41, 37, 36));"><div class="tname" style="color: rgb(55, 65, 81);">Warm Slate</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 12, 27), rgb(5, 16, 32));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Navy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 18, 8), rgb(12, 28, 14));"><div class="tname" style="color: rgb(34, 197, 94);">Forest Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 8, 8), rgb(42, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Burgundy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(12, 14, 24), rgb(20, 22, 34));"><div class="tname" style="color: rgb(165, 180, 252);">Slate Blue</div></div></div>
+        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
       
           </div>
 
@@ -3048,7 +2943,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <!-- ── API KEY PANEL ── -->
         <!-- GOOGLE ACCOUNT PANEL (injected above API key panel) -->
         <!-- ── AI PROFILE PANEL ── -->
-        <div class="ps-panel" id="ps-aiprofile">
+        <div class="ps-panel on" id="ps-aiprofile">
           <div class="ps-card">
             <div class="ps-card-label">// AI STUDENT PROFILE</div>
             <div class="ps-form-label" style="margin-bottom:16px;line-height:1.7;">
@@ -3271,11 +3166,11 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-avatar-ring"></div>
             </div>
             <div class="ps-hero-right">
-              <div class="ps-name" id="acct-name">User</div>
-              <div class="ps-tagline" id="acct-tagline">Level 27 Legend</div>
+              <div class="ps-name" id="acct-name">Keshav</div>
+              <div class="ps-tagline" id="acct-tagline">Level 2 Apprentice</div>
               <div class="ps-badges-row">
-                <div class="ps-pill gem">💎 <span id="acct-gems">1324</span> Gems</div>
-                <div class="ps-pill streak">🔥 <span id="acct-streak">32</span> day streak</div>
+                <div class="ps-pill gem">💎 <span id="acct-gems">60</span> Gems</div>
+                <div class="ps-pill streak">🔥 <span id="acct-streak">3</span> day streak</div>
               </div>
             </div>
           </div>
@@ -3311,14 +3206,14 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// LEVEL PROGRESS</div>
             <div class="ps-level-row">
-              <div class="ps-level-num" id="ps-level">27</div>
+              <div class="ps-level-num" id="ps-level">2</div>
               <div style="flex:1;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <span class="ps-form-label" id="ps-level-title">Legend</span>
-                  <span class="ps-form-label"><span id="ps-gems-cur">24</span> / <span id="ps-gems-next">50</span> gems</span>
+                  <span class="ps-form-label" id="ps-level-title">Apprentice</span>
+                  <span class="ps-form-label"><span id="ps-gems-cur">10</span> / <span id="ps-gems-next">50</span> gems</span>
                 </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 48%;"></div></div>
-                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">🏆 Max Level!</div>
+                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 20%;"></div></div>
+                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Thinker</div>
               </div>
             </div>
           </div>
@@ -3667,13 +3562,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">🐍</div>
               <div class="game-name">Snake</div>
               <div class="game-desc">Classic snake — don't crash!</div>
-              <div class="game-hi" id="hi-snake">Best: 420</div>
+              <div class="game-hi" id="hi-snake">Best: 0</div>
             </div>
             <div class="game-card" data-cat="arcade" onclick="startGame('bubble')">
               <div class="game-icon">🫧</div>
               <div class="game-name">Bubble Pop</div>
               <div class="game-desc">Pop bubbles as fast as you can</div>
-              <div class="game-hi" id="hi-bubble">Best: 73</div>
+              <div class="game-hi" id="hi-bubble">Best: 0</div>
             </div>
             <div class="game-card" data-cat="arcade" onclick="startGame('brickbreaker')">
               <div class="game-icon">🧱</div>
@@ -3732,19 +3627,19 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">🔢</div>
               <div class="game-name">Sudoku</div>
               <div class="game-desc">Classic 9×9 number puzzle</div>
-              <div class="game-hi" id="hi-sudoku">Best score: 950</div>
+              <div class="game-hi" id="hi-sudoku">Not solved yet</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('math')">
               <div class="game-icon">➗</div>
               <div class="game-name">Maths Blitz</div>
               <div class="game-desc">Quick fire maths questions</div>
-              <div class="game-hi" id="hi-math">Best: 34</div>
+              <div class="game-hi" id="hi-math">Best: 0</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('scramble')">
               <div class="game-icon">🔤</div>
               <div class="game-name">Word Scramble</div>
               <div class="game-desc">Unscramble the study words</div>
-              <div class="game-hi" id="hi-scramble">Best: 18</div>
+              <div class="game-hi" id="hi-scramble">Best: 0</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('hangman')">
               <div class="game-icon">🪢</div>
@@ -3785,13 +3680,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">⚡</div>
               <div class="game-name">Reaction Time</div>
               <div class="game-desc">Tap when the signal fires!</div>
-              <div class="game-hi" id="hi-reaction">Best: 214 ms</div>
+              <div class="game-hi" id="hi-reaction">Best: -- ms</div>
             </div>
             <div class="game-card" data-cat="reflex" onclick="startGame('typing')">
               <div class="game-icon">⌨️</div>
               <div class="game-name">Typing Speed</div>
               <div class="game-desc">How fast can you type?</div>
-              <div class="game-hi" id="hi-typing">Best: 87 WPM</div>
+              <div class="game-hi" id="hi-typing">Best: 0 WPM</div>
             </div>
             <div class="game-card" data-cat="reflex" onclick="startGame('aimtrainer')">
               <div class="game-icon">🎯</div>
@@ -3826,7 +3721,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">🌍</div>
               <div class="game-name">Flag Quiz</div>
               <div class="game-desc">Name that country's flag!</div>
-              <div class="game-hi" id="hi-flags">Best: 22</div>
+              <div class="game-hi" id="hi-flags">Best: 0</div>
             </div>
             <div class="game-card" data-cat="quiz" onclick="startGame('capitals')">
               <div class="game-icon">🏛️</div>
@@ -4497,11 +4392,144 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div></div></div></div>
       </div>
 
-    </div>
-  </div>
-</div>
+      <!-- PAST YEAR PAPER TRACKER -->
+      <div class="tab" id="tab-tracker">
+        <div class="ttl">📊 Paper Tracker</div>
+        <div class="tsub"><span class="prm">›</span>Log your past year papers — track attempts, scores, and progress per subject</div>
 
-<!-- MOBILE DOCK -->
+        <!-- Stats row -->
+        <div id="tracker-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px;">
+          <div class="panel" style="text-align:center;padding:16px 12px;">
+            <div style="font-size:1.6rem;font-weight:700;color:var(--teal2);" id="trk-stat-done">0</div>
+            <div style="font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-top:4px;">DONE</div>
+          </div>
+          <div class="panel" style="text-align:center;padding:16px 12px;">
+            <div style="font-size:1.6rem;font-weight:700;color:var(--teal2);" id="trk-stat-avg">—</div>
+            <div style="font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-top:4px;">AVG SCORE</div>
+          </div>
+          <div class="panel" style="text-align:center;padding:16px 12px;">
+            <div style="font-size:1.6rem;font-weight:700;color:var(--teal2);" id="trk-stat-best">—</div>
+            <div style="font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-top:4px;">BEST SCORE</div>
+          </div>
+          <div class="panel" style="text-align:center;padding:16px 12px;">
+            <div style="font-size:1.6rem;font-weight:700;color:var(--teal2);" id="trk-stat-subj">0</div>
+            <div style="font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-top:4px;">SUBJECTS</div>
+          </div>
+        </div>
+
+        <!-- Log new paper -->
+        <div class="panel" style="margin-bottom:18px;">
+          <div style="font-family:var(--exo);font-size:.6rem;color:var(--teal);letter-spacing:2px;margin-bottom:14px;">// LOG A PAPER</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+            <div>
+              <div style="font-size:.65rem;color:var(--silver);margin-bottom:6px;">Subject</div>
+              <select id="trk-subject" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 12px;color:var(--white);font-family:var(--exo);font-size:.8rem;outline:none;">
+                <option value="">— Select —</option>
+                <option>Mathematics</option>
+                <option>Additional Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Biology</option>
+                <option>English</option>
+                <option>Bahasa Melayu</option>
+                <option>History</option>
+                <option>Economics</option>
+                <option>Accounting</option>
+                <option>Computer Science</option>
+                <option>Geography</option>
+                <option>Literature</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:.65rem;color:var(--silver);margin-bottom:6px;">Year</div>
+              <select id="trk-year" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 12px;color:var(--white);font-family:var(--exo);font-size:.8rem;outline:none;">
+                <option value="">— Select —</option>
+                <option>2026</option><option>2025</option>
+                <option>2024</option><option>2023</option><option>2022</option><option>2021</option>
+                <option>2020</option><option>2019</option><option>2018</option><option>2017</option>
+                <option>2016</option><option>2015</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:.65rem;color:var(--silver);margin-bottom:6px;">Paper</div>
+              <select id="trk-paper" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 12px;color:var(--white);font-family:var(--exo);font-size:.8rem;outline:none;">
+                <option value="">— Select —</option>
+                <option>Paper 1</option>
+                <option>Paper 2</option>
+                <option>Paper 3</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:.65rem;color:var(--silver);margin-bottom:6px;">Score (%)</div>
+              <input id="trk-score" type="number" min="0" max="100" placeholder="e.g. 85" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 12px;color:var(--white);font-family:var(--exo);font-size:.8rem;outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+          <div style="margin-bottom:10px;">
+            <div style="font-size:.65rem;color:var(--silver);margin-bottom:6px;">Notes (optional)</div>
+            <input id="trk-notes" type="text" placeholder="e.g. struggled with Section B, need to revise vectors..." style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 12px;color:var(--white);font-family:var(--exo);font-size:.8rem;outline:none;box-sizing:border-box;">
+          </div>
+          <button onclick="trkAddPaper()" style="background:linear-gradient(135deg,rgba(0,212,170,.18),rgba(77,159,255,.1));border:1px solid rgba(0,212,170,.4);border-radius:12px;padding:10px 24px;color:var(--teal2);font-family:var(--exo);font-size:.8rem;font-weight:700;cursor:pointer;letter-spacing:1px;width:100%;">✦ Log Paper</button>
+        </div>
+
+        <!-- Filter bar -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+          <div style="font-size:.65rem;color:var(--silver);letter-spacing:1px;">FILTER:</div>
+          <button class="exam-chip on" id="trk-filter-all" onclick="trkFilter('all',this)">All</button>
+          <button class="exam-chip" id="trk-filter-done" onclick="trkFilter('done',this)">✅ Done</button>
+          <button class="exam-chip" id="trk-filter-high" onclick="trkFilter('high',this)">🔥 ≥80%</button>
+          <button class="exam-chip" id="trk-filter-low" onclick="trkFilter('low',this)">⚠️ &lt;60%</button>
+          <input id="trk-search" type="text" placeholder="🔍 Search subject..." oninput="trkRender()" style="margin-left:auto;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 14px;color:var(--white);font-family:var(--exo);font-size:.75rem;outline:none;width:160px;">
+        </div>
+
+        <!-- List -->
+        <div id="tracker-list" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="text-align:center;padding:40px;color:var(--silver);font-size:.8rem;opacity:.5;">No papers logged yet. Add your first one above!</div>
+        </div>
+        <!-- LEADERBOARD TAB -->
+        <div class="tab" id="tab-leaderboard">
+          <div class="ttl">🏆 Leaderboard</div>
+          <div class="tsub"><span class="prm">›</span>Compete with friends — earn gems, keep streaks, top the board</div>
+
+          <!-- Friend code + add friend row -->
+          <div class="panel" style="margin-bottom:16px;">
+            <div style="font-family:var(--exo);font-size:.6rem;color:var(--teal);letter-spacing:2px;margin-bottom:14px;">// YOUR FRIEND CODE</div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <div id="lb-my-code" style="font-family:var(--orb);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;">6CCG6U</div>
+              <button onclick="lbCopyCode()" style="background:rgba(77,159,255,.1);border:1px solid rgba(77,159,255,.25);border-radius:8px;padding:6px 14px;color:var(--accent2);font-family:var(--exo);font-size:.72rem;cursor:pointer;transition:all .15s;">📋 Copy</button>
+              <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.6;">Share this with friends so they can add you</div>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <input id="lb-add-code-in" type="text" placeholder="Enter friend's code..." maxlength="6" style="flex:1;min-width:140px;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.2);border-radius:10px;padding:9px 14px;color:var(--text);font-family:var(--orb);font-size:.9rem;letter-spacing:3px;outline:none;text-transform:uppercase;" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6)" onkeydown="if(event.key==='Enter')lbAddFriend()">
+              <button onclick="lbAddFriend()" style="background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:10px;padding:9px 20px;color:#fff;font-family:var(--exo);font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.5px;white-space:nowrap;">+ Add Friend</button>
+            </div>
+            <div id="lb-add-status" style="font-family:var(--exo);font-size:.72rem;margin-top:8px;min-height:16px;"></div>
+          </div>
+
+          <!-- Board type tabs -->
+          <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+            <button class="lb-tab-btn on" id="lbt-gems" onclick="lbSetTab('gems',this)">💎 Gems</button>
+            <button class="lb-tab-btn" id="lbt-streak" onclick="lbSetTab('streak',this)">🔥 Streak</button>
+            <button class="lb-tab-btn" id="lbt-games" onclick="lbSetTab('games',this)">🎮 Games</button>
+          </div>
+
+          <!-- Scope tabs: Friends / Global -->
+          <div style="display:flex;gap:8px;margin-bottom:18px;">
+            <button class="lb-scope-btn on" id="lbs-friends" onclick="lbSetScope('friends',this)">👥 Friends</button>
+            <button class="lb-scope-btn" id="lbs-global" onclick="lbSetScope('global',this)">🌐 Global</button>
+          </div>
+
+          <!-- Visibility toggle -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;padding:10px 14px;background:rgba(77,159,255,.04);border:1px solid rgba(77,159,255,.1);border-radius:10px;">
+            <span style="font-family:var(--exo);font-size:.75rem;color:var(--silver);flex:1;">Appear on global leaderboard</span>
+            <button id="lb-visibility-btn" onclick="lbToggleVisibility()" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(0, 212, 170, 0.4); border-radius: 999px; padding: 4px 14px; font-family: var(--exo); font-size: 0.7rem; color: var(--teal2); cursor: pointer; transition: 0.2s;">✅ Visible</button>
+          </div>
+
+          <!-- Board list -->
+          <div id="lb-list-wrap" style="display:flex;flex-direction:column;gap:8px;"><div class="lb-empty">Sign in with Google to use the leaderboard.<br><span style="opacity:.6;font-size:.72rem;">Your profile stays private unless you enable global visibility.</span></div></div>
+        </div>
+
+      </div>
 <div id="mobile-dock">
   <div class="md-apps-btn" onclick="openDrawer()" title="All Apps">⊞</div>
 </div>
@@ -4625,7 +4653,7 @@ const LANGS = {
     nav_notes: 'Notes', nav_study: 'Smart Study',
     nav_calc: 'Calculator', nav_chat: 'Companion', nav_journal: 'Journal',
     nav_profile: 'Profile', nav_games: 'Games', nav_exam: 'Exam Papers', nav_settings: 'Settings',
-    nav_music: 'Music', nav_todo: 'To-Do List', nav_planner: 'Study Planner',
+    nav_music: 'Music', nav_todo: 'To-Do List', nav_planner: 'Study Planner', nav_tracker: 'Paper Tracker',
     ttl_music: '🎵 Music', ttl_todo: '✅ To-Do List', ttl_planner: '📅 Study Planner',
     sub_todo: '› Track tasks — complete them to earn 💎 gems',
     sub_planner: '› Build your weekly timetable — colour-code subjects, set recurring sessions',
@@ -4669,7 +4697,7 @@ const LANGS = {
     // Settings
     lang_section: '// LANGUAGE',
     set_profile: '👤 Details', set_stats: '📊 Stats', set_badges: '🏅 Badge',
-    set_goals: '🎯 Goal Set', set_appearance: '🎨 Appearance', set_apikey: '🔑 API',
+    set_goals: '🎯 Goal Set', set_appearance: '🎨 Appearance', set_aiprofile: '🤖 AI Settings', set_apikey: '🔑 API',
     // Splash
     splash_google: 'Continue with Google',
     splash_or: 'OR USE API KEY',
@@ -4686,7 +4714,7 @@ const LANGS = {
     nav_notes: 'Notas', nav_study: 'Estudio',
     nav_calc: 'Calculadora', nav_chat: 'Compañero', nav_journal: 'Diario',
     nav_profile: 'Perfil', nav_games: 'Juegos', nav_exam: 'Exámenes', nav_settings: 'Ajustes',
-    nav_music: 'Música', nav_todo: 'Lista de Tareas', nav_planner: 'Planificador',
+    nav_music: 'Música', nav_todo: 'Lista de Tareas', nav_planner: 'Planificador', nav_tracker: 'Rastreador',
     ttl_music: '🎵 Música', ttl_todo: '✅ Lista de Tareas', ttl_planner: '📅 Planificador',
     sub_todo: '› Rastrea tareas — complétalas para ganar 💎 gemas',
     sub_planner: '› Construye tu horario semanal — codifica materias por color',
@@ -4717,7 +4745,7 @@ const LANGS = {
     jf_all: 'Todo', jf_today: 'Hoy', jf_week: 'Esta Semana',
     lang_section: '// IDIOMA',
     set_profile: '👤 Perfil', set_stats: '📊 Estadísticas', set_badges: '🏅 Insignias',
-    set_goals: '🎯 Metas', set_appearance: '🎨 Apariencia', set_apikey: '🔑 API',
+    set_goals: '🎯 Metas', set_appearance: '🎨 Apariencia', set_aiprofile: '🤖 Configuración IA', set_apikey: '🔑 API',
     splash_google: 'Continuar con Google', splash_or: 'O USA CLAVE API',
     splash_key_label: '// Clave API de Gemini',
     splash_launch: 'INICIAR SIN CUENTA', splash_browse: 'Navegar sin IA →',
@@ -4729,7 +4757,7 @@ const LANGS = {
     nav_notes: 'Nota', nav_study: 'Kajian Pintar',
     nav_calc: 'Kalkulator', nav_chat: 'Teman', nav_journal: 'Jurnal',
     nav_profile: 'Profil', nav_games: 'Permainan', nav_exam: 'Kertas Peperiksaan', nav_settings: 'Tetapan',
-    nav_music: 'Muzik', nav_todo: 'Senarai Tugasan', nav_planner: 'Perancang Belajar',
+    nav_music: 'Muzik', nav_todo: 'Senarai Tugasan', nav_planner: 'Perancang Belajar', nav_tracker: 'Penjejak Kertas',
     ttl_music: '🎵 Muzik', ttl_todo: '✅ Senarai Tugasan', ttl_planner: '📅 Perancang Belajar',
     sub_todo: '› Jejak tugasan — lengkapkan untuk earn 💎 permata',
     sub_planner: '› Bina jadual mingguan anda — kod warna subjek',
@@ -4760,7 +4788,7 @@ const LANGS = {
     jf_all: 'Semua', jf_today: 'Hari Ini', jf_week: 'Minggu Ini',
     lang_section: '// BAHASA',
     set_profile: '👤 Profil', set_stats: '📊 Statistik', set_badges: '🏅 Lencana',
-    set_goals: '🎯 Matlamat', set_appearance: '🎨 Penampilan', set_apikey: '🔑 API',
+    set_goals: '🎯 Matlamat', set_appearance: '🎨 Penampilan', set_aiprofile: '🤖 Tetapan AI', set_apikey: '🔑 API',
     splash_google: 'Teruskan dengan Google', splash_or: 'ATAU GUNA KUNCI API',
     splash_key_label: '// Kunci API Gemini',
     splash_launch: 'LANCAR TANPA AKAUN', splash_browse: 'Semak tanpa AI →',
@@ -4772,7 +4800,7 @@ const LANGS = {
     nav_notes: '笔记', nav_study: '智能学习',
     nav_calc: '计算器', nav_chat: '学伴', nav_journal: '日记',
     nav_profile: '档案', nav_games: '游戏', nav_exam: '试卷', nav_settings: '设置',
-    nav_music: '音乐', nav_todo: '待办清单', nav_planner: '学习计划',
+    nav_music: '音乐', nav_todo: '待办清单', nav_planner: '学习计划', nav_tracker: '试卷记录',
     ttl_music: '🎵 音乐', ttl_todo: '✅ 待办清单', ttl_planner: '📅 学习计划',
     sub_todo: '› 追踪任务 — 完成任务赚取 💎 宝石',
     sub_planner: '› 建立每周时间表 — 按科目颜色分类',
@@ -4803,7 +4831,7 @@ const LANGS = {
     jf_all: '全部', jf_today: '今天', jf_week: '本周',
     lang_section: '// 语言',
     set_profile: '👤 档案', set_stats: '📊 统计', set_badges: '🏅 徽章',
-    set_goals: '🎯 目标', set_appearance: '🎨 外观', set_apikey: '🔑 API',
+    set_goals: '🎯 目标', set_appearance: '🎨 外观', set_aiprofile: '🤖 AI设置', set_apikey: '🔑 API',
     splash_google: '使用 Google 继续', splash_or: '或使用 API 密钥',
     splash_key_label: '// Gemini API 密钥',
     splash_launch: '无账号启动', splash_browse: '无 AI 浏览 →',
@@ -4815,7 +4843,7 @@ const LANGS = {
     nav_notes: 'ノート', nav_study: 'スマート学習',
     nav_calc: '電卓', nav_chat: '仲間', nav_journal: '日記',
     nav_profile: 'プロフィール', nav_games: 'ゲーム', nav_exam: '試験問題', nav_settings: '設定',
-    nav_music: '音楽', nav_todo: 'ToDoリスト', nav_planner: '学習プランナー',
+    nav_music: '音楽', nav_todo: 'ToDoリスト', nav_planner: '学習プランナー', nav_tracker: '過去問記録',
     ttl_music: '🎵 音楽', ttl_todo: '✅ ToDoリスト', ttl_planner: '📅 学習プランナー',
     sub_todo: '› タスクを管理 — 完了して 💎 ジェムを獲得',
     sub_planner: '› 週間時間割を作成 — 科目ごとに色分け',
@@ -4846,7 +4874,7 @@ const LANGS = {
     jf_all: '全て', jf_today: '今日', jf_week: '今週',
     lang_section: '// 言語',
     set_profile: '👤 プロフィール', set_stats: '📊 統計', set_badges: '🏅 バッジ',
-    set_goals: '🎯 目標', set_appearance: '🎨 外観', set_apikey: '🔑 API',
+    set_goals: '🎯 目標', set_appearance: '🎨 外観', set_aiprofile: '🤖 AI設定', set_apikey: '🔑 API',
     splash_google: 'Google で続ける', splash_or: 'または API キーを使用',
     splash_key_label: '// Gemini APIキー',
     splash_launch: 'アカウントなしで起動', splash_browse: 'AIなしで閲覧 →',
@@ -4862,7 +4890,7 @@ function t(key) {
 function applyLang() {
   const L = currentLang;
   // Nav buttons
-  const navMap = {home:'nav_home',homework:'nav_homework',library:'nav_library',notes:'nav_notes',study:'nav_study',calc:'nav_calc',chat:'nav_chat',journal:'nav_journal',profile:'nav_profile',games:'nav_games',exam:'nav_exam',settings:'nav_settings',music:'nav_music',todo:'nav_todo',planner:'nav_planner'};
+  const navMap = {home:'nav_home',homework:'nav_homework',library:'nav_library',notes:'nav_notes',study:'nav_study',calc:'nav_calc',chat:'nav_chat',journal:'nav_journal',profile:'nav_profile',games:'nav_games',exam:'nav_exam',settings:'nav_settings',music:'nav_music',todo:'nav_todo',planner:'nav_planner',tracker:'nav_tracker'};
   document.querySelectorAll('.nb').forEach(btn => {
     const fn = btn.getAttribute('onclick') || '';
     const match = fn.match(/go\('(\w+)'\)/);
@@ -4924,7 +4952,7 @@ function applyLang() {
   });
   // Settings sub-nav (scoped per parent tab)
   const profileTabMap = [{key:'set_profile'},{key:'set_stats'},{key:'set_badges'},{key:'set_goals'}];
-  const settingsTabMap = [{key:'set_appearance'},{key:'set_apikey'}];
+  const settingsTabMap = [{key:'set_appearance'},{key:'set_aiprofile'},{key:'set_apikey'}];
   const profileTab = document.getElementById('tab-profile');
   const settingsTab = document.getElementById('tab-settings');
   if (profileTab) profileTab.querySelectorAll('.ps-tab').forEach((tab, i) => { if (profileTabMap[i]) tab.textContent = t(profileTabMap[i].key); });
@@ -5016,6 +5044,7 @@ function go(name) {
   }
   if (name === 'library') setTimeout(initLibrary, 0);
   if (name === 'todo') setTimeout(renderTodos, 0);
+  if (name === 'tracker') setTimeout(initTracker, 0);
   if (name === 'planner') setTimeout(renderPlanner, 30);
   // track unique tabs visited for Explorer badge
   try {
@@ -7078,6 +7107,9 @@ function awardGems(n, reason) {
   saveAcct(a);
   showToast(`💎 +${n} gem${n>1?'s':''}! ${reason}`);
   renderAcctPage();
+  // Debounce leaderboard push — don't hammer Firestore on every gem
+  clearTimeout(window._lbPushTimer);
+  window._lbPushTimer = setTimeout(() => { if (typeof lbPushStats === 'function') lbPushStats(); }, 5000);
 }
 
 function trackStat(key) {
@@ -7555,6 +7587,8 @@ function exitGame(score, gemEarned, label) {
       <button class="abtn" onclick="backToGames()">Play Again</button>
     </div>`;
   activeGame = null;
+  // Clean up game-specific globals so stale handlers don't linger
+  ['fqCheck','selectCell','inputNum','toggleNotes','hint','cycleDiff','exitSudoku','snakeScore','_snakeInt'].forEach(k => { try { delete window[k]; } catch(e) { window[k] = undefined; } });
   renderAcctPage();
 }
 
@@ -10893,6 +10927,130 @@ function clearDoneTodos() {
   renderTodos();
 }
 
+// ── PAST YEAR PAPER TRACKER ──────────────────────────────────────────────────
+let _trkPapers = [];
+let _trkFilter = 'all';
+
+async function initTracker() {
+  const uid = window._auth?.currentUser?.uid;
+  if (uid) {
+    try { _trkPapers = await window._fb.getPapers(uid); } catch(e) { _trkPapers = _trkLocalLoad(); }
+  } else {
+    _trkPapers = _trkLocalLoad();
+  }
+  trkRender();
+}
+
+function _trkLocalLoad() {
+  try { return JSON.parse(localStorage.getItem('studly_papers') || '[]'); } catch(e) { return []; }
+}
+function _trkLocalSave() {
+  localStorage.setItem('studly_papers', JSON.stringify(_trkPapers));
+}
+
+async function trkAddPaper() {
+  const subj  = document.getElementById('trk-subject').value;
+  const year  = document.getElementById('trk-year').value;
+  const paper = document.getElementById('trk-paper').value;
+  const score = document.getElementById('trk-score').value;
+  const notes = document.getElementById('trk-notes').value.trim();
+  if (!subj || !year || !paper) { showToast('⚠️ Please fill in Subject, Year, and Paper.'); return; }
+  const entry = { subject: subj, year, paper, score: score !== '' ? Number(score) : null, notes, date: new Date().toISOString() };
+  const uid = window._auth?.currentUser?.uid;
+  if (uid) {
+    try { const ref = await window._fb.addPaper(uid, entry); entry.id = ref.id; } catch(e) {}
+  } else {
+    entry.id = 'local_' + Date.now();
+  }
+  _trkPapers.unshift(entry);
+  _trkLocalSave();
+  // clear form
+  ['trk-subject','trk-year','trk-paper'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('trk-score').value = '';
+  document.getElementById('trk-notes').value = '';
+  trkRender();
+  showToast('✅ Paper logged!');
+}
+
+async function trkDelete(id) {
+  _trkPapers = _trkPapers.filter(p => p.id !== id);
+  _trkLocalSave();
+  const uid = window._auth?.currentUser?.uid;
+  if (uid && !id.startsWith('local_')) { try { await window._fb.deletePaper(uid, id); } catch(e) {} }
+  trkRender();
+}
+
+function trkFilter(f, el) {
+  _trkFilter = f;
+  document.querySelectorAll('#trk-filter-all,#trk-filter-done,#trk-filter-high,#trk-filter-low').forEach(b => b.classList.remove('on'));
+  if (el) el.classList.add('on');
+  trkRender();
+}
+
+function trkRender() {
+  const search = (document.getElementById('trk-search')?.value || '').toLowerCase();
+  let papers = _trkPapers.filter(p => {
+    if (search && !p.subject.toLowerCase().includes(search) && !p.year.includes(search)) return false;
+    if (_trkFilter === 'done') return true; // all logged = done
+    if (_trkFilter === 'high') return p.score !== null && p.score >= 80;
+    if (_trkFilter === 'low')  return p.score !== null && p.score < 60;
+    return true;
+  });
+
+  // Stats
+  const scores = _trkPapers.filter(p => p.score !== null).map(p => p.score);
+  document.getElementById('trk-stat-done').textContent = _trkPapers.length;
+  document.getElementById('trk-stat-avg').textContent  = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) + '%' : '—';
+  document.getElementById('trk-stat-best').textContent = scores.length ? Math.max(...scores) + '%' : '—';
+  const subjects = new Set(_trkPapers.map(p => p.subject));
+  document.getElementById('trk-stat-subj').textContent = subjects.size;
+
+  const list = document.getElementById('tracker-list');
+  if (!list) return;
+  if (!papers.length) {
+    list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--silver);font-size:.8rem;opacity:.5;">${_trkPapers.length ? 'No papers match this filter.' : 'No papers logged yet. Add your first one above!'}</div>`;
+    return;
+  }
+
+  // Group by subject
+  const bySubj = {};
+  papers.forEach(p => { if (!bySubj[p.subject]) bySubj[p.subject] = []; bySubj[p.subject].push(p); });
+
+  list.innerHTML = Object.entries(bySubj).map(([subj, ps]) => {
+    const subScores = ps.filter(p=>p.score!==null).map(p=>p.score);
+    const subAvg = subScores.length ? Math.round(subScores.reduce((a,b)=>a+b,0)/subScores.length) : null;
+    const rows = ps.map(p => {
+      const scoreCol = p.score !== null
+        ? `<span style="font-weight:700;color:${p.score>=80?'var(--teal2)':p.score>=60?'#facc15':'#f87171'};">${p.score}%</span>`
+        : `<span style="color:var(--silver);opacity:.5;">—</span>`;
+      const dateStr = p.date ? new Date(p.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:.82rem;font-weight:600;color:var(--white);">${p.year} · ${p.paper}</div>
+          ${p.notes ? `<div style="font-size:.7rem;color:var(--silver);opacity:.7;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.notes}</div>` : ''}
+          <div style="font-size:.65rem;color:var(--silver);opacity:.4;margin-top:2px;">${dateStr}</div>
+        </div>
+        <div style="flex-shrink:0;font-size:.95rem;">${scoreCol}</div>
+        <button onclick="trkDelete('${p.id}')" style="background:none;border:none;color:var(--silver);opacity:.4;cursor:pointer;font-size:.85rem;padding:4px;flex-shrink:0;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.4">✕</button>
+      </div>`;
+    }).join('');
+
+    const pct = subScores.length ? Math.round(subScores.reduce((a,b)=>a+b,0)/subScores.length) : 0;
+    const barColor = pct>=80?'var(--teal2)':pct>=60?'#facc15':'#f87171';
+
+    return `<div class="panel" style="padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <div style="font-family:var(--exo);font-size:.7rem;color:var(--teal);letter-spacing:1.5px;font-weight:700;flex:1;">${subj.toUpperCase()}</div>
+        <div style="font-size:.7rem;color:var(--silver);">${ps.length} paper${ps.length>1?'s':''}</div>
+        ${subAvg!==null?`<div style="font-size:.75rem;font-weight:700;color:${barColor};">${subAvg}% avg</div>`:''}
+      </div>
+      ${subAvg!==null?`<div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-bottom:10px;"><div style="height:100%;width:${subAvg}%;background:${barColor};border-radius:2px;transition:width .4s;"></div></div>`:''}
+      ${rows}
+    </div>`;
+  }).join('');
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 function renderTodos() {
   const list = document.getElementById('todo-list');
   if (!list) return;
@@ -11109,10 +11267,12 @@ function renderSearchResults(results) {
 
 function highlight(text, q) {
   if (!q || !text) return text || '';
-  // Fix 4: Escape HTML before injecting into innerHTML to prevent XSS
+  // Escape the source text first
   const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const safe = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return escaped.replace(new RegExp(`(${safe.replace(/&/g,'&amp;').replace(/</g,'&lt;')})`, 'gi'), '<mark style="background:rgba(77,159,255,.3);color:var(--text);border-radius:2px;padding:0 1px;">$1</mark>');
+  // Also escape the query the same way so it matches the already-escaped text
+  const escapedQ = q.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const safe = escapedQ.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return escaped.replace(new RegExp(`(${safe})`, 'gi'), '<mark style="background:rgba(77,159,255,.3);color:var(--text);border-radius:2px;padding:0 1px;">$1</mark>');
 }
 
 // Keyboard shortcut Ctrl+K / Cmd+K
@@ -11138,7 +11298,7 @@ function closeMusicSearch() {
 }
 
 function setMsTarget(t) {
-  msTarget = 'spotify';
+  msTarget = t || 'spotify';
   const spBtn = document.getElementById('ms-add-spotify');
   if (spBtn) { spBtn.style.background = 'rgba(30,215,96,.18)'; spBtn.style.borderColor = 'rgba(30,215,96,.5)'; spBtn.style.color = '#1ed760'; }
 }
@@ -11738,6 +11898,149 @@ document.addEventListener('DOMContentLoaded', () => { setTimeout(refreshDailyBri
 </script>
 <style>
 body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20s ease infinite !important; }
+
+/* ── LEADERBOARD ── */
+.lb-tab-btn {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(77,159,255,.18);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-family: var(--exo);
+  font-size: .72rem;
+  color: var(--silver);
+  cursor: pointer;
+  transition: all .18s;
+}
+.lb-tab-btn.on {
+  background: rgba(77,159,255,.15);
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+.lb-scope-btn {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(77,159,255,.15);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-family: var(--exo);
+  font-size: .7rem;
+  color: var(--silver);
+  cursor: pointer;
+  transition: all .18s;
+}
+.lb-scope-btn.on {
+  background: rgba(0,212,170,.12);
+  border-color: var(--teal);
+  color: var(--teal2);
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: border .18s;
+}
+.lb-row::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(77,159,255,.2), transparent);
+}
+.lb-row.lb-me {
+  border-color: rgba(0,212,170,.4);
+  background: linear-gradient(145deg, rgba(0,212,170,.06), rgba(10,14,26,.98));
+}
+.lb-row.lb-me::before {
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+}
+.lb-rank {
+  font-family: var(--orb);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--silver);
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.lb-rank.gold   { color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,.5); }
+.lb-rank.silver { color: #c0c0c0; text-shadow: 0 0 8px rgba(192,192,192,.4); }
+.lb-rank.bronze { color: #cd7f32; text-shadow: 0 0 8px rgba(205,127,50,.4); }
+.lb-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(77,159,255,.12);
+  border: 1px solid rgba(77,159,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.lb-info { flex: 1; min-width: 0; }
+.lb-name {
+  font-family: var(--raj);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-sub {
+  font-family: var(--exo);
+  font-size: .68rem;
+  color: var(--silver);
+  margin-top: 1px;
+}
+.lb-val {
+  font-family: var(--orb);
+  font-size: .9rem;
+  font-weight: 800;
+  color: var(--accent2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.lb-me .lb-val { color: var(--teal2); }
+.lb-empty {
+  text-align: center;
+  padding: 40px 20px;
+  font-family: var(--exo);
+  font-size: .82rem;
+  color: var(--silver);
+  opacity: .5;
+  line-height: 1.8;
+}
+/* Home widget rows */
+.lb-mini-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lb-mini-rank {
+  font-family: var(--orb);
+  font-size: .72rem;
+  color: var(--silver);
+  width: 18px;
+  flex-shrink: 0;
+  text-align: center;
+}
+.lb-mini-name {
+  font-family: var(--raj);
+  font-size: .75rem;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-mini-val {
+  font-family: var(--orb);
+  font-size: .72rem;
+  color: var(--accent2);
+  flex-shrink: 0;
+}
+
 
 
 .mh-pom-mode {
@@ -12896,9 +13199,305 @@ function exportNotesPDF() {
   setTimeout(() => w.print(), 400);
 }
 
-// Show PDF button after notes are generated
-// Deferred so doNotes is guaranteed to be defined before we wrap it
-document.addEventListener('DOMContentLoaded', function() {
+// ══════════════════════════════════════════════════════
+// ── LEADERBOARD SYSTEM ──
+// ══════════════════════════════════════════════════════
+
+let lbTab   = 'gems';    // gems | streak | games
+let lbScope = 'friends'; // friends | global
+
+// ── Generate or retrieve a persistent friend code ──
+function lbGetMyCode() {
+  let code = localStorage.getItem('veda_friend_code');
+  if (!code) {
+    // 6-char alphanumeric
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    code = Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+    localStorage.setItem('veda_friend_code', code);
+  }
+  return code;
+}
+
+// ── Push current user's stats to Firestore ──
+async function lbPushStats() {
+  if (!window._fbUser) return;
+  const uid  = window._fbUser.uid;
+  const code = lbGetMyCode();
+  const acct = getAcct();
+  const visible = localStorage.getItem('veda_lb_visible') !== 'false'; // default true
+  const hiSnake  = parseInt(localStorage.getItem('hi_snake')  || 0);
+  const hiTyping = parseInt(localStorage.getItem('hi_typing') || 0);
+  const hiMath   = parseInt(localStorage.getItem('hi_math')   || 0);
+  const topGame  = Math.max(hiSnake, hiTyping, hiMath);
+  const name = acct.name || window._fbUser.displayName || 'Scholar';
+  try {
+    await window._fb.save(uid, {
+      lbCode:    code,
+      lbName:    name,
+      lbAvatar:  acct.avatar  || '🎓',
+      lbGems:    acct.gems    || 0,
+      lbStreak:  acct.streak  || 0,
+      lbGames:   topGame,
+      lbVisible: visible,
+      lbUpdated: Date.now(),
+    });
+  } catch(e) { /* silent */ }
+}
+
+// ── Get friends list (array of UIDs) ──
+function lbGetFriends() {
+  try { return JSON.parse(localStorage.getItem('veda_friends') || '[]'); } catch { return []; }
+}
+function lbSaveFriends(arr) {
+  localStorage.setItem('veda_friends', JSON.stringify(arr));
+}
+
+// ── Copy own code ──
+function lbCopyCode() {
+  const code = lbGetMyCode();
+  navigator.clipboard.writeText(code).then(() => showToast('📋 Friend code copied!')).catch(() => {
+    // fallback
+    const el = document.getElementById('lb-my-code');
+    if (el) { const r = document.createRange(); r.selectNode(el); window.getSelection().removeAllRanges(); window.getSelection().addRange(r); }
+    showToast('📋 Code selected — Ctrl+C to copy');
+  });
+}
+
+// ── Add friend by code ──
+async function lbAddFriend() {
+  const inp = document.getElementById('lb-add-code-in');
+  const status = document.getElementById('lb-add-status');
+  const code = (inp ? inp.value.trim().toUpperCase() : '');
+  if (!status) return;
+  if (code.length !== 6) { status.style.color='#ff6680'; status.textContent='⚠️ Codes are 6 characters'; return; }
+  if (code === lbGetMyCode()) { status.style.color='#ff6680'; status.textContent='⚠️ That\'s your own code!'; return; }
+  if (!window._fbUser) { status.style.color='#ff6680'; status.textContent='⚠️ Sign in with Google first'; return; }
+
+  status.style.color = 'var(--teal)'; status.textContent = '🔍 Searching...';
+
+  try {
+    // Query Firestore for a user whose lbCode matches
+    const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const db = getFirestore();
+    const q  = query(collection(db, 'users'), where('lbCode', '==', code));
+    const snap = await getDocs(q);
+    if (snap.empty) { status.style.color='#ff6680'; status.textContent='❌ No user found with that code'; return; }
+    const friendDoc = snap.docs[0];
+    const friendUid = friendDoc.id;
+    const friends = lbGetFriends();
+    if (friends.includes(friendUid)) { status.style.color='var(--silver)'; status.textContent='Already friends!'; return; }
+    friends.push(friendUid);
+    lbSaveFriends(friends);
+    const friendName = friendDoc.data().lbName || 'Scholar';
+    status.style.color = 'var(--teal2)';
+    status.textContent = `✅ Added ${friendName}!`;
+    if (inp) inp.value = '';
+    setTimeout(() => { if (status) status.textContent = ''; }, 3000);
+    lbRender();
+  } catch(e) {
+    status.style.color = '#ff6680';
+    status.textContent = '❌ Error — check connection';
+  }
+}
+
+// ── Tab / scope switchers ──
+function lbSetTab(tab, el) {
+  lbTab = tab;
+  document.querySelectorAll('.lb-tab-btn').forEach(b => b.classList.remove('on'));
+  if (el) el.classList.add('on');
+  lbRender();
+}
+function lbSetScope(scope, el) {
+  lbScope = scope;
+  document.querySelectorAll('.lb-scope-btn').forEach(b => b.classList.remove('on'));
+  if (el) el.classList.add('on');
+  lbRender();
+}
+
+// ── Visibility toggle ──
+function lbToggleVisibility() {
+  const current = localStorage.getItem('veda_lb_visible') !== 'false';
+  localStorage.setItem('veda_lb_visible', current ? 'false' : 'true');
+  lbUpdateVisibilityBtn();
+  lbPushStats();
+  showToast(current ? '🔒 Hidden from global leaderboard' : '🌐 Now visible on global leaderboard');
+}
+function lbUpdateVisibilityBtn() {
+  const btn = document.getElementById('lb-visibility-btn');
+  if (!btn) return;
+  const visible = localStorage.getItem('veda_lb_visible') !== 'false';
+  btn.textContent = visible ? '✅ Visible' : '🔒 Hidden';
+  btn.style.color = visible ? 'var(--teal2)' : 'var(--silver)';
+  btn.style.borderColor = visible ? 'rgba(0,212,170,.4)' : 'rgba(77,159,255,.2)';
+}
+
+// ── Fetch user data from Firestore by UID ──
+async function lbFetchUser(uid) {
+  try { return await window._fb.load(uid); } catch { return null; }
+}
+
+// ── Get the sort value based on current tab ──
+function lbVal(userData) {
+  if (lbTab === 'gems')   return userData.lbGems   || 0;
+  if (lbTab === 'streak') return userData.lbStreak  || 0;
+  if (lbTab === 'games')  return userData.lbGames   || 0;
+  return 0;
+}
+function lbValLabel(userData) {
+  if (lbTab === 'gems')   return (userData.lbGems   || 0) + ' 💎';
+  if (lbTab === 'streak') return (userData.lbStreak  || 0) + ' 🔥';
+  if (lbTab === 'games')  return (userData.lbGames   || 0) + ' pts';
+  return '0';
+}
+
+// ── Main render ──
+async function lbRender() {
+  const wrap = document.getElementById('lb-list-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = `<div style="text-align:center;padding:32px;font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.5;"><span class="dots"><span>·</span><span>·</span><span>·</span></span> Loading...</div>`;
+
+  if (!window._fbUser) {
+    wrap.innerHTML = `<div class="lb-empty">Sign in with Google to use the leaderboard.<br><span style="opacity:.6;font-size:.72rem;">Your profile stays private unless you enable global visibility.</span></div>`;
+    return;
+  }
+
+  // Always push our own fresh stats first
+  await lbPushStats();
+
+  const myUid  = window._fbUser.uid;
+  const myData = await lbFetchUser(myUid);
+
+  let entries = []; // [{uid, data}]
+
+  if (lbScope === 'friends') {
+    const friends = lbGetFriends();
+    // Always include self + friends
+    const uids = [...new Set([myUid, ...friends])];
+    const results = await Promise.all(uids.map(async uid => {
+      const d = await lbFetchUser(uid);
+      return d ? {uid, data:d} : null;
+    }));
+    entries = results.filter(Boolean);
+  } else {
+    // Global — fetch top 50 visible users
+    try {
+      const { getFirestore, collection, query, where, orderBy, limit, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const db = getFirestore();
+      const field = lbTab === 'gems' ? 'lbGems' : lbTab === 'streak' ? 'lbStreak' : 'lbGames';
+      const q = query(collection(db,'users'), where('lbVisible','==',true), orderBy(field,'desc'), limit(50));
+      const snap = await getDocs(q);
+      entries = snap.docs.map(d => ({uid:d.id, data:d.data()}));
+      // Inject self if not visible but user wants to see their rank
+      if (!entries.find(e => e.uid === myUid) && myData) {
+        entries.push({uid:myUid, data:myData});
+      }
+    } catch(e) {
+      wrap.innerHTML = `<div class="lb-empty">❌ Could not load global board.<br><span style="font-size:.72rem;opacity:.6;">${e.message||'Check connection'}</span></div>`;
+      return;
+    }
+  }
+
+  // Sort
+  entries.sort((a,b) => lbVal(b.data) - lbVal(a.data));
+
+  if (entries.length === 0) {
+    wrap.innerHTML = `<div class="lb-empty">No data yet — keep studying to climb the board! 🚀</div>`;
+    return;
+  }
+
+  const html = entries.map((entry, i) => {
+    const rank = i + 1;
+    const isMe = entry.uid === myUid;
+    const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+    const rankIcon  = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const name = entry.data.lbName   || 'Scholar';
+    const avatar = entry.data.lbAvatar || '🎓';
+    const val  = lbValLabel(entry.data);
+    const meTag = isMe ? ' <span style="font-family:var(--exo);font-size:.62rem;color:var(--teal2);letter-spacing:1px;">YOU</span>' : '';
+    return `<div class="lb-row ${isMe?'lb-me':''}">
+      <div class="lb-rank ${rankClass}">${rankIcon}</div>
+      <div class="lb-avatar">${avatar}</div>
+      <div class="lb-info">
+        <div class="lb-name">${name}${meTag}</div>
+        <div class="lb-sub">${isMe ? 'Your score' : (entry.data.lbCode || '')}</div>
+      </div>
+      <div class="lb-val">${val}</div>
+    </div>`;
+  }).join('');
+
+  wrap.innerHTML = html;
+
+  // If only self on friends board, nudge to add friends
+  if (lbScope === 'friends' && lbGetFriends().length === 0) {
+    wrap.innerHTML += `<div class="lb-empty" style="padding:16px 0 4px;font-size:.72rem;">👆 That's just you! Share your code to add friends.</div>`;
+  }
+
+  // Update my rank display
+  const myRank = entries.findIndex(e => e.uid === myUid) + 1;
+  // also refresh home widget
+  lbRefreshHomeWidget(entries, myUid);
+}
+
+// ── Refresh the home dashboard mini-widget ──
+function lbRefreshHomeWidget(entries, myUid) {
+  const list = document.getElementById('lb-home-list');
+  const rankWrap = document.getElementById('lb-home-rank');
+  const rankVal  = document.getElementById('lb-home-rank-val');
+  if (!list) return;
+
+  const top3 = entries.slice(0, 3);
+  if (top3.length === 0) {
+    list.innerHTML = `<div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.5;text-align:center;padding:8px 0;">Add friends to see the board</div>`;
+    return;
+  }
+
+  list.innerHTML = top3.map((entry, i) => {
+    const icon = ['🥇','🥈','🥉'][i] || (i+1);
+    const name  = entry.data.lbName || 'Scholar';
+    const isMe  = entry.uid === myUid;
+    const val   = lbValLabel(entry.data);
+    return `<div class="lb-mini-row">
+      <div class="lb-mini-rank">${icon}</div>
+      <div class="lb-mini-name" style="${isMe?'color:var(--teal2);':''}">${name}${isMe?' ✦':''}</div>
+      <div class="lb-mini-val">${val}</div>
+    </div>`;
+  }).join('');
+
+  const myRank = entries.findIndex(e => e.uid === myUid) + 1;
+  if (myRank > 0 && rankWrap && rankVal) {
+    rankWrap.style.display = 'block';
+    rankVal.textContent = '#' + myRank + ' of ' + entries.length;
+  }
+}
+
+// ── Init leaderboard when tab is opened (wired into go() via DOMContentLoaded below) ──
+function lbOnOpen() {
+  const codeEl = document.getElementById('lb-my-code');
+  if (codeEl) codeEl.textContent = lbGetMyCode();
+  lbUpdateVisibilityBtn();
+  lbRender();
+}
+
+// ── Load home widget on page ready ──
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(async () => {
+    if (!window._fbUser) return;
+    await lbPushStats();
+    const myUid = window._fbUser.uid;
+    const friends = lbGetFriends();
+    const uids = [...new Set([myUid, ...friends])];
+    const results = await Promise.all(uids.map(async uid => {
+      const d = await window._fb.load(uid);
+      return d ? {uid, data:d} : null;
+    }));
+    const entries = results.filter(Boolean).sort((a,b) => (b.data.lbGems||0) - (a.data.lbGems||0));
+    lbRefreshHomeWidget(entries, myUid);
+  }, 2500);
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Wrap doNotes to show PDF export button after notes are generated
   if (typeof window.doNotes === 'function') {
     const __dn = window.doNotes;
     window.doNotes = async function(mode) {
@@ -12910,21 +13509,18 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 500);
     };
   }
-});
 
-// ── INIT ALL FEATURES ON LOAD ──
-document.addEventListener('DOMContentLoaded', () => {
   renderExamCountdown();
   initDailyChallenge();
   setTimeout(checkNotifications, 1500);
 
-  // Re-check on home navigation
-  const _goBase = window.go;
+  // Re-check countdown and challenge when navigating home
   if (typeof go === 'function') {
     const __go = go;
     window.go = function(name) {
       __go(name);
       if (name === 'home') { renderExamCountdown(); initDailyChallenge(); }
+      if (name === 'leaderboard') { lbOnOpen(); }
     };
   }
 });
@@ -12935,7 +13531,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
-<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
-
-</body></html>
+</div></div></div></body></html>
