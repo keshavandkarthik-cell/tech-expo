@@ -1890,7 +1890,7 @@ body.fs-large { font-size: 17px; }
         <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       </div>
-      <div class="hdr-time" id="clk">16:08</div>
+      <div class="hdr-time" id="clk">16:12</div>
     </div>
   </div>
   <div id="body">
@@ -1940,7 +1940,7 @@ body.fs-large { font-size: 17px; }
       </div>
       <button id="tog" onclick="toggleSb()">◀</button>
       <nav>
-        <button class="nb on" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
+        <button class="nb" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
         <button class="nb" onclick="go('homework')"><span class="ni">📚</span><span class="nl">Homework</span></button>
         <button class="nb" onclick="go('library')"><span class="ni">🗂️</span><span class="nl">Topic Library</span></button>
         <button class="nb" onclick="go('notes')"><span class="ni">📝</span><span class="nl">Notes</span></button>
@@ -1955,7 +1955,7 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
         <button class="nb" onclick="go('tracker')"><span class="ni">📊</span><span class="nl">Paper Tracker</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb" onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
+        <button class="nb on" onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
         <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
@@ -1972,7 +1972,7 @@ body.fs-large { font-size: 17px; }
     <div id="content">
 
       <!-- HOME — DESKTOP OS -->
-      <div class="tab on" id="tab-home">
+      <div class="tab" id="tab-home">
         <div class="desktop-wallpaper"></div>
 
 
@@ -2000,7 +2000,7 @@ body.fs-large { font-size: 17px; }
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">16:08</div>
+            <div class="dt-clock-big" id="dt-clock-big">16:12</div>
             <div class="dt-clock-date" id="dt-clock-date">Saturday, Apr 25</div>
           </div>
 
@@ -2118,7 +2118,7 @@ body.fs-large { font-size: 17px; }
               <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">✅</div>
               <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Correct! +5 gems 💎</div>
               <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Great work! Come back tomorrow for the next one.</div>
-              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 51m 23s</div>
+              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 47m 22s</div>
               <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;startGame('blitz'),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
             </div>
             <div id="dc-no-key-msg" style="display: none; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
@@ -4486,8 +4486,10 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <div id="tracker-list" style="display:flex;flex-direction:column;gap:10px;">
           <div style="text-align:center;padding:40px;color:var(--silver);font-size:.8rem;opacity:.5;">No papers logged yet. Add your first one above!</div>
         </div>
-        <!-- LEADERBOARD TAB -->
-        <div class="tab" id="tab-leaderboard">
+      </div>
+
+      <!-- LEADERBOARD TAB -->
+      <div class="tab on" id="tab-leaderboard">
           <div class="ttl">🏆 Leaderboard</div>
           <div class="tsub"><span class="prm">›</span>Compete with friends — earn gems, keep streaks, top the board</div>
 
@@ -4529,7 +4531,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div id="lb-list-wrap" style="display:flex;flex-direction:column;gap:8px;"><div class="lb-empty">Sign in with Google to use the leaderboard.<br><span style="opacity:.6;font-size:.72rem;">Your profile stays private unless you enable global visibility.</span></div></div>
         </div>
 
-      </div>
+      </div><!-- end #content -->
 <div id="mobile-dock">
   <div class="md-apps-btn" onclick="openDrawer()" title="All Apps">⊞</div>
 </div>
@@ -13532,4 +13534,4 @@ document.addEventListener('DOMContentLoaded', () => {
 <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
 
-</div></div></div></body></html>
+</div></div></body></html>
