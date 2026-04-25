@@ -1,4 +1,4 @@
-<html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc; font-size: 17px;"><head>
+<html lang="en" style="--accent: #00d4aa; --accent2: #00d4aacc; font-size: 16px;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Veda — AI Study Companion</title>
@@ -1632,7 +1632,7 @@ body.fs-large { font-size: 17px; }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
 </style>
 </head>
-<body style="background: linear-gradient(135deg, rgb(6, 8, 14) 0%, rgb(12, 16, 24) 100%);" class="fs-large">
+<body style="background: linear-gradient(135deg, rgb(7, 18, 8) 0%, rgb(12, 28, 14) 100%);" class="">
 <!-- VEDA NOTIFICATION BAR -->
 <div id="veda-notif-bar" style="display:none;background:linear-gradient(135deg,rgba(0,212,170,.13),rgba(77,159,255,.08));border-bottom:1px solid rgba(0,212,170,.22);padding:9px 20px;align-items:center;gap:12px;flex-wrap:wrap;z-index:999;position:relative;">
   <span style="font-size:1rem;">🔔</span>
@@ -1877,7 +1877,7 @@ body.fs-large { font-size: 17px; }
         <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       </div>
-      <div class="hdr-time" id="clk">13:14</div>
+      <div class="hdr-time" id="clk">13:21</div>
     </div>
   </div>
   <div id="body">
@@ -1938,10 +1938,10 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('todo')"><span class="ni">✅</span><span class="nl">To-Do List</span></button>
         <button class="nb" onclick="go('journal')"><span class="ni">📓</span><span class="nl">Journal</span></button>
         <button class="nb" onclick="go('profile')"><span class="ni">👤</span><span class="nl">Profile</span></button>
-        <button class="nb on" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
+        <button class="nb" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
+        <button class="nb on" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
         <div class="sb-foot-text" id="key-indicator">KEY: ACTIVE</div>
@@ -1980,12 +1980,12 @@ body.fs-large { font-size: 17px; }
           <!-- Daily Brief widget -->
           <div class="dt-widget dt-widget-wide" id="daily-brief-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Sat Apr 25 2026</span></div>
-            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">📝</span> Writing notes by hand improves retention compared to typing — your brain processes it more deeply.</div>
+            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> User, your impressive 32-day streak and 1305 gems are a testament to your consistent effort! Today, channel that fantastic momentum into taking one small, focused step towards your biggest goal. Even a short burst of concentrated effort can build incredible progress and keep that streak shining bright.</div>
             <button onclick="refreshDailyBrief(true)" style="margin-top:8px;background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.65rem;cursor:pointer;padding:0;opacity:.6;transition:opacity .15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">↻ refresh</button>
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">13:14</div>
+            <div class="dt-clock-big" id="dt-clock-big">13:21</div>
             <div class="dt-clock-date" id="dt-clock-date">Saturday, Apr 25</div>
           </div>
 
@@ -1996,23 +1996,23 @@ body.fs-large { font-size: 17px; }
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Questions asked</span>
-                  <span class="dt-stat-val" id="dt-stat-q">0</span>
+                  <span class="dt-stat-val" id="dt-stat-q">97</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width: 0%;"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width: 100%;"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Games played</span>
-                  <span class="dt-stat-val" id="dt-stat-g">12</span>
+                  <span class="dt-stat-val" id="dt-stat-g">93</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 60%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 100%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Journal entries</span>
-                  <span class="dt-stat-val" id="dt-stat-j">0</span>
+                  <span class="dt-stat-val" id="dt-stat-j">12</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-j" style="width: 0%; background: linear-gradient(90deg, rgb(192, 132, 252), rgb(232, 121, 249));"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-j" style="width: 60%; background: linear-gradient(90deg, rgb(192, 132, 252), rgb(232, 121, 249));"></div></div>
               </div>
             </div>
           </div>
@@ -2048,11 +2048,11 @@ body.fs-large { font-size: 17px; }
             <div class="dt-reward">
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">💎</div>
-                <div><div class="dt-reward-val" id="dt-gems-big">60</div><div class="dt-reward-label">Gems earned</div></div>
+                <div><div class="dt-reward-val" id="dt-gems-big">1324</div><div class="dt-reward-label">Gems earned</div></div>
               </div>
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">🔥</div>
-                <div><div class="dt-reward-val" id="dt-streak-big">3 days</div><div class="dt-reward-label">Study streak</div></div>
+                <div><div class="dt-reward-val" id="dt-streak-big">32 days</div><div class="dt-reward-label">Study streak</div></div>
               </div>
             </div>
           </div>
@@ -2071,7 +2071,7 @@ body.fs-large { font-size: 17px; }
           <div class="dt-widget" id="daily-challenge-widget">
             <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
               <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Daily Challenge</span>
-              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: none;"></span>
+              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: inline;">🔥 1 day streak</span>
             </div>
             <div id="dc-loading" style="font-family: var(--exo); font-size: 0.75rem; color: var(--silver); opacity: 0.6; text-align: center; padding: 14px 0px; display: none;"><span class="dots"><span>·</span><span>·</span><span>·</span></span> Checking...</div>
             <div id="dc-question-wrap" style="display: none;">
@@ -2088,14 +2088,14 @@ body.fs-large { font-size: 17px; }
               </div>
               <div id="dc-hint-text" style="display:none;font-family:var(--exo);font-size:.68rem;color:var(--teal2);opacity:.8;margin-top:6px;padding:4px 8px;background:rgba(0,212,170,.06);border-radius:6px;"></div>
             </div>
-            <div id="dc-result-wrap" style="display: block; text-align: center; padding: 8px 0px;">
+            <div id="dc-result-wrap" style="display: none; text-align: center; padding: 8px 0px;">
               <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">❌</div>
               <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: Chloroplast</div>
               <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
               <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 10h 45m 42s</div>
               <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;startGame('blitz'),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
             </div>
-            <div id="dc-no-key-msg" style="display: none; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
+            <div id="dc-no-key-msg" style="display: block; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
           </div>
 
           <!-- Music widget -->
@@ -2112,10 +2112,9 @@ body.fs-large { font-size: 17px; }
 
             <!-- Playlist tabs -->
             <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-top:8px;">
-      <button class="music-pl-btn " data-plid="69AaAkdktFGnk9POmHENkT" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Lo-fi">Lo-fi</button>
-      <button class="music-pl-btn " data-plid="37i9dQZF1DX8Uebhn9wzrS" onclick="playPlaylist({&quot;name&quot;:&quot;Focus Flow&quot;,&quot;id&quot;:&quot;37i9dQZF1DX8Uebhn9wzrS&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Focus Flow">Focus Flow</button>
-      <button class="music-pl-btn " data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
-      <button class="music-pl-btn " data-plid="7a78GiEowpaCa7ZJs44xUU" onclick="playPlaylist({&quot;name&quot;:&quot;Interstellar OST&quot;,&quot;id&quot;:&quot;7a78GiEowpaCa7ZJs44xUU&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Soundtrack&quot;})" title="Interstellar OST">Interstellar OST</button></div>
+      <button class="music-pl-btn " data-plid="37i9dQZF1DWWQRwui0ExPn" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi Study&quot;,&quot;id&quot;:&quot;37i9dQZF1DWWQRwui0ExPn&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Lo-fi Study">Lo-fi Study</button>
+      <button class="music-pl-btn " data-plid="37i9dQZF1DX9sIqqvKsjEK" onclick="playPlaylist({&quot;name&quot;:&quot;Deep Focus&quot;,&quot;id&quot;:&quot;37i9dQZF1DX9sIqqvKsjEK&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Deep Focus">Deep Focus</button>
+      <button class="music-pl-btn " data-plid="37i9dQZF1DX5trt9i14X7j" onclick="playPlaylist({&quot;name&quot;:&quot;Coding Vibes&quot;,&quot;id&quot;:&quot;37i9dQZF1DX5trt9i14X7j&quot;,&quot;type&quot;:&quot;playlist&quot;})" title="Coding Vibes">Coding Vibes</button></div>
 
             <!-- Spotify login nudge -->
             <div id="spotify-nudge" style="background: linear-gradient(135deg, rgba(30, 215, 96, 0.08), rgba(30, 215, 96, 0.04)); border: 1px solid rgba(30, 215, 96, 0.25); border-radius: 10px; padding: 10px 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -2151,17 +2150,17 @@ body.fs-large { font-size: 17px; }
           <!-- Greeting -->
           <div>
             <div class="mh-greeting-time" id="mh-timeofday">Good afternoon</div>
-            <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
+            <div class="mh-greeting-name">Hey, <span id="mh-name">User</span></div>
             <div class="mh-pills">
-              <div class="mh-pill">🔥 <span id="mh-streak">3</span> day streak</div>
-              <div class="mh-pill">💎 <span id="mh-gems">60</span> gems</div>
+              <div class="mh-pill">🔥 <span id="mh-streak">32</span> day streak</div>
+              <div class="mh-pill">💎 <span id="mh-gems">1324</span> gems</div>
             </div>
           </div>
 
           <!-- Daily Brief -->
           <div class="mh-card">
             <div class="mh-card-label">Daily Brief</div>
-            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">📝</span> Writing notes by hand improves retention compared to typing — your brain processes it more deeply.</div>
+            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">✨</span> User, your impressive 32-day streak and 1305 gems are a testament to your consistent effort! Today, channel that fantastic momentum into taking one small, focused step towards your biggest goal. Even a short burst of concentrated effort can build incredible progress and keep that streak shining bright.</div>
             <button class="mh-brief-refresh" onclick="refreshDailyBrief(true)">↻ refresh</button>
           </div>
 
@@ -2798,23 +2797,155 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <button class="journal-filter" id="jf-today" onclick="setJournalFilter('today',this)">Today</button>
           <button class="journal-filter" id="jf-week" onclick="setJournalFilter('week',this)">This Week</button>
         </div>
-        <div class="journal-list" id="journal-list"><div class="journal-empty">No entries yet — write your first one above ✏️</div></div>
+        <div class="journal-list" id="journal-list"><div class="jentry" id="jentry-1776912460332">
+      <div class="jentry-header">
+        <div class="jentry-title">Pre-exam anxiety is real</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460332"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460332)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460332)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460332)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460331">
+      <div class="jentry-header">
+        <div class="jentry-title">Chemistry win!</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460331"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460331)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460331)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460331)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460330">
+      <div class="jentry-header">
+        <div class="jentry-title">Running on empty</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460330"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460330)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460330)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460330)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460329">
+      <div class="jentry-header">
+        <div class="jentry-title">In the zone — 4 hour session</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460329"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460329)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460329)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460329)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460328">
+      <div class="jentry-header">
+        <div class="jentry-title">Meh kind of day</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460328"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460328)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460328)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460328)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460327">
+      <div class="jentry-header">
+        <div class="jentry-title">Library study + flag quiz wins</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460327"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460327)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460327)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460327)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460326">
+      <div class="jentry-header">
+        <div class="jentry-title">Three assessments incoming</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460326"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460326)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460326)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460326)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460325">
+      <div class="jentry-header">
+        <div class="jentry-title">Essay done and submitted</div>
+        <div class="jentry-meta">Invalid Date · Invalid Date</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460325"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460325)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460325)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460325)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460324">
+      <div class="jentry-header">
+        <div class="jentry-title">Two weeks in and loving it</div>
+        <div class="jentry-meta">4 Nov 2026 · 00:00</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460324"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460324)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460324)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460324)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460323">
+      <div class="jentry-header">
+        <div class="jentry-title">Rest day (needed it)</div>
+        <div class="jentry-meta">4 Sept 2026 · 00:00</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460323"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460323)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460323)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460323)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460322">
+      <div class="jentry-header">
+        <div class="jentry-title">93% on mock — personal best!</div>
+        <div class="jentry-meta">4 Jun 2026 · 00:00</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460322"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460322)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460322)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460322)">🗑 Delete</button>
+      </div>
+    </div><div class="jentry" id="jentry-1776912460321">
+      <div class="jentry-header">
+        <div class="jentry-title">Day 1 — new term, new goals</div>
+        <div class="jentry-meta">4 Mar 2026 · 00:00</div>
+      </div>
+      <div class="jentry-body" id="jbody-1776912460321"></div>
+      <div class="jentry-footer">
+        <button class="jentry-btn" onclick="toggleJournalExpand(1776912460321)">Read more</button>
+        <button class="jentry-btn" onclick="editJournalEntry(1776912460321)">✏️ Edit</button>
+        <button class="jentry-btn del" onclick="deleteJournalEntry(1776912460321)">🗑 Delete</button>
+      </div>
+    </div></div>
         </div>
       </div>
 
       <!-- THEMES -->
       <!-- SETTINGS — Appearance + API Key only -->
-      <div class="tab" id="tab-settings">
+      <div class="tab on" id="tab-settings">
 
         <!-- SUB-NAV -->
         <div class="ps-subnav">
-          <button class="ps-tab" onclick="psGo('appearance',this)">🎨 Appearance</button>
-          <button class="ps-tab on" onclick="psGo('aiprofile',this)">🤖 AI Profile</button>
+          <button class="ps-tab on" onclick="psGo('appearance',this)">🎨 Appearance</button>
+          <button class="ps-tab" onclick="psGo('aiprofile',this)">🤖 AI Settings</button>
           <button class="ps-tab" onclick="psGo('apikey',this)">🔑 API</button>
         </div>
 
         <!-- ── APPEARANCE PANEL ── -->
-        <div class="ps-panel" id="ps-appearance">
+        <div class="ps-panel on" id="ps-appearance">
           <div class="ps-card">
             <div class="ps-card-label">// UI SKIN</div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
@@ -2840,8 +2971,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// ACCENT COLOR</div>
             <div class="color-row" style="flex-wrap:wrap;gap:10px;margin-top:4px;">
-              <div class="color-swatch on" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
-              <div class="color-swatch" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
+              <div class="color-swatch" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
+              <div class="color-swatch on" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
               <div class="color-swatch" style="background:#c084fc;" data-color="#c084fc" onclick="setAccent('#c084fc',this)"></div>
               <div class="color-swatch" style="background:#f472b6;" data-color="#f472b6" onclick="setAccent('#f472b6',this)"></div>
               <div class="color-swatch" style="background:#fb923c;" data-color="#fb923c" onclick="setAccent('#fb923c',this)"></div>
@@ -2860,15 +2991,16 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-card-label">// FONT SIZE</div>
               <div class="pers-row" style="margin-top:8px;">
                 <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
-                <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
-                <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
+                <button class="pers-btn on" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
+                <button class="pers-btn" id="fs-large" onclick="setFontSize('large',this)">Large</button>
+                <button class="pers-btn" id="fs-huge" onclick="setFontSize('huge',this)">Giant</button>
               </div>
             </div>
             <div class="ps-card">
               <div class="ps-card-label">// SIDEBAR</div>
               <div class="pers-row" style="margin-top:8px;">
-                <button class="pers-btn" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
-                <button class="pers-btn on" id="sb-open" onclick="setSbPref('open',this)">Open</button>
+                <button class="pers-btn on" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
+                <button class="pers-btn" id="sb-open" onclick="setSbPref('open',this)">Open</button>
                 <button class="pers-btn" id="sb-closed" onclick="setSbPref('closed',this)">Closed</button>
               </div>
             </div>
@@ -2878,7 +3010,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// THEME</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
+          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat on">◻️ Minimal</button></div>
           <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
         </div>
         <div id="shop-panel" style="display:none;margin-bottom:16px;">
@@ -2888,7 +3020,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
           <div class="shop-grid" id="shop-grid"></div>
         </div>
-        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
+        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 8, 8), rgb(15, 15, 15));"><div class="tname" style="color: rgb(99, 102, 241);">Pure Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(17, 17, 17), rgb(26, 26, 26));"><div class="tname" style="color: rgb(129, 140, 248);">Charcoal</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 20, 20), rgb(30, 30, 30));"><div class="tname" style="color: rgb(148, 163, 184);">Graphite</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 10, 10), rgb(20, 20, 20));"><div class="tname" style="color: rgb(192, 132, 252);">Obsidian</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 7, 18), rgb(15, 15, 30));"><div class="tname" style="color: rgb(96, 165, 250);">Midnight</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 8, 12), rgb(8, 12, 18));"><div class="tname" style="color: rgb(52, 211, 153);">Abyss</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 24, 24), rgb(34, 34, 34));"><div class="tname" style="color: rgb(226, 232, 240);">Smoke</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(248, 249, 255), rgb(240, 242, 255));"><div class="tname" style="color: rgb(59, 130, 246);">Soft White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(250, 247, 240), rgb(240, 235, 224));"><div class="tname" style="color: rgb(180, 83, 9);">Warm Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(255, 251, 240), rgb(248, 243, 232));"><div class="tname" style="color: rgb(124, 58, 237);">Cream</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 244, 248), rgb(232, 237, 242));"><div class="tname" style="color: rgb(8, 145, 178);">Cool Gray</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 245, 240), rgb(232, 240, 232));"><div class="tname" style="color: rgb(6, 95, 70);">Soft Sage</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(253, 240, 245), rgb(250, 232, 240));"><div class="tname" style="color: rgb(190, 24, 93);">Blush</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 249, 255), rgb(232, 244, 255));"><div class="tname" style="color: rgb(29, 78, 216);">Sky White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(245, 240, 255), rgb(237, 232, 255));"><div class="tname" style="color: rgb(109, 40, 217);">Lavender Mist</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 25, 23), rgb(41, 37, 36));"><div class="tname" style="color: rgb(55, 65, 81);">Warm Slate</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 12, 27), rgb(5, 16, 32));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Navy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 18, 8), rgb(12, 28, 14));"><div class="tname" style="color: rgb(34, 197, 94);">Forest Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 8, 8), rgb(42, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Burgundy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(12, 14, 24), rgb(20, 22, 34));"><div class="tname" style="color: rgb(165, 180, 252);">Slate Blue</div></div></div>
       
           </div>
 
@@ -2916,7 +3048,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <!-- ── API KEY PANEL ── -->
         <!-- GOOGLE ACCOUNT PANEL (injected above API key panel) -->
         <!-- ── AI PROFILE PANEL ── -->
-        <div class="ps-panel on" id="ps-aiprofile">
+        <div class="ps-panel" id="ps-aiprofile">
           <div class="ps-card">
             <div class="ps-card-label">// AI STUDENT PROFILE</div>
             <div class="ps-form-label" style="margin-bottom:16px;line-height:1.7;">
@@ -3139,11 +3271,11 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-avatar-ring"></div>
             </div>
             <div class="ps-hero-right">
-              <div class="ps-name" id="acct-name">Keshav</div>
-              <div class="ps-tagline" id="acct-tagline">Level 2 Apprentice</div>
+              <div class="ps-name" id="acct-name">User</div>
+              <div class="ps-tagline" id="acct-tagline">Level 27 Legend</div>
               <div class="ps-badges-row">
-                <div class="ps-pill gem">💎 <span id="acct-gems">60</span> Gems</div>
-                <div class="ps-pill streak">🔥 <span id="acct-streak">3</span> day streak</div>
+                <div class="ps-pill gem">💎 <span id="acct-gems">1324</span> Gems</div>
+                <div class="ps-pill streak">🔥 <span id="acct-streak">32</span> day streak</div>
               </div>
             </div>
           </div>
@@ -3179,14 +3311,14 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// LEVEL PROGRESS</div>
             <div class="ps-level-row">
-              <div class="ps-level-num" id="ps-level">2</div>
+              <div class="ps-level-num" id="ps-level">27</div>
               <div style="flex:1;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <span class="ps-form-label" id="ps-level-title">Apprentice</span>
-                  <span class="ps-form-label"><span id="ps-gems-cur">10</span> / <span id="ps-gems-next">50</span> gems</span>
+                  <span class="ps-form-label" id="ps-level-title">Legend</span>
+                  <span class="ps-form-label"><span id="ps-gems-cur">24</span> / <span id="ps-gems-next">50</span> gems</span>
                 </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 20%;"></div></div>
-                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Thinker</div>
+                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 48%;"></div></div>
+                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">🏆 Max Level!</div>
               </div>
             </div>
           </div>
@@ -3515,7 +3647,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       </div>
 
       <!-- GAMES -->
-      <div class="tab on" id="tab-games">
+      <div class="tab" id="tab-games">
         <div class="ttl">🎮 Games</div>
         <div class="tsub"><span class="prm">›</span>Play to earn gems — high scores get rewarded</div>
         <div id="games-menu" style="display: block;">
@@ -3535,13 +3667,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">🐍</div>
               <div class="game-name">Snake</div>
               <div class="game-desc">Classic snake — don't crash!</div>
-              <div class="game-hi" id="hi-snake">Best: 0</div>
+              <div class="game-hi" id="hi-snake">Best: 420</div>
             </div>
             <div class="game-card" data-cat="arcade" onclick="startGame('bubble')">
               <div class="game-icon">🫧</div>
               <div class="game-name">Bubble Pop</div>
               <div class="game-desc">Pop bubbles as fast as you can</div>
-              <div class="game-hi" id="hi-bubble">Best: 0</div>
+              <div class="game-hi" id="hi-bubble">Best: 73</div>
             </div>
             <div class="game-card" data-cat="arcade" onclick="startGame('brickbreaker')">
               <div class="game-icon">🧱</div>
@@ -3600,19 +3732,19 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">🔢</div>
               <div class="game-name">Sudoku</div>
               <div class="game-desc">Classic 9×9 number puzzle</div>
-              <div class="game-hi" id="hi-sudoku">Not solved yet</div>
+              <div class="game-hi" id="hi-sudoku">Best score: 950</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('math')">
               <div class="game-icon">➗</div>
               <div class="game-name">Maths Blitz</div>
               <div class="game-desc">Quick fire maths questions</div>
-              <div class="game-hi" id="hi-math">Best: 0</div>
+              <div class="game-hi" id="hi-math">Best: 34</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('scramble')">
               <div class="game-icon">🔤</div>
               <div class="game-name">Word Scramble</div>
               <div class="game-desc">Unscramble the study words</div>
-              <div class="game-hi" id="hi-scramble">Best: 0</div>
+              <div class="game-hi" id="hi-scramble">Best: 18</div>
             </div>
             <div class="game-card" data-cat="puzzle" onclick="startGame('hangman')">
               <div class="game-icon">🪢</div>
@@ -3653,13 +3785,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">⚡</div>
               <div class="game-name">Reaction Time</div>
               <div class="game-desc">Tap when the signal fires!</div>
-              <div class="game-hi" id="hi-reaction">Best: -- ms</div>
+              <div class="game-hi" id="hi-reaction">Best: 214 ms</div>
             </div>
             <div class="game-card" data-cat="reflex" onclick="startGame('typing')">
               <div class="game-icon">⌨️</div>
               <div class="game-name">Typing Speed</div>
               <div class="game-desc">How fast can you type?</div>
-              <div class="game-hi" id="hi-typing">Best: 0 WPM</div>
+              <div class="game-hi" id="hi-typing">Best: 87 WPM</div>
             </div>
             <div class="game-card" data-cat="reflex" onclick="startGame('aimtrainer')">
               <div class="game-icon">🎯</div>
@@ -3694,7 +3826,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">🌍</div>
               <div class="game-name">Flag Quiz</div>
               <div class="game-desc">Name that country's flag!</div>
-              <div class="game-hi" id="hi-flags">Best: 0</div>
+              <div class="game-hi" id="hi-flags">Best: 22</div>
             </div>
             <div class="game-card" data-cat="quiz" onclick="startGame('capitals')">
               <div class="game-icon">🏛️</div>
@@ -9169,11 +9301,11 @@ function setAccent(color, el) {
 }
 
 function setFontSize(size, el) {
-  document.querySelectorAll('#fs-small,#fs-medium,#fs-large').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('#fs-small,#fs-medium,#fs-large,#fs-huge').forEach(b => b.classList.remove('on'));
   if (el) el.classList.add('on');
-  document.body.classList.remove('fs-small','fs-large');
+  document.body.classList.remove('fs-small','fs-large','fs-huge');
   if (size !== 'medium') document.body.classList.add('fs-' + size);
-  const sizeMap = { small: '13px', medium: '16px', large: '17px' };
+  const sizeMap = { small: '13px', medium: '16px', large: '17px', huge: '22px' };
   document.documentElement.style.fontSize = sizeMap[size] || '16px';
   localStorage.setItem('studly_fontsize', size);
 }
@@ -9204,12 +9336,12 @@ function loadPersonalizePrefs() {
   }
   // Font size
   const fs = localStorage.getItem('studly_fontsize') || 'medium';
-  document.body.classList.remove('fs-small','fs-large');
+  document.body.classList.remove('fs-small','fs-large','fs-huge');
   if (fs !== 'medium') document.body.classList.add('fs-' + fs);
-  const fsSizeMap = { small: '13px', medium: '16px', large: '17px' };
+  const fsSizeMap = { small: '13px', medium: '16px', large: '17px', huge: '22px' };
   document.documentElement.style.fontSize = fsSizeMap[fs] || '16px';
   const fsEl = document.getElementById('fs-' + fs);
-  if (fsEl) { document.querySelectorAll('#fs-small,#fs-medium,#fs-large').forEach(b=>b.classList.remove('on')); fsEl.classList.add('on'); }
+  if (fsEl) { document.querySelectorAll('#fs-small,#fs-medium,#fs-large,#fs-huge').forEach(b=>b.classList.remove('on')); fsEl.classList.add('on'); }
   // Sidebar pref
   const sbp = localStorage.getItem('studly_sbpref') || 'auto';
   const sbpEl = document.getElementById('sb-' + sbp);
@@ -12804,5 +12936,6 @@ document.addEventListener('DOMContentLoaded', () => {
 <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
 <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
 
 </body></html>
