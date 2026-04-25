@@ -1645,7 +1645,7 @@ body.fs-large { font-size: 17px; }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
 </style>
 </head>
-<body style="background: linear-gradient(135deg, rgb(6, 16, 10) 0%, rgb(12, 30, 16) 100%);" class="fs-large">
+<body style="background: linear-gradient(135deg, rgb(8, 8, 8) 0%, rgb(15, 15, 15) 100%);" class="fs-large">
 <!-- VEDA NOTIFICATION BAR -->
 <div id="veda-notif-bar" style="display:none;background:linear-gradient(135deg,rgba(0,212,170,.13),rgba(77,159,255,.08));border-bottom:1px solid rgba(0,212,170,.22);padding:9px 20px;align-items:center;gap:12px;flex-wrap:wrap;z-index:999;position:relative;">
   <span style="font-size:1rem;">🔔</span>
@@ -1886,11 +1886,11 @@ body.fs-large { font-size: 17px; }
         <span style="opacity:.7;">🔍</span><span>Search</span><span style="opacity:.35;font-size:.65rem;margin-left:2px;">Ctrl K</span>
       </button>
       <div class="hdr-status"><span class="pulse"></span>AI ONLINE</div>
-      <div id="hdr-user" style="display:none;align-items:center;gap:8px;cursor:pointer;" onclick="go('settings')" title="My Account">
-        <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
-        <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+      <div id="hdr-user" style="display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="go('settings')" title="My Account">
+        <img id="hdr-avatar" src="https://lh3.googleusercontent.com/a-/ALV-UjXtUl0lqq3URDJ11qvJhXuhrfxOYZccymCu0CCnhoe2aLDS7I2fvexRWT6cvQ2Cq9RqLPL9qH5kAO97D6-HMQmgvFmUcyaTSyuipQ6S3ykVoLvJoQ6edBzOOGNdCcm7Qkph9uRjRYGSGkBWdOsad6DTKJJm6Rc7HgZZjJQ4Kcahdzm-Dy4dSzugB9epxM2b9KOCSidJWpSjK-u3SZD1kJMVtDAQPGX6av726y4iXEOkl4su1piAw3ai67VRXcdhExYMexp7Wc-zaDJhyDnn_YtaBWQIjdAR4WRnjlDY2sGcquqm6xYDaPRtdmXI0h8KUu3rOjyCNmbm6ACXObAU6GHoZPMLKX0YYhVE36JwXxRZV8a6qFpB8A6PpeydTesAahD1MzqfD5KZ6Ts1aUr06x0rUaQW8QGjwIZf2x9D-QHtjAlRSA2Wioze-AnEd0LBfNcJ5kHuHXsJpqZuduHnmz_cdWGn2AB0VC8DdEc5ElcXUTmxeHtQqQQThnJO3aCVOZpuUj-6PwOYopXgyEWhM1Q_ouhIXIUYczMDkovcKLrwahess0M4EqLKdDpWNUEpKlIA8D35BZ3LILBzbntuiX9hF06sOPjHTfVR79EQJmRmuwWikJVwMW4G5_HcMFxukcVInYaAjG1zITUTjnMGFZP0hya1zC8-T01u3L4xWq-Zd3OrlImv-KUcHYqQvEi99rWanA8C8YvfTT26p3cgRwSIwzpwdCM6gUzjN9FWFYEtPcDzAEBAmQW7mzY7bw8pbps0iHtunGxnX1RF5wTYF6FSx2EUPVyxQtelo0f6QFqXxqaXyryjqNTzAY5dThoUVRwQrU_2zdePJmLNU_yAPp8nzg7iyU3L80uCcx74jFxjQc-74Bonsp6F_1j_tCrnic2uBBb2MSnEpntfTlih1Yws7g4feJozQNdLNJVKzqHEDbFXlKX8BeA7Uc4HfCc1sbdVDKZoeYDH1aSO7kvMEmHww1GoKtt38IwJXNaF4yFYC5llBT0FJnMCTP-cmNEuux6rc64Y_Z8U5ODxO128yXVhIuA01mXKVagmLFmIEBk0oM2-2Sq2yB1fyQ=s96-c" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
+        <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Keshav</span>
       </div>
-      <div class="hdr-time" id="clk">16:12</div>
+      <div class="hdr-time" id="clk">16:25</div>
     </div>
   </div>
   <div id="body">
@@ -1940,7 +1940,7 @@ body.fs-large { font-size: 17px; }
       </div>
       <button id="tog" onclick="toggleSb()">◀</button>
       <nav>
-        <button class="nb" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
+        <button class="nb on" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
         <button class="nb" onclick="go('homework')"><span class="ni">📚</span><span class="nl">Homework</span></button>
         <button class="nb" onclick="go('library')"><span class="ni">🗂️</span><span class="nl">Topic Library</span></button>
         <button class="nb" onclick="go('notes')"><span class="ni">📝</span><span class="nl">Notes</span></button>
@@ -1955,7 +1955,7 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
         <button class="nb" onclick="go('tracker')"><span class="ni">📊</span><span class="nl">Paper Tracker</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb on" onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
+        <button class="nb " onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
         <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
@@ -2000,7 +2000,7 @@ body.fs-large { font-size: 17px; }
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">16:12</div>
+            <div class="dt-clock-big" id="dt-clock-big">16:25</div>
             <div class="dt-clock-date" id="dt-clock-date">Saturday, Apr 25</div>
           </div>
 
@@ -2018,9 +2018,9 @@ body.fs-large { font-size: 17px; }
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Games played</span>
-                  <span class="dt-stat-val" id="dt-stat-g">4</span>
+                  <span class="dt-stat-val" id="dt-stat-g">1</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 20%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 5%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
@@ -2063,7 +2063,7 @@ body.fs-large { font-size: 17px; }
             <div class="dt-reward">
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">💎</div>
-                <div><div class="dt-reward-val" id="dt-gems-big">18</div><div class="dt-reward-label">Gems earned</div></div>
+                <div><div class="dt-reward-val" id="dt-gems-big">0</div><div class="dt-reward-label">Gems earned</div></div>
               </div>
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">🔥</div>
@@ -2075,11 +2075,13 @@ body.fs-large { font-size: 17px; }
           <!-- Leaderboard widget -->
           <div class="dt-widget clickable" onclick="go('leaderboard')" id="lb-home-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Leaderboard</div>
-            <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
-              <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.5;text-align:center;padding:8px 0;">Loading...</div>
-            </div>
-            <div id="lb-home-rank" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(77,159,255,.1);font-family:var(--exo);font-size:.68rem;color:var(--silver);display:none;">
-              Your rank: <span id="lb-home-rank-val" style="color:var(--accent2);font-weight:700;"></span>
+            <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;"><div class="lb-mini-row">
+      <div class="lb-mini-rank">🥇</div>
+      <div class="lb-mini-name" style="color:var(--teal2);">Keshav ✦</div>
+      <div class="lb-mini-val">0 💎</div>
+    </div></div>
+            <div id="lb-home-rank" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(77, 159, 255, 0.1); font-family: var(--exo); font-size: 0.68rem; color: var(--silver); display: block;">
+              Your rank: <span id="lb-home-rank-val" style="color:var(--accent2);font-weight:700;">#1 of 1</span>
             </div>
           </div>
 
@@ -2097,7 +2099,7 @@ body.fs-large { font-size: 17px; }
           <div class="dt-widget" id="daily-challenge-widget">
             <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
               <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Daily Challenge</span>
-              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: inline;">🔥 1 day streak</span>
+              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: none;"></span>
             </div>
             <div id="dc-loading" style="font-family: var(--exo); font-size: 0.75rem; color: var(--silver); opacity: 0.6; text-align: center; padding: 14px 0px; display: none;"><span class="dots"><span>·</span><span>·</span><span>·</span></span> Checking...</div>
             <div id="dc-question-wrap" style="display: none;">
@@ -2115,10 +2117,10 @@ body.fs-large { font-size: 17px; }
               <div id="dc-hint-text" style="display:none;font-family:var(--exo);font-size:.68rem;color:var(--teal2);opacity:.8;margin-top:6px;padding:4px 8px;background:rgba(0,212,170,.06);border-radius:6px;"></div>
             </div>
             <div id="dc-result-wrap" style="display: block; text-align: center; padding: 8px 0px;">
-              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">✅</div>
-              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Correct! +5 gems 💎</div>
-              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Great work! Come back tomorrow for the next one.</div>
-              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 47m 22s</div>
+              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">❌</div>
+              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: ATP</div>
+              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
+              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 34m 45s</div>
               <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;startGame('blitz'),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
             </div>
             <div id="dc-no-key-msg" style="display: none; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
@@ -2180,7 +2182,7 @@ body.fs-large { font-size: 17px; }
             <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
             <div class="mh-pills">
               <div class="mh-pill">🔥 <span id="mh-streak">1</span> day streak</div>
-              <div class="mh-pill">💎 <span id="mh-gems">18</span> gems</div>
+              <div class="mh-pill">💎 <span id="mh-gems">0</span> gems</div>
             </div>
           </div>
 
@@ -2905,7 +2907,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// THEME</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
+          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat on">◻️ Minimal</button></div>
           <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
         </div>
         <div id="shop-panel" style="display:none;margin-bottom:16px;">
@@ -2915,7 +2917,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
           <div class="shop-grid" id="shop-grid"></div>
         </div>
-        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
+        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 8, 8), rgb(15, 15, 15));"><div class="tname" style="color: rgb(99, 102, 241);">Pure Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(17, 17, 17), rgb(26, 26, 26));"><div class="tname" style="color: rgb(129, 140, 248);">Charcoal</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 20, 20), rgb(30, 30, 30));"><div class="tname" style="color: rgb(148, 163, 184);">Graphite</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 10, 10), rgb(20, 20, 20));"><div class="tname" style="color: rgb(192, 132, 252);">Obsidian</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 7, 18), rgb(15, 15, 30));"><div class="tname" style="color: rgb(96, 165, 250);">Midnight</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 8, 12), rgb(8, 12, 18));"><div class="tname" style="color: rgb(52, 211, 153);">Abyss</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 24, 24), rgb(34, 34, 34));"><div class="tname" style="color: rgb(226, 232, 240);">Smoke</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(248, 249, 255), rgb(240, 242, 255));"><div class="tname" style="color: rgb(59, 130, 246);">Soft White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(250, 247, 240), rgb(240, 235, 224));"><div class="tname" style="color: rgb(180, 83, 9);">Warm Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(255, 251, 240), rgb(248, 243, 232));"><div class="tname" style="color: rgb(124, 58, 237);">Cream</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 244, 248), rgb(232, 237, 242));"><div class="tname" style="color: rgb(8, 145, 178);">Cool Gray</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 245, 240), rgb(232, 240, 232));"><div class="tname" style="color: rgb(6, 95, 70);">Soft Sage</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(253, 240, 245), rgb(250, 232, 240));"><div class="tname" style="color: rgb(190, 24, 93);">Blush</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 249, 255), rgb(232, 244, 255));"><div class="tname" style="color: rgb(29, 78, 216);">Sky White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(245, 240, 255), rgb(237, 232, 255));"><div class="tname" style="color: rgb(109, 40, 217);">Lavender Mist</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 25, 23), rgb(41, 37, 36));"><div class="tname" style="color: rgb(55, 65, 81);">Warm Slate</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 12, 27), rgb(5, 16, 32));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Navy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 18, 8), rgb(12, 28, 14));"><div class="tname" style="color: rgb(34, 197, 94);">Forest Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 8, 8), rgb(42, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Burgundy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(12, 14, 24), rgb(20, 22, 34));"><div class="tname" style="color: rgb(165, 180, 252);">Slate Blue</div></div></div>
       
           </div>
 
@@ -3071,13 +3073,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <!-- ── API KEY PANEL ── -->
         <div class="ps-panel" id="ps-apikey">
           <!-- Signed-in card -->
-          <div class="ps-card" id="fb-card-in" style="display:none;margin-bottom:12px;">
+          <div class="ps-card" id="fb-card-in" style="display: block; margin-bottom: 12px;">
             <div class="ps-card-label">// GOOGLE ACCOUNT</div>
             <div style="display:flex;align-items:center;gap:14px;margin:10px 0 16px;">
-              <img id="fb-av" src="" style="width:52px;height:52px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
+              <img id="fb-av" src="https://lh3.googleusercontent.com/a-/ALV-UjXtUl0lqq3URDJ11qvJhXuhrfxOYZccymCu0CCnhoe2aLDS7I2fvexRWT6cvQ2Cq9RqLPL9qH5kAO97D6-HMQmgvFmUcyaTSyuipQ6S3ykVoLvJoQ6edBzOOGNdCcm7Qkph9uRjRYGSGkBWdOsad6DTKJJm6Rc7HgZZjJQ4Kcahdzm-Dy4dSzugB9epxM2b9KOCSidJWpSjK-u3SZD1kJMVtDAQPGX6av726y4iXEOkl4su1piAw3ai67VRXcdhExYMexp7Wc-zaDJhyDnn_YtaBWQIjdAR4WRnjlDY2sGcquqm6xYDaPRtdmXI0h8KUu3rOjyCNmbm6ACXObAU6GHoZPMLKX0YYhVE36JwXxRZV8a6qFpB8A6PpeydTesAahD1MzqfD5KZ6Ts1aUr06x0rUaQW8QGjwIZf2x9D-QHtjAlRSA2Wioze-AnEd0LBfNcJ5kHuHXsJpqZuduHnmz_cdWGn2AB0VC8DdEc5ElcXUTmxeHtQqQQThnJO3aCVOZpuUj-6PwOYopXgyEWhM1Q_ouhIXIUYczMDkovcKLrwahess0M4EqLKdDpWNUEpKlIA8D35BZ3LILBzbntuiX9hF06sOPjHTfVR79EQJmRmuwWikJVwMW4G5_HcMFxukcVInYaAjG1zITUTjnMGFZP0hya1zC8-T01u3L4xWq-Zd3OrlImv-KUcHYqQvEi99rWanA8C8YvfTT26p3cgRwSIwzpwdCM6gUzjN9FWFYEtPcDzAEBAmQW7mzY7bw8pbps0iHtunGxnX1RF5wTYF6FSx2EUPVyxQtelo0f6QFqXxqaXyryjqNTzAY5dThoUVRwQrU_2zdePJmLNU_yAPp8nzg7iyU3L80uCcx74jFxjQc-74Bonsp6F_1j_tCrnic2uBBb2MSnEpntfTlih1Yws7g4feJozQNdLNJVKzqHEDbFXlKX8BeA7Uc4HfCc1sbdVDKZoeYDH1aSO7kvMEmHww1GoKtt38IwJXNaF4yFYC5llBT0FJnMCTP-cmNEuux6rc64Y_Z8U5ODxO128yXVhIuA01mXKVagmLFmIEBk0oM2-2Sq2yB1fyQ=s96-c" style="width:52px;height:52px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
               <div>
-                <div id="fb-name" style="font-family:var(--orb);font-size:.8rem;color:var(--text);letter-spacing:.5px;margin-bottom:3px;"></div>
-                <div id="fb-email" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);"></div>
+                <div id="fb-name" style="font-family:var(--orb);font-size:.8rem;color:var(--text);letter-spacing:.5px;margin-bottom:3px;">Keshav Karthik</div>
+                <div id="fb-email" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);">keshavandkarthik@gmail.com</div>
               </div>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -3086,7 +3088,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             </div>
           </div>
           <!-- Signed-out card -->
-          <div class="ps-card" id="fb-card-out" style="margin-bottom: 12px; display: block;">
+          <div class="ps-card" id="fb-card-out" style="margin-bottom: 12px; display: none;">
             <div class="ps-card-label">// GOOGLE ACCOUNT</div>
             <div class="ps-form-label" style="margin-bottom:14px;line-height:1.7;">Sign in with Google to sync your API key, profile, gems, journal, chats and settings across all devices.</div>
             <button onclick="window._fb&amp;&amp;window._fb.signIn().catch(e=&gt;showToast('❌ '+e.message))" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:none;border-radius:10px;padding:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:600;color:#1f1f1f;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.25);">
@@ -3162,15 +3164,15 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <div class="ps-panel" id="ps-profile">
           <div class="ps-hero">
             <div class="ps-avatar-wrap">
-              <div class="ps-avatar" id="acct-avatar">🎓</div>
+              <div class="ps-avatar" id="acct-avatar">⚡</div>
               <div class="ps-avatar-ring"></div>
             </div>
             <div class="ps-hero-right">
               <div class="ps-name" id="acct-name">Keshav</div>
-              <div class="ps-tagline" id="acct-tagline">Level 2 Apprentice</div>
+              <div class="ps-tagline" id="acct-tagline">Level 1 Scholar</div>
               <div class="ps-badges-row">
-                <div class="ps-pill gem">💎 <span id="acct-gems">60</span> Gems</div>
-                <div class="ps-pill streak">🔥 <span id="acct-streak">3</span> day streak</div>
+                <div class="ps-pill gem">💎 <span id="acct-gems">0</span> Gems</div>
+                <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
               </div>
             </div>
           </div>
@@ -3206,14 +3208,14 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// LEVEL PROGRESS</div>
             <div class="ps-level-row">
-              <div class="ps-level-num" id="ps-level">2</div>
+              <div class="ps-level-num" id="ps-level">1</div>
               <div style="flex:1;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <span class="ps-form-label" id="ps-level-title">Apprentice</span>
-                  <span class="ps-form-label"><span id="ps-gems-cur">10</span> / <span id="ps-gems-next">50</span> gems</span>
+                  <span class="ps-form-label" id="ps-level-title">Scholar</span>
+                  <span class="ps-form-label"><span id="ps-gems-cur">0</span> / <span id="ps-gems-next">50</span> gems</span>
                 </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 20%;"></div></div>
-                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Thinker</div>
+                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 0%;"></div></div>
+                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Apprentice</div>
               </div>
             </div>
           </div>
@@ -3680,7 +3682,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">⚡</div>
               <div class="game-name">Reaction Time</div>
               <div class="game-desc">Tap when the signal fires!</div>
-              <div class="game-hi" id="hi-reaction">Best: -- ms</div>
+              <div class="game-hi" id="hi-reaction">Best: 0 ms</div>
             </div>
             <div class="game-card" data-cat="reflex" onclick="startGame('typing')">
               <div class="game-icon">⌨️</div>
@@ -4497,7 +4499,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="panel" style="margin-bottom:16px;">
             <div style="font-family:var(--exo);font-size:.6rem;color:var(--teal);letter-spacing:2px;margin-bottom:14px;">// YOUR FRIEND CODE</div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-              <div id="lb-my-code" style="font-family:var(--orb);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;">6CCG6U</div>
+              <div id="lb-my-code" style="font-family:var(--orb);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;">######</div>
               <button onclick="lbCopyCode()" style="background:rgba(77,159,255,.1);border:1px solid rgba(77,159,255,.25);border-radius:8px;padding:6px 14px;color:var(--accent2);font-family:var(--exo);font-size:.72rem;cursor:pointer;transition:all .15s;">📋 Copy</button>
               <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.6;">Share this with friends so they can add you</div>
             </div>
@@ -13534,4 +13536,6 @@ document.addEventListener('DOMContentLoaded', () => {
 <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
 
-</div></div></body></html>
+</div></div><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+</body></html>
