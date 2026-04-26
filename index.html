@@ -1319,6 +1319,18 @@ body.fs-large { font-size: 17px; }
 .ps-about-logo { font-family:var(--orb); font-size:1.3rem; font-weight:900; background:linear-gradient(135deg,var(--accent),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:4px; margin-bottom:5px; }
 .ps-about-ver { font-family:var(--exo); font-size:.78rem; color:var(--silver2); letter-spacing:1px; margin-bottom:4px; }
 .ps-about-line { font-family:var(--exo); font-size:.72rem; color:var(--silver); opacity:.7; }
+.support-cat-chip {
+  background:rgba(255,255,255,0.04);border:1px solid rgba(77,159,255,0.18);
+  border-radius:999px;padding:6px 14px;
+  font-family:var(--exo);font-size:.76rem;color:var(--silver2);
+  cursor:pointer;transition:all .15s;letter-spacing:.4px;
+}
+.support-cat-chip:hover { background:rgba(77,159,255,0.1);border-color:var(--accent);color:var(--accent2); }
+.support-cat-chip.on {
+  background:linear-gradient(135deg,rgba(77,159,255,0.15),rgba(0,212,170,0.08));
+  border-color:var(--accent);color:var(--accent2);
+  box-shadow:0 0 10px rgba(77,159,255,0.12);
+}
 
 /* api key */
 .ps-key-status { display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:10px; background:rgba(255,255,255,.03); border:1px solid rgba(77,159,255,.12); }
@@ -1645,7 +1657,7 @@ body.fs-large { font-size: 17px; }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
 </style>
 </head>
-<body style="background: linear-gradient(135deg, rgb(6, 16, 10) 0%, rgb(12, 30, 16) 100%);" class="fs-large">
+<body style="background: linear-gradient(135deg, rgb(8, 8, 8) 0%, rgb(15, 15, 15) 100%);" class="fs-large">
 <!-- VEDA NOTIFICATION BAR -->
 <div id="veda-notif-bar" style="display:none;background:linear-gradient(135deg,rgba(0,212,170,.13),rgba(77,159,255,.08));border-bottom:1px solid rgba(0,212,170,.22);padding:9px 20px;align-items:center;gap:12px;flex-wrap:wrap;z-index:999;position:relative;">
   <span style="font-size:1rem;">🔔</span>
@@ -1886,11 +1898,11 @@ body.fs-large { font-size: 17px; }
         <span style="opacity:.7;">🔍</span><span>Search</span><span style="opacity:.35;font-size:.65rem;margin-left:2px;">Ctrl K</span>
       </button>
       <div class="hdr-status"><span class="pulse"></span>AI ONLINE</div>
-      <div id="hdr-user" style="display:none;align-items:center;gap:8px;cursor:pointer;" onclick="go('settings')" title="My Account">
-        <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
-        <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+      <div id="hdr-user" style="display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="go('settings')" title="My Account">
+        <img id="hdr-avatar" src="https://lh3.googleusercontent.com/a-/ALV-UjXtUl0lqq3URDJ11qvJhXuhrfxOYZccymCu0CCnhoe2aLDS7I2fvexRWT6cvQ2Cq9RqLPL9qH5kAO97D6-HMQmgvFmUcyaTSyuipQ6S3ykVoLvJoQ6edBzOOGNdCcm7Qkph9uRjRYGSGkBWdOsad6DTKJJm6Rc7HgZZjJQ4Kcahdzm-Dy4dSzugB9epxM2b9KOCSidJWpSjK-u3SZD1kJMVtDAQPGX6av726y4iXEOkl4su1piAw3ai67VRXcdhExYMexp7Wc-zaDJhyDnn_YtaBWQIjdAR4WRnjlDY2sGcquqm6xYDaPRtdmXI0h8KUu3rOjyCNmbm6ACXObAU6GHoZPMLKX0YYhVE36JwXxRZV8a6qFpB8A6PpeydTesAahD1MzqfD5KZ6Ts1aUr06x0rUaQW8QGjwIZf2x9D-QHtjAlRSA2Wioze-AnEd0LBfNcJ5kHuHXsJpqZuduHnmz_cdWGn2AB0VC8DdEc5ElcXUTmxeHtQqQQThnJO3aCVOZpuUj-6PwOYopXgyEWhM1Q_ouhIXIUYczMDkovcKLrwahess0M4EqLKdDpWNUEpKlIA8D35BZ3LILBzbntuiX9hF06sOPjHTfVR79EQJmRmuwWikJVwMW4G5_HcMFxukcVInYaAjG1zITUTjnMGFZP0hya1zC8-T01u3L4xWq-Zd3OrlImv-KUcHYqQvEi99rWanA8C8YvfTT26p3cgRwSIwzpwdCM6gUzjN9FWFYEtPcDzAEBAmQW7mzY7bw8pbps0iHtunGxnX1RF5wTYF6FSx2EUPVyxQtelo0f6QFqXxqaXyryjqNTzAY5dThoUVRwQrU_2zdePJmLNU_yAPp8nzg7iyU3L80uCcx74jFxjQc-74Bonsp6F_1j_tCrnic2uBBb2MSnEpntfTlih1Yws7g4feJozQNdLNJVKzqHEDbFXlKX8BeA7Uc4HfCc1sbdVDKZoeYDH1aSO7kvMEmHww1GoKtt38IwJXNaF4yFYC5llBT0FJnMCTP-cmNEuux6rc64Y_Z8U5ODxO128yXVhIuA01mXKVagmLFmIEBk0oM2-2Sq2yB1fyQ=s96-c" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
+        <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Keshav</span>
       </div>
-      <div class="hdr-time" id="clk">16:12</div>
+      <div class="hdr-time" id="clk">16:25</div>
     </div>
   </div>
   <div id="body">
@@ -1940,7 +1952,7 @@ body.fs-large { font-size: 17px; }
       </div>
       <button id="tog" onclick="toggleSb()">◀</button>
       <nav>
-        <button class="nb" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
+        <button class="nb on" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
         <button class="nb" onclick="go('homework')"><span class="ni">📚</span><span class="nl">Homework</span></button>
         <button class="nb" onclick="go('library')"><span class="ni">🗂️</span><span class="nl">Topic Library</span></button>
         <button class="nb" onclick="go('notes')"><span class="ni">📝</span><span class="nl">Notes</span></button>
@@ -1955,7 +1967,7 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
         <button class="nb" onclick="go('tracker')"><span class="ni">📊</span><span class="nl">Paper Tracker</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb on" onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
+        <button class="nb " onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
         <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
@@ -1976,6 +1988,25 @@ body.fs-large { font-size: 17px; }
         <div class="desktop-wallpaper"></div>
 
 
+
+        <!-- Edit Widgets button -->
+        <div style="position:absolute;top:14px;right:18px;z-index:20;">
+          <button onclick="openWidgetEditor()" style="background:rgba(8,12,26,.7);backdrop-filter:blur(12px);border:1px solid rgba(77,159,255,.25);border-radius:999px;padding:6px 16px;font-family:var(--exo);font-size:.68rem;color:var(--accent2);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;" onmouseover="this.style.borderColor='rgba(77,159,255,.55)'" onmouseout="this.style.borderColor='rgba(77,159,255,.25)'">⊹ Edit Widgets</button>
+        </div>
+
+        <!-- Widget Editor Overlay -->
+        <div id="widget-editor-overlay" style="display:none;position:absolute;inset:0;z-index:100;background:rgba(4,6,16,.7);backdrop-filter:blur(8px);align-items:flex-start;justify-content:flex-end;padding:16px;">
+          <div style="background:rgba(8,12,26,.97);border:1px solid rgba(77,159,255,.2);border-radius:20px;padding:22px;width:min(340px,92vw);max-height:calc(100% - 32px);overflow-y:auto;display:flex;flex-direction:column;gap:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+              <div style="font-family:var(--raj);font-size:1rem;font-weight:700;color:var(--text);">⊹ Widgets</div>
+              <button onclick="closeWidgetEditor()" style="background:rgba(255,255,255,.06);border:1px solid rgba(77,159,255,.15);border-radius:8px;padding:4px 12px;color:var(--silver);font-family:var(--exo);font-size:.72rem;cursor:pointer;">Done</button>
+            </div>
+            <div style="font-family:var(--exo);font-size:.62rem;color:var(--silver);opacity:.45;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Default</div>
+            <div id="weditor-list-default" style="display:flex;flex-direction:column;gap:6px;"></div>
+            <div style="font-family:var(--exo);font-size:.62rem;color:var(--silver);opacity:.45;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 10px;">Add Widgets</div>
+            <div id="weditor-list-extra" style="display:flex;flex-direction:column;gap:6px;"></div>
+          </div>
+        </div>
 
         <!-- DESKTOP CANVAS -->
         <div class="desktop-canvas">
@@ -2000,7 +2031,7 @@ body.fs-large { font-size: 17px; }
           </div>
 
           <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">16:12</div>
+            <div class="dt-clock-big" id="dt-clock-big">16:25</div>
             <div class="dt-clock-date" id="dt-clock-date">Saturday, Apr 25</div>
           </div>
 
@@ -2018,9 +2049,9 @@ body.fs-large { font-size: 17px; }
               <div>
                 <div class="dt-stat-row">
                   <span class="dt-stat-label">Games played</span>
-                  <span class="dt-stat-val" id="dt-stat-g">4</span>
+                  <span class="dt-stat-val" id="dt-stat-g">1</span>
                 </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 20%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
+                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 5%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
               </div>
               <div>
                 <div class="dt-stat-row">
@@ -2063,7 +2094,7 @@ body.fs-large { font-size: 17px; }
             <div class="dt-reward">
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">💎</div>
-                <div><div class="dt-reward-val" id="dt-gems-big">18</div><div class="dt-reward-label">Gems earned</div></div>
+                <div><div class="dt-reward-val" id="dt-gems-big">0</div><div class="dt-reward-label">Gems earned</div></div>
               </div>
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">🔥</div>
@@ -2075,11 +2106,13 @@ body.fs-large { font-size: 17px; }
           <!-- Leaderboard widget -->
           <div class="dt-widget clickable" onclick="go('leaderboard')" id="lb-home-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Leaderboard</div>
-            <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
-              <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.5;text-align:center;padding:8px 0;">Loading...</div>
-            </div>
-            <div id="lb-home-rank" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(77,159,255,.1);font-family:var(--exo);font-size:.68rem;color:var(--silver);display:none;">
-              Your rank: <span id="lb-home-rank-val" style="color:var(--accent2);font-weight:700;"></span>
+            <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;"><div class="lb-mini-row">
+      <div class="lb-mini-rank">🥇</div>
+      <div class="lb-mini-name" style="color:var(--teal2);">Keshav ✦</div>
+      <div class="lb-mini-val">0 💎</div>
+    </div></div>
+            <div id="lb-home-rank" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(77, 159, 255, 0.1); font-family: var(--exo); font-size: 0.68rem; color: var(--silver); display: block;">
+              Your rank: <span id="lb-home-rank-val" style="color:var(--accent2);font-weight:700;">#1 of 1</span>
             </div>
           </div>
 
@@ -2097,7 +2130,7 @@ body.fs-large { font-size: 17px; }
           <div class="dt-widget" id="daily-challenge-widget">
             <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
               <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Daily Challenge</span>
-              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: inline;">🔥 1 day streak</span>
+              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: none;"></span>
             </div>
             <div id="dc-loading" style="font-family: var(--exo); font-size: 0.75rem; color: var(--silver); opacity: 0.6; text-align: center; padding: 14px 0px; display: none;"><span class="dots"><span>·</span><span>·</span><span>·</span></span> Checking...</div>
             <div id="dc-question-wrap" style="display: none;">
@@ -2115,10 +2148,10 @@ body.fs-large { font-size: 17px; }
               <div id="dc-hint-text" style="display:none;font-family:var(--exo);font-size:.68rem;color:var(--teal2);opacity:.8;margin-top:6px;padding:4px 8px;background:rgba(0,212,170,.06);border-radius:6px;"></div>
             </div>
             <div id="dc-result-wrap" style="display: block; text-align: center; padding: 8px 0px;">
-              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">✅</div>
-              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Correct! +5 gems 💎</div>
-              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Great work! Come back tomorrow for the next one.</div>
-              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 47m 22s</div>
+              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">❌</div>
+              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: ATP</div>
+              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
+              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 34m 45s</div>
               <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;startGame('blitz'),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
             </div>
             <div id="dc-no-key-msg" style="display: none; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
@@ -2169,6 +2202,53 @@ body.fs-large { font-size: 17px; }
 
 
 
+
+          <!-- Weather + Quote widget (extra) -->
+          <div class="dt-widget dt-widget-wide" id="widget-weather" style="display:none;">
+            <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:#fbbf24;"></span>Weather &amp; Quote</div>
+            <div style="display:flex;align-items:center;gap:16px;margin-top:6px;flex-wrap:wrap;">
+              <div id="ww-weather" style="display:flex;align-items:center;gap:10px;">
+                <div id="ww-icon" style="font-size:2rem;">🌤️</div>
+                <div>
+                  <div id="ww-temp" style="font-family:var(--orb);font-size:1.3rem;color:var(--text);font-weight:700;">--°</div>
+                  <div id="ww-desc" style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Loading...</div>
+                  <div id="ww-loc" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.5;"></div>
+                </div>
+              </div>
+              <div style="flex:1;min-width:160px;border-left:1px solid rgba(77,159,255,.12);padding-left:16px;">
+                <div id="ww-quote" style="font-family:var(--raj);font-size:.82rem;color:var(--text2);line-height:1.55;font-style:italic;">"The secret of getting ahead is getting started."</div>
+                <div id="ww-author" style="font-family:var(--exo);font-size:.62rem;color:var(--silver);margin-top:4px;opacity:.6;">— Mark Twain</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- To-Do Summary widget (extra) -->
+          <div class="dt-widget" id="widget-todo-summary" style="display:none;">
+            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
+              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Today's Tasks</span>
+              <button onclick="go('todo')" style="background:none;border:none;color:var(--accent2);font-family:var(--exo);font-size:.62rem;cursor:pointer;padding:0;">View all →</button>
+            </div>
+            <div id="wtodo-list" style="display:flex;flex-direction:column;gap:5px;margin-top:8px;max-height:140px;overflow-y:auto;"></div>
+            <div id="wtodo-empty" style="display:none;font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:12px 0;">✅ All done for today!</div>
+          </div>
+
+          <!-- Recent Notes widget (extra) -->
+          <div class="dt-widget" id="widget-recent-notes" style="display:none;">
+            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
+              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:#c084fc;"></span>Recent Notes</span>
+              <button onclick="go('notes')" style="background:none;border:none;color:var(--accent2);font-family:var(--exo);font-size:.62rem;cursor:pointer;padding:0;">Open →</button>
+            </div>
+            <div id="wrecent-notes-list" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;"></div>
+            <div id="wrecent-notes-empty" style="display:none;font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:12px 0;">No notes yet — start writing!</div>
+          </div>
+
+          <!-- Next Session widget (extra) -->
+          <div class="dt-widget" id="widget-next-session" style="display:none;">
+            <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:#fb923c;"></span>Next Study Session</div>
+            <div id="wnext-session-content" style="margin-top:8px;"></div>
+            <div id="wnext-session-empty" style="display:none;font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:12px 0;">No sessions planned — <button onclick="go('planner')" style="background:none;border:none;color:var(--accent2);font-family:var(--exo);font-size:.72rem;cursor:pointer;padding:0;">open planner →</button></div>
+          </div>
+
         </div>
 
         <!-- MOBILE HOME (visible only in mobile-mode) -->
@@ -2177,10 +2257,10 @@ body.fs-large { font-size: 17px; }
           <!-- Greeting -->
           <div>
             <div class="mh-greeting-time" id="mh-timeofday">Good afternoon</div>
-            <div class="mh-greeting-name">Hey, <span id="mh-name">User</span></div>
+            <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
             <div class="mh-pills">
               <div class="mh-pill">🔥 <span id="mh-streak">1</span> day streak</div>
-              <div class="mh-pill">💎 <span id="mh-gems">18</span> gems</div>
+              <div class="mh-pill">💎 <span id="mh-gems">0</span> gems</div>
             </div>
           </div>
 
@@ -2837,6 +2917,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <button class="ps-tab" onclick="psGo('appearance',this)">🎨 Appearance</button>
           <button class="ps-tab on" onclick="psGo('aiprofile',this)">🤖 AI Settings</button>
           <button class="ps-tab" onclick="psGo('apikey',this)">🔑 API</button>
+          <button class="ps-tab" onclick="psGo('support',this)">📬 Support</button>
         </div>
 
         <!-- ── APPEARANCE PANEL ── -->
@@ -2905,7 +2986,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// THEME</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
+          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat on">◻️ Minimal</button></div>
           <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
         </div>
         <div id="shop-panel" style="display:none;margin-bottom:16px;">
@@ -2915,7 +2996,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
           <div class="shop-grid" id="shop-grid"></div>
         </div>
-        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
+        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 8, 8), rgb(15, 15, 15));"><div class="tname" style="color: rgb(99, 102, 241);">Pure Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(17, 17, 17), rgb(26, 26, 26));"><div class="tname" style="color: rgb(129, 140, 248);">Charcoal</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 20, 20), rgb(30, 30, 30));"><div class="tname" style="color: rgb(148, 163, 184);">Graphite</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 10, 10), rgb(20, 20, 20));"><div class="tname" style="color: rgb(192, 132, 252);">Obsidian</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 7, 18), rgb(15, 15, 30));"><div class="tname" style="color: rgb(96, 165, 250);">Midnight</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 8, 12), rgb(8, 12, 18));"><div class="tname" style="color: rgb(52, 211, 153);">Abyss</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 24, 24), rgb(34, 34, 34));"><div class="tname" style="color: rgb(226, 232, 240);">Smoke</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(248, 249, 255), rgb(240, 242, 255));"><div class="tname" style="color: rgb(59, 130, 246);">Soft White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(250, 247, 240), rgb(240, 235, 224));"><div class="tname" style="color: rgb(180, 83, 9);">Warm Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(255, 251, 240), rgb(248, 243, 232));"><div class="tname" style="color: rgb(124, 58, 237);">Cream</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 244, 248), rgb(232, 237, 242));"><div class="tname" style="color: rgb(8, 145, 178);">Cool Gray</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 245, 240), rgb(232, 240, 232));"><div class="tname" style="color: rgb(6, 95, 70);">Soft Sage</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(253, 240, 245), rgb(250, 232, 240));"><div class="tname" style="color: rgb(190, 24, 93);">Blush</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 249, 255), rgb(232, 244, 255));"><div class="tname" style="color: rgb(29, 78, 216);">Sky White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(245, 240, 255), rgb(237, 232, 255));"><div class="tname" style="color: rgb(109, 40, 217);">Lavender Mist</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 25, 23), rgb(41, 37, 36));"><div class="tname" style="color: rgb(55, 65, 81);">Warm Slate</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 12, 27), rgb(5, 16, 32));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Navy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 18, 8), rgb(12, 28, 14));"><div class="tname" style="color: rgb(34, 197, 94);">Forest Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 8, 8), rgb(42, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Burgundy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(12, 14, 24), rgb(20, 22, 34));"><div class="tname" style="color: rgb(165, 180, 252);">Slate Blue</div></div></div>
       
           </div>
 
@@ -3061,7 +3142,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             <!-- Preview -->
             <div id="aip-preview" style="background: rgba(0, 212, 170, 0.06); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: 10px; padding: 12px 14px; margin-top: 4px; margin-bottom: 14px; display: block;">
               <div style="font-family:var(--exo);font-size:.65rem;color:var(--teal);letter-spacing:1.5px;margin-bottom:6px;">// AI SEES THIS</div>
-              <div id="aip-preview-text" style="font-family:var(--exo);font-size:.78rem;color:var(--silver);line-height:1.7;">Tutoring User — Form 3 IGCSE student · Subjects: Mathematics, English, Physics, Chemistry, Biology · Detailed &amp; thorough · Language: English · Inconsistent — good days and bad days · Struggles with: Memorising facts · Pressure: Moderate</div>
+              <div id="aip-preview-text" style="font-family:var(--exo);font-size:.78rem;color:var(--silver);line-height:1.7;">Tutoring Keshav — Form 3 IGCSE student · Subjects: Mathematics, English, Physics, Chemistry, Biology · Detailed &amp; thorough · Language: English · Inconsistent — good days and bad days · Struggles with: Memorising facts · Pressure: Moderate</div>
             </div>
 
             <button class="set-btn accent" onclick="saveAIProfile()" style="width:100%;">✦ Save AI Profile</button>
@@ -3071,13 +3152,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <!-- ── API KEY PANEL ── -->
         <div class="ps-panel" id="ps-apikey">
           <!-- Signed-in card -->
-          <div class="ps-card" id="fb-card-in" style="display:none;margin-bottom:12px;">
+          <div class="ps-card" id="fb-card-in" style="display: block; margin-bottom: 12px;">
             <div class="ps-card-label">// GOOGLE ACCOUNT</div>
             <div style="display:flex;align-items:center;gap:14px;margin:10px 0 16px;">
-              <img id="fb-av" src="" style="width:52px;height:52px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
+              <img id="fb-av" src="https://lh3.googleusercontent.com/a-/ALV-UjXtUl0lqq3URDJ11qvJhXuhrfxOYZccymCu0CCnhoe2aLDS7I2fvexRWT6cvQ2Cq9RqLPL9qH5kAO97D6-HMQmgvFmUcyaTSyuipQ6S3ykVoLvJoQ6edBzOOGNdCcm7Qkph9uRjRYGSGkBWdOsad6DTKJJm6Rc7HgZZjJQ4Kcahdzm-Dy4dSzugB9epxM2b9KOCSidJWpSjK-u3SZD1kJMVtDAQPGX6av726y4iXEOkl4su1piAw3ai67VRXcdhExYMexp7Wc-zaDJhyDnn_YtaBWQIjdAR4WRnjlDY2sGcquqm6xYDaPRtdmXI0h8KUu3rOjyCNmbm6ACXObAU6GHoZPMLKX0YYhVE36JwXxRZV8a6qFpB8A6PpeydTesAahD1MzqfD5KZ6Ts1aUr06x0rUaQW8QGjwIZf2x9D-QHtjAlRSA2Wioze-AnEd0LBfNcJ5kHuHXsJpqZuduHnmz_cdWGn2AB0VC8DdEc5ElcXUTmxeHtQqQQThnJO3aCVOZpuUj-6PwOYopXgyEWhM1Q_ouhIXIUYczMDkovcKLrwahess0M4EqLKdDpWNUEpKlIA8D35BZ3LILBzbntuiX9hF06sOPjHTfVR79EQJmRmuwWikJVwMW4G5_HcMFxukcVInYaAjG1zITUTjnMGFZP0hya1zC8-T01u3L4xWq-Zd3OrlImv-KUcHYqQvEi99rWanA8C8YvfTT26p3cgRwSIwzpwdCM6gUzjN9FWFYEtPcDzAEBAmQW7mzY7bw8pbps0iHtunGxnX1RF5wTYF6FSx2EUPVyxQtelo0f6QFqXxqaXyryjqNTzAY5dThoUVRwQrU_2zdePJmLNU_yAPp8nzg7iyU3L80uCcx74jFxjQc-74Bonsp6F_1j_tCrnic2uBBb2MSnEpntfTlih1Yws7g4feJozQNdLNJVKzqHEDbFXlKX8BeA7Uc4HfCc1sbdVDKZoeYDH1aSO7kvMEmHww1GoKtt38IwJXNaF4yFYC5llBT0FJnMCTP-cmNEuux6rc64Y_Z8U5ODxO128yXVhIuA01mXKVagmLFmIEBk0oM2-2Sq2yB1fyQ=s96-c" style="width:52px;height:52px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
               <div>
-                <div id="fb-name" style="font-family:var(--orb);font-size:.8rem;color:var(--text);letter-spacing:.5px;margin-bottom:3px;"></div>
-                <div id="fb-email" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);"></div>
+                <div id="fb-name" style="font-family:var(--orb);font-size:.8rem;color:var(--text);letter-spacing:.5px;margin-bottom:3px;">Keshav Karthik</div>
+                <div id="fb-email" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);">keshavandkarthik@gmail.com</div>
               </div>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -3086,7 +3167,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             </div>
           </div>
           <!-- Signed-out card -->
-          <div class="ps-card" id="fb-card-out" style="margin-bottom: 12px; display: block;">
+          <div class="ps-card" id="fb-card-out" style="margin-bottom: 12px; display: none;">
             <div class="ps-card-label">// GOOGLE ACCOUNT</div>
             <div class="ps-form-label" style="margin-bottom:14px;line-height:1.7;">Sign in with Google to sync your API key, profile, gems, journal, chats and settings across all devices.</div>
             <button onclick="window._fb&amp;&amp;window._fb.signIn().catch(e=&gt;showToast('❌ '+e.message))" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:none;border-radius:10px;padding:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:600;color:#1f1f1f;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.25);">
@@ -3141,8 +3222,201 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <button class="ps-danger-btn" onclick="resetAll()">⚠️ Reset Everything</button>
             </div>
           </div>
-          </div>
         </div>
+
+      <!-- ── SUPPORT PANEL ── -->
+        <div class="ps-panel" id="ps-support">
+
+          <!-- ABOUT VEDA KINGDOM BANNER -->
+          <div class="ps-card" style="position:relative;overflow:hidden;padding:0;">
+            <div style="
+              background: linear-gradient(135deg, rgba(10,14,26,0.98) 0%, rgba(15,21,40,0.95) 40%, rgba(8,18,35,0.98) 100%);
+              border-radius:14px;padding:28px 28px 20px;
+              position:relative;overflow:hidden;
+            ">
+              <!-- Animated background orbs -->
+              <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(77,159,255,0.08),transparent 70%);pointer-events:none;"></div>
+              <div style="position:absolute;bottom:-30px;left:20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,0.06),transparent 70%);pointer-events:none;"></div>
+
+              <!-- Crown + Title -->
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+                <div style="
+                  width:52px;height:52px;border-radius:14px;flex-shrink:0;
+                  background:linear-gradient(135deg,rgba(77,159,255,0.15),rgba(0,212,170,0.1));
+                  border:1px solid rgba(77,159,255,0.3);
+                  display:flex;align-items:center;justify-content:center;
+                  font-size:1.6rem;box-shadow:0 0 20px rgba(77,159,255,0.15);
+                ">👑</div>
+                <div>
+                  <div style="font-family:var(--orb);font-size:1.15rem;font-weight:900;letter-spacing:4px;
+                    background:linear-gradient(135deg,var(--accent),var(--teal),var(--chrome2));
+                    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                    VEDA
+                  </div>
+                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:2px;text-transform:uppercase;margin-top:2px;">
+                    ज्ञानं परमं ध्येयम् · Knowledge is the Supreme Goal
+                  </div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div style="font-family:var(--raj);font-size:.88rem;color:var(--text2);line-height:1.75;margin-bottom:20px;">
+                Veda is an AI-powered study companion built for students who refuse to settle for average.
+                From smart flashcards and exam prep to a companion that actually understands your curriculum —
+                Veda is your kingdom of knowledge, open 24/7.
+              </div>
+
+              <!-- Feature pills -->
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;">
+                <div style="background:rgba(77,159,255,0.08);border:1px solid rgba(77,159,255,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:var(--accent2);letter-spacing:.5px;">⚡ Gemini AI</div>
+                <div style="background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:.5px;">🧠 Smart Study</div>
+                <div style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:#c084fc;letter-spacing:.5px;">📚 Flashcards + Quizzes</div>
+                <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:#fbbf24;letter-spacing:.5px;">🏆 Leaderboard</div>
+                <div style="background:rgba(77,159,255,0.08);border:1px solid rgba(77,159,255,0.15);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:var(--silver2);letter-spacing:.5px;">📄 Exam Papers</div>
+                <div style="background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.15);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:var(--silver2);letter-spacing:.5px;">✅ To-Do + Planner</div>
+              </div>
+
+              <!-- Team -->
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(77,159,255,0.12);border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px;">
+                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4d9fff,#00d4aa);display:flex;align-items:center;justify-content:center;font-size:.9rem;">K</div>
+                  <div>
+                    <div style="font-family:var(--orb);font-size:.55rem;color:var(--accent2);letter-spacing:1px;">KESHAV KARTHIK</div>
+                    <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:.5px;">Founder &amp; Developer</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTACT FORM -->
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label">// CONTACT US</div>
+            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);letter-spacing:.3px;line-height:1.7;margin-bottom:18px;">
+              Send us a message and we'll get back to you. Select a category to reach the right team.
+            </div>
+
+            <!-- Category selector (routes email) -->
+            <div style="margin-bottom:14px;">
+              <div style="font-family:var(--exo);font-size:.68rem;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Category</div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;" id="support-cats">
+                <div class="support-cat-chip on" data-email="support@veda-net.com" onclick="supportSelectCat(this)">🛠️ General Support</div>
+                <div class="support-cat-chip" data-email="developer@veda-net.com" onclick="supportSelectCat(this)">🐛 Bug Report</div>
+                <div class="support-cat-chip" data-email="owner@veda-net.com" onclick="supportSelectCat(this)">🤝 Business &amp; Partnerships</div>
+                <div class="support-cat-chip" data-email="hr@veda-net.com" onclick="supportSelectCat(this)">💼 Careers / HR</div>
+
+              </div>
+            </div>
+
+            <!-- Routing badge -->
+            <div id="support-routing-badge" style="
+              display:flex;align-items:center;gap:8px;
+              background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.18);
+              border-radius:9px;padding:8px 14px;margin-bottom:16px;
+            ">
+              <span style="font-size:.85rem;">📮</span>
+              <span style="font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:.5px;">
+                Routing to: <span id="support-routing-addr" style="color:var(--teal2);font-weight:600;">support@veda-net.com</span>
+              </span>
+            </div>
+
+            <!-- Name + Email row -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+              <div>
+                <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Your Name</div>
+                <input id="support-name" type="text" placeholder="e.g. Alex Tan"
+                  style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.18);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;"
+                  onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
+                  onblur="this.style.borderColor='rgba(77,159,255,.18)';this.style.boxShadow='none'">
+              </div>
+              <div>
+                <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Your Email</div>
+                <input id="support-email" type="email" placeholder="your@email.com"
+                  style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.18);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;"
+                  onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
+                  onblur="this.style.borderColor='rgba(77,159,255,.18)';this.style.boxShadow='none'">
+              </div>
+            </div>
+
+            <!-- Subject -->
+            <div style="margin-bottom:10px;">
+              <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Subject</div>
+              <input id="support-subject" type="text" placeholder="Briefly describe your issue or enquiry"
+                style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.18);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;"
+                onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
+                onblur="this.style.borderColor='rgba(77,159,255,.18)';this.style.boxShadow='none'">
+            </div>
+
+            <!-- Message -->
+            <div style="margin-bottom:16px;">
+              <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Message</div>
+              <textarea id="support-message" placeholder="Tell us what's on your mind…" rows="5"
+                style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.18);border-radius:10px;padding:13px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;resize:vertical;line-height:1.65;transition:border .2s,box-shadow .2s;"
+                onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
+                onblur="this.style.borderColor='rgba(77,159,255,.18)';this.style.boxShadow='none'"></textarea>
+            </div>
+
+            <!-- Send button -->
+            <button onclick="supportSend()" style="
+              width:100%;
+              background:linear-gradient(135deg,var(--accent),var(--teal));
+              border:none;border-radius:11px;padding:13px;
+              color:#fff;font-family:var(--orb);font-size:.6rem;font-weight:700;
+              letter-spacing:2px;cursor:pointer;transition:all .2s;text-transform:uppercase;
+            " onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 24px rgba(77,159,255,0.3)'"
+               onmouseout="this.style.transform='none';this.style.boxShadow='none'">
+              📨 Send Message
+            </button>
+
+            <!-- Status message -->
+            <div id="support-status" style="display:none;margin-top:12px;text-align:center;font-family:var(--exo);font-size:.78rem;letter-spacing:.5px;"></div>
+          </div>
+
+          <!-- QUICK LINKS -->
+          <div class="ps-card" style="margin-top:12px;margin-bottom:8px;">
+            <div class="ps-card-label">// QUICK CONTACT</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+              <a href="mailto:support@veda-net.com" style="text-decoration:none;">
+                <div style="background:rgba(77,159,255,0.05);border:1px solid rgba(77,159,255,0.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;"
+                  onmouseover="this.style.background='rgba(77,159,255,0.1)';this.style.borderColor='rgba(77,159,255,0.3)'"
+                  onmouseout="this.style.background='rgba(77,159,255,0.05)';this.style.borderColor='rgba(77,159,255,0.15)'">
+                  <div style="font-size:1.1rem;margin-bottom:4px;">🛠️</div>
+                  <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:1px;">SUPPORT</div>
+                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:2px;">support@veda-net.com</div>
+                </div>
+              </a>
+              <a href="mailto:developer@veda-net.com" style="text-decoration:none;">
+                <div style="background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;"
+                  onmouseover="this.style.background='rgba(0,212,170,0.1)';this.style.borderColor='rgba(0,212,170,0.3)'"
+                  onmouseout="this.style.background='rgba(0,212,170,0.05)';this.style.borderColor='rgba(0,212,170,0.15)'">
+                  <div style="font-size:1.1rem;margin-bottom:4px;">🐛</div>
+                  <div style="font-family:var(--orb);font-size:.5rem;color:var(--teal);letter-spacing:1px;">DEVELOPER</div>
+                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:2px;">developer@veda-net.com</div>
+                </div>
+              </a>
+              <a href="mailto:owner@veda-net.com" style="text-decoration:none;">
+                <div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;"
+                  onmouseover="this.style.background='rgba(251,191,36,0.1)';this.style.borderColor='rgba(251,191,36,0.3)'"
+                  onmouseout="this.style.background='rgba(251,191,36,0.05)';this.style.borderColor='rgba(251,191,36,0.15)'">
+                  <div style="font-size:1.1rem;margin-bottom:4px;">🤝</div>
+                  <div style="font-family:var(--orb);font-size:.5rem;color:#fbbf24;letter-spacing:1px;">BUSINESS</div>
+                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:2px;">owner@veda-net.com</div>
+                </div>
+              </a>
+              <a href="mailto:hr@veda-net.com" style="text-decoration:none;">
+                <div style="background:rgba(192,132,252,0.05);border:1px solid rgba(192,132,252,0.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;"
+                  onmouseover="this.style.background='rgba(192,132,252,0.1)';this.style.borderColor='rgba(192,132,252,0.3)'"
+                  onmouseout="this.style.background='rgba(192,132,252,0.05)';this.style.borderColor='rgba(192,132,252,0.15)'">
+                  <div style="font-size:1.1rem;margin-bottom:4px;">💼</div>
+                  <div style="font-family:var(--orb);font-size:.5rem;color:#c084fc;letter-spacing:1px;">CAREERS</div>
+                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:2px;">hr@veda-net.com</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+        </div>
+        <!-- END SUPPORT PANEL -->
 
       <!-- keep old account tab as alias so any go('account') calls still work -->
       <div class="tab" id="tab-account" style="display:none!important;"></div>
@@ -3162,15 +3436,15 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <div class="ps-panel" id="ps-profile">
           <div class="ps-hero">
             <div class="ps-avatar-wrap">
-              <div class="ps-avatar" id="acct-avatar">🎓</div>
+              <div class="ps-avatar" id="acct-avatar">⚡</div>
               <div class="ps-avatar-ring"></div>
             </div>
             <div class="ps-hero-right">
-              <div class="ps-name" id="acct-name">User</div>
-              <div class="ps-tagline" id="acct-tagline">Level 2 Apprentice</div>
+              <div class="ps-name" id="acct-name">Keshav</div>
+              <div class="ps-tagline" id="acct-tagline">Level 1 Scholar</div>
               <div class="ps-badges-row">
-                <div class="ps-pill gem">💎 <span id="acct-gems">60</span> Gems</div>
-                <div class="ps-pill streak">🔥 <span id="acct-streak">3</span> day streak</div>
+                <div class="ps-pill gem">💎 <span id="acct-gems">0</span> Gems</div>
+                <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
               </div>
             </div>
           </div>
@@ -3206,14 +3480,14 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" style="margin-top:12px;">
             <div class="ps-card-label">// LEVEL PROGRESS</div>
             <div class="ps-level-row">
-              <div class="ps-level-num" id="ps-level">2</div>
+              <div class="ps-level-num" id="ps-level">1</div>
               <div style="flex:1;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <span class="ps-form-label" id="ps-level-title">Apprentice</span>
-                  <span class="ps-form-label"><span id="ps-gems-cur">10</span> / <span id="ps-gems-next">50</span> gems</span>
+                  <span class="ps-form-label" id="ps-level-title">Scholar</span>
+                  <span class="ps-form-label"><span id="ps-gems-cur">0</span> / <span id="ps-gems-next">50</span> gems</span>
                 </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 20%;"></div></div>
-                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Thinker</div>
+                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 0%;"></div></div>
+                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label">Next: Apprentice</div>
               </div>
             </div>
           </div>
@@ -3680,7 +3954,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-icon">⚡</div>
               <div class="game-name">Reaction Time</div>
               <div class="game-desc">Tap when the signal fires!</div>
-              <div class="game-hi" id="hi-reaction">Best: -- ms</div>
+              <div class="game-hi" id="hi-reaction">Best: 0 ms</div>
             </div>
             <div class="game-card" data-cat="reflex" onclick="startGame('typing')">
               <div class="game-icon">⌨️</div>
@@ -4489,7 +4763,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       </div>
 
       <!-- LEADERBOARD TAB -->
-      <div class="tab on" id="tab-leaderboard">
+      <div class="tab" id="tab-leaderboard">
           <div class="ttl">🏆 Leaderboard</div>
           <div class="tsub"><span class="prm">›</span>Compete with friends — earn gems, keep streaks, top the board</div>
 
@@ -4497,7 +4771,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="panel" style="margin-bottom:16px;">
             <div style="font-family:var(--exo);font-size:.6rem;color:var(--teal);letter-spacing:2px;margin-bottom:14px;">// YOUR FRIEND CODE</div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-              <div id="lb-my-code" style="font-family:var(--orb);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;">6CCG6U</div>
+              <div id="lb-my-code" style="font-family:var(--orb);font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;">######</div>
               <button onclick="lbCopyCode()" style="background:rgba(77,159,255,.1);border:1px solid rgba(77,159,255,.25);border-radius:8px;padding:6px 14px;color:var(--accent2);font-family:var(--exo);font-size:.72rem;cursor:pointer;transition:all .15s;">📋 Copy</button>
               <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.6;">Share this with friends so they can add you</div>
             </div>
@@ -9584,6 +9858,214 @@ function obSkipKey() {
   }, 400);
 }
 
+
+// ══════════════════════════════════════════════════════
+// WIDGET SYSTEM
+// ══════════════════════════════════════════════════════
+
+const WIDGET_CONFIG = [
+  // Default widgets (always exist in DOM, toggleable)
+  { id:'daily-brief-widget',    label:'Daily Brief',     icon:'📋', extra:false, defaultOn:true  },
+  { id:'daily-challenge-widget',label:'Daily Challenge', icon:'⚡', extra:false, defaultOn:true  },
+  { id:'music-widget',          label:'Study Music',     icon:'🎵', extra:false, defaultOn:true  },
+  { id:'lb-home-widget',        label:'Leaderboard',     icon:'🏆', extra:false, defaultOn:true  },
+  { id:'exam-countdown-list',   label:'Exam Countdown',  icon:'📅', extra:false, defaultOn:true, parentSel:'.dt-widget:has(#exam-countdown-list)' },
+  // Extra widgets
+  { id:'widget-weather',        label:'Weather & Quote', icon:'🌤️', extra:true,  defaultOn:false },
+  { id:'widget-todo-summary',   label:"Today's Tasks",   icon:'✅', extra:true,  defaultOn:false },
+  { id:'widget-recent-notes',   label:'Recent Notes',    icon:'📝', extra:true,  defaultOn:false },
+  { id:'widget-next-session',   label:'Next Session',    icon:'🗓️', extra:true,  defaultOn:false },
+];
+
+function wGetPrefs() {
+  try { return JSON.parse(localStorage.getItem('veda_widget_prefs') || '{}'); } catch { return {}; }
+}
+function wSetPref(id, on) {
+  const p = wGetPrefs(); p[id] = on;
+  localStorage.setItem('veda_widget_prefs', JSON.stringify(p));
+}
+function wIsOn(cfg) {
+  const p = wGetPrefs();
+  return p[cfg.id] !== undefined ? p[cfg.id] : cfg.defaultOn;
+}
+
+function applyWidgetVisibility() {
+  WIDGET_CONFIG.forEach(cfg => {
+    const el = cfg.parentSel
+      ? document.querySelector(cfg.parentSel)
+      : document.getElementById(cfg.id);
+    if (!el) return;
+    const on = wIsOn(cfg);
+    el.style.display = on ? '' : 'none';
+    if (on && cfg.extra) loadExtraWidget(cfg.id);
+  });
+}
+
+function loadExtraWidget(id) {
+  if (id === 'widget-weather')        loadWeatherWidget();
+  if (id === 'widget-todo-summary')   loadTodoWidget();
+  if (id === 'widget-recent-notes')   loadRecentNotesWidget();
+  if (id === 'widget-next-session')   loadNextSessionWidget();
+}
+
+function openWidgetEditor() {
+  const overlay = document.getElementById('widget-editor-overlay');
+  overlay.style.display = 'flex';
+
+  const defaults = document.getElementById('weditor-list-default');
+  const extras   = document.getElementById('weditor-list-extra');
+  defaults.innerHTML = '';
+  extras.innerHTML   = '';
+
+  WIDGET_CONFIG.forEach(cfg => {
+    const on = wIsOn(cfg);
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(77,159,255,.1);border-radius:10px;';
+    row.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1rem;">${cfg.icon}</span>
+        <span style="font-family:var(--exo);font-size:.78rem;color:var(--text2);">${cfg.label}</span>
+      </div>
+      <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+        <input type="checkbox" ${on?'checked':''} style="opacity:0;width:0;height:0;" onchange="wToggle('${cfg.id}',this.checked)">
+        <span style="position:absolute;inset:0;background:${on?'var(--accent)':'rgba(255,255,255,.1)'};border-radius:999px;transition:.2s;"></span>
+        <span style="position:absolute;top:2px;left:${on?'18px':'2px'};width:16px;height:16px;background:#fff;border-radius:50%;transition:.2s;"></span>
+      </label>`;
+    (cfg.extra ? extras : defaults).appendChild(row);
+  });
+}
+
+function wToggle(id, on) {
+  wSetPref(id, on);
+  applyWidgetVisibility();
+  // Re-render editor to update toggle visual
+  openWidgetEditor();
+}
+
+function closeWidgetEditor() {
+  document.getElementById('widget-editor-overlay').style.display = 'none';
+}
+
+// ── Weather + Quote ──
+const QUOTES = [
+  { q:"The secret of getting ahead is getting started.", a:"Mark Twain" },
+  { q:"It always seems impossible until it's done.", a:"Nelson Mandela" },
+  { q:"Don't watch the clock; do what it does. Keep going.", a:"Sam Levenson" },
+  { q:"Success is the sum of small efforts repeated day in and day out.", a:"Robert Collier" },
+  { q:"Believe you can and you're halfway there.", a:"Theodore Roosevelt" },
+  { q:"The expert in anything was once a beginner.", a:"Helen Hayes" },
+  { q:"Education is the most powerful weapon you can use to change the world.", a:"Nelson Mandela" },
+  { q:"Hard work beats talent when talent doesn't work hard.", a:"Tim Notke" },
+];
+async function loadWeatherWidget() {
+  const el = document.getElementById('widget-weather');
+  if (!el || el.dataset.loaded) return;
+  el.dataset.loaded = '1';
+  // Quote (rotate daily)
+  const q = QUOTES[new Date().getDate() % QUOTES.length];
+  const qEl = document.getElementById('ww-quote');
+  const aEl = document.getElementById('ww-author');
+  if (qEl) qEl.textContent = `"${q.q}"`;
+  if (aEl) aEl.textContent = `— ${q.a}`;
+  // Weather via open-meteo (no key needed)
+  try {
+    navigator.geolocation.getCurrentPosition(async pos => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius`);
+      const data = await res.json();
+      const cw = data.current_weather;
+      const code = cw.weathercode;
+      const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
+      const icon = icons[code] || '🌡️';
+      const temp = Math.round(cw.temperature);
+      const desc = code === 0 ? 'Clear sky' : code <= 3 ? 'Partly cloudy' : code <= 48 ? 'Foggy' : code <= 65 ? 'Rainy' : code <= 75 ? 'Snowy' : 'Stormy';
+      if (document.getElementById('ww-icon'))  document.getElementById('ww-icon').textContent  = icon;
+      if (document.getElementById('ww-temp'))  document.getElementById('ww-temp').textContent  = temp + '°C';
+      if (document.getElementById('ww-desc'))  document.getElementById('ww-desc').textContent  = desc;
+      if (document.getElementById('ww-loc'))   document.getElementById('ww-loc').textContent   = `${lat.toFixed(1)}°N ${Math.abs(lon).toFixed(1)}°${lon<0?'W':'E'}`;
+    }, () => {
+      if (document.getElementById('ww-desc')) document.getElementById('ww-desc').textContent = 'Location unavailable';
+    });
+  } catch { if (document.getElementById('ww-desc')) document.getElementById('ww-desc').textContent = 'Could not load weather'; }
+}
+
+// ── To-Do Summary ──
+function loadTodoWidget() {
+  const el = document.getElementById('widget-todo-summary');
+  if (!el) return;
+  const list = document.getElementById('wtodo-list');
+  const empty = document.getElementById('wtodo-empty');
+  try {
+    const todos = JSON.parse(localStorage.getItem('studly_todos') || '[]');
+    const pending = todos.filter(t => !t.done).slice(0, 5);
+    if (pending.length === 0) {
+      list.style.display = 'none';
+      empty.style.display = 'block';
+      return;
+    }
+    list.style.display = 'flex';
+    empty.style.display = 'none';
+    list.innerHTML = pending.map(t => `
+      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(77,159,255,.07);">
+        <span style="font-size:.75rem;opacity:.5;">○</span>
+        <span style="font-family:var(--exo);font-size:.76rem;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.text || t.title || 'Task'}</span>
+        ${t.due ? `<span style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.5;">${t.due}</span>` : ''}
+      </div>`).join('');
+  } catch { empty.style.display = 'block'; }
+}
+
+// ── Recent Notes ──
+function loadRecentNotesWidget() {
+  const list = document.getElementById('wrecent-notes-list');
+  const empty = document.getElementById('wrecent-notes-empty');
+  if (!list) return;
+  try {
+    const notes = JSON.parse(localStorage.getItem('studly_packs') || '[]');
+    const recent = [...notes].sort((a,b) => (b.updated||0)-(a.updated||0)).slice(0,3);
+    if (recent.length === 0) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    list.innerHTML = recent.map(n => `
+      <div onclick="go('notes')" style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:rgba(192,132,252,.05);border:1px solid rgba(192,132,252,.12);border-radius:9px;cursor:pointer;transition:all .15s;" onmouseover="this.style.background='rgba(192,132,252,.1)'" onmouseout="this.style.background='rgba(192,132,252,.05)'">
+        <span style="font-size:.9rem;">📝</span>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:var(--exo);font-size:.76rem;color:var(--text);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${n.name || 'Untitled'}</div>
+          <div style="font-family:var(--exo);font-size:.62rem;color:var(--silver);opacity:.55;">${n.cards?.length||0} cards</div>
+        </div>
+        <span style="color:var(--silver);font-size:.75rem;opacity:.4;">→</span>
+      </div>`).join('');
+  } catch { empty.style.display = 'block'; }
+}
+
+// ── Next Session ──
+function loadNextSessionWidget() {
+  const content = document.getElementById('wnext-session-content');
+  const empty   = document.getElementById('wnext-session-empty');
+  if (!content) return;
+  try {
+    const planner = JSON.parse(localStorage.getItem('veda_planner') || '[]');
+    const now = Date.now();
+    const upcoming = planner
+      .filter(s => s.start && new Date(s.start).getTime() > now)
+      .sort((a,b) => new Date(a.start) - new Date(b.start));
+    if (upcoming.length === 0) { empty.style.display = 'block'; content.style.display = 'none'; return; }
+    const s = upcoming[0];
+    const dt = new Date(s.start);
+    const diff = Math.round((dt - now) / 60000);
+    const diffStr = diff < 60 ? `in ${diff}m` : diff < 1440 ? `in ${Math.floor(diff/60)}h ${diff%60}m` : `in ${Math.floor(diff/1440)}d`;
+    empty.style.display = 'none';
+    content.style.display = 'block';
+    content.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="font-size:1.8rem;">📖</div>
+        <div>
+          <div style="font-family:var(--raj);font-size:.9rem;color:var(--text);font-weight:600;">${s.title || s.subject || 'Study Session'}</div>
+          <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);margin-top:2px;">${dt.toLocaleDateString()} · ${dt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+          <div style="font-family:var(--orb);font-size:.75rem;color:#fb923c;margin-top:3px;">${diffStr}</div>
+        </div>
+      </div>`;
+  } catch { empty.style.display = 'block'; }
+}
+
 function checkOnboarding() {
   const onboarded = localStorage.getItem('studly_onboarded');
   if (!onboarded) {
@@ -9886,6 +10368,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (s) { applyBg(s); locked = s; }
   renderThemes();
   checkOnboarding();
+  go('home');
+  applyWidgetVisibility();
   updateHomeStats();
   loadCompHistory();
   initLibrary();
@@ -13473,6 +13957,52 @@ function lbRefreshHomeWidget(entries, myUid) {
 }
 
 // ── Init leaderboard when tab is opened (wired into go() via DOMContentLoaded below) ──
+// ── SUPPORT PAGE ──
+function supportSelectCat(el) {
+  document.querySelectorAll('.support-cat-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  const addr = el.dataset.email;
+  const badge = document.getElementById('support-routing-addr');
+  if (badge) badge.textContent = addr;
+}
+
+function supportSend() {
+  const name    = (document.getElementById('support-name')?.value || '').trim();
+  const email   = (document.getElementById('support-email')?.value || '').trim();
+  const subject = (document.getElementById('support-subject')?.value || '').trim();
+  const message = (document.getElementById('support-message')?.value || '').trim();
+  const active  = document.querySelector('.support-cat-chip.on');
+  const toAddr  = active ? active.dataset.email : 'support@veda-net.com';
+  const status  = document.getElementById('support-status');
+
+  if (!name || !email || !subject || !message) {
+    if (status) {
+      status.style.display = 'block';
+      status.style.color = '#ff6680';
+      status.textContent = '⚠️ Please fill in all fields before sending.';
+    }
+    return;
+  }
+
+  const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
+  const mailto = `mailto:${toAddr}?subject=${encodeURIComponent('[Veda Support] ' + subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+
+  if (status) {
+    status.style.display = 'block';
+    status.style.color = 'var(--teal2)';
+    status.textContent = '✅ Opening your mail client… message ready to send.';
+    setTimeout(() => {
+      // Clear form after send
+      ['support-name','support-email','support-subject','support-message'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      setTimeout(() => { status.style.display = 'none'; }, 3000);
+    }, 1500);
+  }
+}
+
 function lbOnOpen() {
   const codeEl = document.getElementById('lb-my-code');
   if (codeEl) codeEl.textContent = lbGetMyCode();
@@ -13534,4 +14064,6 @@ document.addEventListener('DOMContentLoaded', () => {
 <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
 
-</div></div></body></html>
+</div></div><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+</body></html>
