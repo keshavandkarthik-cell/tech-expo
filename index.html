@@ -1319,6 +1319,36 @@ body.fs-large { font-size: 17px; }
 .ps-about-logo { font-family:var(--orb); font-size:1.3rem; font-weight:900; background:linear-gradient(135deg,var(--accent),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:4px; margin-bottom:5px; }
 .ps-about-ver { font-family:var(--exo); font-size:.78rem; color:var(--silver2); letter-spacing:1px; margin-bottom:4px; }
 .ps-about-line { font-family:var(--exo); font-size:.72rem; color:var(--silver); opacity:.7; }
+.ap-subnav {
+  display:flex;gap:6px;flex-wrap:wrap;
+  padding:4px 0 14px;
+  border-bottom:1px solid rgba(77,159,255,0.1);
+  margin-bottom:16px;
+}
+.ap-tab {
+  background:rgba(255,255,255,0.03);border:1px solid rgba(77,159,255,0.15);
+  border-radius:999px;padding:7px 16px;
+  font-family:var(--exo);font-size:.75rem;color:var(--silver2);
+  cursor:pointer;transition:all .15s;letter-spacing:.3px;
+}
+.ap-tab:hover { background:rgba(77,159,255,0.08);border-color:var(--accent);color:var(--accent2); }
+.ap-tab.on {
+  background:linear-gradient(135deg,rgba(77,159,255,0.15),rgba(0,212,170,0.08));
+  border-color:var(--accent);color:var(--accent2);
+  box-shadow:0 0 10px rgba(77,159,255,0.12);
+}
+.ap-panel { display:none; animation:tIn .18s ease; }
+.ap-panel.on { display:block; }
+.sp-panel { display:none; animation:tIn .18s ease; }
+.sp-panel.on { display:block; }
+.sp-contact-card {
+  background:rgba(var(--cc),0.05);border:1px solid rgba(var(--cc),0.15);
+  border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;
+}
+.sp-contact-card:hover {
+  background:rgba(var(--cc),0.1);border-color:rgba(var(--cc),0.35);
+  transform:translateY(-1px);box-shadow:0 6px 20px rgba(var(--cc),0.1);
+}
 .support-cat-chip {
   background:rgba(255,255,255,0.04);border:1px solid rgba(77,159,255,0.18);
   border-radius:999px;padding:6px 14px;
@@ -2922,103 +2952,124 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
         <!-- ── APPEARANCE PANEL ── -->
         <div class="ps-panel" id="ps-appearance">
-          <div class="ps-card">
-            <div class="ps-card-label">// UI SKIN</div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
-              <div class="skin-card on" id="style-default" onclick="setUIStyle('default',this)">
-                <div class="skin-preview skin-prev-default"></div>
-                <div class="skin-label">🖥️ Default</div>
+
+          <!-- Secondary nav -->
+          <div class="ap-subnav" id="ap-subnav">
+            <button class="ap-tab on" onclick="apGo('look',this)">🎨 Look</button>
+            <button class="ap-tab" onclick="apGo('colors',this)">🌈 Colors</button>
+            <button class="ap-tab" onclick="apGo('layout',this)">📐 Layout</button>
+            <button class="ap-tab" onclick="apGo('language',this)">🌐 Language</button>
+          </div>
+
+          <!-- LOOK: Skin + Theme -->
+          <div class="ap-panel on" id="ap-look">
+            <div class="ps-card">
+              <div class="ps-card-label">// UI SKIN</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
+                <div class="skin-card on" id="style-default" onclick="setUIStyle('default',this)">
+                  <div class="skin-preview skin-prev-default"></div>
+                  <div class="skin-label">🖥️ Default</div>
+                </div>
+                <div class="skin-card" id="style-hacker" onclick="setUIStyle('hacker',this)">
+                  <div class="skin-preview skin-prev-hacker"></div>
+                  <div class="skin-label">💻 Hacker</div>
+                </div>
+                <div class="skin-card" id="style-glass" onclick="setUIStyle('glass',this)">
+                  <div class="skin-preview skin-prev-glass"></div>
+                  <div class="skin-label">🔮 Frosted</div>
+                </div>
+                <div class="skin-card" id="style-synthwave" onclick="setUIStyle('synthwave',this)">
+                  <div class="skin-preview skin-prev-synthwave"></div>
+                  <div class="skin-label">🌆 Synthwave</div>
+                </div>
               </div>
-              <div class="skin-card" id="style-hacker" onclick="setUIStyle('hacker',this)">
-                <div class="skin-preview skin-prev-hacker"></div>
-                <div class="skin-label">💻 Hacker</div>
+            </div>
+
+            <div class="ps-card" style="margin-top:12px;">
+              <div class="ps-card-label">// THEME</div>
+              <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
+                <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat on">◻️ Minimal</button></div>
+                <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
               </div>
-              <div class="skin-card" id="style-glass" onclick="setUIStyle('glass',this)">
-                <div class="skin-preview skin-prev-glass"></div>
-                <div class="skin-label">🔮 Frosted</div>
+              <div id="shop-panel" style="display:none;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                  <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:2px;">// GEM SHOP</div>
+                  <div style="font-family:var(--orb);font-size:.55rem;color:var(--teal2);">💎 <span id="shop-gems-display">0</span> gems</div>
+                </div>
+                <div class="shop-grid" id="shop-grid"></div>
               </div>
-              <div class="skin-card" id="style-synthwave" onclick="setUIStyle('synthwave',this)">
-                <div class="skin-preview skin-prev-synthwave"></div>
-                <div class="skin-label">🌆 Synthwave</div>
+              <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 8, 8), rgb(15, 15, 15));"><div class="tname" style="color: rgb(99, 102, 241);">Pure Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(17, 17, 17), rgb(26, 26, 26));"><div class="tname" style="color: rgb(129, 140, 248);">Charcoal</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 20, 20), rgb(30, 30, 30));"><div class="tname" style="color: rgb(148, 163, 184);">Graphite</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 10, 10), rgb(20, 20, 20));"><div class="tname" style="color: rgb(192, 132, 252);">Obsidian</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 7, 18), rgb(15, 15, 30));"><div class="tname" style="color: rgb(96, 165, 250);">Midnight</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 8, 12), rgb(8, 12, 18));"><div class="tname" style="color: rgb(52, 211, 153);">Abyss</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 24, 24), rgb(34, 34, 34));"><div class="tname" style="color: rgb(226, 232, 240);">Smoke</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(248, 249, 255), rgb(240, 242, 255));"><div class="tname" style="color: rgb(59, 130, 246);">Soft White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(250, 247, 240), rgb(240, 235, 224));"><div class="tname" style="color: rgb(180, 83, 9);">Warm Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(255, 251, 240), rgb(248, 243, 232));"><div class="tname" style="color: rgb(124, 58, 237);">Cream</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 244, 248), rgb(232, 237, 242));"><div class="tname" style="color: rgb(8, 145, 178);">Cool Gray</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 245, 240), rgb(232, 240, 232));"><div class="tname" style="color: rgb(6, 95, 70);">Soft Sage</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(253, 240, 245), rgb(250, 232, 240));"><div class="tname" style="color: rgb(190, 24, 93);">Blush</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 249, 255), rgb(232, 244, 255));"><div class="tname" style="color: rgb(29, 78, 216);">Sky White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(245, 240, 255), rgb(237, 232, 255));"><div class="tname" style="color: rgb(109, 40, 217);">Lavender Mist</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 25, 23), rgb(41, 37, 36));"><div class="tname" style="color: rgb(55, 65, 81);">Warm Slate</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 12, 27), rgb(5, 16, 32));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Navy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 18, 8), rgb(12, 28, 14));"><div class="tname" style="color: rgb(34, 197, 94);">Forest Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 8, 8), rgb(42, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Burgundy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(12, 14, 24), rgb(20, 22, 34));"><div class="tname" style="color: rgb(165, 180, 252);">Slate Blue</div></div></div>
+            </div>
+          </div>
+
+          <!-- COLORS: Accent -->
+          <div class="ap-panel" id="ap-colors">
+            <div class="ps-card">
+              <div class="ps-card-label">// ACCENT COLOR</div>
+              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:16px;line-height:1.6;">Pick a color to use across buttons, highlights, and active states throughout Veda.</div>
+              <div class="color-row" style="flex-wrap:wrap;gap:12px;margin-top:4px;">
+                <div class="color-swatch on" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
+                <div class="color-swatch" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
+                <div class="color-swatch" style="background:#c084fc;" data-color="#c084fc" onclick="setAccent('#c084fc',this)"></div>
+                <div class="color-swatch" style="background:#f472b6;" data-color="#f472b6" onclick="setAccent('#f472b6',this)"></div>
+                <div class="color-swatch" style="background:#fb923c;" data-color="#fb923c" onclick="setAccent('#fb923c',this)"></div>
+                <div class="color-swatch" style="background:#34d399;" data-color="#34d399" onclick="setAccent('#34d399',this)"></div>
+                <div class="color-swatch" style="background:#fbbf24;" data-color="#fbbf24" onclick="setAccent('#fbbf24',this)"></div>
+                <div class="color-swatch" style="background:#ff6b6b;" data-color="#ff6b6b" onclick="setAccent('#ff6b6b',this)"></div>
+                <div class="color-custom-wrap" title="Custom color">
+                  <div class="color-swatch" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);" onclick="document.getElementById('custom-color-in').click()"></div>
+                  <input type="color" id="custom-color-in" style="position:absolute;opacity:0;width:1px;height:1px;" oninput="setAccent(this.value,null)">
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// ACCENT COLOR</div>
-            <div class="color-row" style="flex-wrap:wrap;gap:10px;margin-top:4px;">
-              <div class="color-swatch on" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
-              <div class="color-swatch" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
-              <div class="color-swatch" style="background:#c084fc;" data-color="#c084fc" onclick="setAccent('#c084fc',this)"></div>
-              <div class="color-swatch" style="background:#f472b6;" data-color="#f472b6" onclick="setAccent('#f472b6',this)"></div>
-              <div class="color-swatch" style="background:#fb923c;" data-color="#fb923c" onclick="setAccent('#fb923c',this)"></div>
-              <div class="color-swatch" style="background:#34d399;" data-color="#34d399" onclick="setAccent('#34d399',this)"></div>
-              <div class="color-swatch" style="background:#fbbf24;" data-color="#fbbf24" onclick="setAccent('#fbbf24',this)"></div>
-              <div class="color-swatch" style="background:#ff6b6b;" data-color="#ff6b6b" onclick="setAccent('#ff6b6b',this)"></div>
-              <div class="color-custom-wrap" title="Custom color">
-                <div class="color-swatch" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);" onclick="document.getElementById('custom-color-in').click()"></div>
-                <input type="color" id="custom-color-in" style="position:absolute;opacity:0;width:1px;height:1px;" oninput="setAccent(this.value,null)">
-              </div>
-            </div>
-          </div>
-
-          <div class="ps-two-col" style="margin-top:12px;">
+          <!-- LAYOUT: Font + Sidebar -->
+          <div class="ap-panel" id="ap-layout">
             <div class="ps-card">
               <div class="ps-card-label">// FONT SIZE</div>
-              <div class="pers-row" style="margin-top:8px;">
+              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Controls base text size across the entire app.</div>
+              <div class="pers-row">
                 <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
                 <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
                 <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
                 <button class="pers-btn" id="fs-huge" onclick="setFontSize('huge',this)">Giant</button>
               </div>
             </div>
-            <div class="ps-card">
+            <div class="ps-card" style="margin-top:12px;">
               <div class="ps-card-label">// SIDEBAR</div>
-              <div class="pers-row" style="margin-top:8px;">
+              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Control when the left sidebar is visible.</div>
+              <div class="pers-row">
                 <button class="pers-btn" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
                 <button class="pers-btn on" id="sb-open" onclick="setSbPref('open',this)">Open</button>
                 <button class="pers-btn" id="sb-closed" onclick="setSbPref('closed',this)">Closed</button>
               </div>
             </div>
-          </div>
-
-
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// THEME</div>
-        <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-          <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat on">◻️ Minimal</button></div>
-          <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()">💎 Gem Shop</button>
-        </div>
-        <div id="shop-panel" style="display:none;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-            <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:2px;">// GEM SHOP</div>
-            <div style="font-family:var(--orb);font-size:.55rem;color:var(--teal2);">💎 <span id="shop-gems-display">0</span> gems</div>
-          </div>
-          <div class="shop-grid" id="shop-grid"></div>
-        </div>
-        <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 8, 8), rgb(15, 15, 15));"><div class="tname" style="color: rgb(99, 102, 241);">Pure Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(17, 17, 17), rgb(26, 26, 26));"><div class="tname" style="color: rgb(129, 140, 248);">Charcoal</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 20, 20), rgb(30, 30, 30));"><div class="tname" style="color: rgb(148, 163, 184);">Graphite</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 10, 10), rgb(20, 20, 20));"><div class="tname" style="color: rgb(192, 132, 252);">Obsidian</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 7, 18), rgb(15, 15, 30));"><div class="tname" style="color: rgb(96, 165, 250);">Midnight</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 8, 12), rgb(8, 12, 18));"><div class="tname" style="color: rgb(52, 211, 153);">Abyss</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 24, 24), rgb(34, 34, 34));"><div class="tname" style="color: rgb(226, 232, 240);">Smoke</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(248, 249, 255), rgb(240, 242, 255));"><div class="tname" style="color: rgb(59, 130, 246);">Soft White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(250, 247, 240), rgb(240, 235, 224));"><div class="tname" style="color: rgb(180, 83, 9);">Warm Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(255, 251, 240), rgb(248, 243, 232));"><div class="tname" style="color: rgb(124, 58, 237);">Cream</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 244, 248), rgb(232, 237, 242));"><div class="tname" style="color: rgb(8, 145, 178);">Cool Gray</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 245, 240), rgb(232, 240, 232));"><div class="tname" style="color: rgb(6, 95, 70);">Soft Sage</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(253, 240, 245), rgb(250, 232, 240));"><div class="tname" style="color: rgb(190, 24, 93);">Blush</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(240, 249, 255), rgb(232, 244, 255));"><div class="tname" style="color: rgb(29, 78, 216);">Sky White</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(245, 240, 255), rgb(237, 232, 255));"><div class="tname" style="color: rgb(109, 40, 217);">Lavender Mist</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 25, 23), rgb(41, 37, 36));"><div class="tname" style="color: rgb(55, 65, 81);">Warm Slate</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 12, 27), rgb(5, 16, 32));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Navy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(7, 18, 8), rgb(12, 28, 14));"><div class="tname" style="color: rgb(34, 197, 94);">Forest Dark</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(28, 8, 8), rgb(42, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Burgundy</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(12, 14, 24), rgb(20, 22, 34));"><div class="tname" style="color: rgb(165, 180, 252);">Slate Blue</div></div></div>
-      
-          </div>
-
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label" data-i18n="lang_section">// LANGUAGE</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:10px;">
-              <div class="lang-pill on" id="lang-en" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span></div>
-              <div class="lang-pill" id="lang-es" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></div>
-              <div class="lang-pill" id="lang-ms" onclick="setLang('ms',this)"><span class="lang-flag">🇲🇾</span><span class="lang-name">Bahasa Melayu</span></div>
-              <div class="lang-pill" id="lang-zh" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></div>
-              <div class="lang-pill" id="lang-ja" onclick="setLang('ja',this)"><span class="lang-flag">🇯🇵</span><span class="lang-name">日本語</span></div>
+            <div class="ps-card" style="margin-top:12px;">
+              <div class="ps-card-label">// ABOUT</div>
+              <div class="ps-about">
+                <div class="ps-about-logo">VEDA</div>
+                <div class="ps-about-ver">Version 3.0 · ज्ञानं परमं ध्येयम्</div>
+                <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
+              </div>
             </div>
           </div>
 
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// ABOUT</div>
-            <div class="ps-about">
-              <div class="ps-about-logo">VEDA</div>
-              <div class="ps-about-ver">Version 3.0 · ज्ञानं परमं ध्येयम्</div>
-              <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
+          <!-- LANGUAGE -->
+          <div class="ap-panel" id="ap-language">
+            <div class="ps-card">
+              <div class="ps-card-label" data-i18n="lang_section">// LANGUAGE</div>
+              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:14px;line-height:1.6;">Choose the language for Veda's interface.</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:4px;">
+                <div class="lang-pill on" id="lang-en" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span></div>
+                <div class="lang-pill" id="lang-es" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></div>
+                <div class="lang-pill" id="lang-ms" onclick="setLang('ms',this)"><span class="lang-flag">🇲🇾</span><span class="lang-name">Bahasa Melayu</span></div>
+                <div class="lang-pill" id="lang-zh" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></div>
+                <div class="lang-pill" id="lang-ja" onclick="setLang('ja',this)"><span class="lang-flag">🇯🇵</span><span class="lang-name">日本語</span></div>
+              </div>
             </div>
           </div>
+
         </div>
 
         <!-- ── API KEY PANEL ── -->
@@ -3227,196 +3278,241 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       <!-- ── SUPPORT PANEL ── -->
         <div class="ps-panel" id="ps-support">
 
-          <!-- ABOUT VEDA KINGDOM BANNER -->
-          <div class="ps-card" style="position:relative;overflow:hidden;padding:0;">
-            <div style="
-              background: linear-gradient(135deg, rgba(10,14,26,0.98) 0%, rgba(15,21,40,0.95) 40%, rgba(8,18,35,0.98) 100%);
-              border-radius:14px;padding:28px 28px 20px;
-              position:relative;overflow:hidden;
-            ">
-              <!-- Animated background orbs -->
-              <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(77,159,255,0.08),transparent 70%);pointer-events:none;"></div>
-              <div style="position:absolute;bottom:-30px;left:20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,0.06),transparent 70%);pointer-events:none;"></div>
-
-              <!-- Crown + Title -->
-              <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
-                <div style="
-                  width:52px;height:52px;border-radius:14px;flex-shrink:0;
-                  background:linear-gradient(135deg,rgba(77,159,255,0.15),rgba(0,212,170,0.1));
-                  border:1px solid rgba(77,159,255,0.3);
-                  display:flex;align-items:center;justify-content:center;
-                  font-size:1.6rem;box-shadow:0 0 20px rgba(77,159,255,0.15);
-                ">👑</div>
-                <div>
-                  <div style="font-family:var(--orb);font-size:1.15rem;font-weight:900;letter-spacing:4px;
-                    background:linear-gradient(135deg,var(--accent),var(--teal),var(--chrome2));
-                    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
-                    VEDA
-                  </div>
-                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:2px;text-transform:uppercase;margin-top:2px;">
-                    ज्ञानं परमं ध्येयम् · Knowledge is the Supreme Goal
-                  </div>
-                </div>
-              </div>
-
-              <!-- Description -->
-              <div style="font-family:var(--raj);font-size:.88rem;color:var(--text2);line-height:1.75;margin-bottom:20px;">
-                Veda is an AI-powered study companion built for students who refuse to settle for average.
-                From smart flashcards and exam prep to a companion that actually understands your curriculum —
-                Veda is your kingdom of knowledge, open 24/7.
-              </div>
-
-              <!-- Feature pills -->
-              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;">
-                <div style="background:rgba(77,159,255,0.08);border:1px solid rgba(77,159,255,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:var(--accent2);letter-spacing:.5px;">⚡ Gemini AI</div>
-                <div style="background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:.5px;">🧠 Smart Study</div>
-                <div style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:#c084fc;letter-spacing:.5px;">📚 Flashcards + Quizzes</div>
-                <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:#fbbf24;letter-spacing:.5px;">🏆 Leaderboard</div>
-                <div style="background:rgba(77,159,255,0.08);border:1px solid rgba(77,159,255,0.15);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:var(--silver2);letter-spacing:.5px;">📄 Exam Papers</div>
-                <div style="background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.15);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.72rem;color:var(--silver2);letter-spacing:.5px;">✅ To-Do + Planner</div>
-              </div>
-
-              <!-- Team -->
-              <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(77,159,255,0.12);border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px;">
-                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4d9fff,#00d4aa);display:flex;align-items:center;justify-content:center;font-size:.9rem;">K</div>
-                  <div>
-                    <div style="font-family:var(--orb);font-size:.55rem;color:var(--accent2);letter-spacing:1px;">KESHAV KARTHIK</div>
-                    <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:.5px;">Founder &amp; Developer</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <!-- Secondary nav -->
+          <div class="ap-subnav">
+            <button class="ap-tab on" onclick="spGo('about',this)">👑 About</button>
+            <button class="ap-tab" onclick="spGo('contact',this)">📨 Contact</button>
+            <button class="ap-tab" onclick="spGo('team',this)">👤 Team</button>
           </div>
 
-          <!-- CONTACT FORM -->
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// CONTACT US</div>
-            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);letter-spacing:.3px;line-height:1.7;margin-bottom:18px;">
-              Send us a message and we'll get back to you. Select a category to reach the right team.
+          <!-- ── ABOUT ── -->
+          <div class="sp-panel on" id="sp-about">
+
+            <!-- Hero banner -->
+            <div style="position:relative;overflow:hidden;border-radius:16px;margin-bottom:12px;">
+              <div style="
+                background:linear-gradient(135deg,#050810 0%,#0a1020 40%,#060c18 100%);
+                padding:36px 28px 28px;position:relative;overflow:hidden;
+              ">
+                <!-- Glow orbs -->
+                <div style="position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(77,159,255,0.1),transparent 70%);pointer-events:none;"></div>
+                <div style="position:absolute;bottom:-40px;left:-20px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,0.07),transparent 70%);pointer-events:none;"></div>
+                <div style="position:absolute;top:50%;right:20%;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(192,132,252,0.05),transparent 70%);pointer-events:none;"></div>
+
+                <!-- Crown icon -->
+                <div style="
+                  width:64px;height:64px;border-radius:18px;margin-bottom:20px;
+                  background:linear-gradient(135deg,rgba(77,159,255,0.12),rgba(0,212,170,0.08));
+                  border:1px solid rgba(77,159,255,0.25);
+                  display:flex;align-items:center;justify-content:center;
+                  font-size:2rem;box-shadow:0 0 30px rgba(77,159,255,0.12),inset 0 1px 0 rgba(255,255,255,0.06);
+                ">👑</div>
+
+                <!-- Title -->
+                <div style="
+                  font-family:var(--orb);font-size:2.2rem;font-weight:900;letter-spacing:6px;
+                  background:linear-gradient(135deg,#fff 0%,var(--accent) 50%,var(--teal) 100%);
+                  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+                  margin-bottom:6px;line-height:1;
+                ">VEDA</div>
+                <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;opacity:.7;">
+                  ज्ञानं परमं ध्येयम् · Knowledge is the Supreme Goal
+                </div>
+
+                <!-- Tagline -->
+                <div style="font-family:var(--raj);font-size:.95rem;color:rgba(255,255,255,0.7);line-height:1.8;max-width:480px;margin-bottom:24px;">
+                  An AI-powered study companion built for students who refuse to settle for average. Smart flashcards, exam prep, spaced repetition, and an AI that actually understands your curriculum — all in one kingdom.
+                </div>
+
+                <!-- Version badge -->
+                <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(77,159,255,0.08);border:1px solid rgba(77,159,255,0.2);border-radius:999px;padding:6px 16px;">
+                  <div style="width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);"></div>
+                  <span style="font-family:var(--exo);font-size:.7rem;color:var(--silver2);letter-spacing:1px;">Version 3.0 · Powered by Gemini AI</span>
+                </div>
+              </div>
             </div>
 
-            <!-- Category selector (routes email) -->
-            <div style="margin-bottom:14px;">
-              <div style="font-family:var(--exo);font-size:.68rem;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">Category</div>
-              <div style="display:flex;flex-wrap:wrap;gap:7px;" id="support-cats">
+            <!-- Feature grid -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+              <div style="background:rgba(77,159,255,0.04);border:1px solid rgba(77,159,255,0.12);border-radius:12px;padding:16px;">
+                <div style="font-size:1.4rem;margin-bottom:8px;">⚡</div>
+                <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:1.5px;margin-bottom:4px;">GEMINI AI</div>
+                <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);line-height:1.6;">Powered by Google's latest model for intelligent, context-aware responses.</div>
+              </div>
+              <div style="background:rgba(0,212,170,0.04);border:1px solid rgba(0,212,170,0.12);border-radius:12px;padding:16px;">
+                <div style="font-size:1.4rem;margin-bottom:8px;">🧠</div>
+                <div style="font-family:var(--orb);font-size:.5rem;color:var(--teal);letter-spacing:1.5px;margin-bottom:4px;">SMART STUDY</div>
+                <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);line-height:1.6;">SM-2 spaced repetition, flashcards, quizzes and mastery tracking.</div>
+              </div>
+              <div style="background:rgba(192,132,252,0.04);border:1px solid rgba(192,132,252,0.12);border-radius:12px;padding:16px;">
+                <div style="font-size:1.4rem;margin-bottom:8px;">🏆</div>
+                <div style="font-family:var(--orb);font-size:.5rem;color:#c084fc;letter-spacing:1.5px;margin-bottom:4px;">GAMIFIED</div>
+                <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);line-height:1.6;">Gems, streaks, leaderboards, and 20+ mini-games to keep you sharp.</div>
+              </div>
+              <div style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.12);border-radius:12px;padding:16px;">
+                <div style="font-size:1.4rem;margin-bottom:8px;">📄</div>
+                <div style="font-family:var(--orb);font-size:.5rem;color:#fbbf24;letter-spacing:1.5px;margin-bottom:4px;">EXAM READY</div>
+                <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);line-height:1.6;">AI-generated exam papers, paper tracker and a full study planner.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ── CONTACT ── -->
+          <div class="sp-panel" id="sp-contact">
+            <div class="ps-card">
+              <div class="ps-card-label">// CONTACT US</div>
+              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);line-height:1.7;margin-bottom:18px;">
+                Select a category below — your message will be routed to the right team automatically.
+              </div>
+
+              <!-- Category chips -->
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;" id="support-cats">
                 <div class="support-cat-chip on" data-email="support@veda-net.com" onclick="supportSelectCat(this)">🛠️ General Support</div>
                 <div class="support-cat-chip" data-email="developer@veda-net.com" onclick="supportSelectCat(this)">🐛 Bug Report</div>
                 <div class="support-cat-chip" data-email="owner@veda-net.com" onclick="supportSelectCat(this)">🤝 Business &amp; Partnerships</div>
                 <div class="support-cat-chip" data-email="hr@veda-net.com" onclick="supportSelectCat(this)">💼 Careers / HR</div>
-
               </div>
-            </div>
 
-            <!-- Routing badge -->
-            <div id="support-routing-badge" style="
-              display:flex;align-items:center;gap:8px;
-              background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.18);
-              border-radius:9px;padding:8px 14px;margin-bottom:16px;
-            ">
-              <span style="font-size:.85rem;">📮</span>
-              <span style="font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:.5px;">
-                Routing to: <span id="support-routing-addr" style="color:var(--teal2);font-weight:600;">support@veda-net.com</span>
-              </span>
-            </div>
+              <!-- Routing badge -->
+              <div id="support-routing-badge" style="
+                display:flex;align-items:center;gap:8px;
+                background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.15);
+                border-radius:9px;padding:9px 14px;margin-bottom:18px;
+              ">
+                <span style="font-size:.85rem;">📮</span>
+                <span style="font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:.4px;">
+                  Routing to: <span id="support-routing-addr" style="color:var(--teal2);font-weight:700;">support@veda-net.com</span>
+                </span>
+              </div>
 
-            <!-- Name + Email row -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-              <div>
-                <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Your Name</div>
-                <input id="support-name" type="text" placeholder="e.g. Alex Tan"
-                  style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.18);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;"
+              <!-- Name + Email -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+                <div>
+                  <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Your Name</div>
+                  <input id="support-name" type="text" placeholder="e.g. Alex Tan"
+                    style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.15);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;box-sizing:border-box;"
+                    onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
+                    onblur="this.style.borderColor='rgba(77,159,255,.15)';this.style.boxShadow='none'">
+                </div>
+                <div>
+                  <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Your Email</div>
+                  <input id="support-email" type="email" placeholder="your@email.com"
+                    style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.15);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;box-sizing:border-box;"
+                    onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
+                    onblur="this.style.borderColor='rgba(77,159,255,.15)';this.style.boxShadow='none'">
+                </div>
+              </div>
+
+              <!-- Subject -->
+              <div style="margin-bottom:10px;">
+                <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Subject</div>
+                <input id="support-subject" type="text" placeholder="Briefly describe your issue or enquiry"
+                  style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.15);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;box-sizing:border-box;"
                   onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
-                  onblur="this.style.borderColor='rgba(77,159,255,.18)';this.style.boxShadow='none'">
+                  onblur="this.style.borderColor='rgba(77,159,255,.15)';this.style.boxShadow='none'">
               </div>
-              <div>
-                <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Your Email</div>
-                <input id="support-email" type="email" placeholder="your@email.com"
-                  style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.18);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;"
+
+              <!-- Message -->
+              <div style="margin-bottom:18px;">
+                <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Message</div>
+                <textarea id="support-message" placeholder="Tell us what's on your mind…" rows="5"
+                  style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.15);border-radius:10px;padding:13px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;resize:vertical;line-height:1.65;transition:border .2s,box-shadow .2s;box-sizing:border-box;"
                   onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
-                  onblur="this.style.borderColor='rgba(77,159,255,.18)';this.style.boxShadow='none'">
+                  onblur="this.style.borderColor='rgba(77,159,255,.15)';this.style.boxShadow='none'"></textarea>
               </div>
+
+              <!-- Send -->
+              <button onclick="supportSend()" style="
+                width:100%;
+                background:linear-gradient(135deg,var(--accent),var(--teal));
+                border:none;border-radius:11px;padding:14px;
+                color:#fff;font-family:var(--orb);font-size:.58rem;font-weight:700;
+                letter-spacing:2.5px;cursor:pointer;transition:all .2s;text-transform:uppercase;
+                box-shadow:0 4px 16px rgba(77,159,255,0.2);
+              " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(77,159,255,0.35)'"
+                 onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 16px rgba(77,159,255,0.2)'">
+                📨 &nbsp;Send Message
+              </button>
+              <div id="support-status" style="display:none;margin-top:12px;text-align:center;font-family:var(--exo);font-size:.78rem;letter-spacing:.5px;"></div>
             </div>
-
-            <!-- Subject -->
-            <div style="margin-bottom:10px;">
-              <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Subject</div>
-              <input id="support-subject" type="text" placeholder="Briefly describe your issue or enquiry"
-                style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.18);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;transition:border .2s,box-shadow .2s;"
-                onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
-                onblur="this.style.borderColor='rgba(77,159,255,.18)';this.style.boxShadow='none'">
-            </div>
-
-            <!-- Message -->
-            <div style="margin-bottom:16px;">
-              <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Message</div>
-              <textarea id="support-message" placeholder="Tell us what's on your mind…" rows="5"
-                style="width:100%;background:rgba(5,8,18,.6);border:1px solid rgba(77,159,255,.18);border-radius:10px;padding:13px 14px;color:var(--text);font-family:var(--exo);font-size:.85rem;outline:none;resize:vertical;line-height:1.65;transition:border .2s,box-shadow .2s;"
-                onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px rgba(77,159,255,0.1)'"
-                onblur="this.style.borderColor='rgba(77,159,255,.18)';this.style.boxShadow='none'"></textarea>
-            </div>
-
-            <!-- Send button -->
-            <button onclick="supportSend()" style="
-              width:100%;
-              background:linear-gradient(135deg,var(--accent),var(--teal));
-              border:none;border-radius:11px;padding:13px;
-              color:#fff;font-family:var(--orb);font-size:.6rem;font-weight:700;
-              letter-spacing:2px;cursor:pointer;transition:all .2s;text-transform:uppercase;
-            " onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 24px rgba(77,159,255,0.3)'"
-               onmouseout="this.style.transform='none';this.style.boxShadow='none'">
-              📨 Send Message
-            </button>
-
-            <!-- Status message -->
-            <div id="support-status" style="display:none;margin-top:12px;text-align:center;font-family:var(--exo);font-size:.78rem;letter-spacing:.5px;"></div>
           </div>
 
-          <!-- QUICK LINKS -->
-          <div class="ps-card" style="margin-top:12px;margin-bottom:8px;">
-            <div class="ps-card-label">// QUICK CONTACT</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
-              <a href="mailto:support@veda-net.com" style="text-decoration:none;">
-                <div style="background:rgba(77,159,255,0.05);border:1px solid rgba(77,159,255,0.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;"
-                  onmouseover="this.style.background='rgba(77,159,255,0.1)';this.style.borderColor='rgba(77,159,255,0.3)'"
-                  onmouseout="this.style.background='rgba(77,159,255,0.05)';this.style.borderColor='rgba(77,159,255,0.15)'">
-                  <div style="font-size:1.1rem;margin-bottom:4px;">🛠️</div>
-                  <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:1px;">SUPPORT</div>
-                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:2px;">support@veda-net.com</div>
+          <!-- ── TEAM ── -->
+          <div class="sp-panel" id="sp-team">
+
+            <!-- Founder card -->
+            <div style="position:relative;overflow:hidden;border-radius:16px;margin-bottom:12px;">
+              <div style="background:linear-gradient(135deg,#050810,#0b1525);padding:28px;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(77,159,255,0.08),transparent 70%);pointer-events:none;"></div>
+
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+                  <div style="
+                    width:60px;height:60px;border-radius:50%;flex-shrink:0;
+                    background:linear-gradient(135deg,#4d9fff,#00d4aa);
+                    display:flex;align-items:center;justify-content:center;
+                    font-family:var(--orb);font-size:1.3rem;color:#fff;font-weight:900;
+                    box-shadow:0 0 20px rgba(77,159,255,0.3);
+                  ">K</div>
+                  <div>
+                    <div style="font-family:var(--orb);font-size:.75rem;color:#fff;letter-spacing:2px;margin-bottom:4px;">KESHAV KARTHIK</div>
+                    <div style="font-family:var(--exo);font-size:.7rem;color:var(--teal);letter-spacing:1px;">Founder &amp; Developer</div>
+                  </div>
                 </div>
-              </a>
-              <a href="mailto:developer@veda-net.com" style="text-decoration:none;">
-                <div style="background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;"
-                  onmouseover="this.style.background='rgba(0,212,170,0.1)';this.style.borderColor='rgba(0,212,170,0.3)'"
-                  onmouseout="this.style.background='rgba(0,212,170,0.05)';this.style.borderColor='rgba(0,212,170,0.15)'">
-                  <div style="font-size:1.1rem;margin-bottom:4px;">🐛</div>
-                  <div style="font-family:var(--orb);font-size:.5rem;color:var(--teal);letter-spacing:1px;">DEVELOPER</div>
-                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:2px;">developer@veda-net.com</div>
+
+                <div style="font-family:var(--raj);font-size:.88rem;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:20px;">
+                  Builder of Veda — designed and developed the entire platform from the ground up, combining AI, gamification, and modern design to create a study experience that students actually want to use.
                 </div>
-              </a>
-              <a href="mailto:owner@veda-net.com" style="text-decoration:none;">
-                <div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;"
-                  onmouseover="this.style.background='rgba(251,191,36,0.1)';this.style.borderColor='rgba(251,191,36,0.3)'"
-                  onmouseout="this.style.background='rgba(251,191,36,0.05)';this.style.borderColor='rgba(251,191,36,0.15)'">
-                  <div style="font-size:1.1rem;margin-bottom:4px;">🤝</div>
-                  <div style="font-family:var(--orb);font-size:.5rem;color:#fbbf24;letter-spacing:1px;">BUSINESS</div>
-                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:2px;">owner@veda-net.com</div>
+
+                <div style="display:flex;flex-wrap:wrap;gap:7px;">
+                  <div style="background:rgba(77,159,255,0.08);border:1px solid rgba(77,159,255,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.7rem;color:var(--accent2);">⚡ AI Engineering</div>
+                  <div style="background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.7rem;color:var(--teal);">🎨 UI/UX Design</div>
+                  <div style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.2);border-radius:999px;padding:5px 13px;font-family:var(--exo);font-size:.7rem;color:#c084fc;">📱 Flutter / Web</div>
                 </div>
-              </a>
-              <a href="mailto:hr@veda-net.com" style="text-decoration:none;">
-                <div style="background:rgba(192,132,252,0.05);border:1px solid rgba(192,132,252,0.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;"
-                  onmouseover="this.style.background='rgba(192,132,252,0.1)';this.style.borderColor='rgba(192,132,252,0.3)'"
-                  onmouseout="this.style.background='rgba(192,132,252,0.05)';this.style.borderColor='rgba(192,132,252,0.15)'">
-                  <div style="font-size:1.1rem;margin-bottom:4px;">💼</div>
-                  <div style="font-family:var(--orb);font-size:.5rem;color:#c084fc;letter-spacing:1px;">CAREERS</div>
-                  <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);margin-top:2px;">hr@veda-net.com</div>
-                </div>
-              </a>
+              </div>
             </div>
+
+            <!-- Quick contact grid -->
+            <div class="ps-card">
+              <div class="ps-card-label">// QUICK CONTACT</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+                <a href="mailto:support@veda-net.com" style="text-decoration:none;">
+                  <div class="sp-contact-card" style="--cc:77,159,255;">
+                    <div style="font-size:1.2rem;margin-bottom:6px;">🛠️</div>
+                    <div style="font-family:var(--orb);font-size:.48rem;color:var(--accent2);letter-spacing:1px;margin-bottom:3px;">SUPPORT</div>
+                    <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);">support@veda-net.com</div>
+                  </div>
+                </a>
+                <a href="mailto:developer@veda-net.com" style="text-decoration:none;">
+                  <div class="sp-contact-card" style="--cc:0,212,170;">
+                    <div style="font-size:1.2rem;margin-bottom:6px;">🐛</div>
+                    <div style="font-family:var(--orb);font-size:.48rem;color:var(--teal);letter-spacing:1px;margin-bottom:3px;">DEVELOPER</div>
+                    <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);">developer@veda-net.com</div>
+                  </div>
+                </a>
+                <a href="mailto:owner@veda-net.com" style="text-decoration:none;">
+                  <div class="sp-contact-card" style="--cc:251,191,36;">
+                    <div style="font-size:1.2rem;margin-bottom:6px;">🤝</div>
+                    <div style="font-family:var(--orb);font-size:.48rem;color:#fbbf24;letter-spacing:1px;margin-bottom:3px;">BUSINESS</div>
+                    <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);">owner@veda-net.com</div>
+                  </div>
+                </a>
+                <a href="mailto:hr@veda-net.com" style="text-decoration:none;">
+                  <div class="sp-contact-card" style="--cc:192,132,252;">
+                    <div style="font-size:1.2rem;margin-bottom:6px;">💼</div>
+                    <div style="font-family:var(--orb);font-size:.48rem;color:#c084fc;letter-spacing:1px;margin-bottom:3px;">CAREERS</div>
+                    <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);">hr@veda-net.com</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
           </div>
 
         </div>
         <!-- END SUPPORT PANEL -->
+
+      </div><!-- /tab-settings -->
 
       <!-- keep old account tab as alias so any go('account') calls still work -->
       <div class="tab" id="tab-account" style="display:none!important;"></div>
@@ -8319,6 +8415,8 @@ function startSnake(area) {
 
   document.addEventListener('keydown', snakeKey);
   function snakeKey(e) {
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
     const map = {ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0],
                  w:[0,-1],s:[0,1],a:[-1,0],d:[1,0]};
     const d = map[e.key];
@@ -8625,14 +8723,15 @@ function startSudoku(area) {
 
   // Keyboard support
   function sdkKey(e) {
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
     if (!selected) return;
-    if (e.key >= '1' && e.key <= '9') { window.sdkInput(e.key); }
-    else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') { window.sdkInput('✕'); }
-    else if (e.key === 'ArrowUp'    && selected[0]>0) { selected[0]--; renderGrid(); }
-    else if (e.key === 'ArrowDown'  && selected[0]<8) { selected[0]++; renderGrid(); }
-    else if (e.key === 'ArrowLeft'  && selected[1]>0) { selected[1]--; renderGrid(); }
-    else if (e.key === 'ArrowRight' && selected[1]<8) { selected[1]++; renderGrid(); }
-    e.preventDefault();
+    if (e.key >= '1' && e.key <= '9') { e.preventDefault(); window.sdkInput(e.key); }
+    else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') { e.preventDefault(); window.sdkInput('✕'); }
+    else if (e.key === 'ArrowUp'    && selected[0]>0) { e.preventDefault(); selected[0]--; renderGrid(); }
+    else if (e.key === 'ArrowDown'  && selected[0]<8) { e.preventDefault(); selected[0]++; renderGrid(); }
+    else if (e.key === 'ArrowLeft'  && selected[1]>0) { e.preventDefault(); selected[1]--; renderGrid(); }
+    else if (e.key === 'ArrowRight' && selected[1]<8) { e.preventDefault(); selected[1]++; renderGrid(); }
   }
   document.addEventListener('keydown', sdkKey);
   // Clean up listener when leaving
@@ -8911,6 +9010,8 @@ function startSudoku(area) {
   // Keyboard support
   function onKey(e) {
     if (!document.getElementById('sdk-grid')) { document.removeEventListener('keydown',onKey); return; }
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
     if (!selected) return;
     const [r,c] = selected;
     if (e.key>='1'&&e.key<='9') { window.inputNum(parseInt(e.key)); }
@@ -9016,6 +9117,8 @@ function startHangman(area) {
   // Keyboard support
   function hmKey(e) {
     if (!document.getElementById('hm-score')) { document.removeEventListener('keydown', hmKey); return; }
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
     const l = e.key.toLowerCase();
     if (/^[a-z]$/.test(l)) window.hmGuess(l);
   }
@@ -9206,10 +9309,12 @@ function startTetris(area) {
 
   function tetKey(e) {
     if (!document.getElementById('tet-canvas')) { document.removeEventListener('keydown',tetKey); return; }
-    if (e.key==='ArrowLeft') { e.preventDefault(); window.tetMove(-1,0); }
-    else if (e.key==='ArrowRight') { e.preventDefault(); window.tetMove(1,0); }
-    else if (e.key==='ArrowDown') { e.preventDefault(); window.tetDrop(); }
-    else if (e.key==='ArrowUp') { e.preventDefault(); window.tetRotate(); }
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+    if (e.key==='ArrowLeft'  || e.key==='a' || e.key==='A') { e.preventDefault(); window.tetMove(-1,0); }
+    else if (e.key==='ArrowRight' || e.key==='d' || e.key==='D') { e.preventDefault(); window.tetMove(1,0); }
+    else if (e.key==='ArrowDown'  || e.key==='s' || e.key==='S') { e.preventDefault(); window.tetDrop(); }
+    else if (e.key==='ArrowUp'    || e.key==='w' || e.key==='W') { e.preventDefault(); window.tetRotate(); }
     else if (e.key===' ') { e.preventDefault(); window.tetHardDrop(); }
   }
   document.addEventListener('keydown', tetKey);
@@ -9424,11 +9529,15 @@ function startIcyTower(area) {
 
   function itKeyDown(e) {
     if (!document.getElementById('it-canvas')) { document.removeEventListener('keydown',itKeyDown); document.removeEventListener('keyup',itKeyUp); return; }
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
     if (e.key==='ArrowLeft'||e.key==='a'||e.key==='A') keys.left=true;
     if (e.key==='ArrowRight'||e.key==='d'||e.key==='D') keys.right=true;
     if (e.key==='ArrowUp'||e.key===' '||e.key==='w'||e.key==='W') { e.preventDefault(); jump(); }
   }
   function itKeyUp(e) {
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
     if (e.key==='ArrowLeft'||e.key==='a'||e.key==='A') keys.left=false;
     if (e.key==='ArrowRight'||e.key==='d'||e.key==='D') keys.right=false;
   }
@@ -11916,7 +12025,7 @@ function startFlappy(area) {
   const GAP=110, PIPE_W=38, SPEED=2.2;
   function flap(){bird.vy=-5.5;}
   canvas.addEventListener('click',flap);
-  document.addEventListener('keydown',function fk(e){if(e.code==='Space'){e.preventDefault();flap();}if(!running)document.removeEventListener('keydown',fk);});
+  document.addEventListener('keydown',function fk(e){const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;if(e.code==='Space'){e.preventDefault();flap();}if(!running)document.removeEventListener('keydown',fk);});
   function loop(){
     if(!document.getElementById('fl-canvas')){running=false;return;}
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -11951,7 +12060,10 @@ function startSpaceInvaders(area) {
   function makeAliens(){aliens=[];for(let r=0;r<4;r++)for(let c=0;c<9;c++)aliens.push({x:50+c*50,y:40+r*38,w:22,h:16,alive:true});}
   makeAliens();
   const keys={};
-  document.addEventListener('keydown',function sik(e){keys[e.code]=true;if(e.code==='Space'){e.preventDefault();bullets.push({x:ship.x,y:ship.y-10,vy:-7});}if(!running)document.removeEventListener('keydown',sik);});
+  document.addEventListener('keydown',function sik(e){
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+    keys[e.code]=true;if(e.code==='Space'){e.preventDefault();bullets.push({x:ship.x,y:ship.y-10,vy:-7});}if(!running)document.removeEventListener('keydown',sik);});
   document.addEventListener('keyup',e=>keys[e.code]=false);
   let alienShoot=setInterval(()=>{const live=aliens.filter(a=>a.alive);if(live.length){const a=live[Math.floor(Math.random()*live.length)];alienBullets.push({x:a.x+11,y:a.y+16,vy:3.5});}},1200);
   function loop(){
@@ -12021,7 +12133,7 @@ function startAsteroids(area) {
   function spawnAst(x,y,r){asteroids.push({x:x||Math.random()*W,y:y||Math.random()*H,r:r||35,vx:(Math.random()-.5)*1.8,vy:(Math.random()-.5)*1.8,angle:Math.random()*Math.PI*2,va:(Math.random()-.5)*.04});}
   for(let i=0;i<5;i++)spawnAst();
   const keys={};
-  document.addEventListener('keydown',function ak(e){keys[e.code]=true;if(e.code==='Space'){e.preventDefault();const a=ship.angle-Math.PI/2;bullets.push({x:ship.x,y:ship.y,vx:Math.cos(a)*9,vy:Math.sin(a)*9,life:50});}if(!running)document.removeEventListener('keydown',ak);});
+  document.addEventListener('keydown',function ak(e){const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;keys[e.code]=true;if(e.code==='Space'){e.preventDefault();const a=ship.angle-Math.PI/2;bullets.push({x:ship.x,y:ship.y,vx:Math.cos(a)*9,vy:Math.sin(a)*9,life:50});}if(!running)document.removeEventListener('keydown',ak);});
   document.addEventListener('keyup',e=>keys[e.code]=false);
   function wrap(v,max){return((v%max)+max)%max;}
   function loop(){
@@ -12071,7 +12183,7 @@ function start2048(area) {
   function move(dir){let moved=false;let ng=grid.map(r=>[...r]);if(dir==='left')ng=ng.map(r=>{const s=slide(r);if(s.join()!==r.join())moved=true;return s;});else if(dir==='right')ng=ng.map(r=>{const s=slide([...r].reverse()).reverse();if(s.join()!==r.join())moved=true;return s;});else if(dir==='up'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]);const s=slide(col);s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}}else if(dir==='down'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]).reverse();const s=slide(col).reverse();s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}};if(moved){grid=ng;addTile();const se=document.getElementById('g2048-score');if(se)se.textContent=score;render();if(grid.some(r=>r.includes(2048))){exitGame(score,'2048','You reached 2048! 🎉');running=false;}}}
   area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="g2048-score">0</span></div></div><button class="abtn sec" onclick="exitGame(${score},'2048','')">Quit</button></div><div id="g2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;background:rgba(255,255,255,.03);border-radius:14px;max-width:320px;margin:0 auto;"></div><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:8px;">Arrow keys to slide tiles</div>`;
   render();
-  document.addEventListener('keydown',function k2(e){if(!running){document.removeEventListener('keydown',k2);return;}const m={'ArrowLeft':'left','ArrowRight':'right','ArrowUp':'up','ArrowDown':'down'};if(m[e.code]){e.preventDefault();move(m[e.code]);}});
+  document.addEventListener('keydown',function k2(e){if(!running){document.removeEventListener('keydown',k2);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;const m={'ArrowLeft':'left','ArrowRight':'right','ArrowUp':'up','ArrowDown':'down'};if(m[e.code]){e.preventDefault();move(m[e.code]);}});
   // swipe
   let tx=0,ty=0;
   const el=document.getElementById('g2048');
@@ -12089,7 +12201,7 @@ function startWordle(area) {
   function handleKey(k){if(done)return;if(k==='⌫'||k==='Backspace'){current=current.slice(0,-1);}else if(k==='ENTER'||k==='Enter'){if(current.length!==5)return;guesses.push(current);if(current===target){done=true;setTimeout(()=>exitGame(100+(6-row)*50,'Wordle','You got it! 🎉'),600);}else if(guesses.length>=6){done=true;setTimeout(()=>exitGame(10,'Wordle',`The word was ${target}`),600);}else{row++;}current='';}else if(/^[A-Za-z]$/.test(k)&&current.length<5){current+=k.toUpperCase();}renderGrid();renderKeys();}
   area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Guess the 5-letter word!</div></div><button class="abtn sec" onclick="exitGame(0,'Wordle','')">Quit</button></div><div id="wl-grid" style="margin:10px 0;"></div><div id="wl-keys"></div>`;
   renderGrid();renderKeys();
-  document.addEventListener('keydown',function wlk(e){if(done){document.removeEventListener('keydown',wlk);return;}handleKey(e.key);});
+  document.addEventListener('keydown',function wlk(e){if(done){document.removeEventListener('keydown',wlk);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;handleKey(e.key);});
 }
 
 // ── MEMORY MATCH ──
@@ -13957,6 +14069,24 @@ function lbRefreshHomeWidget(entries, myUid) {
 }
 
 // ── Init leaderboard when tab is opened (wired into go() via DOMContentLoaded below) ──
+// ── SUPPORT SUBNAV ──
+function spGo(id, btn) {
+  document.querySelectorAll('.sp-panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('#ps-support .ap-tab').forEach(t => t.classList.remove('on'));
+  const panel = document.getElementById('sp-' + id);
+  if (panel) panel.classList.add('on');
+  if (btn) btn.classList.add('on');
+}
+
+// ── APPEARANCE SUBNAV ──
+function apGo(id, btn) {
+  document.querySelectorAll('.ap-panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.ap-tab').forEach(t => t.classList.remove('on'));
+  const panel = document.getElementById('ap-' + id);
+  if (panel) panel.classList.add('on');
+  if (btn) btn.classList.add('on');
+}
+
 // ── SUPPORT PAGE ──
 function supportSelectCat(el) {
   document.querySelectorAll('.support-cat-chip').forEach(c => c.classList.remove('on'));
