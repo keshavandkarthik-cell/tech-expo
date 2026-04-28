@@ -7616,6 +7616,7 @@ function psGo(panel, btn) {
   if (panel === 'goals') renderGoalsPanel();
   if (panel === 'apikey') renderApiKeyPanel();
   if (panel === 'profile') renderProfilePanel();
+  if (panel === 'aiprofile') renderAIProfilePanel();
 }
 
 function renderProfileTab() {
@@ -12443,7 +12444,7 @@ function startBlitz(area) {
       ? BZ_SUBJECTS.slice().sort(()=>Math.random()-.5).slice(0, BZ_BATCH).join(', ')
       : Array(BZ_BATCH).fill(bzSubject).join(', ');
 
-    const prompt = `Generate exactly ${BZ_BATCH} unique ${diffWord} short-answer questions for a high school student. Use these subjects in order: ${subjectList}. Each answer must be 1-5 words. No repeated questions. Return ONLY a valid JSON array, no markdown:\n[{"question":"...","answer":"...","subject":"..."},...]`;
+    const prompt = `Generate exactly ${BZ_BATCH} unique ${diffWord} short-answer questions for a high school student. Use these subjects in order: ${subjectList}. Each answer must be 1-5 words. No repeated questions. For each question include an "aliases" array of alternative acceptable answers (synonyms, alternate names). Return ONLY a valid JSON array, no markdown:\n[{"question":"...","answer":"...","aliases":["..."],"subject":"..."},...]`;
 
     const raw = await gemini(prompt);
     const parsed = JSON.parse(raw.replace(/^```(?:json)?|```$/gm,'').trim());
@@ -12518,8 +12519,8 @@ function startBlitz(area) {
     if (!userAns) return;
     if (ans) ans.disabled = true;
     bzStopTimer();
-    // Local fuzzy grading only — no extra API calls
-    const correct = dcFuzzyMatch(userAns, bzCurrent.answer);
+    const candidates = [bzCurrent.answer, ...(bzCurrent.aliases || [])];
+    const correct = candidates.some(c => dcFuzzyMatch(userAns, c));
     correct ? await onCorrect() : await onWrong(false);
   }
 
@@ -13560,12 +13561,21 @@ const DC_SUBJECTS = ['Mathematics','Physics','Chemistry','Biology','History','Ge
 
 // Simple fuzzy match — normalises case, punctuation, leading/trailing whitespace
 function dcFuzzyMatch(userAns, correctAns) {
-  const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();
+  const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim().replace(/^(the|a|an) /,'');
   const u = norm(userAns), c = norm(correctAns);
   if (u === c) return true;
-  // Allow answer to be contained if correct answer is multi-word
   if (c.includes(' ') && (u.includes(c) || c.includes(u))) return true;
+  const maxDist = Math.floor(c.length / 6);
+  if (maxDist > 0 && levenshtein(u, c) <= maxDist) return true;
   return false;
+}
+function levenshtein(a, b) {
+  const dp = Array.from({length: a.length + 1}, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+  return dp[a.length][b.length];
 }
 
 // Calculate streak based purely on saved state — single source of truth
