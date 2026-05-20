@@ -1,22 +1,89 @@
 {
-  "name": "Veda — AI Study Companion",
+  "id": "veda",
+  "name": "Veda: AI Study Companion",
   "short_name": "Veda",
-  "description": "Your AI-powered study companion",
-  "start_url": "/",
+  "description": "Your AI-powered study companion — homework help, flashcards, games, planner and more. Personalised to you.",
+  "start_url": "https://study.veda-net.com/",
+  "scope": "https://study.veda-net.com/",
   "display": "standalone",
-  "background_color": "#0b0d16",
-  "theme_color": "#7cc6ff",
+  "display_override": ["window-controls-overlay", "standalone", "fullscreen"],
   "orientation": "any",
+  "background_color": "#0B0D16",
+  "theme_color": "#4d9fff",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "utilities"],
+  "prefer_related_applications": false,
+  "related_applications": [],
   "icons": [
     {
-      "src": "https://via.placeholder.com/192x192/0b0d16/7cc6ff?text=S",
+      "src": "https://study.veda-net.com/image_1.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "https://via.placeholder.com/512x512/0b0d16/7cc6ff?text=S",
+      "src": "https://study.veda-net.com/image_1.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://study.veda-net.com/image_1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "https://study.veda-net.com/image_1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "label": "Veda Home Screen",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://study.veda-net.com/image_1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "label": "Veda Study Tools",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Homework Helper",
+      "short_name": "Homework",
+      "description": "Get instant AI help with your homework",
+      "url": "https://study.veda-net.com/?tab=homework",
+      "icons": [{ "src": "https://study.veda-net.com/image_1.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Flashcards",
+      "short_name": "Flashcards",
+      "description": "Study with AI-generated flashcards",
+      "url": "https://study.veda-net.com/?tab=study",
+      "icons": [{ "src": "https://study.veda-net.com/image_1.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Games",
+      "short_name": "Games",
+      "description": "Earn gems and play study games",
+      "url": "https://study.veda-net.com/?tab=games",
+      "icons": [{ "src": "https://study.veda-net.com/image_1.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Study Planner",
+      "short_name": "Planner",
+      "description": "Plan and track your study sessions",
+      "url": "https://study.veda-net.com/?tab=planner",
+      "icons": [{ "src": "https://study.veda-net.com/image_1.png", "sizes": "96x96" }]
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "protocol_handlers": [],
+  "iarc_rating_id": ""
 }
