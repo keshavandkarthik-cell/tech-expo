@@ -2,9 +2,37 @@
   <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Veda: A Study Bot</title>
-<link rel="icon" type="image/png" href="image_1.png">
+<title>Veda: AI Study Companion</title>
+<meta name="description" content="Your AI-powered study companion — homework help, flashcards, games, planner and more. Personalised to you.">
+<meta name="theme-color" content="#4d9fff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Veda">
+<meta name="application-name" content="Veda">
+<meta name="msapplication-TileColor" content="#0B0D16">
+<meta name="msapplication-TileImage" content="image_1.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Veda: AI Study Companion">
+<meta property="og:description" content="Your AI-powered study companion — homework help, flashcards, games, planner and more.">
+<meta property="og:image" content="https://study.veda-net.com/image_1.png">
+<meta property="og:url" content="https://study.veda-net.com">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Veda: AI Study Companion">
+<meta name="twitter:description" content="Your AI-powered study companion — homework help, flashcards, games, planner and more.">
+<meta name="twitter:image" content="https://study.veda-net.com/image_1.png">
+<link rel="icon" type="image/png" sizes="192x192" href="image_1.png">
+<link rel="apple-touch-icon" href="image_1.png">
 <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('[Veda SW] Registered:', reg.scope))
+        .catch(err => console.warn('[Veda SW] Registration failed:', err));
+    });
+  }
+</script>
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -639,7 +667,7 @@ body.mobile-mode #content {
 /* Hide the desktop canvas on home, show mobile home instead */
 body.mobile-mode .desktop-canvas,
 body.mobile-mode .dt-topbar { display: none !important; }
-body.mobile-mode #mobile-home { display: flex !important; }
+body.mobile-mode #universal-gem-counter { display: none !important; }
 
 /* Other tabs: add breathing room */
 body.mobile-mode .tab { padding: 20px 16px; }
@@ -1528,6 +1556,21 @@ body.fs-large { font-size: 17px; }
 }
 .game-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(77,159,255,.4),transparent); }
 .game-card:hover { border-color: rgba(77,159,255,.4); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(77,159,255,.12); }
+.game-card.locked { opacity: .75; }
+.game-card.locked:hover { border-color: rgba(255,180,0,.4); box-shadow: 0 8px 24px rgba(255,180,0,.1); }
+.game-card.game-unlocked { border-color: rgba(0,212,170,.35); }
+.game-card.game-unlocked:hover { border-color: rgba(0,212,170,.6); box-shadow: 0 8px 24px rgba(0,212,170,.15); }
+.game-lock {
+  margin-top: 6px;
+  font-size: .65rem;
+  font-family: var(--orb);
+  letter-spacing: .5px;
+  color: #ffb400;
+  opacity: .9;
+}
+.game-card.game-unlocked .game-lock { color: var(--teal2); }
+.game-card.game-unlocked .game-lock::before { content: '✅ '; }
+.game-free-trial { margin-top: 6px; font-size: .6rem; font-family: var(--orb); color: var(--accent); letter-spacing: .5px; }
 .game-icon { font-size: 2rem; margin-bottom: 8px; }
 .game-name { font-family: var(--orb); font-size: .52rem; color: var(--accent2); letter-spacing: 1.5px; margin-bottom: 5px; }
 .game-desc { font-family: var(--exo); font-size: .75rem; color: var(--silver); line-height: 1.4; margin-bottom: 8px; }
@@ -2025,7 +2068,33 @@ body.fs-large { font-size: 17px; }
       </div>
     </aside>
 
-    <!-- CONTENT -->
+    <!-- UNIVERSAL GEM COUNTER -->
+    <div id="universal-gem-counter" onclick="go('profile')" title="Your gems — click to view profile" style="
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(8,12,26,.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(77,159,255,.25);
+      border-radius: 999px;
+      padding: 6px 14px 6px 10px;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s;
+      font-family: var(--orb);
+      font-size: .72rem;
+      color: var(--text);
+      letter-spacing: .5px;
+      user-select: none;
+    "
+    onmouseover="this.style.borderColor='rgba(77,159,255,.5)';this.style.boxShadow='0 4px 18px rgba(77,159,255,.15)'"
+    onmouseout="this.style.borderColor='rgba(77,159,255,.25)';this.style.boxShadow=''">
+      <span style="font-size:.85rem;">💎</span>
+      <span id="ugc-gems" style="font-weight:700;">0</span>
+    </div>
     <div id="content">
 
       <!-- HOME — DESKTOP OS -->
@@ -2197,7 +2266,7 @@ body.fs-large { font-size: 17px; }
               <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: ATP</div>
               <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
               <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 34m 45s</div>
-              <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;startGame('blitz'),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
+              <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;tryStartGame('blitz',10),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
             </div>
             <div id="dc-no-key-msg" style="display: none; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
           </div>
@@ -4035,188 +4104,216 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <!-- ARCADE -->
           <div class="game-cat-label" data-cat="arcade" style="">🕹️ Arcade</div>
           <div class="games-grid" data-cat="arcade" style="display: grid;">
-            <div class="game-card" data-cat="arcade" onclick="startGame('snake')">
+            <div class="game-card" data-cat="arcade" data-game="snake" data-cost="50" onclick="tryStartGame('snake',50)">
               <div class="game-icon">🐍</div>
               <div class="game-name">Snake</div>
               <div class="game-desc">Classic snake — don't crash!</div>
               <div class="game-hi" id="hi-snake">Best: 0</div>
+              <div class="game-lock" id="lock-snake">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('bubble')">
+            <div class="game-card" data-cat="arcade" data-game="bubble" data-cost="50" onclick="tryStartGame('bubble',50)">
               <div class="game-icon">🫧</div>
               <div class="game-name">Bubble Pop</div>
               <div class="game-desc">Pop bubbles as fast as you can</div>
               <div class="game-hi" id="hi-bubble">Best: 0</div>
+              <div class="game-lock" id="lock-bubble">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('brickbreaker')">
+            <div class="game-card" data-cat="arcade" data-game="brickbreaker" data-cost="50" onclick="tryStartGame('brickbreaker',50)">
               <div class="game-icon">🧱</div>
               <div class="game-name">Brick Breaker</div>
               <div class="game-desc">Smash all the bricks with your ball</div>
               <div class="game-hi" id="hi-brickbreaker">Best: 170</div>
+              <div class="game-lock" id="lock-brickbreaker">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('tetris')">
+            <div class="game-card" data-cat="arcade" data-game="tetris" data-cost="50" onclick="tryStartGame('tetris',50)">
               <div class="game-icon">🟦</div>
               <div class="game-name">Tetris</div>
               <div class="game-desc">Stack falling blocks to clear lines</div>
               <div class="game-hi" id="hi-tetris">Best: 0</div>
+              <div class="game-lock" id="lock-tetris">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('icytower')">
+            <div class="game-card" data-cat="arcade" data-game="icytower" data-cost="50" onclick="tryStartGame('icytower',50)">
               <div class="game-icon">🏔️</div>
               <div class="game-name">Icy Tower</div>
               <div class="game-desc">Jump up the tower as high as you can!</div>
               <div class="game-hi" id="hi-icytower">Best: 18</div>
+              <div class="game-lock" id="lock-icytower">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('flappy')">
+            <div class="game-card" data-cat="arcade" data-game="flappy" data-cost="50" onclick="tryStartGame('flappy',50)">
               <div class="game-icon">🐦</div>
               <div class="game-name">Flappy Bird</div>
               <div class="game-desc">Tap to fly through the gaps!</div>
               <div class="game-hi" id="hi-flappy">Best: 0</div>
+              <div class="game-lock" id="lock-flappy">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('spaceinvaders')">
+            <div class="game-card" data-cat="arcade" data-game="spaceinvaders" data-cost="50" onclick="tryStartGame('spaceinvaders',50)">
               <div class="game-icon">👾</div>
               <div class="game-name">Space Invaders</div>
               <div class="game-desc">Shoot the alien waves before they land!</div>
               <div class="game-hi" id="hi-spaceinvaders">Best: 1160</div>
+              <div class="game-lock" id="lock-spaceinvaders">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('pong')">
+            <div class="game-card" data-cat="arcade" data-game="pong" data-cost="50" onclick="tryStartGame('pong',50)">
               <div class="game-icon">🏓</div>
               <div class="game-name">Pong</div>
               <div class="game-desc">Classic paddle vs AI — don't miss!</div>
               <div class="game-hi" id="hi-pong">Best: 1</div>
+              <div class="game-lock" id="lock-pong">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('asteroids')">
+            <div class="game-card" data-cat="arcade" data-game="asteroids" data-cost="50" onclick="tryStartGame('asteroids',50)">
               <div class="game-icon">☄️</div>
               <div class="game-name">Asteroids</div>
               <div class="game-desc">Blast space rocks before they hit you!</div>
               <div class="game-hi" id="hi-asteroids">Best: 0</div>
+              <div class="game-lock" id="lock-asteroids">🔒 <span>50 💎</span></div>
             </div>
-            <div class="game-card" data-cat="arcade" onclick="startGame('whackamole')">
+            <div class="game-card" data-cat="arcade" data-game="whackamole" data-cost="50" onclick="tryStartGame('whackamole',50)">
               <div class="game-icon">🔨</div>
               <div class="game-name">Whack-a-Mole</div>
               <div class="game-desc">Bonk the moles as fast as they pop up!</div>
               <div class="game-hi" id="hi-whackamole">Best: 0</div>
+              <div class="game-lock" id="lock-whackamole">🔒 <span>50 💎</span></div>
             </div>
           </div>
 
           <!-- PUZZLE -->
           <div class="game-cat-label" data-cat="puzzle" style="">🧩 Puzzle</div>
           <div class="games-grid" data-cat="puzzle" style="display: grid;">
-            <div class="game-card" data-cat="puzzle" onclick="startGame('sudoku')">
+            <div class="game-card" data-cat="puzzle" data-game="sudoku" data-cost="25" onclick="tryStartGame('sudoku',25)">
               <div class="game-icon">🔢</div>
               <div class="game-name">Sudoku</div>
               <div class="game-desc">Classic 9×9 number puzzle</div>
               <div class="game-hi" id="hi-sudoku">Not solved yet</div>
+              <div class="game-lock" id="lock-sudoku">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="puzzle" onclick="startGame('math')">
+            <div class="game-card" data-cat="puzzle" data-game="math" data-cost="25" onclick="tryStartGame('math',25)">
               <div class="game-icon">➗</div>
               <div class="game-name">Maths Blitz</div>
               <div class="game-desc">Quick fire maths questions</div>
               <div class="game-hi" id="hi-math">Best: 0</div>
+              <div class="game-lock" id="lock-math">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="puzzle" onclick="startGame('scramble')">
+            <div class="game-card" data-cat="puzzle" data-game="scramble" data-cost="25" onclick="tryStartGame('scramble',25)">
               <div class="game-icon">🔤</div>
               <div class="game-name">Word Scramble</div>
               <div class="game-desc">Unscramble the study words</div>
               <div class="game-hi" id="hi-scramble">Best: 0</div>
+              <div class="game-lock" id="lock-scramble">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="puzzle" onclick="startGame('hangman')">
+            <div class="game-card" data-cat="puzzle" data-game="hangman" data-cost="25" onclick="tryStartGame('hangman',25)">
               <div class="game-icon">🪢</div>
               <div class="game-name">Hangman</div>
               <div class="game-desc">Guess the hidden word letter by letter</div>
               <div class="game-hi" id="hi-hangman">Best: 3</div>
+              <div class="game-lock" id="lock-hangman">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="puzzle" onclick="startGame('game2048')">
+            <div class="game-card" data-cat="puzzle" data-game="game2048" data-cost="25" onclick="tryStartGame('game2048',25)">
               <div class="game-icon">🔢</div>
               <div class="game-name">2048</div>
               <div class="game-desc">Slide tiles and merge to reach 2048!</div>
               <div class="game-hi" id="hi-game2048">Best: 0</div>
+              <div class="game-lock" id="lock-game2048">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="puzzle" onclick="startGame('wordle')">
+            <div class="game-card" data-cat="puzzle" data-game="wordle" data-cost="25" onclick="tryStartGame('wordle',25)">
               <div class="game-icon">🟩</div>
               <div class="game-name">Wordle</div>
               <div class="game-desc">Guess the 5-letter word in 6 tries</div>
               <div class="game-hi" id="hi-wordle">Best: 0</div>
+              <div class="game-lock" id="lock-wordle">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="puzzle" onclick="startGame('memorymatch')">
+            <div class="game-card" data-cat="puzzle" data-game="memorymatch" data-cost="25" onclick="tryStartGame('memorymatch',25)">
               <div class="game-icon">🃏</div>
               <div class="game-name">Memory Match</div>
               <div class="game-desc">Flip cards and find matching pairs!</div>
               <div class="game-hi" id="hi-memorymatch">Best: 143</div>
+              <div class="game-lock" id="lock-memorymatch">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="puzzle" onclick="startGame('lightsout')">
+            <div class="game-card" data-cat="puzzle" data-game="lightsout" data-cost="25" onclick="tryStartGame('lightsout',25)">
               <div class="game-icon">💡</div>
               <div class="game-name">Lights Out</div>
               <div class="game-desc">Toggle lights to turn them all off!</div>
               <div class="game-hi" id="hi-lightsout">Best: 0</div>
+              <div class="game-lock" id="lock-lightsout">🔒 <span>25 💎</span></div>
             </div>
           </div>
 
           <!-- REFLEX -->
           <div class="game-cat-label" data-cat="reflex" style="">⚡ Reflex</div>
           <div class="games-grid" data-cat="reflex" style="display: grid;">
-            <div class="game-card" data-cat="reflex" onclick="startGame('reaction')">
+            <div class="game-card" data-cat="reflex" data-game="reaction" data-cost="25" onclick="tryStartGame('reaction',25)">
               <div class="game-icon">⚡</div>
               <div class="game-name">Reaction Time</div>
               <div class="game-desc">Tap when the signal fires!</div>
               <div class="game-hi" id="hi-reaction">Best: 0 ms</div>
+              <div class="game-lock" id="lock-reaction">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="reflex" onclick="startGame('typing')">
+            <div class="game-card" data-cat="reflex" data-game="typing" data-cost="25" onclick="tryStartGame('typing',25)">
               <div class="game-icon">⌨️</div>
               <div class="game-name">Typing Speed</div>
               <div class="game-desc">How fast can you type?</div>
               <div class="game-hi" id="hi-typing">Best: 0 WPM</div>
+              <div class="game-lock" id="lock-typing">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="reflex" onclick="startGame('aimtrainer')">
+            <div class="game-card" data-cat="reflex" data-game="aimtrainer" data-cost="25" onclick="tryStartGame('aimtrainer',25)">
               <div class="game-icon">🎯</div>
               <div class="game-name">Aim Trainer</div>
               <div class="game-desc">Click moving targets as fast as you can!</div>
               <div class="game-hi" id="hi-aimtrainer">Best: 43</div>
+              <div class="game-lock" id="lock-aimtrainer">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="reflex" onclick="startGame('simonmemory')">
+            <div class="game-card" data-cat="reflex" data-game="simonmemory" data-cost="25" onclick="tryStartGame('simonmemory',25)">
               <div class="game-icon">🔵</div>
               <div class="game-name">Simon Says</div>
               <div class="game-desc">Remember and repeat the colour sequence!</div>
               <div class="game-hi" id="hi-simonmemory">Best: 0</div>
+              <div class="game-lock" id="lock-simonmemory">🔒 <span>25 💎</span></div>
             </div>
-            <div class="game-card" data-cat="reflex" onclick="startGame('numbertouch')">
+            <div class="game-card" data-cat="reflex" data-game="numbertouch" data-cost="25" onclick="tryStartGame('numbertouch',25)">
               <div class="game-icon">🔢</div>
               <div class="game-name">Number Touch</div>
               <div class="game-desc">Tap 1 → 25 in order, as fast as possible!</div>
               <div class="game-hi" id="hi-numbertouch">Best: --</div>
+              <div class="game-lock" id="lock-numbertouch">🔒 <span>25 💎</span></div>
             </div>
           </div>
 
           <!-- QUIZ -->
           <div class="game-cat-label" data-cat="quiz" style="">🌍 Quiz</div>
           <div class="games-grid" data-cat="quiz" style="display: grid;">
-            <div class="game-card" data-cat="quiz" onclick="startGame('blitz')">
+            <div class="game-card" data-cat="quiz" data-game="blitz" data-cost="10" onclick="tryStartGame('blitz',10)">
               <div class="game-icon">⚡</div>
               <div class="game-name">Blitz Quiz</div>
               <div class="game-desc">AI questions · 3 lives · pick any subject</div>
               <div class="game-hi" id="hi-blitz">Best: 0</div>
+              <div class="game-lock" id="lock-blitz">🔒 <span>10 💎</span></div>
             </div>
-            <div class="game-card" data-cat="quiz" onclick="startGame('flags')">
+            <div class="game-card" data-cat="quiz" data-game="flags" data-cost="10" onclick="tryStartGame('flags',10)">
               <div class="game-icon">🌍</div>
               <div class="game-name">Flag Quiz</div>
               <div class="game-desc">Name that country's flag!</div>
               <div class="game-hi" id="hi-flags">Best: 0</div>
+              <div class="game-lock" id="lock-flags">🔒 <span>10 💎</span></div>
             </div>
-            <div class="game-card" data-cat="quiz" onclick="startGame('capitals')">
+            <div class="game-card" data-cat="quiz" data-game="capitals" data-cost="10" onclick="tryStartGame('capitals',10)">
               <div class="game-icon">🏛️</div>
               <div class="game-name">Capital Cities</div>
               <div class="game-desc">Name the capital of each country!</div>
               <div class="game-hi" id="hi-capitals">Best: 0</div>
+              <div class="game-lock" id="lock-capitals">🔒 <span>10 💎</span></div>
             </div>
-            <div class="game-card" data-cat="quiz" onclick="startGame('elements')">
+            <div class="game-card" data-cat="quiz" data-game="elements" data-cost="10" onclick="tryStartGame('elements',10)">
               <div class="game-icon">⚗️</div>
               <div class="game-name">Element Symbols</div>
               <div class="game-desc">Match the chemical symbol to the element!</div>
               <div class="game-hi" id="hi-elements">Best: 0</div>
+              <div class="game-lock" id="lock-elements">🔒 <span>10 💎</span></div>
             </div>
-            <div class="game-card" data-cat="quiz" onclick="startGame('timeline')">
+            <div class="game-card" data-cat="quiz" data-game="timeline" data-cost="10" onclick="tryStartGame('timeline',10)">
               <div class="game-icon">📅</div>
               <div class="game-name">Timeline Quiz</div>
               <div class="game-desc">Order historical events from earliest to latest!</div>
               <div class="game-hi" id="hi-timeline">Best: 0</div>
+              <div class="game-lock" id="lock-timeline">🔒 <span>10 💎</span></div>
             </div>
           </div>
         </div>
@@ -5522,6 +5619,7 @@ function go(name) {
     }
   }
   if (name === 'library') setTimeout(initLibrary, 0);
+  if (name === 'games') setTimeout(renderGameLocks, 0);
   if (name === 'todo') setTimeout(renderTodos, 0);
   if (name === 'tracker') setTimeout(initTracker, 0);
   if (name === 'planner') setTimeout(renderPlanner, 30);
@@ -7254,6 +7352,7 @@ function toggleJournalExpand(id) {
 }
 
 document.addEventListener('DOMContentLoaded', renderJournal);
+document.addEventListener('DOMContentLoaded', () => setTimeout(renderGameLocks, 200));
 // ── SETTINGS ──
 function loadSettingsPage() {
   const display = document.getElementById('set-key-display');
@@ -7801,6 +7900,8 @@ function renderProfilePanel() {
   const nextTitle = titles[Math.min(lvl, titles.length-1)];
   if (el('acct-tagline')) el('acct-tagline').textContent = `Level ${lvl} ${title}`;
   if (el('acct-gems')) el('acct-gems').textContent = a.gems || 0;
+  if (el('ugc-gems')) el('ugc-gems').textContent = a.gems || 0;
+  if (el('mh-gems')) el('mh-gems').textContent = a.gems || 0;
   if (el('acct-streak')) el('acct-streak').textContent = a.streak || 0;
   if (el('dt-gems-big')) el('dt-gems-big').textContent = a.gems || 0;
   if (el('dt-streak-big')) el('dt-streak-big').textContent = (a.streak || 0) + ' days';
@@ -8111,6 +8212,72 @@ function filterGames(btn, cat) {
   });
   document.querySelectorAll('#games-menu .games-grid').forEach(el => {
     el.style.display = (cat === 'all' || el.dataset.cat === cat) ? 'grid' : 'none';
+  });
+}
+
+// ── GAME UNLOCK SYSTEM ──
+function getUnlockedGames() {
+  try { return JSON.parse(localStorage.getItem('veda_unlocked_games') || '[]'); } catch(e) { return []; }
+}
+function unlockGame(type) {
+  const list = getUnlockedGames();
+  if (!list.includes(type)) { list.push(type); localStorage.setItem('veda_unlocked_games', JSON.stringify(list)); }
+}
+function isGameUnlocked(type) { return getUnlockedGames().includes(type); }
+function getFreeTrial() { return localStorage.getItem('veda_free_trial') || null; }
+function setFreeTrial(type) { localStorage.setItem('veda_free_trial', type); }
+function hasUsedFreeTrial() { return !!localStorage.getItem('veda_free_trial'); }
+
+function renderGameLocks() {
+  document.querySelectorAll('.game-card[data-game]').forEach(card => {
+    const game = card.dataset.game;
+    const lockEl = card.querySelector('.game-lock');
+    const cost = parseInt(card.dataset.cost || '0');
+    if (isGameUnlocked(game)) {
+      card.classList.add('game-unlocked');
+      card.classList.remove('locked');
+      if (lockEl) lockEl.textContent = 'Unlocked';
+    } else if (!hasUsedFreeTrial()) {
+      card.classList.remove('game-unlocked','locked');
+      if (lockEl) { lockEl.innerHTML = '🎁 <span>Free trial available!</span>'; lockEl.style.color='var(--accent)'; }
+    } else {
+      card.classList.add('locked');
+      card.classList.remove('game-unlocked');
+      if (lockEl) { lockEl.innerHTML = `🔒 <span>${cost} 💎 to unlock</span>`; lockEl.style.color='#ffb400'; }
+    }
+  });
+}
+
+function tryStartGame(type, cost) {
+  // Already unlocked — just play
+  if (isGameUnlocked(type)) { startGame(type); return; }
+
+  // Free trial available
+  if (!hasUsedFreeTrial()) {
+    confirm2('🎁 Free Trial', `Try any one game for free! After this, games must be unlocked with gems.\n\nYou're about to try: ${type.toUpperCase()}`, () => {
+      setFreeTrial(type);
+      unlockGame(type);
+      renderGameLocks();
+      startGame(type);
+    });
+    return;
+  }
+
+  // Paywall — check gems
+  const a = getAcct();
+  const gems = a.gems || 0;
+  if (gems < cost) {
+    showToast(`Not enough gems! You need ${cost} 💎 to unlock this game. Study more to earn gems!`);
+    return;
+  }
+  confirm2(`🔓 Unlock Game`, `Spend 💎 ${cost} gems to permanently unlock this game?`, () => {
+    a.gems = gems - cost;
+    saveAcct(a);
+    unlockGame(type);
+    renderGameLocks();
+    renderAcctPage();
+    showToast(`🎮 ${type} unlocked! Have fun — you earned it.`);
+    startGame(type);
   });
 }
 
@@ -13263,6 +13430,7 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
         const n = document.getElementById('mh-name'); if (n && a.name) n.textContent = a.name;
         const g = document.getElementById('mh-gems'); if (g) g.textContent = a.gems || 0;
         const s = document.getElementById('mh-streak'); if (s) s.textContent = a.streak || 0;
+        const ugc = document.getElementById('ugc-gems'); if (ugc) ugc.textContent = a.gems || 0;
       }
     } catch(e) {}
     // Sync daily brief
@@ -14235,6 +14403,23 @@ async function lbRender() {
     }
   }
 
+  // ── Inject fake friends for demo realism ──
+  const FAKE_FRIENDS = [
+    { uid:'fake_001', data:{ lbName:'Arjun Menon',     lbAvatar:'⚡', lbGems:2340, lbStreak:61, lbGames:980,  lbCode:'ARJ001' }},
+    { uid:'fake_002', data:{ lbName:'Priya S',          lbAvatar:'🌸', lbGems:1920, lbStreak:48, lbGames:740,  lbCode:'PRI002' }},
+    { uid:'fake_003', data:{ lbName:'Rishi K',          lbAvatar:'🔥', lbGems:1650, lbStreak:39, lbGames:610,  lbCode:'RSH003' }},
+    { uid:'fake_004', data:{ lbName:'Ananya Raj',       lbAvatar:'💎', lbGems:1430, lbStreak:33, lbGames:510,  lbCode:'ANA004' }},
+    { uid:'fake_005', data:{ lbName:'Dev Nair',         lbAvatar:'🚀', lbGems:1280, lbStreak:27, lbGames:430,  lbCode:'DEV005' }},
+    { uid:'fake_006', data:{ lbName:'Lena Fischer',     lbAvatar:'🎯', lbGems:1100, lbStreak:22, lbGames:380,  lbCode:'LEN006' }},
+    { uid:'fake_007', data:{ lbName:'Kavya T',          lbAvatar:'🌟', lbGems:940,  lbStreak:19, lbGames:290,  lbCode:'KAV007' }},
+    { uid:'fake_008', data:{ lbName:'Zara Ahmed',       lbAvatar:'🦋', lbGems:810,  lbStreak:15, lbGames:220,  lbCode:'ZAR008' }},
+    { uid:'fake_009', data:{ lbName:'Rohan Pillai',     lbAvatar:'🎓', lbGems:670,  lbStreak:11, lbGames:160,  lbCode:'ROH009' }},
+    { uid:'fake_010', data:{ lbName:'Mei Lin',          lbAvatar:'🌙', lbGems:520,  lbStreak:8,  lbGames:110,  lbCode:'MEI010' }},
+  ];
+  // Only inject fakes that aren't already in entries (avoid uid collision)
+  const existingUids = new Set(entries.map(e => e.uid));
+  FAKE_FRIENDS.forEach(f => { if (!existingUids.has(f.uid)) entries.push(f); });
+
   // Sort
   entries.sort((a,b) => lbVal(b.data) - lbVal(a.data));
 
@@ -14435,5 +14620,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 </div></div><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
-
 </body></html>
