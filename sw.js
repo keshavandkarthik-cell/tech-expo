@@ -9,6 +9,7 @@ const SHELL_ASSETS = [
   '/index.html',
   '/manifest.json',
   '/image_1.png',
+  '/image_2.png',
   '/offline.html'
 ];
 
@@ -98,8 +99,8 @@ self.addEventListener('push', event => {
   event.waitUntil(
     self.registration.showNotification(data.title || 'Veda', {
       body:    data.body    || 'Time to study! 📚',
-      icon:    '/image_1.png',
-      badge:   '/image_1.png',
+      icon:    '/image_2.png',
+      badge:   '/image_2.png',
       vibrate: [100, 50, 100],
       data:    { url: data.url || '/' }
     })
