@@ -2,7 +2,7 @@
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
-    "package_name": "com.veda_net.study.twa",
+    "package_name": "app.veda.study",
     "sha256_cert_fingerprints": [
       "D8:DF:97:42:1E:36:E0:04:AC:5D:46:A8:6A:C5:DC:F7:06:B1:9A:B4:96:07:FC:09:2C:E7:9B:39:70:B3:64:66"
     ]
