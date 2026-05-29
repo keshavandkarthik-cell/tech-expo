@@ -2,7 +2,7 @@
   <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Veda: AI Study Companion</title>
+<title>Veda:A Study App</title>
 <meta name="description" content="Your AI-powered study companion — homework help, flashcards, games, planner and more. Personalised to you.">
 <meta name="theme-color" content="#4d9fff">
 <meta name="mobile-web-app-capable" content="yes">
@@ -645,265 +645,7 @@ nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrol
 .jentry-btn:hover { color: var(--accent2); background: rgba(77,159,255,.08); }
 .jentry-btn.del:hover { color: #ff6680; background: rgba(255,102,128,.08); }
 .journal-empty { text-align: center; padding: 32px 0; font-family: var(--exo); font-size: .82rem; color: var(--silver); opacity: .5; }
-/* ══════════════════════════════════
-   MOBILE MODE  (body.mobile-mode)
-   ══════════════════════════════════ */
-
-/* Hide all desktop chrome */
-body.mobile-mode #sb,
-body.mobile-mode #tog,
-body.mobile-mode #hdr,
-body.mobile-mode .dt-taskbar { display: none !important; }
-
-/* App shell */
-body.mobile-mode #app  { height: 100dvh; overflow: hidden; }
-body.mobile-mode #body { height: 100%; overflow: hidden; }
-body.mobile-mode #content {
-  height: 100%; overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 80px;
-}
-
-/* Hide the desktop canvas on home, show mobile home instead */
-body.mobile-mode .desktop-canvas,
-body.mobile-mode .dt-topbar { display: none !important; }
-body.mobile-mode #universal-gem-counter { display: none !important; }
-body.mobile-mode #mobile-home { display: flex !important; }
-
-/* Other tabs: add breathing room */
-body.mobile-mode .tab { padding: 20px 16px; }
-
-/* ── MOBILE HOME ── */
-#mobile-home {
-  display: none;
-  flex-direction: column;
-  padding: 32px 20px 20px;
-  gap: 20px;
-  height: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.mh-greeting-time {
-  font-family: var(--exo);
-  font-size: .72rem;
-  color: var(--silver);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.mh-greeting-name {
-  font-family: var(--orb);
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: 1px;
-  line-height: 1.1;
-}
-.mh-greeting-name span { color: var(--accent2); }
-
-.mh-pills {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-.mh-pill {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(77,159,255,.08);
-  border: 1px solid rgba(77,159,255,.18);
-  border-radius: 999px;
-  padding: 5px 12px;
-  font-family: var(--exo);
-  font-size: .72rem;
-  color: var(--silver2);
-}
-
-/* Daily Brief card */
-.mh-card {
-  background: rgba(15,21,40,.9);
-  border: 1px solid rgba(77,159,255,.18);
-  border-radius: 18px;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-}
-.mh-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(77,159,255,.4), transparent);
-}
-.mh-card-label {
-  font-family: var(--exo);
-  font-size: .6rem;
-  color: var(--teal);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.mh-card-label::before {
-  content: '';
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--teal);
-  box-shadow: 0 0 6px var(--teal);
-}
-.mh-brief-text {
-  font-family: var(--exo);
-  font-size: .85rem;
-  color: var(--text2);
-  line-height: 1.75;
-}
-.mh-brief-refresh {
-  background: none; border: none;
-  color: var(--silver);
-  font-family: var(--exo);
-  font-size: .65rem;
-  cursor: pointer;
-  padding: 0;
-  margin-top: 10px;
-  opacity: .5;
-  transition: opacity .15s;
-}
-.mh-brief-refresh:hover { opacity: 1; }
-
-/* Quick actions */
-.mh-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.mh-action {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(77,159,255,.14);
-  border-radius: 16px;
-  padding: 18px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  cursor: pointer;
-  transition: all .18s;
-  -webkit-tap-highlight-color: transparent;
-}
-.mh-action:active { background: rgba(77,159,255,.1); transform: scale(.97); }
-.mh-action-icon { font-size: 1.5rem; line-height: 1; }
-.mh-action-label {
-  font-family: var(--raj);
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--text);
-}
-.mh-action-sub {
-  font-family: var(--exo);
-  font-size: .68rem;
-  color: var(--silver);
-  line-height: 1.35;
-}
-
-/* ── BOTTOM DOCK ── */
-#mobile-dock {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: 72px;
-  align-items: center;
-  justify-content: center;
-  z-index: 400;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-
-body.mobile-mode #mobile-dock { display: flex; }
-
-.md-apps-btn {
-  width: 52px; height: 52px;
-  border-radius: 16px;
-  background: rgba(20,28,50,.95);
-  border: 1px solid rgba(77,159,255,.25);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.3rem;
-  cursor: pointer;
-  box-shadow: 0 4px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(77,159,255,.08);
-  transition: all .18s;
-  backdrop-filter: blur(20px);
-  -webkit-tap-highlight-color: transparent;
-}
-.md-apps-btn:active { transform: scale(.92); }
-
-/* ── APP DRAWER ── */
-#app-drawer-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.6);
-  backdrop-filter: blur(6px);
-  z-index: 450;
-}
-#app-drawer-overlay.open { display: block; }
-
-#app-drawer {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: rgba(10,14,26,.97);
-  border-top: 1px solid rgba(77,159,255,.18);
-  border-radius: 24px 24px 0 0;
-  z-index: 460;
-  padding: 12px 20px 32px;
-  transform: translateY(100%);
-  transition: transform .32s cubic-bezier(.4,1.1,.2,1);
-}
-#app-drawer.open { transform: translateY(0); }
-
-.drawer-handle {
-  width: 36px; height: 4px;
-  background: rgba(255,255,255,.15);
-  border-radius: 2px;
-  margin: 0 auto 20px;
-}
-
-.drawer-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px 4px;
-}
-
-.drawer-app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 4px;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: background .15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.drawer-app:active { background: rgba(77,159,255,.12); }
-
-.drawer-app-icon {
-  width: 52px; height: 52px;
-  border-radius: 14px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(77,159,255,.14);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem;
-  transition: all .15s;
-}
-.drawer-app:active .drawer-app-icon {
-  background: rgba(77,159,255,.16);
-  border-color: rgba(77,159,255,.35);
-}
-
-.drawer-app-label {
-  font-family: var(--exo);
-  font-size: .62rem;
-  color: var(--silver2);
-  text-align: center;
-  letter-spacing: .3px;
-  white-space: nowrap;
-}
+/* ── MOBILE (new UI coming) ── */
 
 /* ── TOPIC LIBRARY ── */
 .lib-level-row { display:flex; align-items:center; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
@@ -1992,6 +1734,28 @@ body.fs-large { font-size: 17px; }
         <img id="hdr-avatar" src="https://lh3.googleusercontent.com/a-/ALV-UjXtUl0lqq3URDJ11qvJhXuhrfxOYZccymCu0CCnhoe2aLDS7I2fvexRWT6cvQ2Cq9RqLPL9qH5kAO97D6-HMQmgvFmUcyaTSyuipQ6S3ykVoLvJoQ6edBzOOGNdCcm7Qkph9uRjRYGSGkBWdOsad6DTKJJm6Rc7HgZZjJQ4Kcahdzm-Dy4dSzugB9epxM2b9KOCSidJWpSjK-u3SZD1kJMVtDAQPGX6av726y4iXEOkl4su1piAw3ai67VRXcdhExYMexp7Wc-zaDJhyDnn_YtaBWQIjdAR4WRnjlDY2sGcquqm6xYDaPRtdmXI0h8KUu3rOjyCNmbm6ACXObAU6GHoZPMLKX0YYhVE36JwXxRZV8a6qFpB8A6PpeydTesAahD1MzqfD5KZ6Ts1aUr06x0rUaQW8QGjwIZf2x9D-QHtjAlRSA2Wioze-AnEd0LBfNcJ5kHuHXsJpqZuduHnmz_cdWGn2AB0VC8DdEc5ElcXUTmxeHtQqQQThnJO3aCVOZpuUj-6PwOYopXgyEWhM1Q_ouhIXIUYczMDkovcKLrwahess0M4EqLKdDpWNUEpKlIA8D35BZ3LILBzbntuiX9hF06sOPjHTfVR79EQJmRmuwWikJVwMW4G5_HcMFxukcVInYaAjG1zITUTjnMGFZP0hya1zC8-T01u3L4xWq-Zd3OrlImv-KUcHYqQvEi99rWanA8C8YvfTT26p3cgRwSIwzpwdCM6gUzjN9FWFYEtPcDzAEBAmQW7mzY7bw8pbps0iHtunGxnX1RF5wTYF6FSx2EUPVyxQtelo0f6QFqXxqaXyryjqNTzAY5dThoUVRwQrU_2zdePJmLNU_yAPp8nzg7iyU3L80uCcx74jFxjQc-74Bonsp6F_1j_tCrnic2uBBb2MSnEpntfTlih1Yws7g4feJozQNdLNJVKzqHEDbFXlKX8BeA7Uc4HfCc1sbdVDKZoeYDH1aSO7kvMEmHww1GoKtt38IwJXNaF4yFYC5llBT0FJnMCTP-cmNEuux6rc64Y_Z8U5ODxO128yXVhIuA01mXKVagmLFmIEBk0oM2-2Sq2yB1fyQ=s96-c" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Keshav</span>
       </div>
+      <div id="universal-gem-counter" onclick="go('profile')" title="Your gems — click to view profile" style="
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(8,12,26,.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(77,159,255,.25);
+      border-radius: 999px;
+      padding: 6px 14px 6px 10px;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s;
+      font-family: var(--orb);
+      font-size: .72rem;
+      color: var(--text);
+      letter-spacing: .5px;
+      user-select: none;
+    "
+    onmouseover="this.style.borderColor='rgba(77,159,255,.5)';this.style.boxShadow='0 4px 18px rgba(77,159,255,.15)'"
+    onmouseout="this.style.borderColor='rgba(77,159,255,.25)';this.style.boxShadow=''">
+      <span style="font-size:.85rem;">💎</span>
+      <span id="ugc-gems" style="font-weight:700;">0</span>
+    </div>
       <div class="hdr-time" id="clk">16:25</div>
     </div>
   </div>
@@ -2071,32 +1835,6 @@ body.fs-large { font-size: 17px; }
     </aside>
 
     <!-- UNIVERSAL GEM COUNTER -->
-    <div id="universal-gem-counter" onclick="go('profile')" title="Your gems — click to view profile" style="
-      position: fixed;
-      top: 14px;
-      right: 18px;
-      z-index: 900;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(8,12,26,.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(77,159,255,.25);
-      border-radius: 999px;
-      padding: 6px 14px 6px 10px;
-      cursor: pointer;
-      transition: border-color .2s, box-shadow .2s;
-      font-family: var(--orb);
-      font-size: .72rem;
-      color: var(--text);
-      letter-spacing: .5px;
-      user-select: none;
-    "
-    onmouseover="this.style.borderColor='rgba(77,159,255,.5)';this.style.boxShadow='0 4px 18px rgba(77,159,255,.15)'"
-    onmouseout="this.style.borderColor='rgba(77,159,255,.25)';this.style.boxShadow=''">
-      <span style="font-size:.85rem;">💎</span>
-      <span id="ugc-gems" style="font-weight:700;">0</span>
-    </div>
     <div id="content">
 
       <!-- HOME — DESKTOP OS -->
@@ -2367,71 +2105,7 @@ body.fs-large { font-size: 17px; }
 
         </div>
 
-        <!-- MOBILE HOME (visible only in mobile-mode) -->
-        <div id="mobile-home">
-
-          <!-- Greeting -->
-          <div>
-            <div class="mh-greeting-time" id="mh-timeofday">Good afternoon</div>
-            <div class="mh-greeting-name">Hey, <span id="mh-name">Keshav</span></div>
-            <div class="mh-pills">
-              <div class="mh-pill">🔥 <span id="mh-streak">1</span> day streak</div>
-              <div class="mh-pill">💎 <span id="mh-gems">0</span> gems</div>
-            </div>
-          </div>
-
-          <!-- Daily Brief -->
-          <div class="mh-card">
-            <div class="mh-card-label">Daily Brief</div>
-            <div class="mh-brief-text" id="mh-brief-text"><span style="font-size: 1.1rem;">📝</span> Writing notes by hand improves retention compared to typing — your brain processes it more deeply.</div>
-            <button class="mh-brief-refresh" onclick="refreshDailyBrief(true)">↻ refresh</button>
-          </div>
-
-          <!-- Focus Timer -->
-          <div class="mh-card">
-            <div class="mh-card-label">Focus Timer</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-              <div>
-                <div id="mh-pom-display" style="font-family:var(--orb);font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;line-height:1;">25:00</div>
-                <div id="mh-pom-label" style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-top:3px;">FOCUS SESSION</div>
-              </div>
-              <div style="display:flex;gap:8px;align-items:center;">
-                <button id="mh-pom-btn" onclick="mhPomToggle()" style="background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:10px;padding:10px 20px;color:#fff;font-family:var(--orb);font-size:.6rem;font-weight:700;letter-spacing:1.5px;cursor:pointer;">START</button>
-                <button onclick="mhPomReset()" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:10px;padding:10px 12px;color:var(--silver2);font-family:var(--exo);font-size:.8rem;cursor:pointer;">↺</button>
-              </div>
-            </div>
-            <!-- mode pills -->
-            <div style="display:flex;gap:6px;margin-top:14px;">
-              <button class="mh-pom-mode on" id="mhpm-focus" onclick="mhPomSetMode(this,25,'FOCUS SESSION')">Focus 25</button>
-              <button class="mh-pom-mode" id="mhpm-short" onclick="mhPomSetMode(this,5,'SHORT BREAK')">Break 5</button>
-              <button class="mh-pom-mode" id="mhpm-long" onclick="mhPomSetMode(this,15,'LONG BREAK')">Break 15</button>
-            </div>
-          </div>
-
-          <!-- Pinnable Shortcut -->
-          <div class="mh-card mh-shortcut-card" id="mh-shortcut-card" onclick="mhLaunchShortcut()">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
-              <div class="mh-card-label" style="margin-bottom:0;">Quick Launch</div>
-              <button onclick="event.stopPropagation();openShortcutPicker()" style="background:rgba(77,159,255,.1);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:4px 10px;font-family:var(--exo);font-size:.62rem;color:var(--accent2);cursor:pointer;">change</button>
-            </div>
-            <div style="display:flex;align-items:center;gap:14px;margin-top:10px;">
-              <div id="mh-sc-icon" style="font-size:2.2rem;line-height:1;">📚</div>
-              <div>
-                <div id="mh-sc-label" style="font-family:var(--raj);font-size:1rem;font-weight:700;color:var(--text);">Homework</div>
-                <div id="mh-sc-sub" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:2px;">Ask anything →</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- SHORTCUT PICKER OVERLAY -->
-        <div id="sc-picker-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:600;" onclick="closeShortcutPicker()"></div>
-        <div id="sc-picker" style="display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,14,26,.98);border-top:1px solid rgba(77,159,255,.2);border-radius:24px 24px 0 0;z-index:610;padding:16px 20px 40px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,1.1,.2,1);">
-          <div style="width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 18px;"></div>
-          <div style="font-family:var(--orb);font-size:.55rem;color:var(--accent2);letter-spacing:2px;margin-bottom:14px;">CHOOSE SHORTCUT</div>
-          <div id="sc-picker-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px 4px;"></div>
-        </div>
+        <!-- MOBILE HOME REMOVED - new UI pending -->
 
         <!-- TASKBAR -->
 
@@ -5108,78 +4782,6 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
 
       </div><!-- end #content -->
-<div id="mobile-dock">
-  <div class="md-apps-btn" onclick="openDrawer()" title="All Apps">⊞</div>
-</div>
-
-<!-- APP DRAWER OVERLAY -->
-<div id="app-drawer-overlay" onclick="closeDrawer()"></div>
-
-<!-- APP DRAWER -->
-<div id="app-drawer">
-  <div class="drawer-handle"></div>
-  <div class="drawer-grid">
-    <div class="drawer-app" onclick="closeDrawer();go('homework')">
-      <div class="drawer-app-icon">📚</div>
-      <div class="drawer-app-label">Homework</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('study')">
-      <div class="drawer-app-icon">🧠</div>
-      <div class="drawer-app-label">Study</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('notes')">
-      <div class="drawer-app-icon">📝</div>
-      <div class="drawer-app-label">Notes</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('todo')">
-      <div class="drawer-app-icon">✅</div>
-      <div class="drawer-app-label">To-Do</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('journal')">
-      <div class="drawer-app-icon">📓</div>
-      <div class="drawer-app-label">Journal</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('chat')">
-      <div class="drawer-app-icon">💬</div>
-      <div class="drawer-app-label">Companion</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('music')">
-      <div class="drawer-app-icon">🎵</div>
-      <div class="drawer-app-label">Music</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('calc')">
-      <div class="drawer-app-icon">🔢</div>
-      <div class="drawer-app-label">Calculator</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('games')">
-      <div class="drawer-app-icon">🎮</div>
-      <div class="drawer-app-label">Games</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('library')">
-      <div class="drawer-app-icon">🗂️</div>
-      <div class="drawer-app-label">Library</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('exam')">
-      <div class="drawer-app-icon">📄</div>
-      <div class="drawer-app-label">Exams</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('settings')">
-      <div class="drawer-app-icon">🌈</div>
-      <div class="drawer-app-label">Themes</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('settings')">
-      <div class="drawer-app-icon">👤</div>
-      <div class="drawer-app-label">Profile</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('planner')">
-      <div class="drawer-app-icon">📅</div>
-      <div class="drawer-app-label">Planner</div>
-    </div>
-    <div class="drawer-app" onclick="closeDrawer();go('home')">
-      <div class="drawer-app-icon">⊞</div>
-      <div class="drawer-app-label">Home</div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -7903,7 +7505,6 @@ function renderProfilePanel() {
   if (el('acct-tagline')) el('acct-tagline').textContent = `Level ${lvl} ${title}`;
   if (el('acct-gems')) el('acct-gems').textContent = a.gems || 0;
   if (el('ugc-gems')) el('ugc-gems').textContent = a.gems || 0;
-  if (el('mh-gems')) el('mh-gems').textContent = a.gems || 0;
   if (el('acct-streak')) el('acct-streak').textContent = a.streak || 0;
   if (el('dt-gems-big')) el('dt-gems-big').textContent = a.gems || 0;
   if (el('dt-streak-big')) el('dt-streak-big').textContent = (a.streak || 0) + ' days';
@@ -13396,200 +12997,8 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
 @media(max-width:600px){.pm-form-row{grid-template-columns:1fr!important;}}
 @media print{.planner-toolbar,.planner-add-btn,.planner-view-toggle,.pw-btn{display:none!important;}.planner-week-grid{border:1px solid #334!important;min-width:unset!important;}}
 /* ══════════════ END PLANNER CSS ══════════════ */
-</style><!-- MOBILE MODE JS -->
-<script>
-(function () {
-
-  // ── Pinnable Shortcut (defined first — used by loadShortcut below) ──
-  const ALL_APPS = [
-    { id: 'homework', icon: '📚', label: 'Homework', sub: 'Ask anything' },
-    { id: 'study',    icon: '🧠', label: 'Study',    sub: 'Flashcards & quizzes' },
-    { id: 'notes',    icon: '📝', label: 'Notes',    sub: 'Summarise' },
-    { id: 'todo',     icon: '✅', label: 'To-Do',    sub: 'Task list' },
-    { id: 'journal',  icon: '📓', label: 'Journal',  sub: 'Write it out' },
-    { id: 'chat',     icon: '💬', label: 'Companion',sub: 'Talk to Veda' },
-    { id: 'calc',     icon: '🔢', label: 'Calculator',sub: 'Crunch numbers' },
-    { id: 'games',    icon: '🎮', label: 'Games',    sub: 'Play & earn gems' },
-    { id: 'library',  icon: '🗂️', label: 'Library',  sub: 'Topic notes' },
-    { id: 'exam',     icon: '📄', label: 'Exams',    sub: 'Mock papers' },
-    { id: 'themes',   icon: '🌈', label: 'Themes',   sub: 'Customise' },
-    { id: 'settings', icon: '👤', label: 'Profile',  sub: 'Your account' },
-  ];
-
-  // ── Mobile mode detection ──
-  function applyMobileMode() {
-    document.body.classList.toggle('mobile-mode', window.innerWidth < 650);
-    if (document.body.classList.contains('mobile-mode')) syncMobileHome();
-  }
-  window.addEventListener('resize', applyMobileMode);
-  applyMobileMode();
-
-  // ── Sync mobile home stats from account ──
-  function syncMobileHome() {
-    try {
-      const a = typeof getAcct === 'function' ? getAcct() : null;
-      if (a) {
-        const n = document.getElementById('mh-name'); if (n && a.name) n.textContent = a.name;
-        const g = document.getElementById('mh-gems'); if (g) g.textContent = a.gems || 0;
-        const s = document.getElementById('mh-streak'); if (s) s.textContent = a.streak || 0;
-        const ugc = document.getElementById('ugc-gems'); if (ugc) ugc.textContent = a.gems || 0;
-      }
-    } catch(e) {}
-    // Sync daily brief
-    const src = document.getElementById('daily-brief-content');
-    const dst = document.getElementById('mh-brief-text');
-    if (src && dst && src.textContent.trim() && !src.textContent.includes('Loading')) {
-      dst.innerHTML = src.innerHTML;
-    }
-    // Time of day
-    const hr = new Date().getHours();
-    const tod = document.getElementById('mh-timeofday');
-    if (tod) tod.textContent = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
-    // Shortcut
-    loadShortcut();
-  }
-
-  // Patch go()
-  const _goOrig = window.go;
-  window.go = function(name) {
-    _goOrig(name);
-    if (name === 'home' && document.body.classList.contains('mobile-mode')) setTimeout(syncMobileHome, 50);
-  };
-
-  // Patch refreshDailyBrief
-  const _origBrief = window.refreshDailyBrief;
-  if (_origBrief) {
-    window.refreshDailyBrief = async function(f) { await _origBrief(f); setTimeout(syncMobileHome, 200); };
-  }
-
-  // ── App Drawer ──
-  window.openDrawer = function() {
-    document.getElementById('app-drawer-overlay').classList.add('open');
-    document.getElementById('app-drawer').classList.add('open');
-  };
-  window.closeDrawer = function() {
-    document.getElementById('app-drawer-overlay').classList.remove('open');
-    document.getElementById('app-drawer').classList.remove('open');
-  };
-  let dTY = null;
-  const drawer = document.getElementById('app-drawer');
-  if (drawer) {
-    drawer.addEventListener('touchstart', e => { dTY = e.touches[0].clientY; }, { passive: true });
-    drawer.addEventListener('touchend', e => {
-      if (dTY !== null && e.changedTouches[0].clientY - dTY > 60) closeDrawer();
-      dTY = null;
-    }, { passive: true });
-  }
-
-  // ── Mobile Pomodoro (independent from desktop) ──
-  let mhPomSecs = 25 * 60, mhPomRunning = false, mhPomInt = null, mhPomMins = 25;
-
-  function mhUpdateDisplay() {
-    const m = String(Math.floor(mhPomSecs / 60)).padStart(2,'0');
-    const s = String(mhPomSecs % 60).padStart(2,'0');
-    const el = document.getElementById('mh-pom-display');
-    if (el) el.textContent = `${m}:${s}`;
-  }
-
-  window.mhPomToggle = function() {
-    const btn = document.getElementById('mh-pom-btn');
-    if (mhPomRunning) {
-      clearInterval(mhPomInt); mhPomRunning = false;
-      if (btn) btn.textContent = 'START';
-    } else {
-      mhPomRunning = true;
-      if (btn) btn.textContent = 'PAUSE';
-      mhPomInt = setInterval(() => {
-        mhPomSecs--;
-        mhUpdateDisplay();
-        if (mhPomSecs <= 0) {
-          clearInterval(mhPomInt); mhPomRunning = false;
-          if (btn) btn.textContent = 'START';
-          if (typeof showToast === 'function') showToast('🍅 Timer done!');
-        }
-      }, 1000);
-    }
-  };
-
-  window.mhPomReset = function() {
-    clearInterval(mhPomInt); mhPomRunning = false;
-    mhPomSecs = mhPomMins * 60;
-    mhUpdateDisplay();
-    const btn = document.getElementById('mh-pom-btn');
-    if (btn) btn.textContent = 'START';
-  };
-
-  window.mhPomSetMode = function(el, mins, label) {
-    document.querySelectorAll('.mh-pom-mode').forEach(b => b.classList.remove('on'));
-    el.classList.add('on');
-    mhPomMins = mins;
-    clearInterval(mhPomInt); mhPomRunning = false;
-    mhPomSecs = mins * 60;
-    mhUpdateDisplay();
-    const btn = document.getElementById('mh-pom-btn');
-    if (btn) btn.textContent = 'START';
-    const lbl = document.getElementById('mh-pom-label');
-    if (lbl) lbl.textContent = label;
-  };
-
-  // ── Pinnable Shortcut ──
-  function loadShortcut() {
-    const saved = JSON.parse(localStorage.getItem('veda_shortcut') || 'null') || ALL_APPS[0];
-    document.getElementById('mh-sc-icon').textContent  = saved.icon;
-    document.getElementById('mh-sc-label').textContent = saved.label;
-    document.getElementById('mh-sc-sub').textContent   = saved.sub + ' →';
-    window._mhShortcutId = saved.id;
-  }
-
-  window.mhLaunchShortcut = function() {
-    if (window._mhShortcutId) go(window._mhShortcutId);
-  };
-
-  window.openShortcutPicker = function() {
-    const grid = document.getElementById('sc-picker-grid');
-    grid.innerHTML = ALL_APPS.map(a => `
-      <div onclick="pickShortcut('${a.id}')" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.background='rgba(77,159,255,.12)'" ontouchend="this.style.background=''">
-        <div style="width:50px;height:50px;border-radius:13px;background:rgba(255,255,255,.06);border:1px solid rgba(77,159,255,.14);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">${a.icon}</div>
-        <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver2);text-align:center;">${a.label}</div>
-      </div>`).join('');
-    document.getElementById('sc-picker-overlay').style.display = 'block';
-    const p = document.getElementById('sc-picker');
-    p.style.display = 'block';
-    requestAnimationFrame(() => p.style.transform = 'translateY(0)');
-  };
-
-  window.closeShortcutPicker = function() {
-    const p = document.getElementById('sc-picker');
-    p.style.transform = 'translateY(100%)';
-    setTimeout(() => {
-      p.style.display = 'none';
-      document.getElementById('sc-picker-overlay').style.display = 'none';
-    }, 300);
-  };
-
-  window.pickShortcut = function(id) {
-    const app = ALL_APPS.find(a => a.id === id);
-    if (!app) return;
-    localStorage.setItem('veda_shortcut', JSON.stringify(app));
-    loadShortcut();
-    closeShortcutPicker();
-    if (typeof showToast === 'function') showToast(`⚡ Shortcut set to ${app.label}`);
-  };
-
-  // ── Flashcard swipe ──
-  let fcTX = null;
-  document.addEventListener('touchstart', e => { if (e.target.closest('#fc')) fcTX = e.touches[0].clientX; }, { passive: true });
-  document.addEventListener('touchend', e => {
-    if (fcTX === null) return;
-    const d = e.changedTouches[0].clientX - fcTX; fcTX = null;
-    if (Math.abs(d) < 50) return;
-    if (typeof flipped !== 'undefined' && flipped) { d > 0 ? srRate(true) : srRate(false); }
-    else { d > 0 ? (typeof prevCard==='function'&&prevCard()) : (typeof nextCard==='function'&&nextCard()); }
-  }, { passive: true });
-
-  setTimeout(syncMobileHome, 300);
-})();
-</script>
+</style>
+<!-- MOBILE MODE JS REMOVED - new mobile JS pending -->
 
 <!-- Support Widget -->
 <div id="support-widget" style="position:fixed;bottom:20px;right:20px;z-index:999;cursor:pointer;" onclick="event.stopPropagation();var p=document.getElementById('support-qr-popup');p.style.display=p.style.display==='block'?'none':'block'">
@@ -14583,6 +13992,8 @@ document.addEventListener('DOMContentLoaded', () => {
     lbRefreshHomeWidget(entries, myUid);
   }, 2500);
 });
+
+
 document.addEventListener('DOMContentLoaded', () => {
   // Wrap doNotes to show PDF export button after notes are generated
   if (typeof window.doNotes === 'function') {
@@ -14596,9 +14007,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 500);
     };
   }
+
   renderExamCountdown();
   initDailyChallenge();
   setTimeout(checkNotifications, 1500);
+
   // Re-check countdown and challenge when navigating home
   if (typeof go === 'function') {
     const __go = go;
@@ -14610,6 +14023,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+
+
+
 <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
 </div></div><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 </body></html>
