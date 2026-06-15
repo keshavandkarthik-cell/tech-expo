@@ -5235,17 +5235,23 @@ function setTopic(el, t) {
   document.getElementById('hw-in').placeholder = `Ask a ${t} question...`;
 }
 
-// ── AI API (Groq via Veda Worker) ──
+// ── GEMINI API ──
 async function gemini(prompt, imageData) {
+  if (!API_KEY) throw new Error('No API key set — go to Settings to add your free Gemini key.');
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+  const parts = [];
+  if (imageData) parts.push({ inline_data: { mime_type: imageData.mimeType, data: imageData.base64 } });
+  // Prepend student profile context to every AI call
   const profileCtx = buildAIContext();
-  const res = await fetch('https://api.veda-net.com/ai', {
+  parts.push({ text: profileCtx + prompt });
+  const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: profileCtx + prompt, imageData: imageData || null })
+    body: JSON.stringify({ contents: [{ parts }] })
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'AI request failed');
-  return data.text || 'No response received.';
+  if (data.error) throw new Error(data.error.message);
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
 }
 
 // ── HOMEWORK IMAGE ──
@@ -6366,6 +6372,8 @@ async function calcAISolve() {
   const typedInput = document.getElementById('calc-type-input').value.trim();
   const canvas = document.getElementById('calc-canvas');
 
+  if (!API_KEY) { resultEl.textContent = 'Add a Gemini API key in Settings to use this feature.'; resultEl.style.display = 'block'; return; }
+
   loadingEl.style.display = 'block';
   resultEl.style.display = 'none';
 
@@ -6379,12 +6387,22 @@ async function calcAISolve() {
     })();
 
     let text;
+    const calcGemini = async (p, img) => {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+      const parts = [];
+      if (img) parts.push({ inline_data: { mime_type: img.mimeType, data: img.base64 } });
+      parts.push({ text: p });
+      const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ contents: [{ parts }] }) });
+      const d = await r.json();
+      if (d.error) throw new Error(d.error.message);
+      return d.candidates?.[0]?.content?.parts?.[0]?.text || 'No response.';
+    };
     if (hasDrawing) {
       const base64 = canvas.toDataURL('image/png').split(',')[1];
       const fullPrompt = (typedInput ? 'Typed: ' + typedInput + '\n' : '') + prompt;
-      text = await gemini(fullPrompt, { mimeType: 'image/png', base64 });
+      text = await calcGemini(fullPrompt, { mimeType: 'image/png', base64 });
     } else if (typedInput) {
-      text = await gemini(typedInput + '\n' + prompt);
+      text = await calcGemini(typedInput + '\n' + prompt);
     } else {
       loadingEl.style.display = 'none';
       resultEl.textContent = 'Draw or type an equation first.';
@@ -13317,7 +13335,7 @@ async function initDailyChallenge() {
     badge.style.display = streak > 0 ? 'inline' : 'none';
   }
 
-  if (noKey) noKey.style.display = 'none';
+  if (!API_KEY) { if (noKey) noKey.style.display = 'block'; return; }
 
   // Already completed today — show result with a "next challenge" countdown
   if (state?.date === today && state?.completed) {
@@ -13521,7 +13539,7 @@ async function runTimetableImport() {
   const status = document.getElementById('tt-status');
   if (!text && !ttImageData) { showToast('⚠️ Paste text or upload an image first'); return; }
   if (!weekStart) { showToast('⚠️ Pick a starting week'); return; }
-
+  if (!API_KEY) { showToast('⚠️ Add a Gemini API key in Settings first'); return; }
 
   status.textContent = '⏳ Parsing timetable...';
   status.style.color = 'var(--teal)';
