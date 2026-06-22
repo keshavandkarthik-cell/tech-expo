@@ -155,6 +155,193 @@ body {
   background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100%;
 }
 
+
+/* ══════════════════════════════════════════
+   IVORY THEME — dark, clean, professional
+   ══════════════════════════════════════════ */
+[data-theme="ivory"] {
+  --navy:        #161618;
+  --navy2:       #1c1c1f;
+  --navy3:       #232326;
+  --blue:        #2a2a2e;
+  --chrome:      #8a8a9a;
+  --chrome2:     #b0b0c0;
+  --accent:      #a78bfa;
+  --accent2:     #c4b5fd;
+  --teal:        #34d399;
+  --teal2:       #6ee7b7;
+  --silver:      #6b7280;
+  --silver2:     #9ca3af;
+  --text:        #f4f4f5;
+  --text2:       #a1a1aa;
+  --glow:        rgba(167,139,250,0.08);
+  --glow2:       rgba(52,211,153,0.06);
+  --panel-bg:    linear-gradient(145deg, rgba(28,28,31,0.97), rgba(22,22,24,0.99));
+  --panel-border: rgba(167,139,250,0.14);
+  --orb: 'Helvetica Neue', 'Arial', sans-serif;
+  --raj: 'Helvetica Neue', 'Arial', sans-serif;
+  --exo: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+}
+
+[data-theme="ivory"] html,
+[data-theme="ivory"] body,
+html[data-theme="ivory"],
+html[data-theme="ivory"] body {
+  background: #f7f6f3;
+  color: #1a1816;
+}
+
+html[data-theme="ivory"] body {
+  background:
+    linear-gradient(rgba(167,139,250,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(167,139,250,0.03) 1px, transparent 1px),
+    radial-gradient(ellipse at 20% 50%, rgba(167,139,250,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(52,211,153,0.03) 0%, transparent 50%),
+    #161618 !important;
+  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% !important;
+}
+
+html[data-theme="ivory"] #app,
+html[data-theme="ivory"] #body,
+html[data-theme="ivory"] #content,
+html[data-theme="ivory"] .tab,
+html[data-theme="ivory"] .tab.on {
+  background: transparent !important;
+}
+
+html[data-theme="ivory"] #content {
+  background: transparent !important;
+}
+
+/* homework / notes / companion output areas */
+html[data-theme="ivory"] #hw-out,
+html[data-theme="ivory"] #notes-out,
+html[data-theme="ivory"] .lib-notes,
+html[data-theme="ivory"] .chatwin,
+html[data-theme="ivory"] #comp-win {
+  background: rgba(18,18,20,0.8) !important;
+  border-color: rgba(167,139,250,0.1) !important;
+  color: #f4f4f5 !important;
+}
+
+/* cards and panels that use inline dark backgrounds */
+html[data-theme="ivory"] .dt-card,
+html[data-theme="ivory"] .home-card,
+html[data-theme="ivory"] .fc-card,
+html[data-theme="ivory"] .lb-row,
+html[data-theme="ivory"] .journal-entry {
+  background: linear-gradient(145deg, rgba(28,28,31,0.97), rgba(22,22,24,0.99)) !important;
+  border-color: rgba(167,139,250,0.14) !important;
+  color: #f4f4f5 !important;
+}
+
+html[data-theme="ivory"] .nb {
+  color: #5a5450 !important;
+}
+html[data-theme="ivory"] .nb:hover,
+html[data-theme="ivory"] .nb.on {
+  color: #3d3a36 !important;
+}
+
+html[data-theme="ivory"] #hdr {
+  background: rgba(22,22,24,0.92);
+  border-bottom: 1px solid rgba(167,139,250,0.12);
+}
+html[data-theme="ivory"] #hdr::after {
+  background: linear-gradient(90deg, transparent, rgba(167,139,250,0.3), rgba(52,211,153,0.2), transparent);
+}
+html[data-theme="ivory"] .hdr-logo {
+  background: linear-gradient(135deg, #a78bfa, #34d399);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+html[data-theme="ivory"] .pulse { background: #34d399; box-shadow: 0 0 8px #34d399; }
+html[data-theme="ivory"] #sb {
+  background: rgba(22,22,24,0.9);
+  border-right: 1px solid rgba(167,139,250,0.1);
+}
+html[data-theme="ivory"] .nb { color: #7a746c; }
+html[data-theme="ivory"] .nb:hover { color: #3d3a36; }
+html[data-theme="ivory"] .nb:hover::before {
+  background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(52,211,153,0.05));
+}
+html[data-theme="ivory"] .nb.on {
+  background: linear-gradient(135deg, rgba(167,139,250,0.12), rgba(52,211,153,0.07));
+  color: #a78bfa;
+}
+html[data-theme="ivory"] .nb.on::after { background: linear-gradient(180deg, #a78bfa, #34d399); }
+html[data-theme="ivory"] #main { background: transparent; }
+html[data-theme="ivory"] .set-section,
+html[data-theme="ivory"] .ps-card {
+  background: linear-gradient(145deg, rgba(28,28,31,0.97), rgba(22,22,24,0.99));
+  border-color: rgba(167,139,250,0.14);
+}
+html[data-theme="ivory"] .bubble.bot {
+  background: rgba(239,237,232,0.95);
+  border: 1px solid rgba(176,125,74,0.15);
+  color: #1a1816;
+}
+html[data-theme="ivory"] .bubble.user {
+  background: linear-gradient(135deg, #7c3aed, #059669);
+}
+html[data-theme="ivory"] .chatbar {
+  background: rgba(22,22,24,0.95);
+  border-top: 1px solid rgba(167,139,250,0.1);
+}
+html[data-theme="ivory"] .chat-input {
+  background: rgba(28,28,31,0.9);
+  border-color: rgba(167,139,250,0.15);
+  color: #f4f4f5;
+}
+html[data-theme="ivory"] .send-btn {
+  background: linear-gradient(135deg, #7c3aed, #059669);
+}
+html[data-theme="ivory"] .key-btn,
+html[data-theme="ivory"] .abtn {
+  background: linear-gradient(135deg, #7c3aed, #059669);
+}
+html[data-theme="ivory"] #splash {
+  background: radial-gradient(ellipse at center, #1c1c1f 0%, #111113 100%);
+}
+html[data-theme="ivory"] .splash-panel {
+  background: linear-gradient(145deg, rgba(28,28,31,0.97), rgba(22,22,24,0.99));
+  border-color: rgba(167,139,250,0.18);
+  box-shadow: 0 0 60px rgba(167,139,250,0.08), 0 0 120px rgba(52,211,153,0.04);
+}
+html[data-theme="ivory"] .splash-logo {
+  background: linear-gradient(135deg, #a78bfa, #34d399);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+html[data-theme="ivory"] .key-input {
+  background: rgba(28,28,31,0.9);
+  border-color: rgba(167,139,250,0.2);
+  color: #f4f4f5;
+}
+html[data-theme="ivory"] .key-input:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167,139,250,0.12);
+}
+html[data-theme="ivory"] .tab-panel,
+html[data-theme="ivory"] #main > .tab {
+  background: transparent;
+}
+html[data-theme="ivory"] .ps-subnav,
+html[data-theme="ivory"] .ap-subnav {
+  border-bottom-color: rgba(167,139,250,0.12);
+}
+html[data-theme="ivory"] .ps-tab,
+html[data-theme="ivory"] .ap-tab {
+  color: #6b7280;
+}
+html[data-theme="ivory"] .ps-tab.on,
+html[data-theme="ivory"] .ap-tab.on {
+  color: #a78bfa;
+  border-bottom-color: #a78bfa;
+}
+html[data-theme="ivory"] .confirm-overlay { background: rgba(0,0,0,0.7); }
+html[data-theme="ivory"] .confirm-box {
+  background: linear-gradient(145deg, rgba(28,28,31,0.99), rgba(22,22,24,0.99));
+}
+
 /* ── API KEY SPLASH ── */
 #splash {
   position: fixed; inset: 0; z-index: 1000;
@@ -2759,6 +2946,25 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
           <!-- LOOK: Skin + Theme -->
           <div class="ap-panel on" id="ap-look">
+            <!-- MASTER THEME SWITCHER -->
+            <div class="ps-card" style="margin-bottom:12px;">
+              <div class="ps-card-label">// MASTER THEME</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
+                <div id="master-theme-veda" onclick="setMasterTheme('veda',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid var(--accent);background:linear-gradient(135deg,#0a0e1a,#0f1528);position:relative;overflow:hidden;transition:all .2s;">
+                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
+                  <div style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:900;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:4px;">VEDA</div>
+                  <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:#8899bb;letter-spacing:1px;">Dark · Glowing · Futuristic</div>
+                  <div id="veda-active-dot" style="position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
+                </div>
+                <div id="master-theme-ivory" onclick="setMasterTheme('ivory',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid rgba(176,125,74,0.3);background:linear-gradient(135deg,#1c1c1f,#232326);position:relative;overflow:hidden;transition:all .2s;">
+                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#a78bfa,#34d399);"></div>
+                  <div style="font-family:'Helvetica Neue',sans-serif;font-size:.85rem;font-weight:700;background:linear-gradient(135deg,#a78bfa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-bottom:4px;">IVORY</div>
+                  <div style="font-family:'SF Mono','Courier New',monospace;font-size:.65rem;color:#6b7280;letter-spacing:1px;">Dark · Sharp · Professional</div>
+                  <div id="ivory-active-dot" style="display:none;position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 6px #34d399;"></div>
+                </div>
+              </div>
+            </div>
+
             <div class="ps-card">
               <div class="ps-card-label">// UI SKIN</div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
@@ -9433,6 +9639,37 @@ function startIcyTower(area) {
 }
 
 // ── PERSONALIZATION ──
+function setMasterTheme(theme, el) {
+  const html = document.documentElement;
+  // Apply or remove ivory
+  if (theme === 'ivory') {
+    html.setAttribute('data-theme', 'ivory');
+  } else {
+    html.removeAttribute('data-theme');
+  }
+  localStorage.setItem('veda_master_theme', theme);
+
+  // Update active dots
+  const vedaDot   = document.getElementById('veda-active-dot');
+  const ivoryDot  = document.getElementById('ivory-active-dot');
+  const vedaCard  = document.getElementById('master-theme-veda');
+  const ivoryCard = document.getElementById('master-theme-ivory');
+
+  if (theme === 'ivory') {
+    if (vedaDot)   vedaDot.style.display   = 'none';
+    if (ivoryDot)  ivoryDot.style.display  = 'block';
+    if (vedaCard)  vedaCard.style.borderColor  = 'rgba(176,125,74,0.15)';
+    if (ivoryCard) ivoryCard.style.borderColor = '#a78bfa';
+  } else {
+    if (vedaDot)   vedaDot.style.display   = 'block';
+    if (ivoryDot)  ivoryDot.style.display  = 'none';
+    if (vedaCard)  vedaCard.style.borderColor  = 'var(--accent)';
+    if (ivoryCard) ivoryCard.style.borderColor = 'rgba(167,139,250,0.25)';
+  }
+
+  showToast(theme === 'ivory' ? '🏛️ Ivory theme applied' : '🌌 Veda theme applied');
+}
+
 function setUIStyle(style, el) {
   document.querySelectorAll('.style-pill,.skin-card').forEach(p => p.classList.remove('on'));
   if (el) el.classList.add('on');
@@ -9471,6 +9708,19 @@ function setSbPref(pref, el) {
 }
 
 function loadPersonalizePrefs() {
+  // Master theme
+  const masterTheme = localStorage.getItem('veda_master_theme') || 'veda';
+  if (masterTheme === 'ivory') {
+    document.documentElement.setAttribute('data-theme', 'ivory');
+    const ivoryDot  = document.getElementById('ivory-active-dot');
+    const vedaDot   = document.getElementById('veda-active-dot');
+    const vedaCard  = document.getElementById('master-theme-veda');
+    const ivoryCard = document.getElementById('master-theme-ivory');
+    if (ivoryDot)  ivoryDot.style.display  = 'block';
+    if (vedaDot)   vedaDot.style.display   = 'none';
+    if (vedaCard)  vedaCard.style.borderColor  = 'rgba(176,125,74,0.15)';
+    if (ivoryCard) ivoryCard.style.borderColor = '#a78bfa';
+  }
   // UI style
   const style = localStorage.getItem('studly_uistyle') || 'default';
   const styleEl = document.getElementById('style-' + style);
@@ -10236,6 +10486,7 @@ const NW_SYNC_KEYS = [
   'studly_key',        // Gemini API key
   'studly_account',    // profile (name, avatar, gems, streak, badges)
   'studly_theme',      // selected theme
+  'veda_master_theme', // master theme (veda/ivory)
   'studly_cat',        // theme category
   'studly_journal',    // journal entries (JSON array)
   'studly_comp_history', // companion chat history
