@@ -1771,6 +1771,7 @@ body.fs-large { font-size: 17px; }
     <div class="ob-dot"></div>
     <div class="ob-dot"></div>
     <div class="ob-dot"></div>
+    <div class="ob-dot"></div>
   </div>
 
   <!-- Slide 0: Welcome -->
@@ -1931,8 +1932,33 @@ body.fs-large { font-size: 17px; }
     </div>
   </div>
 
-  <!-- Slide 7: API Key -->
+  <!-- Slide 7: Rewards explainer -->
   <div class="ob-slide" id="ob-slide-7">
+    <div class="ob-emoji">💎</div>
+    <div class="ob-title">How rewards work</div>
+    <div class="ob-desc">Veda makes studying feel like a game — here's what to know:</div>
+    <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-bottom:18px;text-align:left;">
+      <div style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.2);border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
+        <span style="font-size:1.4rem;flex-shrink:0;">💎</span>
+        <div><div style="font-family:var(--orb);font-size:.6rem;color:var(--accent2);letter-spacing:1px;margin-bottom:3px;">GEMS</div><div style="font-family:var(--exo);font-size:.78rem;color:var(--text2);line-height:1.5;">Earned by completing tasks, finishing games, answering the daily challenge, and completing to-do items. Spend gems to unlock new games.</div></div>
+      </div>
+      <div style="background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.2);border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
+        <span style="font-size:1.4rem;flex-shrink:0;">🔥</span>
+        <div><div style="font-family:var(--orb);font-size:.6rem;color:#ff9966;letter-spacing:1px;margin-bottom:3px;">STREAKS</div><div style="font-family:var(--exo);font-size:.78rem;color:var(--text2);line-height:1.5;">Use Veda every day to grow your streak. Miss a day and it resets — so try to study a little each day, even if it's just the daily challenge!</div></div>
+      </div>
+      <div style="background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.2);border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
+        <span style="font-size:1.4rem;flex-shrink:0;">🏆</span>
+        <div><div style="font-family:var(--orb);font-size:.6rem;color:var(--teal2);letter-spacing:1px;margin-bottom:3px;">LEADERBOARD</div><div style="font-family:var(--exo);font-size:.78rem;color:var(--text2);line-height:1.5;">See how you rank against friends (and globally). Share your 6-character friend code from the Leaderboard page to compete with classmates.</div></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="ob-btn secondary" onclick="obPrev()">← Back</button>
+      <button class="ob-btn" onclick="obNext()">NEXT →</button>
+    </div>
+  </div>
+
+  <!-- Slide 8: API Key -->
+  <div class="ob-slide" id="ob-slide-8">
     <div class="ob-emoji">🔑</div>
     <div class="ob-title">Almost there!</div>
     <div class="ob-desc">Veda uses Google's free Gemini AI. Get your key at <span style="color:var(--accent2)">aistudio.google.com</span> — no credit card needed.</div>
@@ -2035,6 +2061,8 @@ body.fs-large { font-size: 17px; }
         <button class="srch-filter on" data-filter="all" onclick="setSearchFilter('all',this)">All</button>
         <button class="srch-filter" data-filter="pages" onclick="setSearchFilter('pages',this)">📄 Pages</button>
         <button class="srch-filter" data-filter="journal" onclick="setSearchFilter('journal',this)">📓 Journal</button>
+        <button class="srch-filter" data-filter="notes" onclick="setSearchFilter('notes',this)">📝 Notes</button>
+        <button class="srch-filter" data-filter="flashcards" onclick="setSearchFilter('flashcards',this)">🃏 Flashcards</button>
         <button class="srch-filter" data-filter="topics" onclick="setSearchFilter('topics',this)">🗂 Topics</button>
         <button class="srch-filter" data-filter="todo" onclick="setSearchFilter('todo',this)">✅ Tasks</button>
       </div>
@@ -2831,6 +2859,9 @@ body.fs-large { font-size: 17px; }
           <button class="send-btn" onclick="genStudy()">GENERATE</button>
         </div>
         <div id="study-out"></div>
+        <div id="study-export-row" style="display:none;margin-top:10px;justify-content:flex-end;gap:8px;">
+          <button onclick="exportFlashcardsPDF()" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);border-radius:8px;padding:6px 14px;color:#fbbf24;font-family:var(--exo);font-size:.68rem;cursor:pointer;">📤 Export Flashcards</button>
+        </div>
       </div>
 
       <!-- CALCULATOR -->
@@ -2983,6 +3014,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <button class="journal-filter on" id="jf-all" onclick="setJournalFilter('all',this)">All</button>
           <button class="journal-filter" id="jf-today" onclick="setJournalFilter('today',this)">Today</button>
           <button class="journal-filter" id="jf-week" onclick="setJournalFilter('week',this)">This Week</button>
+          <button onclick="exportJournalPDF()" style="margin-left:auto;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:8px;padding:5px 12px;color:#c4b5fd;font-family:var(--exo);font-size:.65rem;cursor:pointer;white-space:nowrap;">📤 Export</button>
         </div>
         <div class="journal-list" id="journal-list"><div class="journal-empty">No entries yet — write your first one above ✏️</div></div>
         </div>
@@ -5639,6 +5671,14 @@ Notes:\n\n${notesText}`
     const ans = await gemini(prompts[mode], imageToSend);
     out.textContent = ans;
     trackStat('notes');
+    // Save to localStorage for search indexing
+    try {
+      const notesIn = document.getElementById('notes-in');
+      const savedNotes = JSON.parse(localStorage.getItem('studly_saved_notes') || '[]');
+      savedNotes.unshift({ topic: (notesIn && notesIn.value.trim().slice(0,60)) || 'Note ' + new Date().toLocaleDateString(), content: ans, date: new Date().toISOString() });
+      if (savedNotes.length > 30) savedNotes.length = 30;
+      localStorage.setItem('studly_saved_notes', JSON.stringify(savedNotes));
+    } catch(e2) { /* non-critical */ }
   } catch (e) { out.textContent = 'Error: ' + e.message; }
 }
 
@@ -5950,6 +5990,16 @@ Respond ONLY with valid JSON, nothing else:
       const data = JSON.parse(raw.replace(/```json|```/g, '').trim());
       cards = data.cards; cidx = 0; flipped = false; initWeights(); renderCard();
       trackStat('flashcards');
+      // Show export button
+      const exportRow = document.getElementById('study-export-row');
+      if (exportRow) exportRow.style.display = 'flex';
+      // Save set to localStorage for search indexing
+      try {
+        const sets = JSON.parse(localStorage.getItem('studly_card_sets') || '[]');
+        sets.unshift({ topic: t || 'Image Topic', cards: data.cards, date: new Date().toISOString() });
+        if (sets.length > 50) sets.length = 50; // cap at 50 sets
+        localStorage.setItem('studly_card_sets', JSON.stringify(sets));
+      } catch(e2) { /* non-critical */ }
     } catch (e) {
       const errEl = document.createElement('div');
       errEl.className = 'bubble bot';
@@ -10084,7 +10134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── ONBOARDING ──
 let obSlide = 0;
 let obAvatar = '🎓';
-const OB_SLIDES = 8;
+const OB_SLIDES = 9;
 
 // Track multi-select subjects
 let obSubjects = new Set();
@@ -12065,6 +12115,43 @@ function runSearch(q) {
     } catch {}
   }
 
+  // ── Notes (saved AI output) ──
+  if (include('notes')) {
+    try {
+      const savedNotes = JSON.parse(localStorage.getItem('studly_saved_notes') || '[]');
+      savedNotes.forEach(n => {
+        const haystack = ((n.topic||'') + ' ' + (n.content||'')).toLowerCase();
+        if (haystack.includes(q)) {
+          const snippet = n.content ? n.content.slice(0, 80) + (n.content.length > 80 ? '…' : '') : '';
+          results.push({ type:'notes', icon:'📝', title: n.topic || 'Saved Notes',
+            sub: snippet, date: n.date ? new Date(n.date).toLocaleDateString() : '',
+            action:() => { closeSearch(); go('notes'); }
+          });
+        }
+      });
+    } catch {}
+  }
+
+  // ── Flashcard sets ──
+  if (include('flashcards')) {
+    try {
+      const cardSets = JSON.parse(localStorage.getItem('studly_card_sets') || '[]');
+      cardSets.forEach(set => {
+        const setHaystack = (set.topic||'').toLowerCase();
+        const cardHaystack = (set.cards||[]).map(c => (c.front||'') + ' ' + (c.back||'')).join(' ').toLowerCase();
+        const combined = setHaystack + ' ' + cardHaystack;
+        if (combined.includes(q)) {
+          const matchCard = (set.cards||[]).find(c => ((c.front||'') + ' ' + (c.back||'')).toLowerCase().includes(q));
+          const snippet = matchCard ? matchCard.front.slice(0, 70) + (matchCard.front.length > 70 ? '…' : '') : set.topic;
+          results.push({ type:'flashcards', icon:'🃏', title: set.topic || 'Flashcard Set',
+            sub: snippet,
+            action:() => { closeSearch(); go('study'); }
+          });
+        }
+      });
+    } catch {}
+  }
+
   // ── To-do tasks ──
   if (include('todo')) {
     try {
@@ -12107,8 +12194,8 @@ function renderSearchResults(results) {
     return;
   }
 
-  const typeLabels = { page:'Page', topic:'Topic', journal:'Journal', todo:'Task' };
-  const typeColors = { page:'var(--accent2)', topic:'var(--teal)', journal:'#c084fc', todo:'#34d399' };
+  const typeLabels = { page:'Page', topic:'Topic', journal:'Journal', todo:'Task', notes:'Notes', flashcards:'Flashcard' };
+  const typeColors = { page:'var(--accent2)', topic:'var(--teal)', journal:'#c084fc', todo:'#34d399', notes:'#818cf8', flashcards:'#fbbf24' };
 
   // Fix 11: Store actions in a closure array; use data-idx + delegated listener instead of toString()
   window._searchActions = results.map(r => r.action);
@@ -13634,8 +13721,25 @@ async function initDailyChallenge() {
   // Rotate subject by day so it's predictable, not random
   const dayIndex = Math.floor(Date.now() / 86400000);
   const subject = DC_SUBJECTS[dayIndex % DC_SUBJECTS.length];
+
+  // Scale difficulty by gem count
+  const acctForDC = getAcct();
+  const gemCount = acctForDC.gems || 0;
+  let dcDifficulty, dcDiffLabel;
+  if (gemCount >= 2000) { dcDifficulty = 'very hard (university/A-level difficulty, complex multi-step reasoning required)'; dcDiffLabel = '🔴 Expert'; }
+  else if (gemCount >= 1000) { dcDifficulty = 'hard (A-level / advanced high school)'; dcDiffLabel = '🟠 Hard'; }
+  else if (gemCount >= 500) { dcDifficulty = 'medium-hard (upper high school, requires some depth)'; dcDiffLabel = '🟡 Medium'; }
+  else if (gemCount >= 100) { dcDifficulty = 'medium (standard high school)'; dcDiffLabel = '🟢 Standard'; }
+  else { dcDifficulty = 'easy (introductory high school, one clear fact)'; dcDiffLabel = '🔵 Starter'; }
+
+  // Show difficulty badge in subject tag
   try {
-    const raw = await gemini(`Generate a single short-answer study question about ${subject} for a high school student. Return ONLY valid JSON, no markdown: {"question":"...","answer":"...","hint":"...","subject":"${subject}"}. The answer must be 1-4 words only. Keep the question factual and specific.`);
+    const subTag = document.getElementById('dc-subject-tag');
+    if (subTag) subTag.textContent = '📚 ' + subject + '  ·  ' + dcDiffLabel;
+  } catch(e) { /* non-critical */ }
+
+  try {
+    const raw = await gemini(`Generate a single short-answer study question about ${subject}. Difficulty: ${dcDifficulty}. Return ONLY valid JSON, no markdown: {"question":"...","answer":"...","hint":"...","subject":"${subject}","difficulty":"${dcDiffLabel}"}. The answer must be 1-4 words only. Keep the question factual and specific.`);
     const parsed = JSON.parse(raw.replace(/^```(?:json)?|```$/gm,'').trim());
     // Preserve previous state for streak calculation — don't recalculate streak at generate time
     const ns = { date: today, question: parsed.question, answer: parsed.answer, hint: parsed.hint, subject: parsed.subject || subject, completed: false, streak: state?.streak || 0, prevState: state };
@@ -13877,6 +13981,43 @@ function exportNotesPDF() {
   w.document.close();
   w.focus();
   setTimeout(() => w.print(), 400);
+}
+
+// ── EXPORT: JOURNAL → PDF ──
+function exportJournalPDF() {
+  const entries = JSON.parse(localStorage.getItem('studly_journal') || '[]');
+  if (!entries.length) { showToast('⚠️ No journal entries to export'); return; }
+  const bodyHtml = entries.map(e => {
+    const d = new Date(e.date);
+    const dateStr = d.toLocaleDateString('en-GB', {weekday:'long',year:'numeric',month:'long',day:'numeric'}) + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    const safeTitle = (e.title||'Untitled Entry').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const safeBody = (e.body||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    return `<div style="margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #e5e7eb;"><h2 style="font-size:15px;margin:0 0 4px;color:#111;">${safeTitle}</h2><div style="font-size:11px;color:#888;margin-bottom:10px;">${dateStr}</div><div style="font-size:14px;line-height:1.75;color:#333;">${safeBody}</div></div>`;
+  }).join('');
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Veda Journal Export</title><style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#111;font-size:15px;}h1{font-size:22px;border-bottom:2px solid #4d9fff;padding-bottom:8px;color:#1a1a2e;}@media print{body{margin:20px;}@page{margin:1.5cm;}}</style></head><body><h1>📓 Veda Journal</h1><p style="font-size:12px;color:#888;margin-bottom:24px;">Exported ${new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · ${entries.length} entr${entries.length===1?'y':'ies'}</p>${bodyHtml}</body></html>`;
+  const w = window.open('','_blank');
+  if (!w) { showToast('⚠️ Allow popups to export'); return; }
+  w.document.write(html); w.document.close(); w.focus();
+  setTimeout(() => w.print(), 400);
+  showToast('📤 Journal export opened — use Print → Save as PDF');
+}
+
+// ── EXPORT: FLASHCARDS → PDF ──
+function exportFlashcardsPDF() {
+  if (!cards || !cards.length) { showToast('⚠️ Generate flashcards first'); return; }
+  const topic = document.getElementById('study-in')?.value.trim() || 'Flashcards';
+  const safeTopic = topic.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rows = cards.map((c,i) => {
+    const sf = (c.front||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const sb = (c.back||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return `<tr style="background:${i%2?'#f9fafb':'#fff'};"><td style="padding:10px 14px;font-weight:600;border:1px solid #e5e7eb;width:45%;">${sf}</td><td style="padding:10px 14px;color:#374151;border:1px solid #e5e7eb;">${sb}</td></tr>`;
+  }).join('');
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Veda Flashcards — ${safeTopic}</title><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;font-size:14px;color:#111;}h1{font-size:20px;border-bottom:2px solid #4d9fff;padding-bottom:8px;color:#1a1a2e;}table{width:100%;border-collapse:collapse;margin-top:16px;}th{background:#1a3a6e;color:#fff;padding:10px 14px;text-align:left;font-size:12px;letter-spacing:1px;text-transform:uppercase;}@media print{body{margin:20px;}@page{margin:1.5cm;}}</style></head><body><h1>🃏 ${safeTopic}</h1><p style="font-size:12px;color:#888;margin-bottom:4px;">${cards.length} flashcard${cards.length===1?'':'s'} · Exported ${new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})}</p><table><thead><tr><th>Front</th><th>Back / Answer</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+  const w = window.open('','_blank');
+  if (!w) { showToast('⚠️ Allow popups to export'); return; }
+  w.document.write(html); w.document.close(); w.focus();
+  setTimeout(() => w.print(), 400);
+  showToast('📤 Flashcard export opened — use Print → Save as PDF');
 }
 
 // ══════════════════════════════════════════════════════
