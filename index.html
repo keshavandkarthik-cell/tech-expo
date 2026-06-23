@@ -376,6 +376,18 @@ html[data-theme="ivory"] textarea:focus {
   box-shadow: 0 0 0 3px rgba(167,139,250,0.12) !important;
 }
 
+
+html[data-theme="ivory"] #search-modal,
+html[data-theme="ivory"] #msearch-modal {
+  background: var(--panel-col2) !important;
+  border-color: rgba(167,139,250,0.3) !important;
+}
+html[data-theme="ivory"] #search-modal input,
+html[data-theme="ivory"] #msearch-modal input {
+  background: var(--panel-col) !important;
+  color: var(--text) !important;
+  border-color: rgba(167,139,250,0.2) !important;
+}
 /* ── Ivory theme: swoop away veda-only sections ── */
 .veda-only-section {
   overflow: hidden;
@@ -2011,7 +2023,7 @@ body.fs-large { font-size: 17px; }
 
     <!-- ══ GLOBAL SEARCH OVERLAY ══ -->
     <div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);" onclick="closeSearch()"></div>
-    <div id="search-modal" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:901;width:min(640px,94vw);background:linear-gradient(145deg,rgba(12,17,34,.99),rgba(8,12,24,.99));border:1px solid rgba(77,159,255,.3);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(77,159,255,.06);overflow:hidden;">
+    <div id="search-modal" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:901;width:min(640px,94vw);background:var(--panel-col2);border:1px solid rgba(77,159,255,.3);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(77,159,255,.06);overflow:hidden;">
       <!-- Input row -->
       <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(77,159,255,.1);">
         <span style="font-size:1.1rem;opacity:.6;">🔍</span>
@@ -2032,7 +2044,7 @@ body.fs-large { font-size: 17px; }
 
     <!-- ══ MUSIC SEARCH OVERLAY ══ -->
     <div id="msearch-overlay" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);" onclick="closeMusicSearch()"></div>
-    <div id="msearch-modal" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:801;width:min(580px,94vw);background:linear-gradient(145deg,rgba(12,17,34,.99),rgba(8,12,24,.99));border:1px solid rgba(77,159,255,.28);border-radius:18px;box-shadow:0 28px 70px rgba(0,0,0,.65);overflow:hidden;">
+    <div id="msearch-modal" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:801;width:min(580px,94vw);background:var(--panel-col2);border:1px solid rgba(77,159,255,.28);border-radius:18px;box-shadow:0 28px 70px rgba(0,0,0,.65);overflow:hidden;">
       <div style="display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid rgba(77,159,255,.1);">
         <span style="font-size:1.1rem;">🎵</span>
         <input id="msearch-input" placeholder="Search music — artist, album, vibe…" autocomplete="off" onkeydown="if(event.key==='Enter')doMusicSearch()" style="flex:1;background:none;border:none;outline:none;font-family:var(--raj);font-size:.95rem;color:var(--text);">
@@ -7068,7 +7080,7 @@ function confirm2(title, msg, onOk) {
 function showToast(msg) {
   const t = document.createElement('div');
   t.textContent = msg;
-  t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(10,14,26,.95);border:1px solid rgba(77,159,255,.3);border-radius:10px;padding:10px 20px;font-family:var(--exo);font-size:.85rem;color:var(--text);z-index:999;box-shadow:0 4px 20px rgba(77,159,255,.15);animation:tIn .25s ease;white-space:nowrap;`;
+  t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--chrome-bg);border:1px solid rgba(77,159,255,.3);border-radius:10px;padding:10px 20px;font-family:var(--exo);font-size:.85rem;color:var(--text);z-index:999;box-shadow:0 4px 20px rgba(77,159,255,.15);animation:tIn .25s ease;white-space:nowrap;`;
   document.body.appendChild(t);
   setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(() => t.remove(), 300); }, 2000);
 }
@@ -8701,7 +8713,7 @@ function startSudoku(area) {
       const bt = r%3===0 ? '2px solid rgba(77,159,255,.6)' : '1px solid rgba(77,159,255,.15)';
       const bl = c%3===0 ? '2px solid rgba(77,159,255,.6)' : '1px solid rgba(77,159,255,.15)';
 
-      let bg = 'rgba(10,14,26,.9)';
+      let bg = getComputedStyle(document.documentElement).getPropertyValue('--chrome-bg') || 'rgba(10,14,26,.9)';
       if (isSel) bg = 'rgba(77,159,255,.35)';
       else if (sameNum && val) bg = 'rgba(77,159,255,.2)';
       else if (sameRowCol || sameBox) bg = 'rgba(77,159,255,.07)';
@@ -9178,7 +9190,7 @@ function startTetris(area) {
       <button class="abtn sec" onclick="tetQuit()">Quit</button>
     </div>
     <div style="display:flex;gap:14px;justify-content:center;align-items:flex-start;">
-      <canvas id="tet-canvas" width="${COLS*CELL}" height="${ROWS*CELL}" style="border:1px solid var(--panel-border);border-radius:8px;background:rgba(5,8,18,.9);display:block;"></canvas>
+      <canvas id="tet-canvas" width="${COLS*CELL}" height="${ROWS*CELL}" style="border:1px solid var(--panel-border);border-radius:8px;background:var(--panel-col);display:block;"></canvas>
       <div style="display:flex;flex-direction:column;gap:10px;min-width:90px;">
         <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1px;text-transform:uppercase;">Next</div>
         <canvas id="tet-next" width="90" height="80" style="border:1px solid rgba(77,159,255,.2);border-radius:8px;background:var(--panel-col);"></canvas>
@@ -9359,7 +9371,7 @@ function startBrickBreaker(area) {
       </div>
       <button class="abtn sec" onclick="bbQuit()">Quit</button>
     </div>
-    <canvas id="bb-canvas" style="border:1px solid var(--panel-border);border-radius:8px;background:rgba(5,8,18,.9);display:block;width:100%;cursor:none;touch-action:none;"></canvas>
+    <canvas id="bb-canvas" style="border:1px solid var(--panel-border);border-radius:8px;background:var(--panel-col);display:block;width:100%;cursor:none;touch-action:none;"></canvas>
     <div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">Move mouse or touch to control paddle · Click/tap to launch ball</div>`;
 
   const canvas = document.getElementById('bb-canvas');
@@ -12652,7 +12664,7 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
 }
 .lb-row.lb-me {
   border-color: rgba(0,212,170,.4);
-  background: linear-gradient(145deg, rgba(0,212,170,.06), rgba(10,14,26,.98));
+  background: linear-gradient(145deg, rgba(0,212,170,.06), var(--chrome-bg));
 }
 .lb-row.lb-me::before {
   background: linear-gradient(90deg, transparent, var(--teal), transparent);
