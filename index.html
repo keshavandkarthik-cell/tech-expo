@@ -6780,6 +6780,126 @@ function checkEasterEgg(msg) {
   return null;
 }
 
+
+// ── KEYWORD FALLBACK COMPANION ────────────────────────────────────────────────
+const KEYWORD_RESPONSES = [
+  {
+    patterns: [/stress|stressed|stressing/i],
+    responses: [
+      "Stress is rough 😔 What's got you feeling this way? Sometimes just saying it out loud helps.",
+      "That sounds heavy. You don't have to have it all figured out right now 💙",
+      "Stress means you care — but you also deserve a breather. What's one small thing you could do for yourself right now?"
+    ]
+  },
+  {
+    patterns: [/anxious|anxiety|nervous|scared|afraid|panic/i],
+    responses: [
+      "Anxiety is so exhausting 💙 You're not alone in feeling this way.",
+      "That feeling is real and valid. Try taking one slow breath — just one. I'm here.",
+      "It's okay to feel nervous. What's the thing that's worrying you most right now?"
+    ]
+  },
+  {
+    patterns: [/sad|upset|unhappy|depressed|down|low/i],
+    responses: [
+      "I'm sorry you're feeling that way 💙 Want to talk about what's going on?",
+      "It's okay to not be okay. You don't have to pretend here.",
+      "Feeling down is hard. I'm here if you want to let it out 🌙"
+    ]
+  },
+  {
+    patterns: [/tired|exhausted|drained|burnt out|burnout|no energy/i],
+    responses: [
+      "Burnout is real and it hits hard. When did you last actually rest — not just sleep, but properly switch off?",
+      "Your body and brain are telling you something. Maybe it's okay to slow down today 💙",
+      "Exhaustion isn't weakness. You've probably been carrying a lot. What would help right now?"
+    ]
+  },
+  {
+    patterns: [/lonely|alone|no friends|nobody|isolated/i],
+    responses: [
+      "Loneliness is one of the hardest feelings. I'm glad you're talking to me 💙",
+      "You're not as alone as it might feel right now. I'm here, and I'm listening.",
+      "That takes courage to say. What's been making you feel this way?"
+    ]
+  },
+  {
+    patterns: [/angry|frustrated|annoyed|mad|pissed|rage/i],
+    responses: [
+      "Ugh, that sounds really frustrating 😤 What happened?",
+      "Makes sense you're angry. Sometimes things are just genuinely unfair.",
+      "Let it out — what's going on? I'm not going anywhere 💙"
+    ]
+  },
+  {
+    patterns: [/overwhelmed|too much|can't cope|cant cope|everything at once/i],
+    responses: [
+      "When everything piles up it can feel impossible. You don't have to tackle it all at once.",
+      "Overwhelmed is a real feeling. What's the one thing pressing on you most right now?",
+      "Hey — breathe. Just one thing at a time. What's the most urgent thing?"
+    ]
+  },
+  {
+    patterns: [/fail|failed|failing|bad grade|exam|test|results/i],
+    responses: [
+      "One result doesn't define you, even when it really stings 💙",
+      "That's genuinely hard to deal with. How are you feeling about it?",
+      "Failing something feels awful but it's not the end. What happened?"
+    ]
+  },
+  {
+    patterns: [/happy|great|good|amazing|excited|proud/i],
+    responses: [
+      "That's genuinely great to hear! What's going well? 🌟",
+      "Love that energy! Tell me more 😊",
+      "That's what I like to hear 💙 What happened?"
+    ]
+  },
+  {
+    patterns: [/help|advice|what should i|what do i|i don't know what/i],
+    responses: [
+      "I'm here 💙 Tell me what's going on and we'll figure it out together.",
+      "Happy to help. What's the situation?",
+      "Let's think through it together. What's going on?"
+    ]
+  },
+  {
+    patterns: [/hi|hey|hello|sup|what's up|wassup|hiya/i],
+    responses: [
+      "Hey! How are you doing today? 🌟",
+      "Hi! Good to see you 💙 What's on your mind?",
+      "Hey you! How's everything going?"
+    ]
+  },
+  {
+    patterns: [/thank|thanks|ty|appreciated/i],
+    responses: [
+      "Always 💙 I'm here whenever you need.",
+      "Of course! That's what I'm here for 🌟",
+      "Anytime. You've got this 💙"
+    ]
+  }
+];
+
+function keywordFallback(msg) {
+  const lower = msg.toLowerCase();
+  for (const group of KEYWORD_RESPONSES) {
+    if (group.patterns.some(p => p.test(lower))) {
+      return group.responses[Math.floor(Math.random() * group.responses.length)];
+    }
+  }
+  // Default fallback
+  const defaults = [
+    "I'm here 💙 Tell me more about what's going on.",
+    "That sounds like a lot. Want to talk about it?",
+    "I'm listening — what's on your mind?",
+    "I hear you 💙 What's this about?",
+    "You've got my full attention. What's up?"
+  ];
+  return defaults[Math.floor(Math.random() * defaults.length)];
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 async function respondComp(userMsg, imageData) {
   const thinking = addCompBubble('Thinking <span class="dots"><span>·</span><span>·</span><span>·</span></span>', 'bot thinking');
 
@@ -6817,6 +6937,19 @@ Current mood context: ${compMood || 'unknown'}`;
     compHistory.slice(-6).map(m => (m.role === 'user' ? 'Student: ' : 'Companion: ') + m.parts[0].text).join('\n') +
     '\n\nRespond as Companion (no label, just your response):';
 
+  // If no API key or guest mode, use keyword fallback
+  const API_KEY = localStorage.getItem('gemini_api_key') || window.GROQ_KEY;
+  if (!API_KEY || window._isGuest) {
+    await new Promise(r => setTimeout(r, 600 + Math.random() * 500));
+    compWin.removeChild(thinking);
+    const fallbackReply = keywordFallback(userMsg);
+    addCompBubble(fallbackReply, 'bot');
+    compHistory.push({ role: 'model', parts: [{ text: fallbackReply }] });
+    saveCompHistory();
+    compWin.scrollTop = compWin.scrollHeight;
+    return;
+  }
+
   try {
     const ans = await gemini(prompt, imageData);
     compWin.removeChild(thinking);
@@ -6824,8 +6957,12 @@ Current mood context: ${compMood || 'unknown'}`;
     compHistory.push({ role: 'model', parts: [{ text: ans }] });
     saveCompHistory();
   } catch (e) {
+    // API failed — fall back to keyword responses
     compWin.removeChild(thinking);
-    addCompBubble('Hmm, having trouble connecting right now. Try again in a sec 💙', 'bot');
+    const fallbackReply = keywordFallback(userMsg);
+    addCompBubble(fallbackReply + ' <span style="opacity:.4;font-size:.75em">(offline)</span>', 'bot');
+    compHistory.push({ role: 'model', parts: [{ text: fallbackReply }] });
+    saveCompHistory();
   }
   compWin.scrollTop = compWin.scrollHeight;
 }
