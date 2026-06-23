@@ -6917,6 +6917,8 @@ async function respondComp(userMsg, imageData) {
     }
   }
 
+  const memory = getCompMemory();
+  const memoryContext = memory ? `\n\nWhat you remember about this student from past conversations:\n${memory}` : '';
   const systemContext = `You are a warm, chill, emotionally intelligent study companion called Companion inside an app called Veda. You're like a supportive friend who gets student life.
 
 Your personality:
@@ -6931,7 +6933,7 @@ Your personality:
 - Never give generic advice. Actually engage with what they said.
 - If someone seems really distressed, gently suggest talking to someone they trust or a counsellor
 
-Current mood context: ${compMood || 'unknown'}`;
+Current mood context: ${compMood || 'unknown'}${memoryContext}`;
 
   const prompt = systemContext + '\n\nConversation so far:\n' +
     compHistory.slice(-6).map(m => (m.role === 'user' ? 'Student: ' : 'Companion: ') + m.parts[0].text).join('\n') +
@@ -10493,7 +10495,27 @@ function loadCompHistory() {
 function saveCompHistory() {
   try {
     localStorage.setItem('studly_comp_history', JSON.stringify(compHistory.slice(-20)));
+    // Auto-update memory summary every 6 exchanges
+    if (compHistory.length > 0 && compHistory.length % 6 === 0) updateCompMemory();
   } catch {}
+}
+
+async function updateCompMemory() {
+  // Only run if AI is available
+  const hasKey = localStorage.getItem('gemini_api_key') || window.GROQ_KEY;
+  if (!hasKey || window._isGuest) return;
+  try {
+    const recentLines = compHistory.slice(-12)
+      .map(m => (m.role === 'user' ? 'Student' : 'Companion') + ': ' + m.parts[0].text)
+      .join('\n');
+    const summaryPrompt = `Summarise this conversation in 2-3 sentences from the companion's perspective. Focus on: the student's emotional state, what they talked about, anything personal they shared. Be warm and specific. Don't include greetings or filler.\n\n${recentLines}\n\nSummary:`;
+    const summary = await gemini(summaryPrompt);
+    if (summary) localStorage.setItem('veda_comp_memory', summary.trim());
+  } catch {}
+}
+
+function getCompMemory() {
+  return localStorage.getItem('veda_comp_memory') || null;
 }
 
 // ── JOURNAL FILTER ──
@@ -10756,6 +10778,7 @@ const NW_SYNC_KEYS = [
   'studly_account',    // profile (name, avatar, gems, streak, badges)
   'studly_theme',      // selected theme
   'veda_master_theme', // master theme (veda/ivory)
+  'veda_comp_memory',  // companion memory summary
   'studly_cat',        // theme category
   'studly_journal',    // journal entries (JSON array)
   'studly_comp_history', // companion chat history
