@@ -1948,7 +1948,7 @@ body.fs-large { font-size: 17px; }
       </div>
       <div style="background:rgba(0,212,170,.07);border:1px solid rgba(0,212,170,.2);border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
         <span style="font-size:1.4rem;flex-shrink:0;">🏆</span>
-        <div><div style="font-family:var(--orb);font-size:.6rem;color:var(--teal2);letter-spacing:1px;margin-bottom:3px;">LEADERBOARD</div><div style="font-family:var(--exo);font-size:.78rem;color:var(--text2);line-height:1.5;">See how you rank against friends (and globally). Share your 6-character friend code from the Leaderboard page to compete with classmates.</div></div>
+        <div><div style="font-family:var(--orb);font-size:.6rem;color:var(--teal2);letter-spacing:1px;margin-bottom:3px;">LEADERBOARD</div><div style="font-family:var(--exo);font-size:.78rem;color:var(--text2);line-height:1.5;">See how you rank against friends and globally. Share your 6-character friend code from the Leaderboard page to compete with classmates.</div></div>
       </div>
     </div>
     <div style="display:flex;gap:10px;margin-top:4px;">
@@ -2150,213 +2150,159 @@ body.fs-large { font-size: 17px; }
           </div>
         </div>
 
-        <!-- DESKTOP CANVAS -->
+        <!-- DESKTOP CANVAS (OVERHAULED) -->
         <div class="desktop-canvas">
 
-          <!-- Hero: Homework -->
-          <div class="dt-widget dt-widget-wide dt-hero clickable" onclick="go('homework')">
-            <div class="dt-hero-icon">📚</div>
-            <div class="dt-hero-text">
-              <div class="dt-hero-badge">✦ AI-POWERED</div>
-              <div class="dt-hero-title">Homework Helper</div>
-              <div class="dt-hero-sub">Ask anything — get a clear step-by-step breakdown</div>
+          <!-- ── ROW 1: Stat bar ── -->
+          <div class="dh-statbar dt-widget-wide" style="grid-column:span 3;">
+            <div class="dh-stat-chip" onclick="go('leaderboard')" title="Your gems">
+              <span class="dh-stat-icon">💎</span>
+              <div><div class="dh-stat-val" id="dh-gems">—</div><div class="dh-stat-lbl">Gems</div></div>
             </div>
-            <div class="dt-hero-arrow">→</div>
+            <div class="dh-stat-divider"></div>
+            <div class="dh-stat-chip" title="Day streak">
+              <span class="dh-stat-icon">🔥</span>
+              <div><div class="dh-stat-val" id="dh-streak">—</div><div class="dh-stat-lbl">Day streak</div></div>
+            </div>
+            <div class="dh-stat-divider"></div>
+            <div class="dh-stat-chip" onclick="go('leaderboard')" title="Global rank">
+              <span class="dh-stat-icon">🏆</span>
+              <div><div class="dh-stat-val" id="dh-rank">—</div><div class="dh-stat-lbl">Global rank</div></div>
+            </div>
+            <div class="dh-stat-divider"></div>
+            <div class="dh-stat-chip" title="Games played">
+              <span class="dh-stat-icon">🎮</span>
+              <div><div class="dh-stat-val" id="dh-games">—</div><div class="dh-stat-lbl">Games</div></div>
+            </div>
+            <div class="dh-xp-wrap" id="dh-xp-wrap" title="XP to next level">
+              <div class="dh-xp-label"><span id="dh-level-lbl">LVL —</span><span id="dh-xp-lbl" style="margin-left:auto;"></span></div>
+              <div class="dh-xp-track"><div class="dh-xp-fill" id="dh-xp-fill" style="width:0%"></div></div>
+            </div>
           </div>
 
-          <!-- Clock widget -->
-          <!-- Daily Brief widget -->
-          <div class="dt-widget dt-widget-wide" id="daily-brief-widget">
-            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Mon Jun 15 2026</span></div>
-            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Keshav, fantastic work maintaining your 1-day study streak and collecting 329 gems! Today, instead of just reading, actively test yourself on a few key facts you studied yesterday by trying to recall them without looking. This small act of retrieval practice is incredibly powerful for solidifying memory, especially for your subjects like History or Biology.</div>
+          <!-- ── ROW 2: Hero card + Daily Brief + Clock ── -->
+          <!-- Hero: AI Homework  -->
+          <div class="dt-widget dh-hero clickable" onclick="go('homework')" style="grid-column:span 2;grid-row:span 1;">
+            <div class="dh-hero-bg"></div>
+            <div class="dh-hero-inner">
+              <div class="dh-hero-badge">✦ AI-POWERED</div>
+              <div class="dh-hero-title">Homework<br>Helper</div>
+              <div class="dh-hero-sub">Ask anything — get a clear step-by-step breakdown instantly.</div>
+              <div class="dh-hero-cta">Open now →</div>
+            </div>
+            <div class="dh-hero-emoji">📚</div>
+          </div>
+
+          <!-- Clock + Daily Brief stacked -->
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="dt-widget dh-clock-card">
+              <div class="dt-clock-big" id="dt-clock-big">—:——</div>
+              <div class="dt-clock-date" id="dt-clock-date">—</div>
+              <div id="dh-weather-inline" style="margin-top:6px;display:flex;align-items:center;gap:6px;font-family:var(--exo);font-size:.7rem;color:var(--silver);">
+                <span id="dh-w-icon">🌤️</span><span id="dh-w-temp">—°</span><span id="dh-w-desc" style="opacity:.6;"></span>
+              </div>
+            </div>
+            <div class="dt-widget dh-streak-card">
+              <div class="dh-streak-fire" id="dh-streak-big">🔥</div>
+              <div class="dh-streak-num" id="dh-streak-num">—</div>
+              <div class="dh-streak-lbl">day streak</div>
+              <div class="dh-streak-sub" id="dh-streak-sub">Keep it going!</div>
+            </div>
+          </div>
+
+          <!-- ── ROW 3: Daily Challenge + Focus Timer + Quick Nav ── -->
+          <!-- Daily Challenge card -->
+          <div class="dt-widget dh-dc-card clickable" onclick="go('daily')" style="grid-column:span 1;">
+            <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:#fbbf24;box-shadow:0 0 6px #fbbf24;"></span>Daily Challenge</div>
+            <div id="dh-dc-preview" style="font-family:var(--exo);font-size:.78rem;color:var(--text2);line-height:1.6;margin:6px 0 10px;min-height:44px;">Loading today's question…</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div id="dh-dc-status" style="font-family:var(--orb);font-size:.42rem;letter-spacing:1px;color:var(--silver);">TAP TO ANSWER</div>
+              <div id="dh-dc-badge" style="font-family:var(--exo);font-size:.6rem;color:#fbbf24;"></div>
+            </div>
+          </div>
+
+          <!-- Focus Timer (Pomodoro) -->
+          <div class="dt-widget" id="daily-brief-widget" style="grid-column:span 1;">
+            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;"></span></div>
+            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.78rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;">Loading…</div>
             <button onclick="refreshDailyBrief(true)" style="margin-top:8px;background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.65rem;cursor:pointer;padding:0;opacity:.6;transition:opacity .15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">↻ refresh</button>
           </div>
 
-          <div class="dt-widget">
-            <div class="dt-clock-big" id="dt-clock-big">18:48</div>
-            <div class="dt-clock-date" id="dt-clock-date">Monday, Jun 15</div>
-          </div>
-
-          <!-- Stats widget -->
-          <div class="dt-widget">
-            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Your Stats</div>
-            <div class="dt-stats">
-              <div>
-                <div class="dt-stat-row">
-                  <span class="dt-stat-label">Questions asked</span>
-                  <span class="dt-stat-val" id="dt-stat-q">1</span>
-                </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-q" style="width: 2%;"></div></div>
-              </div>
-              <div>
-                <div class="dt-stat-row">
-                  <span class="dt-stat-label">Games played</span>
-                  <span class="dt-stat-val" id="dt-stat-g">42</span>
-                </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-g" style="width: 100%; background: linear-gradient(90deg,var(--teal),var(--teal2));"></div></div>
-              </div>
-              <div>
-                <div class="dt-stat-row">
-                  <span class="dt-stat-label">Journal entries</span>
-                  <span class="dt-stat-val" id="dt-stat-j">0</span>
-                </div>
-                <div class="dt-progress"><div class="dt-progress-fill" id="dt-prog-j" style="width: 0%; background: linear-gradient(90deg, rgb(192, 132, 252), rgb(232, 121, 249));"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quick Note widget -->
-          <div class="dt-widget dt-widget-wide">
-            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Quick Note</div>
-            <textarea id="dt-quicknote" style="width:100%;height:70px;background:rgba(255,255,255,.03);border:1px solid rgba(77,159,255,.12);border-radius:10px;padding:10px;color:var(--text);font-family:var(--exo);font-size:.8rem;resize:none;outline:none;line-height:1.6;" placeholder="Jot something down..." oninput="localStorage.setItem('studly_quicknote',this.value)"></textarea>
-          </div>
-
-          <!-- Pomodoro widget -->
+          <!-- Pomodoro -->
           <div class="dt-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Focus Timer</div>
             <div style="text-align:center;">
-              <div id="pom-display" style="font-family:var(--orb);font-size:clamp(1.4rem,3vw,2rem);font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;line-height:1;margin:4px 0 2px;">05:00</div>
-              <div id="pom-label" style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-bottom:10px;">SHORT BREAK</div>
+              <div id="pom-display" style="font-family:var(--orb);font-size:clamp(1.4rem,3vw,2rem);font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;line-height:1;margin:4px 0 2px;">25:00</div>
+              <div id="pom-label" style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1px;margin-bottom:10px;">FOCUS</div>
               <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
                 <button id="pom-btn" onclick="pomToggle()" style="background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:8px;padding:6px 18px;color:#fff;font-family:var(--orb);font-size:.55rem;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .15s;">START</button>
                 <button onclick="pomReset()" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 12px;color:var(--silver2);font-family:var(--exo);font-size:.65rem;cursor:pointer;transition:all .15s;">↺</button>
               </div>
               <div style="display:flex;gap:4px;justify-content:center;">
-                <button onclick="pomSetMode('focus')" id="pom-m-focus" style="border-radius: 999px; padding: 3px 10px; font-family: var(--exo); font-size: 0.6rem; cursor: pointer; border-color: rgba(77, 159, 255, 0.2); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; background: transparent; color: var(--silver); transition: 0.15s;">25 min</button>
-                <button onclick="pomSetMode('short')" id="pom-m-short" style="border-radius: 999px; padding: 3px 10px; font-family: var(--exo); font-size: 0.6rem; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--accent); border-image: initial; background: rgba(77, 159, 255, 0.15); color: var(--accent2); transition: 0.15s;">5 min</button>
-                <button onclick="pomSetMode('long')" id="pom-m-long" style="border-radius:999px;padding:3px 10px;font-family:var(--exo);font-size:.6rem;cursor:pointer;border:1px solid rgba(77,159,255,.2);background:transparent;color:var(--silver);transition:all .15s;">15 min</button>
-              </div>
-              <div id="pom-sessions" style="font-family:var(--exo);font-size:.62rem;color:var(--teal);margin-top:6px;letter-spacing:.5px;"></div>
-            </div>
-          </div>
-
-          <!-- Gems/streak widget -->
-          <div class="dt-widget clickable" onclick="go('profile')">
-            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Rewards</div>
-            <div class="dt-reward">
-              <div class="dt-reward-row">
-                <div class="dt-reward-icon">💎</div>
-                <div><div class="dt-reward-val" id="dt-gems-big">329</div><div class="dt-reward-label">Gems earned</div></div>
-              </div>
-              <div class="dt-reward-row">
-                <div class="dt-reward-icon">🔥</div>
-                <div><div class="dt-reward-val" id="dt-streak-big">1 days</div><div class="dt-reward-label">Study streak</div></div>
+                <button onclick="pomSetMode('focus')" id="pom-mode-focus" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.25);border-radius:6px;padding:4px 10px;color:var(--accent2);font-family:var(--exo);font-size:.6rem;cursor:pointer;">Focus</button>
+                <button onclick="pomSetMode('short')" id="pom-mode-short" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;color:var(--silver);font-family:var(--exo);font-size:.6rem;cursor:pointer;">Short</button>
+                <button onclick="pomSetMode('long')" id="pom-mode-long" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;color:var(--silver);font-family:var(--exo);font-size:.6rem;cursor:pointer;">Long</button>
               </div>
             </div>
           </div>
 
-          <!-- Leaderboard widget -->
-          <div class="dt-widget clickable" onclick="go('leaderboard')" id="lb-home-widget">
-            <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Leaderboard</div>
-            <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;"><div class="lb-mini-row">
-      <div class="lb-mini-rank">🥇</div>
-      <div class="lb-mini-name" style="color:var(--teal2);">Keshav ✦</div>
-      <div class="lb-mini-val">0 💎</div>
-    </div></div>
-            <div id="lb-home-rank" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(77, 159, 255, 0.1); font-family: var(--exo); font-size: 0.68rem; color: var(--silver); display: block;">
-              Your rank: <span id="lb-home-rank-val" style="color:var(--accent2);font-weight:700;">#1 of 1</span>
+          <!-- ── ROW 4: Quick Nav grid ── -->
+          <div class="dt-widget" style="grid-column:span 3;">
+            <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Quick Open</div>
+            <div class="dh-quicknav">
+              <button class="dh-qn-btn" onclick="go('notes')"><span>📝</span><span>Notes</span></button>
+              <button class="dh-qn-btn" onclick="go('study')"><span>🃏</span><span>Flashcards</span></button>
+              <button class="dh-qn-btn" onclick="go('journal')"><span>📓</span><span>Journal</span></button>
+              <button class="dh-qn-btn" onclick="go('games')"><span>🎮</span><span>Games</span></button>
+              <button class="dh-qn-btn" onclick="go('todo')"><span>✅</span><span>Tasks</span></button>
+              <button class="dh-qn-btn" onclick="go('planner')"><span>📅</span><span>Planner</span></button>
+              <button class="dh-qn-btn" onclick="go('calc')"><span>🔢</span><span>Calc</span></button>
+              <button class="dh-qn-btn" onclick="openSearch()"><span>🔍</span><span>Search</span></button>
             </div>
           </div>
 
-          <!-- Exam Countdown widget -->
+          <!-- ── ROW 5: Quick Note + Music + Activity Feed ── -->
           <div class="dt-widget">
-            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
-              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:#fbbf24;"></span>Exams</span>
-              <button onclick="openExamModal()" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);border-radius:999px;padding:2px 10px;font-family:var(--exo);font-size:.6rem;color:#fbbf24;cursor:pointer;">+ Add</button>
-            </div>
-            <div id="exam-countdown-list" style="margin-top:8px;display:flex;flex-direction:column;gap:5px;"></div>
-            <div id="exam-empty-msg" style="font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 10px 0px; display: block;">No upcoming exams — add one!</div>
-          </div>
-
-          <!-- Daily Challenge widget -->
-          <div class="dt-widget" id="daily-challenge-widget">
-            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
-              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Daily Challenge</span>
-              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: none;"></span>
-            </div>
-            <div id="dc-loading" style="font-family: var(--exo); font-size: 0.75rem; color: var(--silver); opacity: 0.6; text-align: center; padding: 14px 0px; display: none;"><span class="dots"><span>·</span><span>·</span><span>·</span></span> Checking...</div>
-            <div id="dc-question-wrap" style="display: none;">
-              <div id="dc-subject-tag" style="font-family:var(--exo);font-size:.65rem;color:var(--teal2);margin-bottom:6px;">📚 Biology</div>
-              <div id="dc-question" style="font-family:var(--raj);font-size:.85rem;color:var(--text);line-height:1.5;margin-bottom:8px;">Which organelle converts light energy into chemical energy during photosynthesis?</div>
-              <div style="background:rgba(0,212,170,.06);border-radius:6px;padding:3px 6px;margin-bottom:8px;overflow:hidden;">
-                <div id="dc-timer-bar" style="height: 3px; background: linear-gradient(90deg,var(--teal),var(--accent)); border-radius: 3px; width: 0%; transition: width 0.9s linear;"></div>
-                <div id="dc-timer-label" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.6;text-align:right;padding-top:2px;">Time's up!</div>
-              </div>
-              <div style="display:flex;gap:6px;">
-                <input id="dc-answer-in" type="text" placeholder="Your answer..." onkeydown="if(event.key==='Enter')submitDailyChallenge(false)" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 10px;color:var(--text);font-family:var(--exo);font-size:.78rem;outline:none;" disabled="">
-                <button onclick="showDCHint()" title="Show hint" style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 10px;color:var(--accent2);font-family:var(--exo);font-size:.72rem;cursor:pointer;">💡</button>
-                <button onclick="submitDailyChallenge(false)" style="background:linear-gradient(135deg,var(--teal),var(--accent));border:none;border-radius:8px;padding:6px 12px;color:#fff;font-family:var(--exo);font-size:.72rem;cursor:pointer;">Submit</button>
-              </div>
-              <div id="dc-hint-text" style="display:none;font-family:var(--exo);font-size:.68rem;color:var(--teal2);opacity:.8;margin-top:6px;padding:4px 8px;background:rgba(0,212,170,.06);border-radius:6px;"></div>
-            </div>
-            <div id="dc-result-wrap" style="display: none; text-align: center; padding: 8px 0px;">
-              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">❌</div>
-              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: ATP</div>
-              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
-              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 34m 45s</div>
-              <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;tryStartGame('blitz',10),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
-            </div>
-            <div id="dc-no-key-msg" style="display: block; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
+            <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:#c084fc;"></span>Quick Note</div>
+            <textarea id="dt-quicknote" style="width:100%;height:88px;background:rgba(255,255,255,.03);border:1px solid rgba(77,159,255,.12);border-radius:10px;padding:10px;color:var(--text);font-family:var(--exo);font-size:.8rem;resize:none;outline:none;line-height:1.6;transition:border .2s;" placeholder="Jot something down…" oninput="localStorage.setItem('studly_quicknote',this.value)" onfocus="this.style.borderColor='rgba(77,159,255,.4)'" onblur="this.style.borderColor='rgba(77,159,255,.12)'"></textarea>
           </div>
 
           <!-- Music widget -->
-          <div class="dt-widget dt-widget-wide" id="music-widget" style="display: none;">
-            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
-              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot"></span>Study Music</span>
-              <div style="display:flex;gap:6px;align-items:center;">
-                <!-- Source toggle -->
-
-                <button onclick="openPlaylistManager()" style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.2);border-radius:999px;padding:3px 11px;font-family:var(--exo);font-size:.62rem;color:var(--accent2);cursor:pointer;transition:all .15s;" title="Manage playlists">✎ Manage</button>
-                <button onclick="openMusicPlayer()" style="background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);border-radius:999px;padding:3px 11px;font-family:var(--exo);font-size:.62rem;color:var(--accent2);cursor:pointer;transition:all .15s;" title="Open full player">⤢ Expand</button>
-              </div>
+          <div class="dt-widget">
+            <div class="dt-wlabel" style="justify-content:space-between;">
+              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:#1ed760;box-shadow:0 0 6px #1ed760;"></span>Music</span>
+              <button onclick="openMusicManager()" style="background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.62rem;cursor:pointer;padding:0;opacity:.6;" title="Manage playlists">✎ Manage</button>
             </div>
-
-            <!-- Playlist tabs -->
-            <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-top:8px;">
-      <button class="music-pl-btn " data-plid="69AaAkdktFGnk9POmHENkT" onclick="playPlaylist({&quot;name&quot;:&quot;Lo-fi&quot;,&quot;id&quot;:&quot;69AaAkdktFGnk9POmHENkT&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Lo-fi">Lo-fi</button>
-      <button class="music-pl-btn " data-plid="37i9dQZF1DX8Uebhn9wzrS" onclick="playPlaylist({&quot;name&quot;:&quot;Focus Flow&quot;,&quot;id&quot;:&quot;37i9dQZF1DX8Uebhn9wzrS&quot;,&quot;type&quot;:&quot;playlist&quot;,&quot;cat&quot;:&quot;Study&quot;})" title="Focus Flow">Focus Flow</button>
-      <button class="music-pl-btn on" data-plid="2e7HNQJ0BcMoqwsVDwDhK8" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar&quot;,&quot;id&quot;:&quot;2e7HNQJ0BcMoqwsVDwDhK8&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;})" title="Dhurandhar">Dhurandhar</button>
-      <button class="music-pl-btn " data-plid="7a78GiEowpaCa7ZJs44xUU" onclick="playPlaylist({&quot;name&quot;:&quot;Interstellar OST&quot;,&quot;id&quot;:&quot;7a78GiEowpaCa7ZJs44xUU&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Soundtrack&quot;})" title="Interstellar OST">Interstellar OST</button>
-      <button class="music-pl-btn " data-plid="4jlyYLklV3kTBA6trX3bpj" onclick="playPlaylist({&quot;name&quot;:&quot;Dhurandhar: The Revenge&quot;,&quot;id&quot;:&quot;4jlyYLklV3kTBA6trX3bpj&quot;,&quot;type&quot;:&quot;album&quot;,&quot;cat&quot;:&quot;Bollywood&quot;,&quot;custom&quot;:true})" title="Dhurandhar: The Revenge">Dhurandhar: The Revenge</button></div>
-
-            <!-- Spotify login nudge -->
-            <div id="spotify-nudge" style="background: linear-gradient(135deg, rgba(30, 215, 96, 0.08), rgba(30, 215, 96, 0.04)); border: 1px solid rgba(30, 215, 96, 0.25); border-radius: 10px; padding: 10px 14px; margin-top: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-              <span style="font-size:1.1rem;">🎵</span>
-              <div style="flex:1;min-width:160px;">
-                <div style="font-family:var(--raj);font-size:.8rem;color:#1ed760;font-weight:600;">Seeing 30s previews?</div>
-                <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:2px;">Log in to Spotify in your browser for full playback — the embed uses your session automatically.</div>
-              </div>
-              <a href="https://accounts.spotify.com/login" target="_blank" rel="noopener" style="background:#1ed760;border:none;border-radius:8px;padding:6px 14px;color:#000;font-family:var(--exo);font-size:.72rem;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap;flex-shrink:0;">Log in →</a>
-              <button onclick="dismissSpotifyNudge()" style="background:none;border:none;color:var(--silver);font-size:.9rem;cursor:pointer;flex-shrink:0;opacity:.6;padding:0;">✕</button>
+            <div class="music-playlists" id="music-pl-tabs" style="flex-wrap:wrap;margin-bottom:8px;"></div>
+            <div id="spotify-nudge" style="background:linear-gradient(135deg,rgba(30,215,96,.08),rgba(30,215,96,.04));border:1px solid rgba(30,215,96,.25);border-radius:10px;padding:8px 12px;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:1rem;">🎵</span>
+              <div style="flex:1;min-width:120px;"><div style="font-family:var(--raj);font-size:.75rem;color:#1ed760;font-weight:600;">30s previews?</div><div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);margin-top:1px;">Log into Spotify in your browser for full tracks.</div></div>
+              <a href="https://accounts.spotify.com/login" target="_blank" rel="noopener" style="background:#1ed760;border:none;border-radius:8px;padding:5px 12px;color:#000;font-family:var(--exo);font-size:.68rem;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap;">Log in →</a>
+              <button onclick="dismissSpotifyNudge()" style="background:none;border:none;color:var(--silver);font-size:.85rem;cursor:pointer;opacity:.6;padding:0;">✕</button>
             </div>
-
-            <!-- Spotify iframe -->
             <div id="spotify-player" style="display:block;">
-              <iframe id="spotify-frame" src="https://open.spotify.com/embed/album/69AaAkdktFGnk9POmHENkT?utm_source=generator&amp;theme=0" width="100%" height="100" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:10px;margin-top:8px;display:block;transition:height .3s ease;"></iframe>
+              <iframe id="spotify-frame" src="https://open.spotify.com/embed/album/69AaAkdktFGnk9POmHENkT?utm_source=generator&theme=0" width="100%" height="80" frameborder="0" allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture" loading="lazy" style="border-radius:10px;display:block;"></iframe>
             </div>
+            <div id="music-empty" style="display:none;padding:16px 0;text-align:center;font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.6;">No playlists — click ✎ Manage to add one</div>
+          </div>
 
-
-            <div id="music-empty" style="display:none;padding:18px 0;text-align:center;font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.6;">
-              No playlists yet — click <strong style="color:var(--accent2);">✎ Manage</strong> to add one
+          <!-- Activity feed -->
+          <div class="dt-widget">
+            <div class="dt-wlabel" style="justify-content:space-between;">
+              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:#fb923c;"></span>Recent Activity</span>
+            </div>
+            <div id="dh-activity-feed" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;max-height:160px;overflow-y:auto;">
+              <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:16px 0;">No activity yet — start studying!</div>
             </div>
           </div>
 
-
-
-
-
-
-          <!-- Weather + Quote widget (extra) -->
+          <!-- ── Extra widgets (toggle via widget editor) ── -->
           <div class="dt-widget dt-widget-wide" id="widget-weather" style="display:none;">
             <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:#fbbf24;"></span>Weather &amp; Quote</div>
             <div style="display:flex;align-items:center;gap:16px;margin-top:6px;flex-wrap:wrap;">
               <div id="ww-weather" style="display:flex;align-items:center;gap:10px;">
                 <div id="ww-icon" style="font-size:2rem;">🌤️</div>
-                <div>
-                  <div id="ww-temp" style="font-family:var(--orb);font-size:1.3rem;color:var(--text);font-weight:700;">--°</div>
-                  <div id="ww-desc" style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Loading...</div>
-                  <div id="ww-loc" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.5;"></div>
-                </div>
+                <div><div id="ww-temp" style="font-family:var(--orb);font-size:1.3rem;color:var(--text);font-weight:700;">--°</div><div id="ww-desc" style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Loading...</div><div id="ww-loc" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.5;"></div></div>
               </div>
               <div style="flex:1;min-width:160px;border-left:1px solid rgba(77,159,255,.12);padding-left:16px;">
                 <div id="ww-quote" style="font-family:var(--raj);font-size:.82rem;color:var(--text2);line-height:1.55;font-style:italic;">"The secret of getting ahead is getting started."</div>
@@ -2365,7 +2311,6 @@ body.fs-large { font-size: 17px; }
             </div>
           </div>
 
-          <!-- To-Do Summary widget (extra) -->
           <div class="dt-widget" id="widget-todo-summary" style="display:none;">
             <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
               <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Today's Tasks</span>
@@ -2375,7 +2320,6 @@ body.fs-large { font-size: 17px; }
             <div id="wtodo-empty" style="display:none;font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:12px 0;">✅ All done for today!</div>
           </div>
 
-          <!-- Recent Notes widget (extra) -->
           <div class="dt-widget" id="widget-recent-notes" style="display:none;">
             <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
               <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:#c084fc;"></span>Recent Notes</span>
@@ -2385,7 +2329,6 @@ body.fs-large { font-size: 17px; }
             <div id="wrecent-notes-empty" style="display:none;font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:12px 0;">No notes yet — start writing!</div>
           </div>
 
-          <!-- Next Session widget (extra) -->
           <div class="dt-widget" id="widget-next-session" style="display:none;">
             <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:#fb923c;"></span>Next Study Session</div>
             <div id="wnext-session-content" style="margin-top:8px;"></div>
@@ -5247,7 +5190,7 @@ function go(name) {
   if (tabEl) tabEl.classList.add('on');
   document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'" + name + "'")) b.classList.add('on'); });
   if (name === 'settings') { loadSettingsPage(); }
-  if (name === 'home') setTimeout(updateHomeStats, 0);
+  if (name === 'home') setTimeout(refreshHomeDashboard, 0);
   if (name === 'music') setTimeout(initMusicTab, 0);
   // Hide music nav again when navigating away from it
   if (name !== 'music') {
@@ -5671,14 +5614,13 @@ Notes:\n\n${notesText}`
     const ans = await gemini(prompts[mode], imageToSend);
     out.textContent = ans;
     trackStat('notes');
-    // Save to localStorage for search indexing
     try {
       const notesIn = document.getElementById('notes-in');
       const savedNotes = JSON.parse(localStorage.getItem('studly_saved_notes') || '[]');
-      savedNotes.unshift({ topic: (notesIn && notesIn.value.trim().slice(0,60)) || 'Note ' + new Date().toLocaleDateString(), content: ans, date: new Date().toISOString() });
+      savedNotes.unshift({ topic: (notesIn && notesIn.value.trim().slice(0,60)) || 'Note', content: ans, date: new Date().toISOString() });
       if (savedNotes.length > 30) savedNotes.length = 30;
       localStorage.setItem('studly_saved_notes', JSON.stringify(savedNotes));
-    } catch(e2) { /* non-critical */ }
+    } catch(e2) {}
   } catch (e) { out.textContent = 'Error: ' + e.message; }
 }
 
@@ -5990,16 +5932,14 @@ Respond ONLY with valid JSON, nothing else:
       const data = JSON.parse(raw.replace(/```json|```/g, '').trim());
       cards = data.cards; cidx = 0; flipped = false; initWeights(); renderCard();
       trackStat('flashcards');
-      // Show export button
       const exportRow = document.getElementById('study-export-row');
       if (exportRow) exportRow.style.display = 'flex';
-      // Save set to localStorage for search indexing
       try {
         const sets = JSON.parse(localStorage.getItem('studly_card_sets') || '[]');
         sets.unshift({ topic: t || 'Image Topic', cards: data.cards, date: new Date().toISOString() });
-        if (sets.length > 50) sets.length = 50; // cap at 50 sets
+        if (sets.length > 50) sets.length = 50;
         localStorage.setItem('studly_card_sets', JSON.stringify(sets));
-      } catch(e2) { /* non-critical */ }
+      } catch(e2) {}
     } catch (e) {
       const errEl = document.createElement('div');
       errEl.className = 'bubble bot';
@@ -12098,23 +12038,6 @@ function runSearch(q) {
     });
   }
 
-  // ── Journal entries ──
-  if (include('journal')) {
-    try {
-      const entries = JSON.parse(localStorage.getItem('studly_journal') || '[]');
-      entries.forEach(e => {
-        const haystack = ((e.title||'') + ' ' + (e.body||'')).toLowerCase();
-        if (haystack.includes(q)) {
-          const snippet = e.body ? e.body.slice(0, 80) + (e.body.length > 80 ? '…' : '') : '';
-          results.push({ type:'journal', icon:'📓', title:e.title || 'Untitled Entry',
-            sub: snippet, date: e.date ? new Date(e.date).toLocaleDateString() : '',
-            action:() => { closeSearch(); go('journal'); }
-          });
-        }
-      });
-    } catch {}
-  }
-
   // ── Notes (saved AI output) ──
   if (include('notes')) {
     try {
@@ -12137,15 +12060,29 @@ function runSearch(q) {
     try {
       const cardSets = JSON.parse(localStorage.getItem('studly_card_sets') || '[]');
       cardSets.forEach(set => {
-        const setHaystack = (set.topic||'').toLowerCase();
-        const cardHaystack = (set.cards||[]).map(c => (c.front||'') + ' ' + (c.back||'')).join(' ').toLowerCase();
-        const combined = setHaystack + ' ' + cardHaystack;
+        const combined = ((set.topic||'') + ' ' + (set.cards||[]).map(c => (c.front||'') + ' ' + (c.back||'')).join(' ')).toLowerCase();
         if (combined.includes(q)) {
           const matchCard = (set.cards||[]).find(c => ((c.front||'') + ' ' + (c.back||'')).toLowerCase().includes(q));
-          const snippet = matchCard ? matchCard.front.slice(0, 70) + (matchCard.front.length > 70 ? '…' : '') : set.topic;
+          const snippet = matchCard ? matchCard.front.slice(0, 70) : set.topic;
           results.push({ type:'flashcards', icon:'🃏', title: set.topic || 'Flashcard Set',
-            sub: snippet,
-            action:() => { closeSearch(); go('study'); }
+            sub: snippet, action:() => { closeSearch(); go('study'); }
+          });
+        }
+      });
+    } catch {}
+  }
+
+  // ── Journal entries ──
+  if (include('journal')) {
+    try {
+      const entries = JSON.parse(localStorage.getItem('studly_journal') || '[]');
+      entries.forEach(e => {
+        const haystack = ((e.title||'') + ' ' + (e.body||'')).toLowerCase();
+        if (haystack.includes(q)) {
+          const snippet = e.body ? e.body.slice(0, 80) + (e.body.length > 80 ? '…' : '') : '';
+          results.push({ type:'journal', icon:'📓', title:e.title || 'Untitled Entry',
+            sub: snippet, date: e.date ? new Date(e.date).toLocaleDateString() : '',
+            action:() => { closeSearch(); go('journal'); }
           });
         }
       });
@@ -13038,6 +12975,56 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
 .dt-time { font-family: var(--orb); font-size: .55rem; color: var(--silver2); letter-spacing: 1px; }
 .desktop-canvas { flex: 1; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 14px 16px; overflow-y: auto; align-content: start; }
 @media(max-width:700px){ .desktop-canvas { grid-template-columns: 1fr 1fr; } .dt-widget-wide { grid-column: span 2 !important; } }
+
+/* ── DASHBOARD OVERHAUL: Stat Bar ── */
+.dh-statbar { display:flex; align-items:center; gap:0; padding:10px 18px !important; background:linear-gradient(135deg,rgba(77,159,255,.07),rgba(0,212,170,.04)) !important; border-color:rgba(77,159,255,.18) !important; flex-wrap:wrap; }
+.dh-stat-chip { display:flex; align-items:center; gap:10px; padding:4px 20px 4px 0; cursor:pointer; transition:opacity .15s; flex-shrink:0; }
+.dh-stat-chip:hover { opacity:.75; }
+.dh-stat-icon { font-size:1.25rem; flex-shrink:0; }
+.dh-stat-val { font-family:var(--orb); font-size:.95rem; color:var(--text); font-weight:800; line-height:1; }
+.dh-stat-lbl { font-family:var(--exo); font-size:.58rem; color:var(--silver); margin-top:2px; letter-spacing:.5px; }
+.dh-stat-divider { width:1px; height:32px; background:rgba(77,159,255,.12); margin:0 16px 0 0; flex-shrink:0; }
+.dh-xp-wrap { flex:1; min-width:160px; padding-left:4px; }
+.dh-xp-label { display:flex; font-family:var(--orb); font-size:.42rem; color:var(--silver); letter-spacing:1px; margin-bottom:5px; }
+.dh-xp-track { height:5px; background:rgba(77,159,255,.1); border-radius:3px; overflow:hidden; }
+.dh-xp-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--teal2)); border-radius:3px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+
+/* ── Hero card ── */
+.dh-hero { position:relative; overflow:hidden; min-height:130px; border-color:rgba(77,159,255,.28) !important; }
+.dh-hero-bg { position:absolute; inset:0; background:linear-gradient(135deg,rgba(77,159,255,.12) 0%,rgba(0,212,170,.07) 60%,transparent 100%); z-index:0; }
+.dh-hero-bg::after { content:''; position:absolute; right:-20px; bottom:-20px; width:120px; height:120px; background:radial-gradient(circle,rgba(77,159,255,.12),transparent 70%); border-radius:50%; }
+.dh-hero-inner { position:relative; z-index:1; display:flex; flex-direction:column; gap:5px; }
+.dh-hero-badge { font-family:var(--orb); font-size:.38rem; color:var(--teal); letter-spacing:1.5px; }
+.dh-hero-title { font-family:var(--orb); font-size:clamp(.85rem,2vw,1.15rem); color:var(--text); letter-spacing:.5px; line-height:1.15; }
+.dh-hero-sub { font-family:var(--exo); font-size:.75rem; color:var(--silver); line-height:1.4; max-width:240px; }
+.dh-hero-cta { font-family:var(--orb); font-size:.45rem; color:var(--accent2); letter-spacing:1px; margin-top:6px; transition:letter-spacing .2s; }
+.dh-hero:hover .dh-hero-cta { letter-spacing:2px; }
+.dh-hero-emoji { position:absolute; right:16px; bottom:12px; font-size:3rem; opacity:.22; z-index:0; transition:transform .3s, opacity .3s; }
+.dh-hero:hover .dh-hero-emoji { transform:scale(1.1) rotate(-5deg); opacity:.35; }
+
+/* ── Clock card ── */
+.dh-clock-card { display:flex; flex-direction:column; justify-content:center; background:linear-gradient(135deg,rgba(8,12,26,.9),rgba(16,24,48,.9)) !important; }
+
+/* ── Streak card ── */
+.dh-streak-card { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:linear-gradient(135deg,rgba(255,107,53,.08),rgba(255,153,0,.05)) !important; border-color:rgba(255,107,53,.2) !important; }
+.dh-streak-fire { font-size:1.8rem; line-height:1; margin-bottom:2px; }
+.dh-streak-num { font-family:var(--orb); font-size:1.6rem; font-weight:900; background:linear-gradient(135deg,#ff6b35,#ffa500); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; }
+.dh-streak-lbl { font-family:var(--exo); font-size:.62rem; color:var(--silver); letter-spacing:.5px; margin-top:2px; }
+.dh-streak-sub { font-family:var(--exo); font-size:.6rem; color:var(--silver); opacity:.5; margin-top:3px; }
+
+/* ── Daily Challenge preview card ── */
+.dh-dc-card { background:linear-gradient(135deg,rgba(251,191,36,.06),rgba(251,191,36,.02)) !important; border-color:rgba(251,191,36,.2) !important; transition:border .2s, transform .18s, box-shadow .18s; }
+.dh-dc-card:hover { border-color:rgba(251,191,36,.45) !important; transform:translateY(-2px); box-shadow:0 8px 28px rgba(251,191,36,.1); }
+
+/* ── Quick nav grid ── */
+.dh-quicknav { display:grid; grid-template-columns:repeat(8,1fr); gap:8px; margin-top:10px; }
+@media(max-width:700px){ .dh-quicknav { grid-template-columns:repeat(4,1fr); } }
+.dh-qn-btn { background:rgba(255,255,255,.04); border:1px solid rgba(77,159,255,.12); border-radius:12px; padding:10px 6px; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; transition:all .18s; color:var(--silver); font-family:var(--exo); font-size:.62rem; letter-spacing:.3px; }
+.dh-qn-btn span:first-child { font-size:1.3rem; line-height:1; }
+.dh-qn-btn:hover { background:rgba(77,159,255,.1); border-color:rgba(77,159,255,.3); color:var(--accent2); transform:translateY(-2px); box-shadow:0 4px 14px rgba(77,159,255,.12); }
+.dh-qn-btn:active { transform:translateY(0); }
+
+/* Edit widgets button */
 .dt-widget { background: var(--panel-col3); backdrop-filter: blur(16px); border: 1px solid rgba(77,159,255,.12); border-radius: 16px; padding: 14px 16px; position: relative; overflow: hidden; transition: border .2s, transform .18s, box-shadow .18s; }
 .dt-widget::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(77,159,255,.25), transparent); }
 .dt-widget.clickable { cursor: pointer; }
@@ -13721,23 +13708,15 @@ async function initDailyChallenge() {
   // Rotate subject by day so it's predictable, not random
   const dayIndex = Math.floor(Date.now() / 86400000);
   const subject = DC_SUBJECTS[dayIndex % DC_SUBJECTS.length];
-
-  // Scale difficulty by gem count
   const acctForDC = getAcct();
   const gemCount = acctForDC.gems || 0;
   let dcDifficulty, dcDiffLabel;
-  if (gemCount >= 2000) { dcDifficulty = 'very hard (university/A-level difficulty, complex multi-step reasoning required)'; dcDiffLabel = '🔴 Expert'; }
+  if (gemCount >= 2000) { dcDifficulty = 'very hard (university/A-level, complex multi-step)'; dcDiffLabel = '🔴 Expert'; }
   else if (gemCount >= 1000) { dcDifficulty = 'hard (A-level / advanced high school)'; dcDiffLabel = '🟠 Hard'; }
-  else if (gemCount >= 500) { dcDifficulty = 'medium-hard (upper high school, requires some depth)'; dcDiffLabel = '🟡 Medium'; }
+  else if (gemCount >= 500) { dcDifficulty = 'medium-hard (upper high school)'; dcDiffLabel = '🟡 Medium'; }
   else if (gemCount >= 100) { dcDifficulty = 'medium (standard high school)'; dcDiffLabel = '🟢 Standard'; }
-  else { dcDifficulty = 'easy (introductory high school, one clear fact)'; dcDiffLabel = '🔵 Starter'; }
-
-  // Show difficulty badge in subject tag
-  try {
-    const subTag = document.getElementById('dc-subject-tag');
-    if (subTag) subTag.textContent = '📚 ' + subject + '  ·  ' + dcDiffLabel;
-  } catch(e) { /* non-critical */ }
-
+  else { dcDifficulty = 'easy (introductory high school)'; dcDiffLabel = '🔵 Starter'; }
+  try { const subTag = document.getElementById('dc-subject-tag'); if (subTag) subTag.textContent = '📚 ' + subject + '  ·  ' + dcDiffLabel; } catch(e) {}
   try {
     const raw = await gemini(`Generate a single short-answer study question about ${subject}. Difficulty: ${dcDifficulty}. Return ONLY valid JSON, no markdown: {"question":"...","answer":"...","hint":"...","subject":"${subject}","difficulty":"${dcDiffLabel}"}. The answer must be 1-4 words only. Keep the question factual and specific.`);
     const parsed = JSON.parse(raw.replace(/^```(?:json)?|```$/gm,'').trim());
@@ -13983,26 +13962,23 @@ function exportNotesPDF() {
   setTimeout(() => w.print(), 400);
 }
 
-// ── EXPORT: JOURNAL → PDF ──
 function exportJournalPDF() {
   const entries = JSON.parse(localStorage.getItem('studly_journal') || '[]');
   if (!entries.length) { showToast('⚠️ No journal entries to export'); return; }
   const bodyHtml = entries.map(e => {
     const d = new Date(e.date);
-    const dateStr = d.toLocaleDateString('en-GB', {weekday:'long',year:'numeric',month:'long',day:'numeric'}) + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    const dateStr = d.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
     const safeTitle = (e.title||'Untitled Entry').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const safeBody = (e.body||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    const safeBody = (e.body||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/
+/g,'<br>');
     return `<div style="margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #e5e7eb;"><h2 style="font-size:15px;margin:0 0 4px;color:#111;">${safeTitle}</h2><div style="font-size:11px;color:#888;margin-bottom:10px;">${dateStr}</div><div style="font-size:14px;line-height:1.75;color:#333;">${safeBody}</div></div>`;
   }).join('');
-  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Veda Journal Export</title><style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#111;font-size:15px;}h1{font-size:22px;border-bottom:2px solid #4d9fff;padding-bottom:8px;color:#1a1a2e;}@media print{body{margin:20px;}@page{margin:1.5cm;}}</style></head><body><h1>📓 Veda Journal</h1><p style="font-size:12px;color:#888;margin-bottom:24px;">Exported ${new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · ${entries.length} entr${entries.length===1?'y':'ies'}</p>${bodyHtml}</body></html>`;
+  const html2 = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Veda Journal</title><style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#111;}h1{font-size:22px;border-bottom:2px solid #4d9fff;padding-bottom:8px;color:#1a1a2e;}@media print{body{margin:20px;}@page{margin:1.5cm;}}</style></head><body><h1>📓 Veda Journal</h1><p style="font-size:12px;color:#888;margin-bottom:24px;">${entries.length} entr${entries.length===1?'y':'ies'} · Exported ${new Date().toLocaleDateString()}</p>${bodyHtml}</body></html>`;
   const w = window.open('','_blank');
   if (!w) { showToast('⚠️ Allow popups to export'); return; }
-  w.document.write(html); w.document.close(); w.focus();
-  setTimeout(() => w.print(), 400);
-  showToast('📤 Journal export opened — use Print → Save as PDF');
+  w.document.write(html2); w.document.close(); w.focus(); setTimeout(() => w.print(), 400);
+  showToast('📤 Journal export opened — Print → Save as PDF');
 }
-
-// ── EXPORT: FLASHCARDS → PDF ──
 function exportFlashcardsPDF() {
   if (!cards || !cards.length) { showToast('⚠️ Generate flashcards first'); return; }
   const topic = document.getElementById('study-in')?.value.trim() || 'Flashcards';
@@ -14010,14 +13986,13 @@ function exportFlashcardsPDF() {
   const rows = cards.map((c,i) => {
     const sf = (c.front||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const sb = (c.back||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    return `<tr style="background:${i%2?'#f9fafb':'#fff'};"><td style="padding:10px 14px;font-weight:600;border:1px solid #e5e7eb;width:45%;">${sf}</td><td style="padding:10px 14px;color:#374151;border:1px solid #e5e7eb;">${sb}</td></tr>`;
+    return `<tr style="background:${i%2?'#f9fafb':'#fff'};"><td style="padding:10px 14px;font-weight:600;border:1px solid #e5e7eb;width:45%;">${sf}</td><td style="padding:10px 14px;border:1px solid #e5e7eb;">${sb}</td></tr>`;
   }).join('');
-  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Veda Flashcards — ${safeTopic}</title><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;font-size:14px;color:#111;}h1{font-size:20px;border-bottom:2px solid #4d9fff;padding-bottom:8px;color:#1a1a2e;}table{width:100%;border-collapse:collapse;margin-top:16px;}th{background:#1a3a6e;color:#fff;padding:10px 14px;text-align:left;font-size:12px;letter-spacing:1px;text-transform:uppercase;}@media print{body{margin:20px;}@page{margin:1.5cm;}}</style></head><body><h1>🃏 ${safeTopic}</h1><p style="font-size:12px;color:#888;margin-bottom:4px;">${cards.length} flashcard${cards.length===1?'':'s'} · Exported ${new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})}</p><table><thead><tr><th>Front</th><th>Back / Answer</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+  const html2 = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Flashcards — ${safeTopic}</title><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;}h1{font-size:20px;border-bottom:2px solid #4d9fff;padding-bottom:8px;}table{width:100%;border-collapse:collapse;margin-top:16px;}th{background:#1a3a6e;color:#fff;padding:10px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:1px;}@media print{body{margin:20px;}}</style></head><body><h1>🃏 ${safeTopic}</h1><p style="font-size:12px;color:#888;">${cards.length} cards · ${new Date().toLocaleDateString()}</p><table><thead><tr><th>Front</th><th>Back</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
   const w = window.open('','_blank');
   if (!w) { showToast('⚠️ Allow popups to export'); return; }
-  w.document.write(html); w.document.close(); w.focus();
-  setTimeout(() => w.print(), 400);
-  showToast('📤 Flashcard export opened — use Print → Save as PDF');
+  w.document.write(html2); w.document.close(); w.focus(); setTimeout(() => w.print(), 400);
+  showToast('📤 Flashcard export opened — Print → Save as PDF');
 }
 
 // ══════════════════════════════════════════════════════
@@ -14278,6 +14253,107 @@ async function lbRender() {
 }
 
 // ── Refresh the home dashboard mini-widget ──
+function refreshHomeDashboard() {
+  const acct = getAcct();
+  // Stat bar
+  const gems = acct.gems || 0;
+  const streak = acct.streak || 0;
+  const games = acct.stats?.games || 0;
+
+  // XP / Level (100 gems per level, scaled)
+  const level = Math.floor(gems / 100) + 1;
+  const xpInLevel = gems % 100;
+  const xpPct = xpInLevel;
+
+  const el = id => document.getElementById(id);
+  if (el('dh-gems')) el('dh-gems').textContent = gems.toLocaleString();
+  if (el('dh-streak')) el('dh-streak').textContent = streak;
+  if (el('dh-games')) el('dh-games').textContent = games;
+  if (el('dh-streak-num')) el('dh-streak-num').textContent = streak;
+  if (el('dh-streak-sub')) el('dh-streak-sub').textContent = streak >= 7 ? '🔥 On fire!' : streak >= 3 ? 'Great momentum!' : streak > 0 ? 'Keep it going!' : 'Start your streak today';
+  if (el('dh-streak-big')) el('dh-streak-big').textContent = streak >= 7 ? '🔥' : streak >= 3 ? '🔥' : '⚡';
+  if (el('dh-level-lbl')) el('dh-level-lbl').textContent = 'LVL ' + level;
+  if (el('dh-xp-lbl')) el('dh-xp-lbl').textContent = xpInLevel + ' / 100 XP';
+  if (el('dh-xp-fill')) el('dh-xp-fill').style.width = xpPct + '%';
+
+  // Global rank (from leaderboard localStorage)
+  try {
+    const lb = JSON.parse(localStorage.getItem('studly_leaderboard') || '[]');
+    const myCode = acct.code || '';
+    const sorted = [...lb].sort((a,b) => (b.gems||0)-(a.gems||0));
+    const rank = myCode ? sorted.findIndex(e => e.code === myCode) + 1 : 0;
+    if (el('dh-rank')) el('dh-rank').textContent = rank > 0 ? '#' + rank : '—';
+  } catch { if (el('dh-rank')) el('dh-rank').textContent = '—'; }
+
+  // Daily challenge preview
+  try {
+    const stored = JSON.parse(localStorage.getItem('studly_dc') || '{}');
+    const todayKey = new Date().toDateString();
+    const dcEl = document.getElementById('dh-dc-preview');
+    const dcStatus = document.getElementById('dh-dc-status');
+    const dcBadge = document.getElementById('dh-dc-badge');
+    if (stored.date === todayKey && stored.question) {
+      if (dcEl) dcEl.textContent = stored.question;
+      if (dcStatus) {
+        if (stored.answered) {
+          dcStatus.textContent = '✅ COMPLETED TODAY';
+          dcStatus.style.color = 'var(--teal)';
+        } else {
+          dcStatus.textContent = 'TAP TO ANSWER';
+          dcStatus.style.color = 'var(--silver)';
+        }
+      }
+      if (dcBadge && stored.difficulty) dcBadge.textContent = stored.difficulty;
+    } else {
+      if (dcEl) dcEl.textContent = 'New challenge waiting — tap to load!';
+      if (dcStatus) dcStatus.textContent = 'TAP TO ANSWER';
+    }
+  } catch {}
+
+  // Activity feed
+  buildActivityFeed();
+
+  // Quick note restore
+  const qn = document.getElementById('dt-quicknote');
+  if (qn) qn.value = localStorage.getItem('studly_quicknote') || '';
+}
+
+function buildActivityFeed() {
+  const feed = document.getElementById('dh-activity-feed');
+  if (!feed) return;
+  const events = [];
+  try {
+    const journal = JSON.parse(localStorage.getItem('studly_journal') || '[]');
+    journal.slice(0,3).forEach(e => events.push({ ts: new Date(e.date), icon:'📓', text: 'Journal: ' + (e.title || 'Untitled Entry') }));
+  } catch {}
+  try {
+    const notes = JSON.parse(localStorage.getItem('studly_saved_notes') || '[]');
+    notes.slice(0,3).forEach(n => events.push({ ts: new Date(n.date), icon:'📝', text: 'Notes: ' + (n.topic || 'Untitled') }));
+  } catch {}
+  try {
+    const sets = JSON.parse(localStorage.getItem('studly_card_sets') || '[]');
+    sets.slice(0,2).forEach(s => events.push({ ts: new Date(s.date), icon:'🃏', text: 'Flashcards: ' + (s.topic || 'Untitled') }));
+  } catch {}
+  try {
+    const dc = JSON.parse(localStorage.getItem('studly_dc') || '{}');
+    if (dc.answered && dc.date) events.push({ ts: new Date(dc.date), icon:'⚡', text: 'Daily Challenge completed!' });
+  } catch {}
+  events.sort((a,b) => b.ts - a.ts);
+  if (!events.length) {
+    feed.innerHTML = '<div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:16px 0;">No activity yet — start studying!</div>';
+    return;
+  }
+  const now = Date.now();
+  feed.innerHTML = events.slice(0,7).map(e => {
+    const diff = now - e.ts;
+    const ago = diff < 60000 ? 'Just now' : diff < 3600000 ? Math.floor(diff/60000)+'m ago' : diff < 86400000 ? Math.floor(diff/3600000)+'h ago' : Math.floor(diff/86400000)+'d ago';
+    return `<div style="display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:8px;transition:background .15s;" onmouseover="this.style.background='rgba(77,159,255,.06)'" onmouseout="this.style.background='transparent'">
+      <span style="font-size:1rem;flex-shrink:0;">${e.icon}</span>
+      <span style="font-family:var(--exo);font-size:.72rem;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.text}</span>
+      <span style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.45;flex-shrink:0;">${ago}</span>
+    </div>`;
+  }).join('');
+}
 function lbRefreshHomeWidget(entries, myUid) {
   const list = document.getElementById('lb-home-list');
   const rankWrap = document.getElementById('lb-home-rank');
