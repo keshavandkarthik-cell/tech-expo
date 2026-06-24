@@ -10034,6 +10034,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAcct();
   loadPersonalizePrefs();
   updateHomeStats();
+  refreshHomeDashboard();
 
   // Desktop clock
   function updateDtClock() {
@@ -10457,6 +10458,109 @@ function updateHomeStats() {
   const streakEl = document.getElementById('home-streak');
   if (streakEl) streakEl.textContent = a.streak || 0;
 }
+
+function refreshHomeDashboard() {
+  const acct = getAcct();
+  // Stat bar
+  const gems = acct.gems || 0;
+  const streak = acct.streak || 0;
+  const games = acct.stats?.games || 0;
+
+  // XP / Level (100 gems per level, scaled)
+  const level = Math.floor(gems / 100) + 1;
+  const xpInLevel = gems % 100;
+  const xpPct = xpInLevel;
+
+  const el = id => document.getElementById(id);
+  if (el('dh-gems')) el('dh-gems').textContent = gems.toLocaleString();
+  if (el('dh-streak')) el('dh-streak').textContent = streak;
+  if (el('dh-games')) el('dh-games').textContent = games;
+  if (el('dh-streak-num')) el('dh-streak-num').textContent = streak;
+  if (el('dh-streak-sub')) el('dh-streak-sub').textContent = streak >= 7 ? '🔥 On fire!' : streak >= 3 ? 'Great momentum!' : streak > 0 ? 'Keep it going!' : 'Start your streak today';
+  if (el('dh-streak-big')) el('dh-streak-big').textContent = streak >= 7 ? '🔥' : streak >= 3 ? '🔥' : '⚡';
+  if (el('dh-level-lbl')) el('dh-level-lbl').textContent = 'LVL ' + level;
+  if (el('dh-xp-lbl')) el('dh-xp-lbl').textContent = xpInLevel + ' / 100 XP';
+  if (el('dh-xp-fill')) el('dh-xp-fill').style.width = xpPct + '%';
+
+  // Global rank (from leaderboard localStorage)
+  try {
+    const lb = JSON.parse(localStorage.getItem('studly_leaderboard') || '[]');
+    const myCode = acct.code || '';
+    const sorted = [...lb].sort((a,b) => (b.gems||0)-(a.gems||0));
+    const rank = myCode ? sorted.findIndex(e => e.code === myCode) + 1 : 0;
+    if (el('dh-rank')) el('dh-rank').textContent = rank > 0 ? '#' + rank : '—';
+  } catch { if (el('dh-rank')) el('dh-rank').textContent = '—'; }
+
+  // Daily challenge preview
+  try {
+    const stored = JSON.parse(localStorage.getItem('studly_dc') || '{}');
+    const todayKey = new Date().toDateString();
+    const dcEl = document.getElementById('dh-dc-preview');
+    const dcStatus = document.getElementById('dh-dc-status');
+    const dcBadge = document.getElementById('dh-dc-badge');
+    if (stored.date === todayKey && stored.question) {
+      if (dcEl) dcEl.textContent = stored.question;
+      if (dcStatus) {
+        if (stored.answered) {
+          dcStatus.textContent = '\u2705 COMPLETED TODAY';
+          dcStatus.style.color = 'var(--teal)';
+        } else {
+          dcStatus.textContent = 'TAP TO ANSWER';
+          dcStatus.style.color = 'var(--silver)';
+        }
+      }
+      if (dcBadge && stored.difficulty) dcBadge.textContent = stored.difficulty;
+    } else {
+      if (dcEl) dcEl.textContent = 'New challenge waiting \u2014 tap to load!';
+      if (dcStatus) dcStatus.textContent = 'TAP TO ANSWER';
+    }
+  } catch {}
+
+  // Activity feed
+  buildActivityFeed();
+
+  // Quick note restore
+  const qn = document.getElementById('dt-quicknote');
+  if (qn) qn.value = localStorage.getItem('studly_quicknote') || '';
+}
+
+function buildActivityFeed() {
+  const feed = document.getElementById('dh-activity-feed');
+  if (!feed) return;
+  const events = [];
+  try {
+    const journal = JSON.parse(localStorage.getItem('studly_journal') || '[]');
+    journal.slice(0,3).forEach(e => events.push({ ts: new Date(e.date), icon:'\ud83d\udcd3', text: 'Journal: ' + (e.title || 'Untitled Entry') }));
+  } catch {}
+  try {
+    const notes = JSON.parse(localStorage.getItem('studly_saved_notes') || '[]');
+    notes.slice(0,3).forEach(n => events.push({ ts: new Date(n.date), icon:'\ud83d\udcdd', text: 'Notes: ' + (n.topic || 'Untitled') }));
+  } catch {}
+  try {
+    const sets = JSON.parse(localStorage.getItem('studly_card_sets') || '[]');
+    sets.slice(0,2).forEach(s => events.push({ ts: new Date(s.date), icon:'\ud83c\udccf', text: 'Flashcards: ' + (s.topic || 'Untitled') }));
+  } catch {}
+  try {
+    const dc = JSON.parse(localStorage.getItem('studly_dc') || '{}');
+    if (dc.answered && dc.date) events.push({ ts: new Date(dc.date), icon:'\u26a1', text: 'Daily Challenge completed!' });
+  } catch {}
+  events.sort((a,b) => b.ts - a.ts);
+  if (!events.length) {
+    feed.innerHTML = '<div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:16px 0;">No activity yet \u2014 start studying!</div>';
+    return;
+  }
+  const now = Date.now();
+  feed.innerHTML = events.slice(0,7).map(e => {
+    const diff = now - e.ts;
+    const ago = diff < 60000 ? 'Just now' : diff < 3600000 ? Math.floor(diff/60000)+'m ago' : diff < 86400000 ? Math.floor(diff/3600000)+'h ago' : Math.floor(diff/86400000)+'d ago';
+    return '<div style="display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:8px;transition:background .15s;" onmouseover="this.style.background=\'rgba(77,159,255,.06)\'" onmouseout="this.style.background=\'transparent\'">'
+      + '<span style="font-size:1rem;flex-shrink:0;">' + e.icon + '</span>'
+      + '<span style="font-family:var(--exo);font-size:.72rem;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + e.text + '</span>'
+      + '<span style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.45;flex-shrink:0;">' + ago + '</span>'
+      + '</div>';
+  }).join('');
+}
+
 
 // ── COMPANION MEMORY ──
 function loadCompHistory() {
@@ -13969,8 +14073,7 @@ function exportJournalPDF() {
     const d = new Date(e.date);
     const dateStr = d.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) + ' · ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
     const safeTitle = (e.title||'Untitled Entry').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const safeBody = (e.body||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/
-/g,'<br>');
+    const safeBody = (e.body||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
     return `<div style="margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #e5e7eb;"><h2 style="font-size:15px;margin:0 0 4px;color:#111;">${safeTitle}</h2><div style="font-size:11px;color:#888;margin-bottom:10px;">${dateStr}</div><div style="font-size:14px;line-height:1.75;color:#333;">${safeBody}</div></div>`;
   }).join('');
   const html2 = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Veda Journal</title><style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#111;}h1{font-size:22px;border-bottom:2px solid #4d9fff;padding-bottom:8px;color:#1a1a2e;}@media print{body{margin:20px;}@page{margin:1.5cm;}}</style></head><body><h1>📓 Veda Journal</h1><p style="font-size:12px;color:#888;margin-bottom:24px;">${entries.length} entr${entries.length===1?'y':'ies'} · Exported ${new Date().toLocaleDateString()}</p>${bodyHtml}</body></html>`;
@@ -14253,107 +14356,6 @@ async function lbRender() {
 }
 
 // ── Refresh the home dashboard mini-widget ──
-function refreshHomeDashboard() {
-  const acct = getAcct();
-  // Stat bar
-  const gems = acct.gems || 0;
-  const streak = acct.streak || 0;
-  const games = acct.stats?.games || 0;
-
-  // XP / Level (100 gems per level, scaled)
-  const level = Math.floor(gems / 100) + 1;
-  const xpInLevel = gems % 100;
-  const xpPct = xpInLevel;
-
-  const el = id => document.getElementById(id);
-  if (el('dh-gems')) el('dh-gems').textContent = gems.toLocaleString();
-  if (el('dh-streak')) el('dh-streak').textContent = streak;
-  if (el('dh-games')) el('dh-games').textContent = games;
-  if (el('dh-streak-num')) el('dh-streak-num').textContent = streak;
-  if (el('dh-streak-sub')) el('dh-streak-sub').textContent = streak >= 7 ? '🔥 On fire!' : streak >= 3 ? 'Great momentum!' : streak > 0 ? 'Keep it going!' : 'Start your streak today';
-  if (el('dh-streak-big')) el('dh-streak-big').textContent = streak >= 7 ? '🔥' : streak >= 3 ? '🔥' : '⚡';
-  if (el('dh-level-lbl')) el('dh-level-lbl').textContent = 'LVL ' + level;
-  if (el('dh-xp-lbl')) el('dh-xp-lbl').textContent = xpInLevel + ' / 100 XP';
-  if (el('dh-xp-fill')) el('dh-xp-fill').style.width = xpPct + '%';
-
-  // Global rank (from leaderboard localStorage)
-  try {
-    const lb = JSON.parse(localStorage.getItem('studly_leaderboard') || '[]');
-    const myCode = acct.code || '';
-    const sorted = [...lb].sort((a,b) => (b.gems||0)-(a.gems||0));
-    const rank = myCode ? sorted.findIndex(e => e.code === myCode) + 1 : 0;
-    if (el('dh-rank')) el('dh-rank').textContent = rank > 0 ? '#' + rank : '—';
-  } catch { if (el('dh-rank')) el('dh-rank').textContent = '—'; }
-
-  // Daily challenge preview
-  try {
-    const stored = JSON.parse(localStorage.getItem('studly_dc') || '{}');
-    const todayKey = new Date().toDateString();
-    const dcEl = document.getElementById('dh-dc-preview');
-    const dcStatus = document.getElementById('dh-dc-status');
-    const dcBadge = document.getElementById('dh-dc-badge');
-    if (stored.date === todayKey && stored.question) {
-      if (dcEl) dcEl.textContent = stored.question;
-      if (dcStatus) {
-        if (stored.answered) {
-          dcStatus.textContent = '✅ COMPLETED TODAY';
-          dcStatus.style.color = 'var(--teal)';
-        } else {
-          dcStatus.textContent = 'TAP TO ANSWER';
-          dcStatus.style.color = 'var(--silver)';
-        }
-      }
-      if (dcBadge && stored.difficulty) dcBadge.textContent = stored.difficulty;
-    } else {
-      if (dcEl) dcEl.textContent = 'New challenge waiting — tap to load!';
-      if (dcStatus) dcStatus.textContent = 'TAP TO ANSWER';
-    }
-  } catch {}
-
-  // Activity feed
-  buildActivityFeed();
-
-  // Quick note restore
-  const qn = document.getElementById('dt-quicknote');
-  if (qn) qn.value = localStorage.getItem('studly_quicknote') || '';
-}
-
-function buildActivityFeed() {
-  const feed = document.getElementById('dh-activity-feed');
-  if (!feed) return;
-  const events = [];
-  try {
-    const journal = JSON.parse(localStorage.getItem('studly_journal') || '[]');
-    journal.slice(0,3).forEach(e => events.push({ ts: new Date(e.date), icon:'📓', text: 'Journal: ' + (e.title || 'Untitled Entry') }));
-  } catch {}
-  try {
-    const notes = JSON.parse(localStorage.getItem('studly_saved_notes') || '[]');
-    notes.slice(0,3).forEach(n => events.push({ ts: new Date(n.date), icon:'📝', text: 'Notes: ' + (n.topic || 'Untitled') }));
-  } catch {}
-  try {
-    const sets = JSON.parse(localStorage.getItem('studly_card_sets') || '[]');
-    sets.slice(0,2).forEach(s => events.push({ ts: new Date(s.date), icon:'🃏', text: 'Flashcards: ' + (s.topic || 'Untitled') }));
-  } catch {}
-  try {
-    const dc = JSON.parse(localStorage.getItem('studly_dc') || '{}');
-    if (dc.answered && dc.date) events.push({ ts: new Date(dc.date), icon:'⚡', text: 'Daily Challenge completed!' });
-  } catch {}
-  events.sort((a,b) => b.ts - a.ts);
-  if (!events.length) {
-    feed.innerHTML = '<div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:16px 0;">No activity yet — start studying!</div>';
-    return;
-  }
-  const now = Date.now();
-  feed.innerHTML = events.slice(0,7).map(e => {
-    const diff = now - e.ts;
-    const ago = diff < 60000 ? 'Just now' : diff < 3600000 ? Math.floor(diff/60000)+'m ago' : diff < 86400000 ? Math.floor(diff/3600000)+'h ago' : Math.floor(diff/86400000)+'d ago';
-    return `<div style="display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:8px;transition:background .15s;" onmouseover="this.style.background='rgba(77,159,255,.06)'" onmouseout="this.style.background='transparent'">
-      <span style="font-size:1rem;flex-shrink:0;">${e.icon}</span>
-      <span style="font-family:var(--exo);font-size:.72rem;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.text}</span>
-      <span style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.45;flex-shrink:0;">${ago}</span>
-    </div>`;
-  }).join('');
-}
 function lbRefreshHomeWidget(entries, myUid) {
   const list = document.getElementById('lb-home-list');
   const rankWrap = document.getElementById('lb-home-rank');
