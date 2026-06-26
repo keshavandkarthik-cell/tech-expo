@@ -6369,35 +6369,33 @@ const TD = {
     {n:'Supernova',a:'#fbbf24',b1:'#100808',b2:'#1c0c10',an:true,gr:'linear-gradient(270deg,#1a1a2e,#e94560,#fbbf24,#e94560,#1a1a2e)'}
   ],
 
-  minimal:[
-    {n:'Pure Dark',a:'#6366f1',b1:'#080808',b2:'#0f0f0f'},
-    {n:'Charcoal',a:'#818cf8',b1:'#111111',b2:'#1a1a1a'},
-    {n:'Graphite',a:'#94a3b8',b1:'#141414',b2:'#1e1e1e'},
-    {n:'Obsidian',a:'#c084fc',b1:'#0a0a0a',b2:'#141414'},
-    {n:'Midnight',a:'#60a5fa',b1:'#070712',b2:'#0f0f1e'},
-    {n:'Abyss',a:'#34d399',b1:'#04080c',b2:'#080c12'},
-    {n:'Smoke',a:'#e2e8f0',b1:'#181818',b2:'#222222'},
-    {n:'Soft White',a:'#3b82f6',b1:'#f8f9ff',b2:'#f0f2ff'},
-    {n:'Warm Paper',a:'#b45309',b1:'#faf7f0',b2:'#f0ebe0'},
-    {n:'Cream',a:'#7c3aed',b1:'#fffbf0',b2:'#f8f3e8'},
-    {n:'Cool Gray',a:'#0891b2',b1:'#f0f4f8',b2:'#e8edf2'},
-    {n:'Soft Sage',a:'#065f46',b1:'#f0f5f0',b2:'#e8f0e8'},
-    {n:'Blush',a:'#be185d',b1:'#fdf0f5',b2:'#fae8f0'},
-    {n:'Sky White',a:'#1d4ed8',b1:'#f0f9ff',b2:'#e8f4ff'},
-    {n:'Lavender Mist',a:'#6d28d9',b1:'#f5f0ff',b2:'#ede8ff'},
-    {n:'Warm Slate',a:'#374151',b1:'#1c1917',b2:'#292524'},
-    {n:'Deep Navy',a:'#38bdf8',b1:'#020c1b',b2:'#051020'},
-    {n:'Forest Dark',a:'#22c55e',b1:'#071208',b2:'#0c1c0e'},
-    {n:'Burgundy',a:'#fca5a5',b1:'#1c0808',b2:'#2a0e0e'},
-    {n:'Slate Blue',a:'#a5b4fc',b1:'#0c0e18',b2:'#141622'}
+  wallpapers:[
+    {n:'Wallpaper 1',  img:'image10.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 2',  img:'image11.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 3',  img:'image12.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 4',  img:'image13.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 5',  img:'image14.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 6',  img:'image15.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 7',  img:'image16.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 8',  img:'image17.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 9',  img:'image18.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 10', img:'image19.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 11', img:'image20.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 12', img:'image21.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 13', img:'image22.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 14', img:'image23.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 15', img:'image24.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 16', img:'image25.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 17', img:'image26.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+    {n:'Wallpaper 18', img:'image27.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
   ]
 };
-const CATS = ['vibes','aesthetic','minimal'];
+const CATS = ['vibes','aesthetic','wallpapers'];
 let curCat = localStorage.getItem('studly_cat') || 'vibes', locked = null, prevBg = null;
 
 function renderThemes() {
   const ce = document.getElementById('tcats'); ce.innerHTML = '';
-  const CAT_LABELS = {vibes:'✨ Vibes',aesthetic:'🎨 Aesthetic',minimal:'◻️ Minimal'};
+  const CAT_LABELS = {vibes:'✨ Vibes',aesthetic:'🎨 Aesthetic',wallpapers:'🖼️ Wallpapers'};
   CATS.forEach(c => {
     const b = document.createElement('button'); b.className = 'tcat' + (c === curCat ? ' on' : '');
     b.textContent = CAT_LABELS[c] || (c.charAt(0).toUpperCase() + c.slice(1));
