@@ -6391,7 +6391,9 @@ const TD = {
   ]
 };
 const CATS = ['vibes','aesthetic','wallpapers'];
-let curCat = localStorage.getItem('studly_cat') || 'vibes', locked = null, prevBg = null;
+let curCat = localStorage.getItem('studly_cat') || 'vibes';
+if (!CATS.includes(curCat)) { curCat = 'vibes'; localStorage.setItem('studly_cat', 'vibes'); }
+let locked = null, prevBg = null;
 
 function renderThemes() {
   const ce = document.getElementById('tcats'); ce.innerHTML = '';
@@ -6411,8 +6413,8 @@ function renderThemes() {
     else tile.style.background = `linear-gradient(135deg,${t.b1},${t.b2})`;
     const nm = document.createElement('div'); nm.className = 'tname'; nm.style.color = t.a; nm.textContent = t.n;
     tile.appendChild(nm);
-    tile.addEventListener('mouseenter', () => { if (locked) return; if (!prevBg) prevBg = { bg: document.body.style.background, cls: document.body.className }; applyBg(t); });
-    tile.addEventListener('mouseleave', () => { if (locked || !prevBg) return; document.body.style.background = prevBg.bg; document.body.className = prevBg.cls; prevBg = null; });
+    tile.addEventListener('mouseenter', () => { if (locked) return; if (!prevBg) prevBg = { bg: document.body.style.background, bgImg: document.body.style.backgroundImage, bgSize: document.body.style.backgroundSize, bgPos: document.body.style.backgroundPosition, cls: document.body.className }; applyBg(t); });
+    tile.addEventListener('mouseleave', () => { if (locked || !prevBg) return; document.body.style.background = prevBg.bg; document.body.style.backgroundImage = prevBg.bgImg; document.body.style.backgroundSize = prevBg.bgSize; document.body.style.backgroundPosition = prevBg.bgPos; document.body.className = prevBg.cls; prevBg = null; });
     tile.addEventListener('click', () => { locked = t; applyBg(t); localStorage.setItem('studly_theme', JSON.stringify(t)); });
     ge.appendChild(tile);
   });
@@ -6440,18 +6442,20 @@ function applyBg(t) {
   else if (t.img) { document.body.style.background = `linear-gradient(${t.b1||'rgba(0,0,0,.4)'},${t.b2||'rgba(0,0,0,.7)'}),url(${t.img})`; document.body.style.backgroundSize = 'cover'; document.body.style.backgroundPosition = 'center'; }
   else document.body.style.background = `linear-gradient(135deg,${t.b1} 0%,${t.b2} 100%)`;
 
-  // Tint sidebar, header, and panels with the theme colour
-  if (t.b1) {
-    // Parse b1 hex and lighten it for panels so they contrast against body
-    const hex = t.b1.replace('#','');
-    const r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), b = parseInt(hex.slice(4,6),16);
-    // Panel = body colour + ~18 brightness bump so cards are visibly lighter
-    // widgets match body colour exactly
+  // Tint sidebar, header, and panels with the theme colour (skip for wallpapers - rgba b1 values)
+  if (t.b1 && t.b1.startsWith('#')) {
     document.documentElement.style.setProperty('--chrome-bg',   t.b1 + 'e6');
     document.documentElement.style.setProperty('--chrome-bg2',  t.b1 + 'cc');
     document.documentElement.style.setProperty('--panel-col',   t.b1 + '99');
     document.documentElement.style.setProperty('--panel-col2',  t.b1 + 'ee');
     document.documentElement.style.setProperty('--panel-col3',  t.b1 + 'cc');
+  } else if (t.img) {
+    // Wallpaper: use semi-transparent dark panels so content stays readable
+    document.documentElement.style.setProperty('--chrome-bg',   'rgba(10,10,14,0.82)');
+    document.documentElement.style.setProperty('--chrome-bg2',  'rgba(10,10,14,0.70)');
+    document.documentElement.style.setProperty('--panel-col',   'rgba(10,10,14,0.60)');
+    document.documentElement.style.setProperty('--panel-col2',  'rgba(10,10,14,0.80)');
+    document.documentElement.style.setProperty('--panel-col3',  'rgba(10,10,14,0.70)');
   }
 }
 
