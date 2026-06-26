@@ -2294,7 +2294,7 @@ body.fs-large { font-size: 17px; }
               <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: ATP</div>
               <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
               <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 34m 45s</div>
-              <button onclick="go('games');filterGames(document.querySelector('[onclick*=\'quiz\']'),'quiz');setTimeout(()=&gt;tryStartGame('blitz',10),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
+              <button onclick="go('games');(function(){var b=document.querySelector('[onclick*=\'quiz\']');if(b)filterGames(b,'quiz');})();setTimeout(()=&gt;tryStartGame('blitz',10),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
             </div>
             <div id="dc-no-key-msg" style="display: block; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 12px 0px;">⚠️ Could not load today's challenge — check your API key</div>
           </div>
@@ -3361,6 +3361,19 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-key-step"><span class="ps-key-num">2</span>Sign in with your Google account</div>
               <div class="ps-key-step"><span class="ps-key-num">3</span>Click <strong>Get API Key</strong> → <strong>Create API Key</strong></div>
               <div class="ps-key-step"><span class="ps-key-num">4</span>Copy and paste it above</div>
+            </div>
+          </div>
+
+          <!-- KEY POOL -->
+          <div class="ps-card" id="ps-key-pool-card" style="margin-top:12px;">
+            <div class="ps-card-label">// BACKUP KEY POOL</div>
+            <div class="ps-form-label" style="margin-bottom:12px;line-height:1.7;">
+              Add extra Gemini keys. If your primary key hits rate limits (429), Veda automatically falls back to these.
+            </div>
+            <div id="ps-pool-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+            <div class="set-row" style="margin-top:4px;">
+              <input class="set-input" id="ps-pool-new" type="password" placeholder="Paste backup key (AIza...)..." onkeydown="if(event.key==='Enter')addPoolKey()">
+              <button class="set-btn accent" onclick="addPoolKey()">+ Add</button>
             </div>
           </div>
 
@@ -4800,6 +4813,17 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 <script>
 // ── API KEY ──
 let API_KEY = localStorage.getItem('studly_key') || '';
+// ── KEY POOL ──
+function getKeyPool() { try { return JSON.parse(localStorage.getItem('studly_key_pool') || '[]'); } catch { return []; } }
+function saveKeyPool(arr) { localStorage.setItem('studly_key_pool', JSON.stringify(arr)); }
+let _poolIdx = 0;
+function _nextPoolKey() {
+  const pool = getKeyPool();
+  if (!pool.length) return null;
+  const key = pool[_poolIdx % pool.length];
+  _poolIdx = (_poolIdx + 1) % pool.length;
+  return key;
+}
 function saveKey() {
   const k = document.getElementById('key-in').value.trim();
   if (!k) return;
@@ -5283,26 +5307,54 @@ let topic = '';
 function setTopic(el, t) {
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   el.classList.add('on'); topic = t;
-  document.getElementById('hw-in').placeholder = `Ask a ${t} question...`;
+  const hwIn = document.getElementById('hw-in');
+  if (hwIn) hwIn.placeholder = `Ask a ${t} question...`;
 }
 
 // ── GEMINI API ──
 async function gemini(prompt, imageData) {
   if (!API_KEY) throw new Error('No API key set — go to Settings to add your free Gemini key.');
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+  const profileCtx = buildAIContext();
   const parts = [];
   if (imageData) parts.push({ inline_data: { mime_type: imageData.mimeType, data: imageData.base64 } });
-  // Prepend student profile context to every AI call
-  const profileCtx = buildAIContext();
   parts.push({ text: profileCtx + prompt });
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts }] })
-  });
-  const data = await res.json();
-  if (data.error) throw new Error(data.error.message);
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+  const body = JSON.stringify({ contents: [{ parts }] });
+
+  async function _callWithKey(key) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+    const data = await res.json();
+    if (data.error) {
+      const err = new Error(data.error.message);
+      err.status = data.error.code;
+      throw err;
+    }
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+  }
+
+  try {
+    return await _callWithKey(API_KEY);
+  } catch (e) {
+    if (e.status === 429) {
+      const pool = getKeyPool();
+      if (pool.length) {
+        showToast('⚠️ Primary key rate-limited — trying backup key...');
+        // try each pool key in order until one works
+        for (let i = 0; i < pool.length; i++) {
+          const k = pool[_poolIdx % pool.length];
+          _poolIdx = (_poolIdx + 1) % pool.length;
+          try {
+            return await _callWithKey(k);
+          } catch (e2) {
+            if (e2.status !== 429) throw e2; // non-rate-limit error, bubble it
+            // else try next key
+          }
+        }
+        showToast('🚫 All API keys rate-limited — please wait a moment');
+      }
+    }
+    throw e;
+  }
 }
 
 // ── HOMEWORK IMAGE ──
@@ -7997,6 +8049,46 @@ function renderApiKeyPanel() {
   }
   const display = document.getElementById('set-key-display');
   if (display) display.value = API_KEY || '';
+  renderPoolList();
+}
+
+function renderPoolList() {
+  const el = document.getElementById('ps-pool-list');
+  if (!el) return;
+  const pool = getKeyPool();
+  if (!pool.length) {
+    el.innerHTML = '<div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.5;">No backup keys added yet.</div>';
+    return;
+  }
+  el.innerHTML = pool.map((k, i) => `
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:7px 10px;">
+      <span style="font-family:var(--exo);font-size:.7rem;color:var(--teal2);min-width:20px;">#${i+1}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${k.slice(0,8)}••••••••${k.slice(-4)}</span>
+      <button onclick="removePoolKey(${i})" style="background:rgba(255,100,100,.08);border:1px solid rgba(255,100,100,.2);border-radius:6px;padding:3px 8px;color:#ff6680;font-size:.68rem;cursor:pointer;font-family:var(--exo);">Remove</button>
+    </div>`).join('');
+}
+
+function addPoolKey() {
+  const inp = document.getElementById('ps-pool-new');
+  const k = inp ? inp.value.trim() : '';
+  if (!k) return;
+  if (k === API_KEY) { showToast('⚠️ That\'s your primary key — add a different one'); return; }
+  const pool = getKeyPool();
+  if (pool.includes(k)) { showToast('⚠️ Key already in pool'); return; }
+  pool.push(k);
+  saveKeyPool(pool);
+  if (inp) inp.value = '';
+  renderPoolList();
+  showToast(`✅ Backup key #${pool.length} added`);
+}
+
+function removePoolKey(idx) {
+  const pool = getKeyPool();
+  pool.splice(idx, 1);
+  saveKeyPool(pool);
+  _poolIdx = 0;
+  renderPoolList();
+  showToast('🗑 Backup key removed');
 }
 
 // ── log daily activity for chart ──
@@ -12077,7 +12169,10 @@ function runSearch(q) {
       { id:'exam',     icon:'📄', title:'Exam Papers',  hint:'Mock exam generator' },
       { id:'calc',     icon:'🔢', title:'Calculator',   hint:'Scientific calculator' },
       { id:'library',  icon:'🗂️', title:'Topic Library',hint:'Curated study topics' },
-      { id:'themes',   icon:'🌈', title:'Themes',       hint:'Customise appearance' },
+      { id:'settings', icon:'🌈', title:'Themes',        hint:'Customise appearance' },
+      { id:'music',    icon:'🎵', title:'Music',          hint:'Study music & playlists' },
+      { id:'planner',  icon:'📅', title:'Study Planner',  hint:'Weekly timetable & schedule' },
+      { id:'tracker',  icon:'📋', title:'Paper Tracker',  hint:'Track past papers & scores' },
       { id:'settings', icon:'⚙️', title:'Settings & Profile', hint:'Account, badges, stats' },
     ];
     pages.forEach(p => {
@@ -13742,7 +13837,7 @@ async function initDailyChallenge() {
     const raw = await gemini(`Generate a single short-answer study question about ${subject}. Difficulty: ${dcDifficulty}. Return ONLY valid JSON, no markdown: {"question":"...","answer":"...","hint":"...","subject":"${subject}","difficulty":"${dcDiffLabel}"}. The answer must be 1-4 words only. Keep the question factual and specific.`);
     const parsed = JSON.parse(raw.replace(/^```(?:json)?|```$/gm,'').trim());
     // Preserve previous state for streak calculation — don't recalculate streak at generate time
-    const ns = { date: today, question: parsed.question, answer: parsed.answer, hint: parsed.hint, subject: parsed.subject || subject, completed: false, streak: state?.streak || 0, prevState: state };
+    const ns = { date: today, question: parsed.question, answer: parsed.answer, hint: parsed.hint, subject: parsed.subject || subject, diffLabel: dcDiffLabel, completed: false, streak: state?.streak || 0, prevState: state };
     saveDCState(ns);
     if (loading) loading.style.display = 'none';
     showDCQuestion(ns);
@@ -13763,7 +13858,7 @@ function showDCQuestion(state) {
   const subTag = document.getElementById('dc-subject-tag');
   const qEl   = document.getElementById('dc-question');
   const ansIn = document.getElementById('dc-answer-in');
-  if (subTag) subTag.textContent = '📚 ' + (state.subject || '');
+  if (subTag) subTag.textContent = '📚 ' + (state.subject || '') + (state.diffLabel ? '  ·  ' + state.diffLabel : '');
   if (qEl)   qEl.textContent = state.question || '';
   if (ansIn) { ansIn.value = ''; ansIn.disabled = false; setTimeout(() => ansIn.focus(), 100); }
   startDCTimer(60);
