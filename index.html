@@ -10801,7 +10801,7 @@ let libCat = 'All', libLevel = 'GCSE';
 
 function initLibrary() {
   const catsEl = document.getElementById('lib-cats');
-  if (!catsEl || catsEl.innerHTML) return;
+  if (!catsEl) return;
   catsEl.innerHTML = LIB_CATS.map(c =>
     `<button class="lib-cat${c === libCat ? ' on' : ''}" onclick="setLibCat(this,'${c}')">${c}</button>`
   ).join('');
