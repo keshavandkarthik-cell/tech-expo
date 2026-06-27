@@ -1743,6 +1743,10 @@ body.fs-large { font-size: 17px; }
 .journal-filter { background: rgba(255,255,255,.04); border: 1px solid rgba(77,159,255,.18); border-radius: 10px; padding: 9px 12px; color: var(--silver2); font-family: var(--exo); font-size: .78rem; cursor: pointer; transition: all .15s; }
 .journal-filter:hover { border-color: var(--accent); color: var(--accent2); }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
+.nb-more-toggle { opacity:.7; }
+.nb-more-toggle:hover { opacity:1; }
+.nb-more-item { font-size:.75rem; }
+.nb-more-item .ni { font-size:.85rem; }
 /* ── FORUM ── */
 .forum-post-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .2s,background .2s;}
 .forum-post-card:hover{background:rgba(255,255,255,.06);border-color:rgba(77,159,255,.3);}
@@ -2110,24 +2114,14 @@ body.fs-large { font-size: 17px; }
         <div class="sb-ver">// AI STUDY SYSTEM</div>
       </div>
       <button id="tog" onclick="toggleSb()">◀</button>
-      <nav>
+      <nav id="main-nav">
         <button class="nb on" onclick="go('home')"><span class="ni">⊞</span><span class="nl">Home</span></button>
-        <button class="nb" onclick="go('homework')"><span class="ni">📚</span><span class="nl">Homework</span></button>
-        <button class="nb" onclick="go('library')"><span class="ni">🗂️</span><span class="nl">Topic Library</span></button>
-        <button class="nb" onclick="go('notes')"><span class="ni">📝</span><span class="nl">Notes</span></button>
-        <button class="nb" onclick="go('study')"><span class="ni">🧠</span><span class="nl">Smart Study</span></button>
-        <button class="nb" onclick="go('calc')"><span class="ni">🔢</span><span class="nl">Calculator</span></button>
-        <button class="nb" onclick="go('chat')"><span class="ni">💬</span><span class="nl">Companion</span></button>
-        <button class="nb" id="nb-music" onclick="go('music')" style="display: none; opacity: 0; transform: translateX(-12px);"><span class="ni">🎵</span><span class="nl">Music</span></button>
-        <button class="nb" onclick="go('todo')"><span class="ni">✅</span><span class="nl">To-Do List</span></button>
-        <button class="nb" onclick="go('journal')"><span class="ni">📓</span><span class="nl">Journal</span></button>
-        <button class="nb" onclick="go('profile')"><span class="ni">👤</span><span class="nl">Profile</span></button>
-        <button class="nb" onclick="go('games')"><span class="ni">🎮</span><span class="nl">Games</span></button>
-        <button class="nb" onclick="go('exam')"><span class="ni">📄</span><span class="nl">Exam Papers</span></button>
-        <button class="nb" onclick="go('tracker')"><span class="ni">📊</span><span class="nl">Paper Tracker</span></button>
-        <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
-        <button class="nb" onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
-        <button class="nb" onclick="go('forum')"><span class="ni">🌐</span><span class="nl">Forum</span></button>
+        <!-- dynamic nav buttons injected by renderNav() -->
+        <button class="nb" id="nb-music" onclick="go('music')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">🎵</span><span class="nl">Music</span></button>
+        <div id="nav-more-section" style="display:none;flex-direction:column;gap:2px;">
+          <button class="nb nb-more-toggle" id="nav-more-btn" onclick="toggleNavMore()"><span class="ni">⋯</span><span class="nl">More</span></button>
+          <div id="nav-more-list" style="display:none;flex-direction:column;gap:2px;padding-left:8px;border-left:2px solid rgba(255,255,255,.06);margin-left:4px;"></div>
+        </div>
         <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
@@ -5372,6 +5366,103 @@ function go(name) {
     }
   } catch(e) {}
 }
+
+// ── SMART NAV ──
+const NAV_TABS = [
+  { id:'homework',    icon:'📚', label:'Homework' },
+  { id:'library',     icon:'🗂️', label:'Topic Library' },
+  { id:'notes',       icon:'📝', label:'Notes' },
+  { id:'study',       icon:'🧠', label:'Smart Study' },
+  { id:'calc',        icon:'🔢', label:'Calculator' },
+  { id:'chat',        icon:'💬', label:'Companion' },
+  { id:'todo',        icon:'✅', label:'To-Do List' },
+  { id:'journal',     icon:'📓', label:'Journal' },
+  { id:'profile',     icon:'👤', label:'Profile' },
+  { id:'games',       icon:'🎮', label:'Games' },
+  { id:'exam',        icon:'📄', label:'Exam Papers' },
+  { id:'tracker',     icon:'📊', label:'Paper Tracker' },
+  { id:'planner',     icon:'📅', label:'Study Planner' },
+  { id:'leaderboard', icon:'🏆', label:'Leaderboard' },
+  { id:'forum',       icon:'🌐', label:'Forum' },
+];
+const NAV_VISIBLE = 7; // max shown before "More"
+
+function getNavCounts() {
+  try { return JSON.parse(localStorage.getItem('veda_nav_counts') || '{}'); } catch { return {}; }
+}
+function bumpNavCount(name) {
+  const c = getNavCounts();
+  c[name] = (c[name] || 0) + 1;
+  localStorage.setItem('veda_nav_counts', JSON.stringify(c));
+}
+
+function renderNav() {
+  const counts = getNavCounts();
+  // Sort by usage desc, preserve original order for ties
+  const sorted = [...NAV_TABS].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
+  const top = sorted.slice(0, NAV_VISIBLE);
+  const rest = sorted.slice(NAV_VISIBLE);
+
+  // Build top buttons (insert before nb-music)
+  const nav = document.getElementById('main-nav');
+  // Remove old dynamic buttons
+  nav.querySelectorAll('.nb-dynamic').forEach(b => b.remove());
+
+  const moreSection = document.getElementById('nav-more-section');
+  const musicBtn = document.getElementById('nb-music');
+
+  top.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'nb nb-dynamic';
+    btn.setAttribute('onclick', `go('${t.id}')`);
+    btn.innerHTML = `<span class="ni">${t.icon}</span><span class="nl">${t.label}</span>`;
+    nav.insertBefore(btn, moreSection);
+  });
+
+  // More section
+  if (rest.length) {
+    moreSection.style.display = 'flex';
+    const list = document.getElementById('nav-more-list');
+    list.innerHTML = rest.map(t =>
+      `<button class="nb nb-dynamic nb-more-item" onclick="go('${t.id}');collapseNavMore()"><span class="ni">${t.icon}</span><span class="nl">${t.label}</span></button>`
+    ).join('');
+  } else {
+    moreSection.style.display = 'none';
+  }
+}
+
+function toggleNavMore() {
+  const list = document.getElementById('nav-more-list');
+  const btn = document.getElementById('nav-more-btn');
+  const open = list.style.display !== 'none';
+  list.style.display = open ? 'none' : 'flex';
+  list.style.flexDirection = 'column';
+  list.style.gap = '2px';
+  btn.querySelector('.nl').textContent = open ? 'More' : 'Less';
+}
+function collapseNavMore() {
+  const list = document.getElementById('nav-more-list');
+  const btn = document.getElementById('nav-more-btn');
+  if (list) list.style.display = 'none';
+  if (btn) btn.querySelector('.nl').textContent = 'More';
+}
+
+// Hook go() to track usage and re-render nav
+const _goOrig = window.go;
+window.go = function(name) {
+  if (name !== 'home' && name !== 'settings' && name !== 'music') {
+    bumpNavCount(name);
+    renderNav();
+  }
+  // Collapse more drawer when navigating
+  collapseNavMore();
+  if (_goOrig) _goOrig(name);
+  // Forum init
+  if (name === 'forum') { renderForumCats(); loadForumFeed(); }
+};
+
+// Initial render
+renderNav();
 
 // ── TOPIC CHIPS ──
 let topic = '';
@@ -14846,14 +14937,7 @@ function timeAgo(d) {
 }
 
 // ── Hook into go() for forum init ──
-const _origGo = window.go;
-window.go = function(name) {
-  if (_origGo) _origGo(name);
-  if (name === 'forum') {
-    renderForumCats();
-    loadForumFeed();
-  }
-};
+// (forum init is handled by the smart nav go() hook above)
 
 })();
 
