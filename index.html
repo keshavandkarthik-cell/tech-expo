@@ -1743,6 +1743,23 @@ body.fs-large { font-size: 17px; }
 .journal-filter { background: rgba(255,255,255,.04); border: 1px solid rgba(77,159,255,.18); border-radius: 10px; padding: 9px 12px; color: var(--silver2); font-family: var(--exo); font-size: .78rem; cursor: pointer; transition: all .15s; }
 .journal-filter:hover { border-color: var(--accent); color: var(--accent2); }
 .journal-filter.on { background: rgba(77,159,255,.12); border-color: var(--accent); color: var(--accent2); }
+/* ── FORUM ── */
+.forum-post-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .2s,background .2s;}
+.forum-post-card:hover{background:rgba(255,255,255,.06);border-color:rgba(77,159,255,.3);}
+.forum-post-type{display:inline-block;font-family:var(--exo);font-size:.62rem;letter-spacing:1.5px;padding:3px 8px;border-radius:6px;margin-bottom:8px;font-weight:700;}
+.forum-post-type.question{background:rgba(77,159,255,.12);color:#4d9fff;border:1px solid rgba(77,159,255,.25);}
+.forum-post-type.tip{background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.25);}
+.forum-post-title{font-family:var(--exo);font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.forum-post-meta{font-family:var(--exo);font-size:.68rem;color:var(--silver);opacity:.6;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.forum-cat-btn{font-family:var(--exo);font-size:.7rem;padding:5px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--silver);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.forum-cat-btn.on{background:rgba(77,159,255,.15);border-color:rgba(77,159,255,.4);color:#4d9fff;}
+.forum-type-btn{flex:1;font-family:var(--exo);font-size:.72rem;padding:8px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--silver);cursor:pointer;transition:all .15s;}
+.forum-type-btn.on{background:rgba(77,159,255,.15);border-color:rgba(77,159,255,.4);color:#4d9fff;}
+.forum-reply-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px 14px;}
+.forum-flag-btn{font-family:var(--exo);font-size:.65rem;padding:3px 8px;border-radius:6px;border:1px solid rgba(255,100,100,.2);background:rgba(255,100,100,.05);color:#ff6680;cursor:pointer;transition:all .15s;margin-left:auto;}
+.forum-flag-btn:hover{background:rgba(255,100,100,.15);}
+.forum-upvote-btn{font-family:var(--exo);font-size:.68rem;padding:3px 9px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--silver);cursor:pointer;transition:all .15s;}
+.forum-upvote-btn.on{background:rgba(77,159,255,.15);border-color:rgba(77,159,255,.4);color:#4d9fff;}
 </style>
 </head>
 <body style="background: linear-gradient(135deg, rgb(6, 16, 10) 0%, rgb(12, 30, 16) 100%);" class="style-hacker fs-large">
@@ -2110,6 +2127,7 @@ body.fs-large { font-size: 17px; }
         <button class="nb" onclick="go('tracker')"><span class="ni">📊</span><span class="nl">Paper Tracker</span></button>
         <button class="nb" onclick="go('planner')"><span class="ni">📅</span><span class="nl">Study Planner</span></button>
         <button class="nb" onclick="go('leaderboard')"><span class="ni">🏆</span><span class="nl">Leaderboard</span></button>
+        <button class="nb" onclick="go('forum')"><span class="ni">🌐</span><span class="nl">Forum</span></button>
         <button class="nb" onclick="go('settings')"><span class="ni">⚙️</span><span class="nl">Settings</span></button>
       </nav>
       <div class="sb-foot">
@@ -4808,6 +4826,61 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
 
       </div><!-- end #content -->
+
+      <!-- ══════════════ FORUM TAB ══════════════ -->
+      <div class="tab" id="tab-forum" style="padding:0;display:none;flex-direction:column;height:100%;overflow:hidden;position:relative;">
+
+        <!-- Header bar -->
+        <div style="padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;">
+          <div class="ttl" style="margin-bottom:4px;">🌐 Student Forum</div>
+          <div class="tsub"><span class="prm">›</span>Ask questions, share tips, help others</div>
+        </div>
+
+        <!-- Subject filter -->
+        <div id="forum-cats" style="display:flex;gap:8px;padding:12px 20px;overflow-x:auto;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.05);scrollbar-width:none;"></div>
+
+        <!-- Feed -->
+        <div id="forum-feed" style="flex:1;overflow-y:auto;padding:14px 20px;display:flex;flex-direction:column;gap:12px;">
+          <div style="text-align:center;padding:40px 0;font-family:var(--exo);color:var(--silver);opacity:.5;">Loading posts...</div>
+        </div>
+
+        <!-- Compose button -->
+        <div style="padding:14px 20px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;">
+          <button onclick="openForumCompose()" style="width:100%;background:linear-gradient(135deg,var(--accent),#7c5fe6);border:none;border-radius:12px;padding:12px;color:#fff;font-family:var(--exo);font-size:.8rem;font-weight:700;cursor:pointer;letter-spacing:.5px;">✏️ New Post</button>
+        </div>
+
+        <!-- Compose modal -->
+        <div id="forum-compose-modal" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center;padding:20px;">
+          <div style="background:var(--bg2,#12121a);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:22px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:14px;">
+            <div style="font-family:var(--exo);font-size:.75rem;letter-spacing:2px;color:var(--teal2,#4d9fff);">// NEW POST</div>
+            <div style="display:flex;gap:8px;">
+              <button class="forum-type-btn on" onclick="forumSetType(this,'question')" data-type="question">❓ Question</button>
+              <button class="forum-type-btn" onclick="forumSetType(this,'tip')" data-type="tip">💡 Tip / Resource</button>
+            </div>
+            <select id="forum-compose-subject" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 12px;color:var(--text,#e2e8f0);font-family:var(--exo);font-size:.78rem;"></select>
+            <input id="forum-compose-title" maxlength="120" placeholder="Post title..." style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 12px;color:var(--text,#e2e8f0);font-family:var(--exo);font-size:.82rem;outline:none;">
+            <textarea id="forum-compose-body" maxlength="1200" rows="5" placeholder="Describe your question or share your tip..." style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 12px;color:var(--text,#e2e8f0);font-family:var(--exo);font-size:.78rem;resize:vertical;outline:none;line-height:1.6;"></textarea>
+            <div style="display:flex;gap:10px;">
+              <button onclick="closeForumCompose()" style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;color:var(--silver,#94a3b8);font-family:var(--exo);font-size:.78rem;cursor:pointer;">Cancel</button>
+              <button onclick="submitForumPost()" style="flex:2;background:linear-gradient(135deg,var(--accent),#7c5fe6);border:none;border-radius:10px;padding:10px;color:#fff;font-family:var(--exo);font-size:.78rem;font-weight:700;cursor:pointer;">Post</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thread view -->
+        <div id="forum-thread-modal" style="display:none;position:absolute;inset:0;background:var(--bg,#0d0d12);z-index:190;flex-direction:column;overflow:hidden;">
+          <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px;flex-shrink:0;">
+            <button onclick="closeForumThread()" style="background:rgba(255,255,255,.06);border:none;border-radius:8px;padding:6px 12px;color:var(--silver);font-family:var(--exo);font-size:.78rem;cursor:pointer;">← Back</button>
+            <span id="forum-thread-label" style="font-family:var(--exo);font-size:.7rem;letter-spacing:1.5px;color:var(--teal2,#4d9fff);"></span>
+          </div>
+          <div id="forum-thread-content" style="flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:14px;"></div>
+          <div style="padding:12px 20px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:10px;flex-shrink:0;">
+            <input id="forum-reply-in" placeholder="Write a reply..." maxlength="600" style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 12px;color:var(--text);font-family:var(--exo);font-size:.78rem;outline:none;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitForumReply();}">
+            <button onclick="submitForumReply()" style="background:linear-gradient(135deg,var(--accent),#7c5fe6);border:none;border-radius:10px;padding:9px 16px;color:#fff;font-family:var(--exo);font-size:.78rem;font-weight:700;cursor:pointer;">Send</button>
+          </div>
+        </div>
+
+      </div><!-- end forum tab -->
 </div>
 
 <script>
@@ -14477,7 +14550,322 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous">
+// ══════════════════════════════════════════════
+// FORUM — Firebase Firestore backend
+// ══════════════════════════════════════════════
+(function() {
+
+// ── Firebase config ──
+const FB_CFG = {
+  apiKey: "AIzaSyAH7cP8gWGszWPezWotHAYtf4hJM1mH1Ng",
+  authDomain: "forum-veda.firebaseapp.com",
+  projectId: "forum-veda",
+  storageBucket: "forum-veda.firebasestorage.app",
+  messagingSenderId: "330516813475",
+  appId: "1:330516813475:web:d2f8ca339c9e44d8d6d116"
+};
+
+// ── Subjects ──
+const FORUM_SUBJECTS = ['All','Maths','Physics','Chemistry','Biology','English','History','Geography','Computer Science','Economics','Psychology','Art','Music','Other'];
+
+// ── Profanity list (expandable) ──
+const BAD_WORDS = ['fuck','shit','bitch','asshole','bastard','cunt','dick','pussy','cock','nigger','nigga','faggot','retard','whore','slut'];
+function censorText(text) {
+  let out = text;
+  BAD_WORDS.forEach(w => {
+    const re = new RegExp('\\b' + w + '\\b', 'gi');
+    out = out.replace(re, m => m[0] + '*'.repeat(m.length - 1));
+  });
+  return out;
+}
+
+// ── State ──
+let _db = null, _forumCat = 'All', _forumType = 'question', _currentPostId = null, _unsubFeed = null;
+
+// ── Init Firebase lazily ──
+async function forumGetDB() {
+  if (_db) return _db;
+  // Load Firebase from CDN
+  if (!window.firebase) {
+    await loadScript('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
+    await loadScript('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js');
+  }
+  if (!window.firebase.apps.length) window.firebase.initializeApp(FB_CFG);
+  _db = window.firebase.firestore();
+  return _db;
+}
+
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    if (document.querySelector('script[src="' + src + '"]')) return res();
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+// ── Current username ──
+function forumUsername() {
+  try { const a = getAcct(); return a.name || a.username || 'Student'; } catch { return 'Student'; }
+}
+
+// ── Subjects filter bar ──
+function renderForumCats() {
+  const el = document.getElementById('forum-cats');
+  if (!el) return;
+  el.innerHTML = FORUM_SUBJECTS.map(s =>
+    `<button class="forum-cat-btn${s === _forumCat ? ' on' : ''}" onclick="window._forumSetCat('${s}')">${s}</button>`
+  ).join('');
+}
+
+window._forumSetCat = function(cat) {
+  _forumCat = cat;
+  renderForumCats();
+  loadForumFeed();
+};
+
+// ── Load feed ──
+async function loadForumFeed() {
+  const feed = document.getElementById('forum-feed');
+  if (!feed) return;
+  feed.innerHTML = '<div style="text-align:center;padding:40px 0;font-family:var(--exo);color:var(--silver);opacity:.5;">Loading...</div>';
+
+  try {
+    const db = await forumGetDB();
+    if (_unsubFeed) { _unsubFeed(); _unsubFeed = null; }
+
+    let q = db.collection('posts').orderBy('createdAt', 'desc').limit(40);
+    if (_forumCat !== 'All') q = db.collection('posts').where('subject', '==', _forumCat).orderBy('createdAt', 'desc').limit(40);
+
+    _unsubFeed = q.onSnapshot(snap => {
+      if (snap.empty) {
+        feed.innerHTML = '<div style="text-align:center;padding:40px 0;font-family:var(--exo);color:var(--silver);opacity:.5;">No posts yet — be the first!</div>';
+        return;
+      }
+      feed.innerHTML = '';
+      snap.forEach(doc => {
+        const p = doc.data();
+        if ((p.flags || 0) >= 3) return; // hidden
+        const card = document.createElement('div');
+        card.className = 'forum-post-card';
+        const ago = timeAgo(p.createdAt?.toDate ? p.createdAt.toDate() : new Date());
+        card.innerHTML = `
+          <span class="forum-post-type ${p.type}">${p.type === 'question' ? '❓ Question' : '💡 Tip'}</span>
+          <div class="forum-post-title">${escHtml(p.title)}</div>
+          <div class="forum-post-meta">
+            <span>👤 ${escHtml(p.author)}</span>
+            <span>📚 ${escHtml(p.subject)}</span>
+            <span>🕐 ${ago}</span>
+            <span>💬 ${p.replyCount || 0} replies</span>
+          </div>`;
+        card.onclick = () => openForumThread(doc.id, p);
+        feed.appendChild(card);
+      });
+    }, err => {
+      feed.innerHTML = '<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">Failed to load posts. Check connection.</div>';
+    });
+  } catch(e) {
+    feed.innerHTML = `<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">${e.message}</div>`;
+  }
+}
+
+// ── Compose ──
+window.openForumCompose = function() {
+  const modal = document.getElementById('forum-compose-modal');
+  if (!modal) return;
+  // Populate subject dropdown
+  const sel = document.getElementById('forum-compose-subject');
+  sel.innerHTML = FORUM_SUBJECTS.filter(s => s !== 'All').map(s => `<option value="${s}">${s}</option>`).join('');
+  if (_forumCat !== 'All') sel.value = _forumCat;
+  modal.style.display = 'flex';
+};
+
+window.closeForumCompose = function() {
+  const modal = document.getElementById('forum-compose-modal');
+  if (modal) modal.style.display = 'none';
+  document.getElementById('forum-compose-title').value = '';
+  document.getElementById('forum-compose-body').value = '';
+};
+
+window.forumSetType = function(btn, type) {
+  _forumType = type;
+  document.querySelectorAll('.forum-type-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+};
+
+window.submitForumPost = async function() {
+  const title = censorText(document.getElementById('forum-compose-title').value.trim());
+  const body  = censorText(document.getElementById('forum-compose-body').value.trim());
+  const subject = document.getElementById('forum-compose-subject').value;
+
+  if (!title) { showToast('⚠️ Add a title'); return; }
+  if (!body)  { showToast('⚠️ Write something in the body'); return; }
+
+  try {
+    const db = await forumGetDB();
+    await db.collection('posts').add({
+      title, body, subject,
+      type: _forumType,
+      author: forumUsername(),
+      createdAt: window.firebase.firestore.FieldValue.serverTimestamp(),
+      replyCount: 0,
+      flags: 0,
+      flaggedBy: []
+    });
+    closeForumCompose();
+    showToast('✅ Post published!');
+  } catch(e) {
+    showToast('❌ ' + e.message);
+  }
+};
+
+// ── Thread view ──
+window.openForumThread = async function(postId, post) {
+  _currentPostId = postId;
+  const modal = document.getElementById('forum-thread-modal');
+  const content = document.getElementById('forum-thread-content');
+  const label = document.getElementById('forum-thread-label');
+  if (!modal || !content) return;
+
+  label.textContent = post.subject + ' · ' + (post.type === 'question' ? 'QUESTION' : 'TIP');
+  content.innerHTML = `
+    <div style="border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:14px;margin-bottom:4px;">
+      <span class="forum-post-type ${post.type}">${post.type === 'question' ? '❓ Question' : '💡 Tip'}</span>
+      <div class="forum-post-title" style="font-size:1rem;">${escHtml(post.title)}</div>
+      <div style="font-family:var(--exo);font-size:.8rem;color:var(--text);line-height:1.7;margin:10px 0;">${escHtml(post.body)}</div>
+      <div class="forum-post-meta">
+        <span>👤 ${escHtml(post.author)}</span>
+        <span>${timeAgo(post.createdAt?.toDate ? post.createdAt.toDate() : new Date())}</span>
+        <button class="forum-flag-btn" onclick="flagPost('${postId}')">🚩 Flag</button>
+      </div>
+    </div>
+    <div id="forum-replies-list" style="display:flex;flex-direction:column;gap:10px;">
+      <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.5;">Loading replies...</div>
+    </div>`;
+
+  modal.style.display = 'flex';
+  modal.style.flexDirection = 'column';
+
+  // Load replies live
+  try {
+    const db = await forumGetDB();
+    db.collection('posts').doc(postId).collection('replies')
+      .orderBy('createdAt', 'asc').limit(60)
+      .onSnapshot(snap => {
+        const list = document.getElementById('forum-replies-list');
+        if (!list) return;
+        if (snap.empty) {
+          list.innerHTML = '<div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);opacity:.5;text-align:center;padding:20px 0;">No replies yet — be the first!</div>';
+          return;
+        }
+        list.innerHTML = '';
+        snap.forEach(doc => {
+          const r = doc.data();
+          if ((r.flags || 0) >= 3) return;
+          const card = document.createElement('div');
+          card.className = 'forum-reply-card';
+          card.innerHTML = `
+            <div style="font-family:var(--exo);font-size:.78rem;color:var(--text);line-height:1.6;">${escHtml(r.body)}</div>
+            <div class="forum-post-meta" style="margin-top:8px;">
+              <span>👤 ${escHtml(r.author)}</span>
+              <span>${timeAgo(r.createdAt?.toDate ? r.createdAt.toDate() : new Date())}</span>
+              <button class="forum-flag-btn" onclick="flagReply('${postId}','${doc.id}')">🚩 Flag</button>
+            </div>`;
+          list.appendChild(card);
+        });
+      });
+  } catch(e) {}
+};
+
+window.closeForumThread = function() {
+  const modal = document.getElementById('forum-thread-modal');
+  if (modal) modal.style.display = 'none';
+  _currentPostId = null;
+};
+
+window.submitForumReply = async function() {
+  const inp = document.getElementById('forum-reply-in');
+  const body = censorText((inp?.value || '').trim());
+  if (!body || !_currentPostId) return;
+  try {
+    const db = await forumGetDB();
+    const batch = db.batch();
+    const replyRef = db.collection('posts').doc(_currentPostId).collection('replies').doc();
+    batch.set(replyRef, {
+      body, author: forumUsername(),
+      createdAt: window.firebase.firestore.FieldValue.serverTimestamp(),
+      flags: 0, flaggedBy: []
+    });
+    batch.update(db.collection('posts').doc(_currentPostId), {
+      replyCount: window.firebase.firestore.FieldValue.increment(1)
+    });
+    await batch.commit();
+    inp.value = '';
+  } catch(e) {
+    showToast('❌ ' + e.message);
+  }
+};
+
+// ── Flag system ──
+window.flagPost = async function(postId) {
+  const me = forumUsername();
+  try {
+    const db = await forumGetDB();
+    const ref = db.collection('posts').doc(postId);
+    const snap = await ref.get();
+    const data = snap.data();
+    if ((data.flaggedBy || []).includes(me)) { showToast('⚠️ You already flagged this'); return; }
+    const newFlags = (data.flags || 0) + 1;
+    await ref.update({ flags: newFlags, flaggedBy: window.firebase.firestore.FieldValue.arrayUnion(me) });
+    if (newFlags >= 3) { showToast('🚩 Post hidden after 3 flags'); closeForumThread(); }
+    else showToast('🚩 Flagged — ' + (3 - newFlags) + ' more needed to hide');
+  } catch(e) { showToast('❌ ' + e.message); }
+};
+
+window.flagReply = async function(postId, replyId) {
+  const me = forumUsername();
+  try {
+    const db = await forumGetDB();
+    const ref = db.collection('posts').doc(postId).collection('replies').doc(replyId);
+    const snap = await ref.get();
+    const data = snap.data();
+    if ((data.flaggedBy || []).includes(me)) { showToast('⚠️ Already flagged'); return; }
+    await ref.update({ flags: (data.flags || 0) + 1, flaggedBy: window.firebase.firestore.FieldValue.arrayUnion(me) });
+    showToast('🚩 Reply flagged');
+  } catch(e) { showToast('❌ ' + e.message); }
+};
+
+// ── Helpers ──
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function timeAgo(d) {
+  if (!d) return '';
+  const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+
+// ── Hook into go() ──
+const _origGo = window.go;
+window.go = function(name) {
+  if (name === 'forum') {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+    const tabEl = document.getElementById('tab-forum');
+    if (tabEl) { tabEl.classList.add('on'); tabEl.style.display = 'flex'; }
+    document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'forum'")) b.classList.add('on'); });
+    renderForumCats();
+    loadForumFeed();
+    return;
+  }
+  if (_origGo) _origGo(name);
+};
+
+})();
+
+</script>
 
 
 
