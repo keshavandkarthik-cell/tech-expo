@@ -4823,12 +4823,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
           <!-- Board list -->
           <div id="lb-list-wrap" style="display:flex;flex-direction:column;gap:8px;"><div class="lb-empty">Sign in with Google to use the leaderboard.<br><span style="opacity:.6;font-size:.72rem;">Your profile stays private unless you enable global visibility.</span></div></div>
-        </div>
-
-      </div><!-- end #content -->
-
       <!-- ══════════════ FORUM TAB ══════════════ -->
-      <div class="tab" id="tab-forum" style="padding:0;display:none;flex-direction:column;height:100%;overflow:hidden;position:relative;">
+      <div class="tab" id="tab-forum" style="padding:0;flex-direction:column;height:100%;overflow:hidden;position:relative;">
 
         <!-- Header bar -->
         <div style="padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;">
@@ -4881,6 +4877,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
 
       </div><!-- end forum tab -->
+
+      </div><!-- end #content -->
 </div>
 
 <script>
@@ -14847,20 +14845,14 @@ function timeAgo(d) {
   return Math.floor(s/86400) + 'd ago';
 }
 
-// ── Hook into go() ──
+// ── Hook into go() for forum init ──
 const _origGo = window.go;
 window.go = function(name) {
+  if (_origGo) _origGo(name);
   if (name === 'forum') {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
-    document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
-    const tabEl = document.getElementById('tab-forum');
-    if (tabEl) { tabEl.classList.add('on'); tabEl.style.display = 'flex'; }
-    document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'forum'")) b.classList.add('on'); });
     renderForumCats();
     loadForumFeed();
-    return;
   }
-  if (_origGo) _origGo(name);
 };
 
 })();
