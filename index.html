@@ -5459,6 +5459,11 @@ window.go = function(name) {
   if (_goOrig) _goOrig(name);
   // Forum init
   if (name === 'forum') { renderForumCats(); loadForumFeed(); }
+  // Re-apply active state to dynamic buttons after renderNav recreated them
+  document.querySelectorAll('.nb-dynamic').forEach(b => {
+    const matches = b.getAttribute('onclick')?.includes("'" + name + "'");
+    if (matches) b.classList.add('on'); else b.classList.remove('on');
+  });
 };
 
 // Initial render
