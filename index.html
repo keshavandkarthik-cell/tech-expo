@@ -14760,7 +14760,7 @@ window.loadForumFeed = async function loadForumFeed() {
         feed.appendChild(card);
       });
     }, err => {
-      feed.innerHTML = '<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">Failed to load posts. Check connection.</div>';
+      feed.innerHTML = '<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">Failed to load posts. Check connection. <br> No Posts in catagory</div>';
     });
   } catch(e) {
     feed.innerHTML = `<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">${e.message}</div>`;
