@@ -4817,6 +4817,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
           <!-- Board list -->
           <div id="lb-list-wrap" style="display:flex;flex-direction:column;gap:8px;"><div class="lb-empty">Sign in with Google to use the leaderboard.<br><span style="opacity:.6;font-size:.72rem;">Your profile stays private unless you enable global visibility.</span></div></div>
+      </div><!-- end leaderboard tab -->
+
       <!-- ══════════════ FORUM TAB ══════════════ -->
       <div class="tab" id="tab-forum" style="padding:0;flex-direction:column;height:100%;overflow:hidden;position:relative;">
 
@@ -14644,7 +14646,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous">
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c4de60d7e9cc4be6a1c5a25b83a58a02&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+<script>
 // ══════════════════════════════════════════════
 // FORUM — Firebase Firestore backend
 // ══════════════════════════════════════════════
@@ -14705,7 +14708,7 @@ function forumUsername() {
 }
 
 // ── Subjects filter bar ──
-function renderForumCats() {
+window.renderForumCats = function renderForumCats() {
   const el = document.getElementById('forum-cats');
   if (!el) return;
   el.innerHTML = FORUM_SUBJECTS.map(s =>
@@ -14720,7 +14723,7 @@ window._forumSetCat = function(cat) {
 };
 
 // ── Load feed ──
-async function loadForumFeed() {
+window.loadForumFeed = async function loadForumFeed() {
   const feed = document.getElementById('forum-feed');
   if (!feed) return;
   feed.innerHTML = '<div style="text-align:center;padding:40px 0;font-family:var(--exo);color:var(--silver);opacity:.5;">Loading...</div>';
