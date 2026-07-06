@@ -550,6 +550,61 @@ html[data-theme="ivory"] #msearch-modal input {
   overflow: hidden; flex-shrink: 0;
   backdrop-filter: blur(10px);
 }
+
+/* ── MOBILE MODE ── */
+.mobile-only { display: none; }
+body.mobile-mode #sb { display: none !important; }
+body.mobile-mode .mobile-only { display: block; }
+body.mobile-mode #hdr { padding: 10px 14px; gap: 10px; }
+body.mobile-mode #hdr-search-btn span,
+body.mobile-mode #hdr-uname { display: none !important; }
+body.mobile-mode #hdr-search-btn { padding: 6px 9px; }
+body.mobile-mode #content { padding-bottom: 90px; }
+body.mobile-mode .tab { padding: 16px 14px 90px; }
+body.mobile-mode .desktop-canvas { grid-template-columns: 1fr 1fr; padding: 0; }
+body.mobile-mode .dt-widget { display: none !important; }
+body.mobile-mode #daily-brief-widget { display: block !important; }
+body.mobile-mode .mobile-tool-card { display: flex !important; }
+.mobile-tool-card { display: none; }
+
+#mobile-fab-btn {
+  display: none; position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
+  width: 56px; height: 56px; border-radius: 50%; border: none; z-index: 500;
+  background: linear-gradient(135deg, var(--accent), var(--teal));
+  color: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(77,159,255,.4);
+  transition: transform .25s ease;
+}
+body.mobile-mode #mobile-fab-btn { display: flex; align-items: center; justify-content: center; }
+#mobile-fab-btn.open { transform: translateX(-50%) rotate(45deg); }
+
+#mobile-fab-overlay {
+  display: none; position: fixed; inset: 0; z-index: 480;
+  background: rgba(4,6,16,.55); backdrop-filter: blur(6px);
+}
+#mobile-fab-overlay.open { display: block; }
+
+#mobile-fab-list {
+  display: none; position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%);
+  z-index: 490; flex-direction: column-reverse; gap: 10px; align-items: center;
+  max-height: calc(100vh - 160px); overflow-y: auto; padding: 4px;
+}
+#mobile-fab-list.open { display: flex; }
+.mfab-item {
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  animation: mfabIn .2s ease both;
+}
+.mfab-item .mfab-icon {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  background: var(--panel-col3); border: 1px solid rgba(77,159,255,.25);
+  display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
+}
+.mfab-item .mfab-label {
+  background: var(--panel-col3); border: 1px solid rgba(77,159,255,.25);
+  border-radius: 999px; padding: 6px 14px; font-family: var(--exo);
+  font-size: .78rem; color: var(--text); white-space: nowrap;
+}
+@keyframes mfabIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
 #sb.col { width: 52px; min-width: 52px; }
 #sb.col .nl, #sb.col .sb-ver { display: none; }
 
@@ -794,6 +849,70 @@ nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrol
   line-height: 1.75; display: none; white-space: pre-wrap; flex: 1; overflow-y: auto;
 }
 
+/* ── MOBILE: Smart Notes redesign ── */
+body.mobile-mode .brow {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;
+}
+body.mobile-mode .brow .abtn:not(.sec) {
+  background: var(--panel-bg) !important; border: 1px solid var(--panel-border);
+  border-radius: 12px; padding: 14px 8px; display: flex; align-items: center;
+  justify-content: center; gap: 6px; font-family: var(--raj); font-size: .82rem;
+  font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--text2);
+}
+body.mobile-mode .brow .abtn.sec {
+  grid-column: span 1; border-radius: 12px; padding: 12px 8px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: .76rem;
+}
+body.mobile-mode .brow .abtn.sec:last-child { grid-column: 1 / -1; }
+body.mobile-mode .nta { min-height: 100px; font-size: .85rem; }
+body.mobile-mode #notes-pdf-btn, body.mobile-mode #notes-copy-btn { top: 8px !important; }
+
+/* ── MOBILE: Smart Study mode selector ── */
+body.mobile-mode .study-mode-bar { flex-direction: column; align-items: stretch; }
+body.mobile-mode .mrow {
+  flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none;
+}
+body.mobile-mode .mrow::-webkit-scrollbar { display: none; }
+body.mobile-mode .mbtn { flex-shrink: 0; white-space: nowrap; }
+body.mobile-mode .study-count-wrap { align-self: flex-end; }
+
+/* ── MOBILE: Games browser redesign (games themselves untouched) ── */
+body.mobile-mode .game-cats {
+  flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none;
+}
+body.mobile-mode .game-cats::-webkit-scrollbar { display: none; }
+body.mobile-mode .game-cat-btn { flex-shrink: 0; }
+body.mobile-mode .game-cat-label { font-size: .78rem; margin-top: 4px; }
+body.mobile-mode .games-grid { grid-template-columns: 1fr; gap: 8px; }
+body.mobile-mode .game-card {
+  display: grid; grid-template-columns: 46px 1fr auto; grid-template-rows: auto auto;
+  grid-template-areas: "icon name hi" "icon desc lock";
+  align-items: center; column-gap: 12px; row-gap: 2px; padding: 12px 14px;
+}
+body.mobile-mode .game-card::before { display: none; }
+body.mobile-mode .game-icon {
+  grid-area: icon; font-size: 1.5rem; margin-bottom: 0; width: 46px; height: 46px;
+  border-radius: 12px; background: rgba(255,255,255,.04);
+  display: flex; align-items: center; justify-content: center;
+}
+body.mobile-mode .game-name {
+  grid-area: name; font-family: var(--raj); font-size: .86rem; font-weight: 700;
+  letter-spacing: 0; margin-bottom: 0; color: var(--text);
+}
+body.mobile-mode .game-desc {
+  grid-area: desc; margin-bottom: 0; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; font-size: .72rem;
+}
+body.mobile-mode .game-hi { grid-area: hi; justify-self: end; font-size: .6rem; }
+body.mobile-mode .game-lock {
+  grid-area: lock; justify-self: end; font-size: .62rem; white-space: nowrap;
+}
+
 /* ── STUDY ── */
 .mrow { display: flex; gap: 8px; margin-bottom: 18px; }
 .mbtn {
@@ -942,6 +1061,36 @@ nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrol
   line-height:1.85; white-space:pre-wrap; flex:1; overflow-y:auto;
 }
 .lib-loading { display:flex; align-items:center; gap:10px; padding:24px; font-family:var(--exo); font-size:.85rem; color:var(--silver); }
+
+/* ── MOBILE: Topic Library redesign ── */
+body.mobile-mode .lib-level-row,
+body.mobile-mode .lib-cats {
+  flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none;
+}
+body.mobile-mode .lib-level-row::-webkit-scrollbar,
+body.mobile-mode .lib-cats::-webkit-scrollbar { display: none; }
+body.mobile-mode .lib-level-btn,
+body.mobile-mode .lib-cat,
+body.mobile-mode .lib-level-label { flex-shrink: 0; }
+body.mobile-mode .lib-grid { grid-template-columns: 1fr; gap: 8px; }
+body.mobile-mode .lib-card {
+  display: grid; grid-template-columns: 42px 1fr auto; grid-template-rows: auto auto;
+  grid-template-areas: "icon name tag" "icon sub tag";
+  align-items: center; column-gap: 12px; row-gap: 2px; padding: 12px 14px;
+}
+body.mobile-mode .lib-card::before { display: none; }
+body.mobile-mode .lib-card-icon {
+  grid-area: icon; font-size: 1.3rem; width: 42px; height: 42px; border-radius: 11px;
+  background: color-mix(in srgb, var(--lib-color, var(--accent)) 16%, transparent);
+  display: flex; align-items: center; justify-content: center;
+}
+body.mobile-mode .lib-card-name { grid-area: name; font-size: .84rem; letter-spacing: .2px; min-width: 0; }
+body.mobile-mode .lib-card-sub {
+  grid-area: sub; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+body.mobile-mode .lib-card-tag { grid-area: tag; align-self: center; }
 
 /* ── STUDY COUNT WHEEL ── */
 .study-count-wrap {
@@ -1858,6 +2007,8 @@ body.fs-large { font-size: 17px; }
       <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Year 1')">Year 1</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Year 2')">Year 2</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Year 3')">Year 3</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Year 4')">Year 4</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Postgraduate')">Postgraduate</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','Other')">Other</div>
     </div>
     <div style="display:flex;gap:10px;margin-top:4px;">
@@ -1909,8 +2060,16 @@ body.fs-large { font-size: 17px; }
     <div class="ob-label-sm" style="margin-top:14px;margin-bottom:8px;">Preferred language</div>
     <div class="ob-chip-grid" id="ob-lang-grid">
       <div class="ob-chip" onclick="obChipSelect(this,'ob-lang-grid','English')">🇬🇧 English</div>
-      <div class="ob-chip" onclick="obChipSelect(this,'ob-lang-grid','Bahasa Malaysia')">🇲🇾 BM</div>
-      <div class="ob-chip" onclick="obChipSelect(this,'ob-lang-grid','Casual Manglish (English + BM mix)')">🤙 Manglish</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-lang-grid','Bahasa Malaysia')">🇲🇾 Bahasa Malaysia</div>
+      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Mandarin')">🇨🇳 Mandarin</div>
+      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Tamil')">🇮🇳 Tamil</div>
+      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Japanese')">🇯🇵 Japanese</div>
+      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Korean')">🇰🇷 Korean</div>
+      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Spanish')">🇪🇸 Spanish</div>
+      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','French')">🇫🇷 French</div>
+      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Arabic')">🇸🇦 Arabic</div>
+      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','German')">🇩🇪 German</div>
+      <div class="ob-chip ob-more-btn" onclick="toggleLangMore(this)">More ▾</div>
     </div>
     <div style="display:flex;gap:10px;margin-top:12px;">
       <button class="ob-btn secondary" onclick="obPrev()">← Back</button>
@@ -2036,8 +2195,8 @@ body.fs-large { font-size: 17px; }
       </button>
       <div class="hdr-status"><span class="pulse"></span>AI ONLINE</div>
       <div id="hdr-user" style="display: none; align-items: center; gap: 8px; cursor: pointer;" onclick="go('settings')" title="My Account">
-        <img id="hdr-avatar" src="https://lh3.googleusercontent.com/a-/ALV-UjXtUl0lqq3URDJ11qvJhXuhrfxOYZccymCu0CCnhoe2aLDS7I2fvexRWT6cvQ2Cq9RqLPL9qH5kAO97D6-HMQmgvFmUcyaTSyuipQ6S3ykVoLvJoQ6edBzOOGNdCcm7Qkph9uRjRYGSGkBWdOsad6DTKJJm6Rc7HgZZjJQ4Kcahdzm-Dy4dSzugB9epxM2b9KOCSidJWpSjK-u3SZD1kJMVtDAQPGX6av726y4iXEOkl4su1piAw3ai67VRXcdhExYMexp7Wc-zaDJhyDnn_YtaBWQIjdAR4WRnjlDY2sGcquqm6xYDaPRtdmXI0h8KUu3rOjyCNmbm6ACXObAU6GHoZPMLKX0YYhVE36JwXxRZV8a6qFpB8A6PpeydTesAahD1MzqfD5KZ6Ts1aUr06x0rUaQW8QGjwIZf2x9D-QHtjAlRSA2Wioze-AnEd0LBfNcJ5kHuHXsJpqZuduHnmz_cdWGn2AB0VC8DdEc5ElcXUTmxeHtQqQQThnJO3aCVOZpuUj-6PwOYopXgyEWhM1Q_ouhIXIUYczMDkovcKLrwahess0M4EqLKdDpWNUEpKlIA8D35BZ3LILBzbntuiX9hF06sOPjHTfVR79EQJmRmuwWikJVwMW4G5_HcMFxukcVInYaAjG1zITUTjnMGFZP0hya1zC8-T01u3L4xWq-Zd3OrlImv-KUcHYqQvEi99rWanA8C8YvfTT26p3cgRwSIwzpwdCM6gUzjN9FWFYEtPcDzAEBAmQW7mzY7bw8pbps0iHtunGxnX1RF5wTYF6FSx2EUPVyxQtelo0f6QFqXxqaXyryjqNTzAY5dThoUVRwQrU_2zdePJmLNU_yAPp8nzg7iyU3L80uCcx74jFxjQc-74Bonsp6F_1j_tCrnic2uBBb2MSnEpntfTlih1Yws7g4feJozQNdLNJVKzqHEDbFXlKX8BeA7Uc4HfCc1sbdVDKZoeYDH1aSO7kvMEmHww1GoKtt38IwJXNaF4yFYC5llBT0FJnMCTP-cmNEuux6rc64Y_Z8U5ODxO128yXVhIuA01mXKVagmLFmIEBk0oM2-2Sq2yB1fyQ=s96-c" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
-        <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Keshav</span>
+        <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
+        <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Student</span>
       </div>
       <div id="hdr-guest" style="display:none;align-items:center;gap:8px;cursor:pointer;" onclick="go('settings')" title="Guest Mode — click to sign in">
         <div style="width:28px;height:28px;border-radius:50%;background:rgba(77,159,255,0.15);border:2px solid rgba(77,159,255,0.3);display:flex;align-items:center;justify-content:center;font-size:.85rem;">👤</div>
@@ -2107,6 +2266,11 @@ body.fs-large { font-size: 17px; }
       <div id="msearch-results" style="max-height:400px;overflow-y:auto;padding:8px 0;"></div>
     </div>
 
+    <!-- MOBILE FAB NAV -->
+    <div id="mobile-fab-overlay" onclick="closeMobileFab()"></div>
+    <div id="mobile-fab-list"></div>
+    <button id="mobile-fab-btn" onclick="toggleMobileFab()">＋</button>
+
     <!-- SIDEBAR -->
     <aside id="sb">
       <div class="sb-top">
@@ -2163,6 +2327,16 @@ body.fs-large { font-size: 17px; }
         </div>
 
         <!-- DESKTOP CANVAS -->
+        <!-- MOBILE HERO (greeting + pills) -->
+        <div class="mobile-only" style="padding:16px 16px 4px;position:relative;z-index:2;">
+          <div style="font-family:var(--exo);font-size:.68rem;color:var(--teal);letter-spacing:1.5px;">// <span id="m-greet-time">GOOD DAY</span></div>
+          <div style="font-family:var(--raj);font-size:1.6rem;font-weight:800;color:var(--text);margin:2px 0 10px;">Hey, <span id="m-greet-name">Scholar</span></div>
+          <div style="display:flex;gap:8px;">
+            <div class="ps-pill streak" style="display:inline-flex;align-items:center;gap:5px;">🔥 <span id="m-streak-val">0</span> day streak</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(77,159,255,.1);border:1px solid rgba(77,159,255,.3);border-radius:999px;padding:5px 12px;font-family:var(--exo);font-size:.72rem;color:var(--accent2);">💎 <span id="m-gems-val">0</span> gems</div>
+          </div>
+        </div>
+
         <div class="desktop-canvas">
 
           <!-- Hero: Homework -->
@@ -2180,8 +2354,49 @@ body.fs-large { font-size: 17px; }
           <!-- Daily Brief widget -->
           <div class="dt-widget dt-widget-wide" id="daily-brief-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Daily Brief <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Mon Jun 15 2026</span></div>
-            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Keshav, fantastic work maintaining your 1-day study streak and collecting 329 gems! Today, instead of just reading, actively test yourself on a few key facts you studied yesterday by trying to recall them without looking. This small act of retrieval practice is incredibly powerful for solidifying memory, especially for your subjects like History or Biology.</div>
+            <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.65;min-height:48px;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Loading your personalised tip...</div>
             <button onclick="refreshDailyBrief(true)" style="margin-top:8px;background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.65rem;cursor:pointer;padding:0;opacity:.6;transition:opacity .15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">↻ refresh</button>
+          </div>
+
+          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('homework')">
+            <div style="font-size:1.4rem;">📚</div>
+            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Homework AI</div>
+            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Step-by-step answers</div>
+          </div>
+          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('study')">
+            <div style="font-size:1.4rem;">🧠</div>
+            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Smart Study</div>
+            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Flashcards & quizzes</div>
+          </div>
+          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('notes')">
+            <div style="font-size:1.4rem;">📝</div>
+            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Smart Notes</div>
+            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Summarise anything</div>
+          </div>
+          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('chat')">
+            <div style="font-size:1.4rem;">💬</div>
+            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Companion</div>
+            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">AI study buddy</div>
+          </div>
+          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('todo')">
+            <div style="font-size:1.4rem;">✅</div>
+            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">To-Do List</div>
+            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Tasks & checklist</div>
+          </div>
+          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('journal')">
+            <div style="font-size:1.4rem;">📓</div>
+            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Journal</div>
+            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Write & reflect</div>
+          </div>
+          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('games')">
+            <div style="font-size:1.4rem;">🎮</div>
+            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Games</div>
+            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Play & earn gems</div>
+          </div>
+          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('calc')">
+            <div style="font-size:1.4rem;">🔢</div>
+            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Calculator</div>
+            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Scientific calc</div>
           </div>
 
           <div class="dt-widget">
@@ -2262,7 +2477,7 @@ body.fs-large { font-size: 17px; }
             <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Leaderboard</div>
             <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;"><div class="lb-mini-row">
       <div class="lb-mini-rank">🥇</div>
-      <div class="lb-mini-name" style="color:var(--teal2);">Keshav ✦</div>
+      <div class="lb-mini-name" style="color:var(--teal2);">You</div>
       <div class="lb-mini-val">0 💎</div>
     </div></div>
             <div id="lb-home-rank" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(77, 159, 255, 0.1); font-family: var(--exo); font-size: 0.68rem; color: var(--silver); display: block;">
@@ -2836,7 +3051,7 @@ body.fs-large { font-size: 17px; }
       <div class="tab" id="tab-study">
         <div class="ttl">🧠 Smart Study</div>
         <div class="tsub"><span class="prm">›</span>Generate flashcards or quiz questions from any topic or image</div>
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+        <div class="study-mode-bar" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
           <div class="mrow" style="margin-bottom:0;flex-wrap:wrap;">
             <button class="mbtn on" onclick="setMode(this,'flashcards')">🃏 Flashcards</button>
             <button class="mbtn" onclick="setMode(this,'quiz')">❓ Quiz Mode</button>
@@ -3222,6 +3437,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
                 <div class="aip-chip" data-val="Year 1">Y1</div>
                 <div class="aip-chip" data-val="Year 2">Y2</div>
                 <div class="aip-chip" data-val="Year 3">Y3</div>
+                <div class="aip-chip" data-val="Year 4">Y4</div>
+                <div class="aip-chip" data-val="Postgraduate">Postgrad</div>
                 <div class="aip-chip" data-val="Other">Other</div>
               </div>
             </div>
@@ -3265,8 +3482,16 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-form-label">Response language</div>
               <div class="aip-chip-row" id="aip-language">
                 <div class="aip-chip on" data-val="English">🇬🇧 English</div>
-                <div class="aip-chip" data-val="Bahasa Malaysia">🇲🇾 BM</div>
-                <div class="aip-chip" data-val="Casual Manglish (English + BM mix)">🤙 Manglish</div>
+                <div class="aip-chip" data-val="Bahasa Malaysia">🇲🇾 Bahasa Malaysia</div>
+                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Mandarin">🇨🇳 Mandarin</div>
+                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Tamil">🇮🇳 Tamil</div>
+                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Japanese">🇯🇵 Japanese</div>
+                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Korean">🇰🇷 Korean</div>
+                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Spanish">🇪🇸 Spanish</div>
+                <div class="aip-chip" data-lang-extra style="display:none;" data-val="French">🇫🇷 French</div>
+                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Arabic">🇸🇦 Arabic</div>
+                <div class="aip-chip" data-lang-extra style="display:none;" data-val="German">🇩🇪 German</div>
+                <div class="aip-chip aip-more-btn" onclick="toggleLangMore(this)">More ▾</div>
               </div>
             </div>
 
@@ -3305,7 +3530,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             <!-- Preview -->
             <div id="aip-preview" style="background: rgba(0, 212, 170, 0.06); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: 10px; padding: 12px 14px; margin-top: 4px; margin-bottom: 14px; display: block;">
               <div style="font-family:var(--exo);font-size:.65rem;color:var(--teal);letter-spacing:1.5px;margin-bottom:6px;">// AI SEES THIS</div>
-              <div id="aip-preview-text" style="font-family:var(--exo);font-size:.78rem;color:var(--silver);line-height:1.7;">Tutoring Keshav — Form 3 IGCSE student · Subjects: Mathematics, English, Physics, Chemistry, Biology · Detailed &amp; thorough · Language: English · Inconsistent — good days and bad days · Struggles with: Memorising facts · Pressure: Moderate</div>
+              <div id="aip-preview-text" style="font-family:var(--exo);font-size:.78rem;color:var(--silver);line-height:1.7;"></div>
             </div>
 
             <button class="set-btn accent" onclick="saveAIProfile()" style="width:100%;">✦ Save AI Profile</button>
@@ -3318,10 +3543,10 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-card" id="fb-card-in" style="display: none; margin-bottom: 12px;">
             <div class="ps-card-label">// GOOGLE ACCOUNT</div>
             <div style="display:flex;align-items:center;gap:14px;margin:10px 0 16px;">
-              <img id="fb-av" src="https://lh3.googleusercontent.com/a-/ALV-UjXtUl0lqq3URDJ11qvJhXuhrfxOYZccymCu0CCnhoe2aLDS7I2fvexRWT6cvQ2Cq9RqLPL9qH5kAO97D6-HMQmgvFmUcyaTSyuipQ6S3ykVoLvJoQ6edBzOOGNdCcm7Qkph9uRjRYGSGkBWdOsad6DTKJJm6Rc7HgZZjJQ4Kcahdzm-Dy4dSzugB9epxM2b9KOCSidJWpSjK-u3SZD1kJMVtDAQPGX6av726y4iXEOkl4su1piAw3ai67VRXcdhExYMexp7Wc-zaDJhyDnn_YtaBWQIjdAR4WRnjlDY2sGcquqm6xYDaPRtdmXI0h8KUu3rOjyCNmbm6ACXObAU6GHoZPMLKX0YYhVE36JwXxRZV8a6qFpB8A6PpeydTesAahD1MzqfD5KZ6Ts1aUr06x0rUaQW8QGjwIZf2x9D-QHtjAlRSA2Wioze-AnEd0LBfNcJ5kHuHXsJpqZuduHnmz_cdWGn2AB0VC8DdEc5ElcXUTmxeHtQqQQThnJO3aCVOZpuUj-6PwOYopXgyEWhM1Q_ouhIXIUYczMDkovcKLrwahess0M4EqLKdDpWNUEpKlIA8D35BZ3LILBzbntuiX9hF06sOPjHTfVR79EQJmRmuwWikJVwMW4G5_HcMFxukcVInYaAjG1zITUTjnMGFZP0hya1zC8-T01u3L4xWq-Zd3OrlImv-KUcHYqQvEi99rWanA8C8YvfTT26p3cgRwSIwzpwdCM6gUzjN9FWFYEtPcDzAEBAmQW7mzY7bw8pbps0iHtunGxnX1RF5wTYF6FSx2EUPVyxQtelo0f6QFqXxqaXyryjqNTzAY5dThoUVRwQrU_2zdePJmLNU_yAPp8nzg7iyU3L80uCcx74jFxjQc-74Bonsp6F_1j_tCrnic2uBBb2MSnEpntfTlih1Yws7g4feJozQNdLNJVKzqHEDbFXlKX8BeA7Uc4HfCc1sbdVDKZoeYDH1aSO7kvMEmHww1GoKtt38IwJXNaF4yFYC5llBT0FJnMCTP-cmNEuux6rc64Y_Z8U5ODxO128yXVhIuA01mXKVagmLFmIEBk0oM2-2Sq2yB1fyQ=s96-c" style="width:52px;height:52px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
+              <img id="fb-av" src="" style="width:52px;height:52px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="">
               <div>
-                <div id="fb-name" style="font-family:var(--orb);font-size:.8rem;color:var(--text);letter-spacing:.5px;margin-bottom:3px;">Keshav Karthik</div>
-                <div id="fb-email" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);">keshavandkarthik@gmail.com</div>
+                <div id="fb-name" style="font-family:var(--orb);font-size:.8rem;color:var(--text);letter-spacing:.5px;margin-bottom:3px;"></div>
+                <div id="fb-email" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);"></div>
               </div>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -3426,7 +3651,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-avatar-ring"></div>
             </div>
             <div class="ps-hero-right">
-              <div class="ps-name" id="acct-name">Keshav</div>
+              <div class="ps-name" id="acct-name">Student</div>
               <div class="ps-tagline" id="acct-tagline">Level 7 Legend</div>
               <div class="ps-badges-row">
                 <div class="ps-pill gem">💎 <span id="acct-gems">330</span> Gems</div>
@@ -5388,6 +5613,57 @@ const NAV_TABS = [
   { id:'forum',       icon:'🌐', label:'Forum' },
 ];
 const NAV_VISIBLE = 7; // max shown before "More"
+
+// ── MOBILE MODE ──
+function checkMobileMode() {
+  const isMobile = window.matchMedia('(max-width:768px)').matches &&
+    (('ontouchstart' in window) || navigator.maxTouchPoints > 0);
+  document.body.classList.toggle('mobile-mode', isMobile);
+}
+checkMobileMode();
+window.addEventListener('resize', checkMobileMode);
+window.addEventListener('orientationchange', checkMobileMode);
+
+function renderMobileFab() {
+  const list = document.getElementById('mobile-fab-list');
+  if (!list) return;
+  const items = [
+    { id:'home', icon:'🏠', label:'Home' },
+    ...NAV_TABS,
+    { id:'settings', icon:'⚙️', label:'Settings' },
+  ];
+  list.innerHTML = items.map((it, i) =>
+    `<div class="mfab-item" style="animation-delay:${i*0.02}s" onclick="closeMobileFab();go('${it.id}')">
+      <div class="mfab-icon">${it.icon}</div>
+      <div class="mfab-label">${it.label}</div>
+    </div>`
+  ).join('');
+}
+
+function toggleMobileFab() {
+  const open = document.getElementById('mobile-fab-list').classList.toggle('open');
+  document.getElementById('mobile-fab-overlay').classList.toggle('open', open);
+  document.getElementById('mobile-fab-btn').classList.toggle('open', open);
+  if (open) renderMobileFab();
+}
+function closeMobileFab() {
+  document.getElementById('mobile-fab-list').classList.remove('open');
+  document.getElementById('mobile-fab-overlay').classList.remove('open');
+  document.getElementById('mobile-fab-btn').classList.remove('open');
+}
+
+function updateMobileGreeting() {
+  const timeEl = document.getElementById('m-greet-time');
+  const nameEl = document.getElementById('m-greet-name');
+  if (!timeEl) return;
+  const h = new Date().getHours();
+  timeEl.textContent = h < 12 ? 'GOOD MORNING' : h < 18 ? 'GOOD AFTERNOON' : 'GOOD EVENING';
+  try {
+    const a = getAcct();
+    if (nameEl && a && a.name) nameEl.textContent = a.name.split(' ')[0];
+  } catch {}
+}
+document.addEventListener('DOMContentLoaded', () => { updateMobileGreeting(); setInterval(updateMobileGreeting, 60000); });
 
 function getNavCounts() {
   try { return JSON.parse(localStorage.getItem('veda_nav_counts') || '{}'); } catch { return {}; }
@@ -7954,6 +8230,8 @@ function renderProfilePanel() {
   if (el('acct-streak')) el('acct-streak').textContent = a.streak || 0;
   if (el('dt-gems-big')) el('dt-gems-big').textContent = a.gems || 0;
   if (el('dt-streak-big')) el('dt-streak-big').textContent = (a.streak || 0) + ' days';
+  if (el('m-gems-val')) el('m-gems-val').textContent = a.gems || 0;
+  if (el('m-streak-val')) el('m-streak-val').textContent = a.streak || 0;
   // level bar
   const gemsInLevel = (a.gems || 0) % 50;
   if (el('ps-level')) el('ps-level').textContent = lvl;
@@ -8048,7 +8326,29 @@ function renderWeekChart(stats) {
 function aipChipClick(el, rowId) {
   document.querySelectorAll('#' + rowId + ' .aip-chip').forEach(c => c.classList.remove('on'));
   el.classList.add('on');
+  if (rowId === 'aip-curriculum') {
+    aipSwapSubjects(el.dataset.val === 'University');
+    aipSwapYears(el.dataset.val === 'University');
+  }
   aipUpdatePreview();
+}
+
+function aipSwapSubjects(isUni) {
+  const grid = document.getElementById('aip-subjects');
+  const wantMode = isUni ? 'uni' : 'school';
+  if (grid.dataset.mode === wantMode) return;
+  grid.innerHTML = buildAipSubjectChips(isUni ? UNI_MAJORS : SCHOOL_SUBJECTS);
+  grid.dataset.mode = wantMode;
+  document.querySelectorAll('#aip-subjects .aip-chip').forEach(c => { c.onclick = () => aipMultiClick(c); });
+}
+
+function aipSwapYears(isUni) {
+  const grid = document.getElementById('aip-year');
+  const wantMode = isUni ? 'uni' : 'school';
+  if (grid.dataset.mode === wantMode) return;
+  grid.innerHTML = buildAipYearChips(isUni ? UNI_YEARS : SCHOOL_YEARS);
+  grid.dataset.mode = wantMode;
+  document.querySelectorAll('#aip-year .aip-chip').forEach(c => { c.onclick = () => aipChipClick(c, 'aip-year'); });
 }
 
 function aipMultiClick(el) {
@@ -8096,6 +8396,8 @@ function aipUpdatePreview() {
 
 function renderAIProfilePanel() {
   const p = getStudentProfile();
+  aipSwapSubjects(p.curriculum === 'University');
+  aipSwapYears(p.curriculum === 'University');
   // Single-select rows
   const singles = {
     'aip-curriculum': p.curriculum,
@@ -8107,10 +8409,17 @@ function renderAIProfilePanel() {
     'aip-pressure':   p.pressure,
   };
   for (const [rowId, val] of Object.entries(singles)) {
-    document.querySelectorAll('#' + rowId + ' .aip-chip').forEach(c => {
+    document.querySelectorAll('#' + rowId + ' .aip-chip:not(.aip-more-btn)').forEach(c => {
       c.classList.toggle('on', c.dataset.val === val);
       c.onclick = () => aipChipClick(c, rowId);
     });
+  }
+  // Reveal hidden language chips if the saved language is one of them
+  const langRow = document.getElementById('aip-language');
+  if (langRow && langRow.querySelector(`.aip-chip[data-val="${p.language}"][data-lang-extra]`)) {
+    langRow.querySelectorAll('[data-lang-extra]').forEach(c => c.style.display = '');
+    const moreBtn = langRow.querySelector('.aip-more-btn');
+    if (moreBtn) moreBtn.textContent = 'Less ▲';
   }
   // Multi-select subjects
   const subs = new Set(p.subjects || []);
@@ -10402,12 +10711,64 @@ const OB_SLIDES = 9;
 // Track multi-select subjects
 let obSubjects = new Set();
 
+const SCHOOL_SUBJECTS = [
+  ['Mathematics','📐'], ['Add Maths','➕'], ['English','🇬🇧'], ['Bahasa Malaysia','🇲🇾'],
+  ['Physics','⚛️'], ['Chemistry','🧪'], ['Biology','🧬'], ['History','📜'],
+  ['Geography','🌏'], ['Economics','📈'], ['Computer Science','💻'], ['Accounting','🧾'],
+  ['Literature','📚'], ['Art','🎨'], ['Music','🎵'],
+];
+const UNI_MAJORS = [
+  ['Computer Science','💻'], ['Engineering','⚙️'], ['Medicine','🩺'], ['Law','⚖️'],
+  ['Business & Management','📊'], ['Finance & Accounting','💰'], ['Economics','📈'],
+  ['Psychology','🧠'], ['Architecture','🏛️'], ['Pharmacy','💊'], ['Biotechnology','🧬'],
+  ['Data Science','📊'], ['Mass Communication','🎙️'], ['Design','🎨'], ['Other','✨'],
+];
+function buildObSubjectChips(list) {
+  return list.map(([val,icon]) => `<div class="ob-chip ob-multi" onclick="obMultiToggle(this,'${val.replace(/'/g,"\\'")}')">${icon} ${val}</div>`).join('');
+}
+function buildAipSubjectChips(list) {
+  return list.map(([val,icon]) => `<div class="aip-chip aip-multi" data-val="${val}">${icon} ${val}</div>`).join('');
+}
+
+const SCHOOL_YEARS = ['Form 1','Form 2','Form 3','Form 4','Form 5','Form 6','Other'];
+const UNI_YEARS = ['Year 1','Year 2','Year 3','Year 4','Postgraduate','Other'];
+function buildObYearChips(list) {
+  return list.map(val => `<div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','${val}')">${val}</div>`).join('');
+}
+function buildAipYearChips(list) {
+  return list.map(val => `<div class="aip-chip" data-val="${val}">${val.replace('Postgraduate','Postgrad').replace('Form ','F').replace('Year ','Y')}</div>`).join('');
+}
+
 function obShowSlide(n) {
   document.querySelectorAll('.ob-slide').forEach((s,i) => s.classList.toggle('active', i===n));
   document.querySelectorAll('.ob-dot').forEach((d,i) => d.classList.toggle('on', i===n));
   const prog = document.getElementById('ob-progress');
   if (prog) prog.style.width = ((n / (OB_SLIDES - 1)) * 100) + '%';
   obSlide = n;
+  // Swap year options based on curriculum — Form 1-6 for school, Year 1-4/Postgrad for university
+  if (n === 3) {
+    const isUni = obGetChipValue('ob-curriculum-grid') === 'University';
+    const grid = document.getElementById('ob-year-grid');
+    const wantMode = isUni ? 'uni' : 'school';
+    if (grid.dataset.mode !== wantMode) {
+      grid.innerHTML = buildObYearChips(isUni ? UNI_YEARS : SCHOOL_YEARS);
+      grid.dataset.mode = wantMode;
+    }
+  }
+  // Swap subjects → majors when the student is at University
+  if (n === 4) {
+    const isUni = obGetChipValue('ob-curriculum-grid') === 'University';
+    const grid = document.getElementById('ob-subjects-grid');
+    const wantMode = isUni ? 'uni' : 'school';
+    if (grid.dataset.mode !== wantMode) {
+      grid.innerHTML = buildObSubjectChips(isUni ? UNI_MAJORS : SCHOOL_SUBJECTS);
+      grid.dataset.mode = wantMode;
+      obSubjects.clear();
+      const slide4 = document.getElementById('ob-slide-4');
+      slide4.querySelector('.ob-title').textContent = isUni ? "What's your field of study?" : 'Which subjects are you taking?';
+      slide4.querySelector('.ob-desc').textContent = isUni ? 'Pick your major(s) — Veda will tailor content to your specialization.' : 'Pick all that apply — Veda will use these for flashcards, quizzes and homework help.';
+    }
+  }
   // Populate profile preview on last slide
   if (n === OB_SLIDES - 1) obRenderPreview();
 }
@@ -10416,6 +10777,14 @@ function obChipSelect(el, gridId, value) {
   document.querySelectorAll('#' + gridId + ' .ob-chip').forEach(c => c.classList.remove('on'));
   el.classList.add('on');
   el.dataset.value = value;
+}
+
+function toggleLangMore(btn) {
+  const container = btn.parentElement;
+  const extras = container.querySelectorAll('[data-lang-extra]');
+  const opening = btn.textContent.trim().startsWith('More');
+  extras.forEach(c => c.style.display = opening ? '' : 'none');
+  btn.textContent = opening ? 'Less ▲' : 'More ▾';
 }
 
 function obGetChipValue(gridId) {
@@ -10759,6 +11128,10 @@ function updateHomeStats() {
   const dtStreak = document.getElementById('dt-streak-big');
   if (dtGems) dtGems.textContent = a.gems || 0;
   if (dtStreak) dtStreak.textContent = (a.streak || 0) + ' days';
+  const mGems = document.getElementById('m-gems-val');
+  const mStreak = document.getElementById('m-streak-val');
+  if (mGems) mGems.textContent = a.gems || 0;
+  if (mStreak) mStreak.textContent = a.streak || 0;
   // Stats panel counters
   const qEl = document.getElementById('dt-stat-q');
   const gEl = document.getElementById('dt-stat-g');
@@ -12344,6 +12717,9 @@ function runSearch(q) {
       { id:'music',    icon:'🎵', title:'Music',          hint:'Study music & playlists' },
       { id:'planner',  icon:'📅', title:'Study Planner',  hint:'Weekly timetable & schedule' },
       { id:'tracker',  icon:'📋', title:'Paper Tracker',  hint:'Track past papers & scores' },
+      { id:'forum',    icon:'🌐', title:'Forum',          hint:'Ask questions, share tips' },
+      { id:'leaderboard', icon:'🏆', title:'Leaderboard', hint:'Compete with friends' },
+      { id:'profile',  icon:'👤', title:'Profile',        hint:'Account, badges, stats' },
       { id:'settings', icon:'⚙️', title:'Settings & Profile', hint:'Account, badges, stats' },
     ];
     pages.forEach(p => {
@@ -14760,7 +15136,7 @@ window.loadForumFeed = async function loadForumFeed() {
         feed.appendChild(card);
       });
     }, err => {
-      feed.innerHTML = '<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">Failed to load posts. Check connection. / <br> No Posts in catagory</div>';
+      feed.innerHTML = '<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">Failed to load posts. Check connection.</div>';
     });
   } catch(e) {
     feed.innerHTML = `<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">${e.message}</div>`;
