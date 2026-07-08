@@ -770,7 +770,7 @@ nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrol
 
 .in-row { display: flex; gap: 10px; }
 .chat-in {
-  flex: 1; background: rgba(255,255,255,.04); border: 1px solid rgba(77,159,255,.2);
+  flex: 1; min-width: 0; background: rgba(255,255,255,.04); border: 1px solid rgba(77,159,255,.2);
   border-radius: 12px; padding: 12px 16px; color: var(--text);
   font-family: var(--exo); font-size: .92rem; outline: none;
   transition: border .2s, box-shadow .2s;
@@ -869,15 +869,62 @@ body.mobile-mode .nta { min-height: 100px; font-size: .85rem; }
 body.mobile-mode #notes-pdf-btn, body.mobile-mode #notes-copy-btn { top: 8px !important; }
 
 /* ── MOBILE: Smart Study mode selector ── */
-body.mobile-mode .study-mode-bar { flex-direction: column; align-items: stretch; }
+body.mobile-mode .study-mode-bar { flex-direction: column !important; align-items: stretch !important; }
 body.mobile-mode .mrow {
   flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch;
   padding-bottom: 4px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
-  scrollbar-width: none;
+  scrollbar-width: none; min-width: 0; width: 100%; max-width: 100vw; box-sizing: border-box;
 }
 body.mobile-mode .mrow::-webkit-scrollbar { display: none; }
 body.mobile-mode .mbtn { flex-shrink: 0; white-space: nowrap; }
 body.mobile-mode .study-count-wrap { align-self: flex-end; }
+
+/* ── MOBILE: Homework chip rows (subjects, response style, starters) ── */
+body.mobile-mode .trow {
+  flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none; min-width: 0;
+}
+body.mobile-mode .trow::-webkit-scrollbar { display: none; }
+body.mobile-mode .trow > * { flex-shrink: 0; white-space: nowrap; }
+
+/* ── MOBILE: Companion mood selector ── */
+body.mobile-mode .mood-row {
+  flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none; min-width: 0;
+}
+body.mobile-mode .mood-row::-webkit-scrollbar { display: none; }
+body.mobile-mode .mood-row > * { flex-shrink: 0; white-space: nowrap; }
+
+/* ── MOBILE: Journal search + filters ── */
+.journal-filter-group { display: contents; }
+body.mobile-mode .journal-search-row { flex-wrap: wrap; }
+body.mobile-mode .journal-search { flex: 1 1 100%; min-width: 0; }
+body.mobile-mode .journal-filter-group {
+  display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  gap: 8px; width: 100%; padding-bottom: 4px; scrollbar-width: none; min-width: 0;
+}
+body.mobile-mode .journal-filter-group::-webkit-scrollbar { display: none; }
+body.mobile-mode .journal-filter-group > * { flex-shrink: 0; white-space: nowrap; margin-left: 0 !important; }
+body.mobile-mode .journal-filter-group > button:last-child { margin-left: auto !important; }
+
+/* ── MOBILE: AI Settings panel ── */
+body.mobile-mode .ps-subnav {
+  flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+body.mobile-mode .ps-subnav::-webkit-scrollbar { display: none; }
+body.mobile-mode .ps-tab { flex-shrink: 0; white-space: nowrap; }
+body.mobile-mode .aip-chip-row {
+  flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none;
+}
+body.mobile-mode .aip-chip-row::-webkit-scrollbar { display: none; }
+body.mobile-mode .aip-chip { flex-shrink: 0; white-space: nowrap; }
+body.mobile-mode #ps-aiprofile .ps-card { padding: 14px; }
+body.mobile-mode #ps-aiprofile .ps-form-group { gap: 4px; margin-bottom: 4px; }
+body.mobile-mode #ps-aiprofile .ps-form-label:first-child { font-size: .78rem; line-height: 1.55; }
 
 /* ── MOBILE: Games browser redesign (games themselves untouched) ── */
 body.mobile-mode .game-cats {
@@ -1796,6 +1843,12 @@ body.fs-large { font-size: 17px; }
 .ob-chip:hover { border-color: rgba(77,159,255,.5); color: var(--accent2); background: rgba(77,159,255,.08); }
 .ob-chip.on { background: linear-gradient(135deg,rgba(77,159,255,.18),rgba(0,212,170,.1)); border-color: var(--accent); color: var(--accent2); box-shadow: 0 0 10px rgba(77,159,255,.15); }
 .ob-chip.ob-multi.on { background: linear-gradient(135deg,rgba(0,212,170,.15),rgba(77,159,255,.1)); border-color: var(--teal); color: var(--teal2); }
+.ob-chip.ob-add-custom, .aip-chip.aip-add-custom { border-style: dashed; opacity: .8; }
+.ob-chip-custom-input, .aip-chip-custom-input {
+  background: rgba(255,255,255,.06); border: 1px solid var(--accent);
+  border-radius: 999px; padding: 8px 14px; font-family: var(--exo); font-size: .8rem;
+  color: var(--text); outline: none; width: 130px;
+}
 .ob-label-sm { font-family: var(--exo); font-size: .68rem; color: var(--teal); letter-spacing: 1.5px; text-transform: uppercase; width: 100%; text-align: left; margin-bottom: 6px; }
 
 /* ── AI PROFILE SETTINGS ── */
@@ -1980,8 +2033,10 @@ body.fs-large { font-size: 17px; }
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','SPM')">🇲🇾 SPM</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','STPM')">🇲🇾 STPM</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','PT3')">🇲🇾 PT3</div>
-      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','IGCSE')">🌍 IGCSE</div>
-      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','A-Levels')">🌍 A-Levels</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Cambridge IGCSE')">🌍 Cambridge IGCSE</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Edexcel IGCSE')">🌍 Edexcel IGCSE</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Cambridge A-Level')">🌍 Cambridge A-Level</div>
+      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Edexcel A-Level')">🌍 Edexcel A-Level</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','IB')">🌍 IB</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','University')">🎓 University</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Other')">Other</div>
@@ -2067,8 +2122,6 @@ body.fs-large { font-size: 17px; }
       <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Korean')">🇰🇷 Korean</div>
       <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Spanish')">🇪🇸 Spanish</div>
       <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','French')">🇫🇷 French</div>
-      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','Arabic')">🇸🇦 Arabic</div>
-      <div class="ob-chip" data-lang-extra style="display:none;" onclick="obChipSelect(this,'ob-lang-grid','German')">🇩🇪 German</div>
       <div class="ob-chip ob-more-btn" onclick="toggleLangMore(this)">More ▾</div>
     </div>
     <div style="display:flex;gap:10px;margin-top:12px;">
@@ -2393,11 +2446,6 @@ body.fs-large { font-size: 17px; }
             <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Games</div>
             <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Play & earn gems</div>
           </div>
-          <div class="dt-widget mobile-tool-card" style="flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;" onclick="go('calc')">
-            <div style="font-size:1.4rem;">🔢</div>
-            <div style="font-family:var(--raj);font-weight:700;font-size:.88rem;color:var(--text);margin-top:6px;">Calculator</div>
-            <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);">Scientific calc</div>
-          </div>
 
           <div class="dt-widget">
             <div class="dt-clock-big" id="dt-clock-big">18:48</div>
@@ -2439,7 +2487,7 @@ body.fs-large { font-size: 17px; }
           </div>
 
           <!-- Pomodoro widget -->
-          <div class="dt-widget">
+          <div class="dt-widget" style="align-self:start;overflow:visible;">
             <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Focus Timer</div>
             <div style="text-align:center;">
               <div id="pom-display" style="font-family:var(--orb);font-size:clamp(1.4rem,3vw,2rem);font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;line-height:1;margin:4px 0 2px;">05:00</div>
@@ -2448,10 +2496,14 @@ body.fs-large { font-size: 17px; }
                 <button id="pom-btn" onclick="pomToggle()" style="background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:8px;padding:6px 18px;color:#fff;font-family:var(--orb);font-size:.55rem;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .15s;">START</button>
                 <button onclick="pomReset()" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 12px;color:var(--silver2);font-family:var(--exo);font-size:.65rem;cursor:pointer;transition:all .15s;">↺</button>
               </div>
-              <div style="display:flex;gap:4px;justify-content:center;">
-                <button onclick="pomSetMode('focus')" id="pom-m-focus" style="border-radius: 999px; padding: 3px 10px; font-family: var(--exo); font-size: 0.6rem; cursor: pointer; border-color: rgba(77, 159, 255, 0.2); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; background: transparent; color: var(--silver); transition: 0.15s;">25 min</button>
-                <button onclick="pomSetMode('short')" id="pom-m-short" style="border-radius: 999px; padding: 3px 10px; font-family: var(--exo); font-size: 0.6rem; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--accent); border-image: initial; background: rgba(77, 159, 255, 0.15); color: var(--accent2); transition: 0.15s;">5 min</button>
-                <button onclick="pomSetMode('long')" id="pom-m-long" style="border-radius:999px;padding:3px 10px;font-family:var(--exo);font-size:.6rem;cursor:pointer;border:1px solid rgba(77,159,255,.2);background:transparent;color:var(--silver);transition:all .15s;">15 min</button>
+              <div style="display:flex;gap:4px;justify-content:center;margin-bottom:6px;">
+                <button onclick="pomSetMode('focus')" id="pom-m-focus" style="border-radius:999px;padding:3px 10px;font-family:var(--exo);font-size:.6rem;cursor:pointer;border:1px solid var(--accent);background:rgba(77,159,255,.15);color:var(--accent2);transition:.15s;">Focus</button>
+                <button onclick="pomSetMode('short')" id="pom-m-short" style="border-radius:999px;padding:3px 10px;font-family:var(--exo);font-size:.6rem;cursor:pointer;border:1px solid rgba(77,159,255,.2);background:transparent;color:var(--silver);transition:.15s;">Short break</button>
+                <button onclick="pomSetMode('long')" id="pom-m-long" style="border-radius:999px;padding:3px 10px;font-family:var(--exo);font-size:.6rem;cursor:pointer;border:1px solid rgba(77,159,255,.2);background:transparent;color:var(--silver);transition:.15s;">Long break</button>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:0 4px;">
+                <input type="range" id="pom-slider" min="1" max="90" value="25" oninput="pomSliderChange(this.value)" style="flex:1;accent-color:var(--accent);cursor:pointer;">
+                <span id="pom-slider-label" style="font-family:var(--exo);font-size:.68rem;color:var(--accent2);min-width:44px;text-align:right;">25 min</span>
               </div>
               <div id="pom-sessions" style="font-family:var(--exo);font-size:.62rem;color:var(--teal);margin-top:6px;letter-spacing:.5px;"></div>
             </div>
@@ -2660,7 +2712,7 @@ body.fs-large { font-size: 17px; }
         <!-- Prompt starters -->
         <div style="margin-bottom:10px;">
           <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;">Quick starters</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <div class="trow" style="margin-bottom:0;gap:6px;flex-wrap:wrap;">
             <button class="hw-starter" onclick="hwStarter('Explain this concept to me: ')">💬 Explain this...</button>
             <button class="hw-starter" onclick="hwStarter('Check my working: ')">📝 Check my working</button>
             <button class="hw-starter" onclick="hwStarter('Why is this wrong: ')">❌ Why is this wrong?</button>
@@ -3238,10 +3290,12 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
           <div class="journal-search-row">
           <input class="journal-search" id="journal-search" placeholder="🔍 Search entries..." oninput="renderJournal()">
+          <div class="journal-filter-group">
           <button class="journal-filter on" id="jf-all" onclick="setJournalFilter('all',this)">All</button>
           <button class="journal-filter" id="jf-today" onclick="setJournalFilter('today',this)">Today</button>
           <button class="journal-filter" id="jf-week" onclick="setJournalFilter('week',this)">This Week</button>
           <button onclick="exportJournalPDF()" style="margin-left:auto;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:8px;padding:5px 12px;color:#c4b5fd;font-family:var(--exo);font-size:.65rem;cursor:pointer;white-space:nowrap;">📤 Export</button>
+          </div>
         </div>
         <div class="journal-list" id="journal-list"><div class="journal-empty">No entries yet — write your first one above ✏️</div></div>
         </div>
@@ -3416,8 +3470,10 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
                 <div class="aip-chip" data-val="SPM">🇲🇾 SPM</div>
                 <div class="aip-chip" data-val="STPM">🇲🇾 STPM</div>
                 <div class="aip-chip" data-val="PT3">🇲🇾 PT3</div>
-                <div class="aip-chip on" data-val="IGCSE">🌍 IGCSE</div>
-                <div class="aip-chip" data-val="A-Levels">🌍 A-Levels</div>
+                <div class="aip-chip on" data-val="Cambridge IGCSE">🌍 Cambridge IGCSE</div>
+                <div class="aip-chip" data-val="Edexcel IGCSE">🌍 Edexcel IGCSE</div>
+                <div class="aip-chip" data-val="Cambridge A-Level">🌍 Cambridge A-Level</div>
+                <div class="aip-chip" data-val="Edexcel A-Level">🌍 Edexcel A-Level</div>
                 <div class="aip-chip" data-val="IB">🌍 IB</div>
                 <div class="aip-chip" data-val="University">🎓 University</div>
                 <div class="aip-chip" data-val="Other">Other</div>
@@ -3489,8 +3545,6 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
                 <div class="aip-chip" data-lang-extra style="display:none;" data-val="Korean">🇰🇷 Korean</div>
                 <div class="aip-chip" data-lang-extra style="display:none;" data-val="Spanish">🇪🇸 Spanish</div>
                 <div class="aip-chip" data-lang-extra style="display:none;" data-val="French">🇫🇷 French</div>
-                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Arabic">🇸🇦 Arabic</div>
-                <div class="aip-chip" data-lang-extra style="display:none;" data-val="German">🇩🇪 German</div>
                 <div class="aip-chip aip-more-btn" onclick="toggleLangMore(this)">More ▾</div>
               </div>
             </div>
@@ -5069,17 +5123,28 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <!-- Compose modal -->
         <div id="forum-compose-modal" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center;padding:20px;">
           <div style="background:var(--bg2,#12121a);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:22px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:14px;">
-            <div style="font-family:var(--exo);font-size:.75rem;letter-spacing:2px;color:var(--teal2,#4d9fff);">// NEW POST</div>
+            <div id="forum-compose-heading" style="font-family:var(--exo);font-size:.75rem;letter-spacing:2px;color:var(--teal2,#4d9fff);">// NEW POST</div>
             <div style="display:flex;gap:8px;">
               <button class="forum-type-btn on" onclick="forumSetType(this,'question')" data-type="question">❓ Question</button>
               <button class="forum-type-btn" onclick="forumSetType(this,'tip')" data-type="tip">💡 Tip / Resource</button>
             </div>
             <select id="forum-compose-subject" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 12px;color:var(--text,#e2e8f0);font-family:var(--exo);font-size:.78rem;"></select>
             <input id="forum-compose-title" maxlength="120" placeholder="Post title..." style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 12px;color:var(--text,#e2e8f0);font-family:var(--exo);font-size:.82rem;outline:none;">
-            <textarea id="forum-compose-body" maxlength="1200" rows="5" placeholder="Describe your question or share your tip..." style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 12px;color:var(--text,#e2e8f0);font-family:var(--exo);font-size:.78rem;resize:vertical;outline:none;line-height:1.6;"></textarea>
+            <textarea id="forum-compose-body" maxlength="1200" rows="5" placeholder="Describe your question or share your tip... (you can paste an image)" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 12px;color:var(--text,#e2e8f0);font-family:var(--exo);font-size:.78rem;resize:vertical;outline:none;line-height:1.6;" onpaste="forumHandlePaste(event)"></textarea>
+            <div id="forum-compose-preview" style="display:none;position:relative;width:fit-content;">
+              <img id="forum-compose-preview-img" style="max-height:120px;max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.12);display:block;">
+              <button onclick="forumRemoveAttachment()" style="position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:#1a1a20;border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.7rem;cursor:pointer;line-height:1;">✕</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <label style="cursor:pointer;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:7px 12px;color:var(--silver,#94a3b8);font-family:var(--exo);font-size:.72rem;">
+                📎 Attach image
+                <input type="file" accept="image/*" style="display:none;" onchange="forumHandleFileInput(this)">
+              </label>
+              <span style="font-family:var(--exo);font-size:.68rem;color:var(--silver,#94a3b8);opacity:.6;">or paste one into the box above</span>
+            </div>
             <div style="display:flex;gap:10px;">
               <button onclick="closeForumCompose()" style="flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;color:var(--silver,#94a3b8);font-family:var(--exo);font-size:.78rem;cursor:pointer;">Cancel</button>
-              <button onclick="submitForumPost()" style="flex:2;background:linear-gradient(135deg,var(--accent),#7c5fe6);border:none;border-radius:10px;padding:10px;color:#fff;font-family:var(--exo);font-size:.78rem;font-weight:700;cursor:pointer;">Post</button>
+              <button id="forum-compose-submit-btn" onclick="submitForumPost()" style="flex:2;background:linear-gradient(135deg,var(--accent),#7c5fe6);border:none;border-radius:10px;padding:10px;color:#fff;font-family:var(--exo);font-size:.78rem;font-weight:700;cursor:pointer;">Post</button>
             </div>
           </div>
         </div>
@@ -5600,7 +5665,6 @@ const NAV_TABS = [
   { id:'library',     icon:'🗂️', label:'Topic Library' },
   { id:'notes',       icon:'📝', label:'Notes' },
   { id:'study',       icon:'🧠', label:'Smart Study' },
-  { id:'calc',        icon:'🔢', label:'Calculator' },
   { id:'chat',        icon:'💬', label:'Companion' },
   { id:'todo',        icon:'✅', label:'To-Do List' },
   { id:'journal',     icon:'📓', label:'Journal' },
@@ -8339,7 +8403,7 @@ function aipSwapSubjects(isUni) {
   if (grid.dataset.mode === wantMode) return;
   grid.innerHTML = buildAipSubjectChips(isUni ? UNI_MAJORS : SCHOOL_SUBJECTS);
   grid.dataset.mode = wantMode;
-  document.querySelectorAll('#aip-subjects .aip-chip').forEach(c => { c.onclick = () => aipMultiClick(c); });
+  document.querySelectorAll('#aip-subjects .aip-chip:not(.aip-add-custom)').forEach(c => { c.onclick = () => aipMultiClick(c); });
 }
 
 function aipSwapYears(isUni) {
@@ -8423,9 +8487,20 @@ function renderAIProfilePanel() {
   }
   // Multi-select subjects
   const subs = new Set(p.subjects || []);
-  document.querySelectorAll('#aip-subjects .aip-chip').forEach(c => {
-    c.classList.toggle('on', subs.has(c.dataset.val));
+  document.querySelectorAll('#aip-subjects .aip-chip:not(.aip-add-custom)').forEach(c => {
+    subs.delete(c.dataset.val);
+    c.classList.toggle('on', new Set(p.subjects || []).has(c.dataset.val));
     c.onclick = () => aipMultiClick(c);
+  });
+  // Re-add any saved custom subjects that aren't in the base list
+  const addBtn = document.querySelector('#aip-subjects .aip-add-custom');
+  subs.forEach(val => {
+    const chip = document.createElement('div');
+    chip.className = 'aip-chip aip-multi on';
+    chip.dataset.val = val;
+    chip.textContent = '✨ ' + val;
+    chip.onclick = () => aipMultiClick(chip);
+    if (addBtn) addBtn.before(chip);
   });
   aipUpdatePreview();
 }
@@ -10724,10 +10799,71 @@ const UNI_MAJORS = [
   ['Data Science','📊'], ['Mass Communication','🎙️'], ['Design','🎨'], ['Other','✨'],
 ];
 function buildObSubjectChips(list) {
-  return list.map(([val,icon]) => `<div class="ob-chip ob-multi" onclick="obMultiToggle(this,'${val.replace(/'/g,"\\'")}')">${icon} ${val}</div>`).join('');
+  return list.map(([val,icon]) => `<div class="ob-chip ob-multi" onclick="obMultiToggle(this,'${val.replace(/'/g,"\\'")}')">${icon} ${val}</div>`).join('')
+    + `<div class="ob-chip ob-add-custom" onclick="obAddCustomSubject(this)">➕ Add your own</div>`;
 }
 function buildAipSubjectChips(list) {
-  return list.map(([val,icon]) => `<div class="aip-chip aip-multi" data-val="${val}">${icon} ${val}</div>`).join('');
+  return list.map(([val,icon]) => `<div class="aip-chip aip-multi" data-val="${val}">${icon} ${val}</div>`).join('')
+    + `<div class="aip-chip aip-add-custom" onclick="aipAddCustomSubject(this)">➕ Add your own</div>`;
+}
+
+function obAddCustomSubject(btn) {
+  const grid = btn.parentElement;
+  const input = document.createElement('input');
+  input.type = 'text'; input.maxLength = 40;
+  input.placeholder = 'Subject name...';
+  input.className = 'ob-chip ob-chip-custom-input';
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    const val = input.value.trim();
+    if (val) {
+      obSubjects.add(val);
+      const chip = document.createElement('div');
+      chip.className = 'ob-chip ob-multi on';
+      chip.textContent = '✨ ' + val;
+      chip.onclick = () => { chip.classList.toggle('on'); if (chip.classList.contains('on')) obSubjects.add(val); else obSubjects.delete(val); };
+      input.replaceWith(chip);
+      grid.appendChild(btn);
+    } else {
+      input.replaceWith(btn);
+    }
+  };
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); finish(); } });
+  input.addEventListener('blur', finish);
+  btn.replaceWith(input);
+  input.focus();
+}
+
+function aipAddCustomSubject(btn) {
+  const grid = btn.parentElement;
+  const input = document.createElement('input');
+  input.type = 'text'; input.maxLength = 40;
+  input.placeholder = 'Subject name...';
+  input.className = 'aip-chip aip-chip-custom-input';
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    const val = input.value.trim();
+    if (val) {
+      const chip = document.createElement('div');
+      chip.className = 'aip-chip aip-multi on';
+      chip.dataset.val = val;
+      chip.textContent = '✨ ' + val;
+      chip.onclick = () => aipMultiClick(chip);
+      input.replaceWith(chip);
+      grid.appendChild(btn);
+      aipUpdatePreview();
+    } else {
+      input.replaceWith(btn);
+    }
+  };
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); finish(); } });
+  input.addEventListener('blur', finish);
+  btn.replaceWith(input);
+  input.focus();
 }
 
 const SCHOOL_YEARS = ['Form 1','Form 2','Form 3','Form 4','Form 5','Form 6','Other'];
@@ -12304,8 +12440,25 @@ function examNewPaper() {
 }
 
 // ── POMODORO TIMER ──
-let pomInt = null, pomRunning = false, pomSecsLeft = 25*60, pomMode = 'focus', pomSessionsDone = 0;
-const POM_DURATIONS = { focus: 25*60, short: 5*60, long: 15*60 };
+let pomInt = null, pomRunning = false, pomMode = 'focus', pomSessionsDone = 0;
+const POM_LIMITS = { focus: {min:5, max:90}, short: {min:1, max:30}, long: {min:5, max:45} };
+let POM_DURATIONS = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('studly_pom_durations') || 'null');
+    if (saved) return saved;
+  } catch {}
+  return { focus: 25*60, short: 5*60, long: 15*60 };
+})();
+let pomSecsLeft = POM_DURATIONS.focus;
+
+function pomSliderChange(minsStr) {
+  const mins = parseInt(minsStr, 10);
+  POM_DURATIONS[pomMode] = mins * 60;
+  localStorage.setItem('studly_pom_durations', JSON.stringify(POM_DURATIONS));
+  const label = document.getElementById('pom-slider-label');
+  if (label) label.textContent = mins + ' min';
+  if (!pomRunning) { pomSecsLeft = POM_DURATIONS[pomMode]; pomRender(); }
+}
 
 function pomSetMode(mode) {
   pomMode = mode;
@@ -12319,6 +12472,16 @@ function pomSetMode(mode) {
     el.style.borderColor = m===mode ? 'var(--accent)' : 'rgba(77,159,255,.2)';
     el.style.color = m===mode ? 'var(--accent2)' : 'var(--silver)';
   });
+  const slider = document.getElementById('pom-slider');
+  const sliderLabel = document.getElementById('pom-slider-label');
+  const mins = Math.round(POM_DURATIONS[mode] / 60);
+  if (slider) {
+    slider.min = POM_LIMITS[mode].min;
+    slider.max = POM_LIMITS[mode].max;
+    slider.value = mins;
+    slider.disabled = false;
+  }
+  if (sliderLabel) sliderLabel.textContent = mins + ' min';
   const lbl = document.getElementById('pom-label');
   if (lbl) lbl.textContent = mode==='focus' ? 'FOCUS SESSION' : mode==='short' ? 'SHORT BREAK' : 'LONG BREAK';
   const btn = document.getElementById('pom-btn');
@@ -12336,12 +12499,15 @@ function pomRender() {
 
 function pomToggle() {
   const btn = document.getElementById('pom-btn');
+  const slider = document.getElementById('pom-slider');
   if (pomRunning) {
     clearInterval(pomInt); pomRunning = false;
     if (btn) btn.textContent = 'RESUME';
+    if (slider) slider.disabled = false;
   } else {
     pomRunning = true;
     if (btn) btn.textContent = 'PAUSE';
+    if (slider) slider.disabled = true;
     pomInt = setInterval(() => {
       pomSecsLeft--;
       pomRender();
@@ -12376,8 +12542,11 @@ function pomReset() {
   pomSecsLeft = POM_DURATIONS[pomMode];
   const btn = document.getElementById('pom-btn');
   if (btn) btn.textContent = 'START';
+  const slider = document.getElementById('pom-slider');
+  if (slider) slider.disabled = false;
   pomRender();
 }
+document.addEventListener('DOMContentLoaded', () => { if (document.getElementById('pom-display')) pomSetMode('focus'); });
 
 // ── VOICE INPUT ──
 let voiceRecognizer = null, voiceActive = false;
@@ -12711,7 +12880,6 @@ function runSearch(q) {
       { id:'todo',     icon:'✅', title:'To-Do List',   hint:'Tasks & checklist' },
       { id:'games',    icon:'🎮', title:'Games',        hint:'Play & earn gems' },
       { id:'exam',     icon:'📄', title:'Exam Papers',  hint:'Mock exam generator' },
-      { id:'calc',     icon:'🔢', title:'Calculator',   hint:'Scientific calculator' },
       { id:'library',  icon:'🗂️', title:'Topic Library',hint:'Curated study topics' },
       { id:'settings', icon:'🌈', title:'Themes',        hint:'Customise appearance' },
       { id:'music',    icon:'🎵', title:'Music',          hint:'Study music & playlists' },
@@ -12995,8 +13163,12 @@ async function refreshDailyBrief(forceRefresh = false) {
       const name = acct.name || 'Scholar';
       const streak = acct.streak || 0;
       const gems = acct.gems || 0;
+      const sprofile = getStudentProfile();
+      const subjLine = (sprofile.subjects && sprofile.subjects.length)
+        ? `Their subjects: ${sprofile.subjects.join(', ')}. Reference one of these specifically if relevant — never invent a subject they haven't listed.`
+        : `Their subjects aren't set yet — keep the tip subject-agnostic (general study technique), don't invent or guess a subject.`;
       const prompt = `Give a student named ${name} a short, motivating daily study tip or insight (2-3 sentences max). 
-They have a ${streak}-day study streak and ${gems} gems. Make it personal, practical and energising.
+They have a ${streak}-day study streak and ${gems} gems. ${subjLine} Make it personal, practical and energising.
 Start directly with the tip — no "Good morning" or greeting. No markdown. Keep it concise.`;
       const text = await gemini(prompt);
       brief = { date: today, icon: '✨', text: text.trim() };
@@ -14360,9 +14532,11 @@ async function initDailyChallenge() {
   if (loading) loading.style.display = 'block';
   [qWrap, rWrap, noKey].forEach(el => { if(el) el.style.display = 'none'; });
 
-  // Rotate subject by day so it's predictable, not random
+  // Rotate subject by day so it's predictable, not random — prefer the student's own subjects
   const dayIndex = Math.floor(Date.now() / 86400000);
-  const subject = DC_SUBJECTS[dayIndex % DC_SUBJECTS.length];
+  const sprofile = getStudentProfile();
+  const subjectPool = (sprofile.subjects && sprofile.subjects.length) ? sprofile.subjects : DC_SUBJECTS;
+  const subject = subjectPool[dayIndex % subjectPool.length];
 
   // Scale difficulty by gem count
   const acctForDC = getAcct();
@@ -15078,9 +15252,76 @@ function loadScript(src) {
   });
 }
 
+// ── Attachments (paste or file picker) ──
+let _forumAttachment = null; // { base64, mimeType }
+
+function forumCompressImage(file, maxDim, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const scale = maxDim / Math.max(width, height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve({ base64: dataUrl, mimeType: 'image/jpeg' });
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function forumSetAttachmentFromFile(file) {
+  if (!file || !file.type.startsWith('image/')) { showToast('⚠️ Only images can be attached'); return; }
+  try {
+    const compressed = await forumCompressImage(file, 900, 0.65);
+    if (compressed.base64.length > 700000) { showToast('⚠️ Image still too large after compression'); return; }
+    _forumAttachment = compressed;
+    const preview = document.getElementById('forum-compose-preview');
+    const img = document.getElementById('forum-compose-preview-img');
+    img.src = compressed.base64;
+    preview.style.display = 'block';
+  } catch (e) { showToast('⚠️ Could not read image'); }
+}
+
+window.forumHandleFileInput = function(input) {
+  if (input.files && input.files[0]) forumSetAttachmentFromFile(input.files[0]);
+  input.value = '';
+};
+
+window.forumHandlePaste = function(e) {
+  const items = e.clipboardData?.items || [];
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      e.preventDefault();
+      forumSetAttachmentFromFile(item.getAsFile());
+      return;
+    }
+  }
+};
+
+window.forumRemoveAttachment = function() {
+  _forumAttachment = null;
+  document.getElementById('forum-compose-preview').style.display = 'none';
+  document.getElementById('forum-compose-preview-img').src = '';
+};
+
 // ── Current username ──
 function forumUsername() {
   try { const a = getAcct(); return a.name || a.username || 'Student'; } catch { return 'Student'; }
+}
+function forumUid() {
+  return (window._fbUser && window._fbUser.uid) || null;
 }
 
 // ── Subjects filter bar ──
@@ -15125,7 +15366,8 @@ window.loadForumFeed = async function loadForumFeed() {
         const ago = timeAgo(p.createdAt?.toDate ? p.createdAt.toDate() : new Date());
         card.innerHTML = `
           <span class="forum-post-type ${p.type}">${p.type === 'question' ? '❓ Question' : '💡 Tip'}</span>
-          <div class="forum-post-title">${escHtml(p.title)}</div>
+          <div class="forum-post-title">${escHtml(p.title)}${p.edited ? ' <span style="font-size:.65rem;opacity:.5;font-weight:400;">(edited)</span>' : ''}</div>
+          ${p.image ? `<img src="${p.image}" style="max-height:140px;border-radius:8px;margin:6px 0;display:block;">` : ''}
           <div class="forum-post-meta">
             <span>👤 ${escHtml(p.author)}</span>
             <span>📚 ${escHtml(p.subject)}</span>
@@ -15144,13 +15386,40 @@ window.loadForumFeed = async function loadForumFeed() {
 }
 
 // ── Compose ──
+let _editingPostId = null;
+
 window.openForumCompose = function() {
+  _editingPostId = null;
   const modal = document.getElementById('forum-compose-modal');
   if (!modal) return;
+  document.getElementById('forum-compose-heading').textContent = '// NEW POST';
+  document.getElementById('forum-compose-submit-btn').textContent = 'Post';
   // Populate subject dropdown
   const sel = document.getElementById('forum-compose-subject');
   sel.innerHTML = FORUM_SUBJECTS.filter(s => s !== 'All').map(s => `<option value="${s}">${s}</option>`).join('');
   if (_forumCat !== 'All') sel.value = _forumCat;
+  modal.style.display = 'flex';
+};
+
+window.editForumPost = function(postId, post) {
+  _editingPostId = postId;
+  const modal = document.getElementById('forum-compose-modal');
+  if (!modal) return;
+  document.getElementById('forum-compose-heading').textContent = '// EDIT POST';
+  document.getElementById('forum-compose-submit-btn').textContent = 'Save changes';
+  const sel = document.getElementById('forum-compose-subject');
+  sel.innerHTML = FORUM_SUBJECTS.filter(s => s !== 'All').map(s => `<option value="${s}">${s}</option>`).join('');
+  sel.value = post.subject;
+  document.getElementById('forum-compose-title').value = post.title;
+  document.getElementById('forum-compose-body').value = post.body;
+  _forumType = post.type;
+  document.querySelectorAll('.forum-type-btn').forEach(b => b.classList.toggle('on', b.dataset.type === post.type));
+  if (post.image) {
+    _forumAttachment = { base64: post.image, mimeType: 'image/jpeg' };
+    document.getElementById('forum-compose-preview-img').src = post.image;
+    document.getElementById('forum-compose-preview').style.display = 'block';
+  }
+  closeForumThread();
   modal.style.display = 'flex';
 };
 
@@ -15159,6 +15428,8 @@ window.closeForumCompose = function() {
   if (modal) modal.style.display = 'none';
   document.getElementById('forum-compose-title').value = '';
   document.getElementById('forum-compose-body').value = '';
+  forumRemoveAttachment();
+  _editingPostId = null;
 };
 
 window.forumSetType = function(btn, type) {
@@ -15177,17 +15448,27 @@ window.submitForumPost = async function() {
 
   try {
     const db = await forumGetDB();
-    await db.collection('posts').add({
+    const payload = {
       title, body, subject,
       type: _forumType,
-      author: forumUsername(),
-      createdAt: window.firebase.firestore.FieldValue.serverTimestamp(),
-      replyCount: 0,
-      flags: 0,
-      flaggedBy: []
-    });
+      image: _forumAttachment ? _forumAttachment.base64 : null,
+    };
+    if (_editingPostId) {
+      payload.edited = true;
+      payload.editedAt = window.firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('posts').doc(_editingPostId).update(payload);
+      showToast('✅ Post updated!');
+    } else {
+      payload.author = forumUsername();
+      payload.uid = forumUid();
+      payload.createdAt = window.firebase.firestore.FieldValue.serverTimestamp();
+      payload.replyCount = 0;
+      payload.flags = 0;
+      payload.flaggedBy = [];
+      await db.collection('posts').add(payload);
+      showToast('✅ Post published!');
+    }
     closeForumCompose();
-    showToast('✅ Post published!');
   } catch(e) {
     showToast('❌ ' + e.message);
   }
@@ -15196,20 +15477,24 @@ window.submitForumPost = async function() {
 // ── Thread view ──
 window.openForumThread = async function(postId, post) {
   _currentPostId = postId;
+  window._currentThreadPost = post;
   const modal = document.getElementById('forum-thread-modal');
   const content = document.getElementById('forum-thread-content');
   const label = document.getElementById('forum-thread-label');
   if (!modal || !content) return;
 
+  const isOwner = post.uid && forumUid() && post.uid === forumUid();
   label.textContent = post.subject + ' · ' + (post.type === 'question' ? 'QUESTION' : 'TIP');
   content.innerHTML = `
     <div style="border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:14px;margin-bottom:4px;">
       <span class="forum-post-type ${post.type}">${post.type === 'question' ? '❓ Question' : '💡 Tip'}</span>
-      <div class="forum-post-title" style="font-size:1rem;">${escHtml(post.title)}</div>
+      <div class="forum-post-title" style="font-size:1rem;">${escHtml(post.title)}${post.edited ? ' <span style="font-size:.65rem;opacity:.5;font-weight:400;">(edited)</span>' : ''}</div>
       <div style="font-family:var(--exo);font-size:.8rem;color:var(--text);line-height:1.7;margin:10px 0;">${escHtml(post.body)}</div>
+      ${post.image ? `<img src="${post.image}" style="max-width:100%;border-radius:10px;margin-bottom:10px;display:block;">` : ''}
       <div class="forum-post-meta">
         <span>👤 ${escHtml(post.author)}</span>
         <span>${timeAgo(post.createdAt?.toDate ? post.createdAt.toDate() : new Date())}</span>
+        ${isOwner ? `<button class="forum-flag-btn" onclick="editForumPost(_currentPostId, window._currentThreadPost)">✏️ Edit</button>` : ''}
         <button class="forum-flag-btn" onclick="flagPost('${postId}')">🚩 Flag</button>
       </div>
     </div>
@@ -15266,7 +15551,7 @@ window.submitForumReply = async function() {
     const batch = db.batch();
     const replyRef = db.collection('posts').doc(_currentPostId).collection('replies').doc();
     batch.set(replyRef, {
-      body, author: forumUsername(),
+      body, author: forumUsername(), uid: forumUid(),
       createdAt: window.firebase.firestore.FieldValue.serverTimestamp(),
       flags: 0, flaggedBy: []
     });
