@@ -678,6 +678,7 @@ nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrol
 .tab { display: none; flex: 1; overflow-y: auto; padding: 28px 28px; flex-direction: column; animation: tIn .25s ease; }
 .tab.on { display: flex; }
 
+@keyframes jrecPulse { 0%,100%{opacity:1} 50%{opacity:.25} }
 @keyframes tIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
 ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(77,159,255,0.3); border-radius: 2px; }
 
@@ -896,6 +897,46 @@ body.mobile-mode .mood-row {
 }
 body.mobile-mode .mood-row::-webkit-scrollbar { display: none; }
 body.mobile-mode .mood-row > * { flex-shrink: 0; white-space: nowrap; }
+
+/* ── MOBILE: Exam Papers builder ── */
+body.mobile-mode .exam-config-grid { grid-template-columns: 1fr !important; }
+body.mobile-mode .exam-row-scroll {
+  flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none; min-width: 0; width: 100%; max-width: 100vw; box-sizing: border-box;
+}
+body.mobile-mode .exam-row-scroll::-webkit-scrollbar { display: none; }
+body.mobile-mode .exam-row-scroll > * { flex-shrink: 0; white-space: nowrap; }
+
+/* ── MOBILE: Companion chat — behave like a real messaging app ── */
+body.mobile-mode #comp-win {
+  max-height: none; min-height: 0; flex: 1 1 auto;
+}
+body.mobile-mode #tab-chat .tsub { margin-bottom: 8px; }
+body.mobile-mode .mood-row { margin: 8px 0 !important; }
+body.mobile-mode #tab-chat .in-row { margin-bottom: 0 !important; }
+
+/* ── MOBILE: Paper Tracker filter bar ── */
+body.mobile-mode .tracker-filter-bar { flex-direction: column; align-items: stretch; }
+body.mobile-mode .tracker-filter-group {
+  flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none; min-width: 0; width: 100%; max-width: 100vw; box-sizing: border-box;
+}
+body.mobile-mode .tracker-filter-group::-webkit-scrollbar { display: none; }
+body.mobile-mode .tracker-filter-group > * { flex-shrink: 0; white-space: nowrap; }
+body.mobile-mode #trk-search { margin-left: 0 !important; width: 100% !important; box-sizing: border-box; }
+
+/* ── MOBILE: Study Planner toolbar ── */
+body.mobile-mode .planner-toolbar {
+  flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px; margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px;
+  scrollbar-width: none; min-width: 0; width: 100%; max-width: 100vw; box-sizing: border-box;
+}
+body.mobile-mode .planner-toolbar::-webkit-scrollbar { display: none; }
+body.mobile-mode .planner-toolbar > * { flex-shrink: 0; }
+body.mobile-mode .planner-week-nav, body.mobile-mode .planner-view-toggle { flex-shrink: 0; white-space: nowrap; }
+body.mobile-mode .pw-week-label { white-space: nowrap; }
 
 /* ── MOBILE: Journal search + filters ── */
 .journal-filter-group { display: contents; }
@@ -1968,7 +2009,7 @@ body.fs-large { font-size: 17px; }
 .forum-upvote-btn.on{background:rgba(77,159,255,.15);border-color:rgba(77,159,255,.4);color:#4d9fff;}
 </style>
 </head>
-<body style="background: linear-gradient(135deg, rgb(6, 16, 10) 0%, rgb(12, 30, 16) 100%);" class="style-hacker fs-large">
+<body>
 <!-- VEDA NOTIFICATION BAR -->
 <div id="veda-notif-bar" style="display:none;background:linear-gradient(135deg,rgba(0,212,170,.13),rgba(77,159,255,.08));border-bottom:1px solid rgba(0,212,170,.22);padding:9px 20px;align-items:center;gap:12px;flex-wrap:wrap;z-index:999;position:relative;">
   <span style="font-size:1rem;">🔔</span>
@@ -2527,13 +2568,9 @@ body.fs-large { font-size: 17px; }
           <!-- Leaderboard widget -->
           <div class="dt-widget clickable" onclick="go('leaderboard')" id="lb-home-widget">
             <div class="dt-wlabel"><span class="dt-wlabel-dot" style="background:var(--teal);"></span>Leaderboard</div>
-            <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;"><div class="lb-mini-row">
-      <div class="lb-mini-rank">🥇</div>
-      <div class="lb-mini-name" style="color:var(--teal2);">You</div>
-      <div class="lb-mini-val">0 💎</div>
-    </div></div>
-            <div id="lb-home-rank" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(77, 159, 255, 0.1); font-family: var(--exo); font-size: 0.68rem; color: var(--silver); display: block;">
-              Your rank: <span id="lb-home-rank-val" style="color:var(--accent2);font-weight:700;">#1 of 1</span>
+            <div id="lb-home-list" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;"><div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.5;text-align:center;padding:8px 0;">Sign in with Google to join the leaderboard</div></div>
+            <div id="lb-home-rank" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(77, 159, 255, 0.1); font-family: var(--exo); font-size: 0.68rem; color: var(--silver); display: none;">
+              Your rank: <span id="lb-home-rank-val" style="color:var(--accent2);font-weight:700;"></span>
             </div>
           </div>
 
@@ -3137,7 +3174,13 @@ body.fs-large { font-size: 17px; }
           <input class="chat-in" id="study-in" placeholder="Enter a topic, e.g. Photosynthesis or World War 2..." onkeydown="if(event.key==='Enter')genStudy()">
           <button class="send-btn" onclick="genStudy()">GENERATE</button>
         </div>
-        <div id="study-out"></div>
+        <div id="study-out">
+          <div id="study-empty-state" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;opacity:.7;">
+            <div style="font-size:2.6rem;margin-bottom:14px;">🧠</div>
+            <div style="font-family:var(--raj);font-size:1rem;font-weight:600;color:var(--text2);margin-bottom:6px;">Nothing generated yet</div>
+            <div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.75;line-height:1.6;max-width:280px;">Pick a mode above, type a topic, and hit <strong>Generate</strong> — your flashcards or quiz will show up right here.</div>
+          </div>
+        </div>
         <div id="study-export-row" style="display:none;margin-top:10px;justify-content:flex-end;gap:8px;">
           <button onclick="exportFlashcardsPDF()" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);border-radius:8px;padding:6px 14px;color:#fbbf24;font-family:var(--exo);font-size:.68rem;cursor:pointer;">📤 Export Flashcards</button>
         </div>
@@ -3222,7 +3265,10 @@ body.fs-large { font-size: 17px; }
       <div class="tab" id="tab-chat">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
           <div class="ttl">💬 Companion</div>
-          <button onclick="openDebateMode()" style="background:linear-gradient(135deg,rgba(77,159,255,.1),rgba(0,212,170,.07));border:1px solid rgba(0,212,170,.3);border-radius:999px;padding:5px 14px;font-family:var(--exo);font-size:.72rem;color:var(--teal2);cursor:pointer;transition:all .15s;" title="Debate Me mode">⚔️ Debate Me</button>
+          <div style="display:flex;gap:6px;">
+            <button onclick="clearCompChat()" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,102,128,.25);border-radius:999px;padding:5px 12px;font-family:var(--exo);font-size:.72rem;color:#ff8899;cursor:pointer;transition:all .15s;" title="Clear conversation history">🗑️ Clear</button>
+            <button onclick="openDebateMode()" style="background:linear-gradient(135deg,rgba(77,159,255,.1),rgba(0,212,170,.07));border:1px solid rgba(0,212,170,.3);border-radius:999px;padding:5px 14px;font-family:var(--exo);font-size:.72rem;color:var(--teal2);cursor:pointer;transition:all .15s;" title="Debate Me mode">⚔️ Debate Me</button>
+          </div>
         </div>
         <div class="tsub"><span class="prm">›</span>Talk about anything — stress, feelings, study life</div>
 
@@ -3280,9 +3326,18 @@ body.fs-large { font-size: 17px; }
             <textarea class="journal-body-in" id="journal-body" placeholder="What's on your mind today?
 
 Write about your study session, how you're feeling, goals for tomorrow..."></textarea>
+            <div id="journal-audio-preview" style="display:none;align-items:center;gap:10px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:8px 12px;margin-bottom:10px;">
+              <audio id="journal-audio-player" controls style="height:32px;flex:1;"></audio>
+              <button onclick="clearJournalRecording()" style="background:none;border:none;color:var(--silver);cursor:pointer;font-size:.9rem;">✕</button>
+            </div>
             <div class="journal-actions">
               <div class="journal-date" id="journal-date">Monday, 15 June 2026</div>
-              <div style="display:flex;gap:8px;">
+              <div style="display:flex;gap:8px;align-items:center;">
+                <button class="abtn sec" id="journal-rec-btn" onclick="toggleJournalRecording()">🎙️ Record</button>
+                <span id="journal-rec-status" style="display:none;font-family:var(--exo);font-size:.7rem;color:#ff6680;align-items:center;gap:5px;">
+                  <span style="width:7px;height:7px;border-radius:50%;background:#ff6680;animation:jrecPulse 1s infinite;"></span>
+                  <span id="journal-rec-time">0:00</span>
+                </span>
                 <button class="abtn sec" onclick="clearJournal()">Clear</button>
                 <button class="abtn" onclick="saveJournal()">💾 Save Entry</button>
               </div>
@@ -4324,7 +4379,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <!-- Row 1: Subject -->
           <div class="panel" style="margin-bottom:14px;">
             <div class="exam-section-label">// SUBJECT</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;" id="exam-subject-chips">
+            <div class="exam-row-scroll" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;" id="exam-subject-chips">
               <button class="exam-chip" onclick="examSetSubject(this,'Mathematics')">➕ Mathematics</button>
               <button class="exam-chip" onclick="examSetSubject(this,'Science')">🔬 Science</button>
               <button class="exam-chip" onclick="examSetSubject(this,'Biology')">🧬 Biology</button>
@@ -4344,7 +4399,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <!-- Row 2: Question Types -->
           <div class="panel" style="margin-bottom:14px;">
             <div class="exam-section-label">// QUESTION TYPES</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="exam-qtype-chips">
+            <div class="exam-row-scroll" style="display:flex;gap:8px;flex-wrap:wrap;" id="exam-qtype-chips">
               <button class="exam-chip exam-toggle" id="qt-mcq" onclick="examToggleType(this,'mcq')">
                 <span class="exam-check">✓</span> Multiple Choice (MCQ)
               </button>
@@ -4373,7 +4428,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;" class="exam-config-grid">
             <div class="panel" style="margin-bottom:0;">
               <div class="exam-section-label">// DIFFICULTY</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+              <div class="exam-row-scroll" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
                 <button class="exam-chip exam-sel on" id="diff-easy" onclick="examSetDiff(this,'Easy')">🟢 Easy</button>
                 <button class="exam-chip exam-sel" id="diff-med" onclick="examSetDiff(this,'Medium')">🟡 Medium</button>
                 <button class="exam-chip exam-sel" id="diff-hard" onclick="examSetDiff(this,'Hard')">🔴 Hard</button>
@@ -4382,7 +4437,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             </div>
             <div class="panel" style="margin-bottom:0;">
               <div class="exam-section-label">// NO. OF QUESTIONS</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+              <div class="exam-row-scroll" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
                 <button class="exam-chip exam-sel" id="qc-10" onclick="examSetCount(this,10)">10</button>
                 <button class="exam-chip exam-sel on" id="qc-20" onclick="examSetCount(this,20)">20</button>
                 <button class="exam-chip exam-sel" id="qc-30" onclick="examSetCount(this,30)">30</button>
@@ -4392,7 +4447,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             </div>
             <div class="panel" style="margin-bottom:0;">
               <div class="exam-section-label">// LEVEL</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+              <div class="exam-row-scroll" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
                 <button class="exam-chip exam-sel" id="lv-primary" onclick="examSetLevel(this,'Primary')">Primary</button>
                 <button class="exam-chip exam-sel on" id="lv-secondary" onclick="examSetLevel(this,'Secondary')">Secondary</button>
                 <button class="exam-chip exam-sel" id="lv-alevels" onclick="examSetLevel(this,'A-Levels')">A-Levels</button>
@@ -4404,7 +4459,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <!-- Row 4: Templates -->
           <div class="panel" style="margin-bottom:14px;">
             <div class="exam-section-label">// QUICK TEMPLATES</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+            <div class="exam-row-scroll" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
               <button class="exam-tpl-btn" onclick="examLoadTemplate('gcse')">📋 GCSE Style</button>
               <button class="exam-tpl-btn" onclick="examLoadTemplate('alevels')">🎓 A-Levels Style</button>
               <button class="exam-tpl-btn" onclick="examLoadTemplate('revision')">🔄 Quick Revision</button>
@@ -4430,7 +4485,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div id="exam-out-title" style="font-family:var(--orb);font-size:.85rem;color:var(--text);letter-spacing:1px;margin-bottom:3px;"></div>
               <div id="exam-out-meta" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);"></div>
             </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="exam-row-scroll" style="display:flex;gap:8px;flex-wrap:wrap;">
               <button class="exam-out-btn" onclick="examPrint()">🖨️ Print / Save PDF</button>
               <button class="exam-out-btn" onclick="examShowAnswers()">👁 Toggle Answers</button>
               <button class="exam-out-btn accent" onclick="examNewPaper()">+ New Paper</button>
@@ -5040,12 +5095,14 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
 
         <!-- Filter bar -->
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+        <div class="tracker-filter-bar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+          <div class="tracker-filter-group" style="display:flex;gap:8px;align-items:center;">
           <div style="font-size:.65rem;color:var(--silver);letter-spacing:1px;">FILTER:</div>
           <button class="exam-chip on" id="trk-filter-all" onclick="trkFilter('all',this)">All</button>
           <button class="exam-chip" id="trk-filter-done" onclick="trkFilter('done',this)">✅ Done</button>
           <button class="exam-chip" id="trk-filter-high" onclick="trkFilter('high',this)">🔥 ≥80%</button>
           <button class="exam-chip" id="trk-filter-low" onclick="trkFilter('low',this)">⚠️ &lt;60%</button>
+          </div>
           <input id="trk-search" type="text" placeholder="🔍 Search subject..." oninput="trkRender()" style="margin-left:auto;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 14px;color:var(--white);font-family:var(--exo);font-size:.75rem;outline:none;width:160px;">
         </div>
 
@@ -5619,7 +5676,7 @@ function go(name) {
     const profileTab = document.getElementById('tab-profile');
     if (profileTab) profileTab.classList.add('on');
     document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'profile'")) b.classList.add('on'); });
-    setTimeout(renderProfilePanel, 0);
+    setTimeout(() => { renderProfilePanel(); renderGoalsPanel(); }, 0);
     return;
   }
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
@@ -7394,124 +7451,6 @@ function checkEasterEgg(msg) {
 }
 
 
-// ── KEYWORD FALLBACK COMPANION ────────────────────────────────────────────────
-const KEYWORD_RESPONSES = [
-  {
-    patterns: [/stress|stressed|stressing/i],
-    responses: [
-      "Stress is rough 😔 What's got you feeling this way? Sometimes just saying it out loud helps.",
-      "That sounds heavy. You don't have to have it all figured out right now 💙",
-      "Stress means you care — but you also deserve a breather. What's one small thing you could do for yourself right now?"
-    ]
-  },
-  {
-    patterns: [/anxious|anxiety|nervous|scared|afraid|panic/i],
-    responses: [
-      "Anxiety is so exhausting 💙 You're not alone in feeling this way.",
-      "That feeling is real and valid. Try taking one slow breath — just one. I'm here.",
-      "It's okay to feel nervous. What's the thing that's worrying you most right now?"
-    ]
-  },
-  {
-    patterns: [/sad|upset|unhappy|depressed|down|low/i],
-    responses: [
-      "I'm sorry you're feeling that way 💙 Want to talk about what's going on?",
-      "It's okay to not be okay. You don't have to pretend here.",
-      "Feeling down is hard. I'm here if you want to let it out 🌙"
-    ]
-  },
-  {
-    patterns: [/tired|exhausted|drained|burnt out|burnout|no energy/i],
-    responses: [
-      "Burnout is real and it hits hard. When did you last actually rest — not just sleep, but properly switch off?",
-      "Your body and brain are telling you something. Maybe it's okay to slow down today 💙",
-      "Exhaustion isn't weakness. You've probably been carrying a lot. What would help right now?"
-    ]
-  },
-  {
-    patterns: [/lonely|alone|no friends|nobody|isolated/i],
-    responses: [
-      "Loneliness is one of the hardest feelings. I'm glad you're talking to me 💙",
-      "You're not as alone as it might feel right now. I'm here, and I'm listening.",
-      "That takes courage to say. What's been making you feel this way?"
-    ]
-  },
-  {
-    patterns: [/angry|frustrated|annoyed|mad|pissed|rage/i],
-    responses: [
-      "Ugh, that sounds really frustrating 😤 What happened?",
-      "Makes sense you're angry. Sometimes things are just genuinely unfair.",
-      "Let it out — what's going on? I'm not going anywhere 💙"
-    ]
-  },
-  {
-    patterns: [/overwhelmed|too much|can't cope|cant cope|everything at once/i],
-    responses: [
-      "When everything piles up it can feel impossible. You don't have to tackle it all at once.",
-      "Overwhelmed is a real feeling. What's the one thing pressing on you most right now?",
-      "Hey — breathe. Just one thing at a time. What's the most urgent thing?"
-    ]
-  },
-  {
-    patterns: [/fail|failed|failing|bad grade|exam|test|results/i],
-    responses: [
-      "One result doesn't define you, even when it really stings 💙",
-      "That's genuinely hard to deal with. How are you feeling about it?",
-      "Failing something feels awful but it's not the end. What happened?"
-    ]
-  },
-  {
-    patterns: [/happy|great|good|amazing|excited|proud/i],
-    responses: [
-      "That's genuinely great to hear! What's going well? 🌟",
-      "Love that energy! Tell me more 😊",
-      "That's what I like to hear 💙 What happened?"
-    ]
-  },
-  {
-    patterns: [/help|advice|what should i|what do i|i don't know what/i],
-    responses: [
-      "I'm here 💙 Tell me what's going on and we'll figure it out together.",
-      "Happy to help. What's the situation?",
-      "Let's think through it together. What's going on?"
-    ]
-  },
-  {
-    patterns: [/hi|hey|hello|sup|what's up|wassup|hiya/i],
-    responses: [
-      "Hey! How are you doing today? 🌟",
-      "Hi! Good to see you 💙 What's on your mind?",
-      "Hey you! How's everything going?"
-    ]
-  },
-  {
-    patterns: [/thank|thanks|ty|appreciated/i],
-    responses: [
-      "Always 💙 I'm here whenever you need.",
-      "Of course! That's what I'm here for 🌟",
-      "Anytime. You've got this 💙"
-    ]
-  }
-];
-
-function keywordFallback(msg) {
-  const lower = msg.toLowerCase();
-  for (const group of KEYWORD_RESPONSES) {
-    if (group.patterns.some(p => p.test(lower))) {
-      return group.responses[Math.floor(Math.random() * group.responses.length)];
-    }
-  }
-  // Default fallback
-  const defaults = [
-    "I'm here 💙 Tell me more about what's going on.",
-    "That sounds like a lot. Want to talk about it?",
-    "I'm listening — what's on your mind?",
-    "I hear you 💙 What's this about?",
-    "You've got my full attention. What's up?"
-  ];
-  return defaults[Math.floor(Math.random() * defaults.length)];
-}
-// ─────────────────────────────────────────────────────────────────────────────
 
 async function respondComp(userMsg, imageData) {
   const thinking = addCompBubble('Thinking <span class="dots"><span>·</span><span>·</span><span>·</span></span>', 'bot thinking');
@@ -7552,15 +7491,10 @@ Current mood context: ${compMood || 'unknown'}${memoryContext}`;
     compHistory.slice(-6).map(m => (m.role === 'user' ? 'Student: ' : 'Companion: ') + m.parts[0].text).join('\n') +
     '\n\nRespond as Companion (no label, just your response):';
 
-  // If no API key or guest mode, use keyword fallback
-  const API_KEY = localStorage.getItem('gemini_api_key') || window.GROQ_KEY;
+  // No API key or guest mode — be honest about it instead of faking a reply
   if (!API_KEY || window._isGuest) {
-    await new Promise(r => setTimeout(r, 600 + Math.random() * 500));
     compWin.removeChild(thinking);
-    const fallbackReply = keywordFallback(userMsg);
-    addCompBubble(fallbackReply, 'bot');
-    compHistory.push({ role: 'model', parts: [{ text: fallbackReply }] });
-    saveCompHistory();
+    addCompBubble('💬 Companion needs an API key to actually chat with you. <a href="#" onclick="go(\'settings\');return false;" style="color:var(--accent2);text-decoration:underline;">Add a free Gemini key in Settings</a> to start a real conversation.', 'bot system');
     compWin.scrollTop = compWin.scrollHeight;
     return;
   }
@@ -7572,12 +7506,9 @@ Current mood context: ${compMood || 'unknown'}${memoryContext}`;
     compHistory.push({ role: 'model', parts: [{ text: ans }] });
     saveCompHistory();
   } catch (e) {
-    // API failed — fall back to keyword responses
+    // API call genuinely failed — say so, don't fake a response
     compWin.removeChild(thinking);
-    const fallbackReply = keywordFallback(userMsg);
-    addCompBubble(fallbackReply + ' <span style="opacity:.4;font-size:.75em">(offline)</span>', 'bot');
-    compHistory.push({ role: 'model', parts: [{ text: fallbackReply }] });
-    saveCompHistory();
+    addCompBubble('⚠️ Couldn\'t reach the AI just now (' + (e.message || 'connection issue') + '). Try again in a moment.', 'bot system');
   }
   compWin.scrollTop = compWin.scrollHeight;
 }
@@ -7649,15 +7580,106 @@ function updateJournalDate() {
 updateJournalDate();
 setInterval(updateJournalDate, 60000);
 
+// ── JOURNAL VOICE NOTES ──
+let jrecRecorder = null, jrecChunks = [], jrecStream = null, jrecTimer = null, jrecSeconds = 0;
+let journalPendingAudio = null; // { base64, mimeType }
+
+async function toggleJournalRecording() {
+  if (jrecRecorder && jrecRecorder.state === 'recording') {
+    jrecRecorder.stop();
+    return;
+  }
+  try {
+    jrecStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (e) {
+    showToast('⚠️ Microphone access denied'); return;
+  }
+  const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+  jrecRecorder = new MediaRecorder(jrecStream, { mimeType });
+  jrecChunks = [];
+  jrecRecorder.ondataavailable = e => { if (e.data.size) jrecChunks.push(e.data); };
+  jrecRecorder.onstop = () => onJournalRecordingStop(mimeType);
+  jrecRecorder.start();
+  jrecSeconds = 0;
+  const btn = document.getElementById('journal-rec-btn');
+  const status = document.getElementById('journal-rec-status');
+  if (btn) btn.textContent = '⏹️ Stop';
+  if (status) status.style.display = 'inline-flex';
+  jrecTimer = setInterval(() => {
+    jrecSeconds++;
+    const m = Math.floor(jrecSeconds / 60), s = jrecSeconds % 60;
+    const t = document.getElementById('journal-rec-time');
+    if (t) t.textContent = m + ':' + String(s).padStart(2, '0');
+    if (jrecSeconds >= 180) jrecRecorder.stop(); // 3 min cap
+  }, 1000);
+}
+
+async function onJournalRecordingStop(mimeType) {
+  clearInterval(jrecTimer);
+  jrecStream?.getTracks().forEach(t => t.stop());
+  const btn = document.getElementById('journal-rec-btn');
+  const status = document.getElementById('journal-rec-status');
+  if (btn) btn.textContent = '🎙️ Record';
+  if (status) status.style.display = 'none';
+
+  const blob = new Blob(jrecChunks, { type: mimeType });
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const dataUrl = reader.result;
+    const base64 = dataUrl.split(',')[1];
+    journalPendingAudio = { base64, mimeType };
+
+    const preview = document.getElementById('journal-audio-preview');
+    const player = document.getElementById('journal-audio-player');
+    if (player) player.src = dataUrl;
+    if (preview) preview.style.display = 'flex';
+
+    if (!API_KEY || window._isGuest) {
+      showToast('🎙️ Voice note saved — add an API key in Settings to enable auto-transcription');
+      return;
+    }
+    showToast('✨ Transcribing...');
+    try {
+      const text = await gemini('Transcribe this audio recording word-for-word. Return only the transcribed text, no labels or commentary.', journalPendingAudio);
+      const bodyEl = document.getElementById('journal-body');
+      if (bodyEl) bodyEl.value = (bodyEl.value.trim() ? bodyEl.value.trim() + '\n\n' : '') + text.trim();
+      showToast('✅ Transcribed!');
+    } catch (e) {
+      showToast('⚠️ Transcription failed — voice note still saved');
+    }
+  };
+  reader.readAsDataURL(blob);
+}
+
+function clearJournalRecording() {
+  journalPendingAudio = null;
+  const preview = document.getElementById('journal-audio-preview');
+  const player = document.getElementById('journal-audio-player');
+  if (preview) preview.style.display = 'none';
+  if (player) player.src = '';
+}
+
 function saveJournal() {
   const title = document.getElementById('journal-title').value.trim();
   const body = document.getElementById('journal-body').value.trim();
   if (!body) { showToast('Write something first!'); return; }
   const entries = JSON.parse(localStorage.getItem('studly_journal') || '[]');
-  entries.unshift({ id: Date.now(), title: title || 'Untitled Entry', body, date: new Date().toISOString() });
-  localStorage.setItem('studly_journal', JSON.stringify(entries));
+  const entry = { id: Date.now(), title: title || 'Untitled Entry', body, date: new Date().toISOString() };
+  if (journalPendingAudio) {
+    entry.audio = 'data:' + journalPendingAudio.mimeType + ';base64,' + journalPendingAudio.base64;
+    entry.audioMime = journalPendingAudio.mimeType;
+  }
+  entries.unshift(entry);
+  try {
+    localStorage.setItem('studly_journal', JSON.stringify(entries));
+  } catch (e) {
+    showToast('⚠️ Storage full — try a shorter recording or delete old entries');
+    entries.shift();
+    return;
+  }
   document.getElementById('journal-title').value = '';
   document.getElementById('journal-body').value = '';
+  clearJournalRecording();
   renderJournal();
   trackStat('journal');
   showToast('📓 Entry saved!');
@@ -7718,6 +7740,7 @@ function renderJournal() {
         <div class="jentry-meta">${dateStr}</div>
       </div>
       <div class="jentry-body" id="jbody-${e.id}"></div>
+      ${e.audio ? `<audio controls src="${e.audio}" style="height:32px;width:100%;margin:6px 0;"></audio>` : ''}
       <div class="jentry-footer">
         <button class="jentry-btn" onclick="toggleJournalExpand(${e.id})">Read more</button>
         <button class="jentry-btn" onclick="editJournalEntry(${e.id})">✏️ Edit</button>
@@ -10690,7 +10713,8 @@ function loadPersonalizePrefs() {
   // UI style
   const style = localStorage.getItem('studly_uistyle') || 'default';
   const styleEl = document.getElementById('style-' + style);
-  if (styleEl) { document.querySelectorAll('.style-pill').forEach(p=>p.classList.remove('on')); styleEl.classList.add('on'); }
+  document.querySelectorAll('.style-pill,.skin-card').forEach(p=>p.classList.remove('on'));
+  if (styleEl) { styleEl.classList.add('on'); }
   ['style-futuristic','style-retro','style-terminal','style-minimal','style-hacker','style-glass','style-synthwave'].forEach(c => document.body.classList.remove(c));
   if (style !== 'default') document.body.classList.add('style-' + style);
   // Accent
@@ -11264,6 +11288,8 @@ function updateHomeStats() {
   const dtStreak = document.getElementById('dt-streak-big');
   if (dtGems) dtGems.textContent = a.gems || 0;
   if (dtStreak) dtStreak.textContent = (a.streak || 0) + ' days';
+  const ugcGems = document.getElementById('ugc-gems');
+  if (ugcGems) ugcGems.textContent = a.gems || 0;
   const mGems = document.getElementById('m-gems-val');
   const mStreak = document.getElementById('m-streak-val');
   if (mGems) mGems.textContent = a.gems || 0;
@@ -11291,6 +11317,16 @@ function updateHomeStats() {
 }
 
 // ── COMPANION MEMORY ──
+function clearCompChat() {
+  if (!confirm('Clear your whole conversation history with Companion? This can\'t be undone.')) return;
+  compHistory = [];
+  localStorage.removeItem('studly_comp_history');
+  localStorage.removeItem('veda_comp_memory');
+  const win = document.getElementById('comp-win');
+  if (win) win.innerHTML = '<div class="bubble bot">Hey! I\'m your study companion 🌟 How are you feeling today? You can talk to me about anything — stress, exams, or just life in general.</div>';
+  showToast('🗑️ Conversation cleared');
+}
+
 function loadCompHistory() {
   try {
     const saved = JSON.parse(localStorage.getItem('studly_comp_history') || '[]');
@@ -11324,8 +11360,7 @@ function saveCompHistory() {
 
 async function updateCompMemory() {
   // Only run if AI is available
-  const hasKey = localStorage.getItem('gemini_api_key') || window.GROQ_KEY;
-  if (!hasKey || window._isGuest) return;
+  if (!API_KEY || window._isGuest) return;
   try {
     const recentLines = compHistory.slice(-12)
       .map(m => (m.role === 'user' ? 'Student' : 'Companion') + ': ' + m.parts[0].text)
@@ -15034,23 +15069,6 @@ async function lbRender() {
       return;
     }
   }
-
-  // ── Inject fake friends for demo realism ──
-  const FAKE_FRIENDS = [
-    { uid:'fake_001', data:{ lbName:'Arjun Menon',     lbAvatar:'⚡', lbGems:2340, lbStreak:61, lbGames:980,  lbCode:'ARJ001' }},
-    { uid:'fake_002', data:{ lbName:'Priya S',          lbAvatar:'🌸', lbGems:1920, lbStreak:48, lbGames:740,  lbCode:'PRI002' }},
-    { uid:'fake_003', data:{ lbName:'Rishi K',          lbAvatar:'🔥', lbGems:1650, lbStreak:39, lbGames:610,  lbCode:'RSH003' }},
-    { uid:'fake_004', data:{ lbName:'Ananya Raj',       lbAvatar:'💎', lbGems:1430, lbStreak:33, lbGames:510,  lbCode:'ANA004' }},
-    { uid:'fake_005', data:{ lbName:'Dev Nair',         lbAvatar:'🚀', lbGems:1280, lbStreak:27, lbGames:430,  lbCode:'DEV005' }},
-    { uid:'fake_006', data:{ lbName:'Lena Fischer',     lbAvatar:'🎯', lbGems:1100, lbStreak:22, lbGames:380,  lbCode:'LEN006' }},
-    { uid:'fake_007', data:{ lbName:'Kavya T',          lbAvatar:'🌟', lbGems:940,  lbStreak:19, lbGames:290,  lbCode:'KAV007' }},
-    { uid:'fake_008', data:{ lbName:'Zara Ahmed',       lbAvatar:'🦋', lbGems:810,  lbStreak:15, lbGames:220,  lbCode:'ZAR008' }},
-    { uid:'fake_009', data:{ lbName:'Rohan Pillai',     lbAvatar:'🎓', lbGems:670,  lbStreak:11, lbGames:160,  lbCode:'ROH009' }},
-    { uid:'fake_010', data:{ lbName:'Mei Lin',          lbAvatar:'🌙', lbGems:520,  lbStreak:8,  lbGames:110,  lbCode:'MEI010' }},
-  ];
-  // Only inject fakes that aren't already in entries (avoid uid collision)
-  const existingUids = new Set(entries.map(e => e.uid));
-  FAKE_FRIENDS.forEach(f => { if (!existingUids.has(f.uid)) entries.push(f); });
 
   // Sort
   entries.sort((a,b) => lbVal(b.data) - lbVal(a.data));
