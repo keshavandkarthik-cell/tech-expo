@@ -165,24 +165,29 @@ body {
    IVORY THEME — dark, clean, professional
    ══════════════════════════════════════════ */
 [data-theme="ivory"] {
-  --navy:        #161618;
-  --navy2:       #1c1c1f;
-  --navy3:       #232326;
-  --blue:        #2a2a2e;
-  --chrome:      #8a8a9a;
-  --chrome2:     #b0b0c0;
-  --accent:      #a78bfa;
-  --accent2:     #c4b5fd;
-  --teal:        #34d399;
-  --teal2:       #6ee7b7;
-  --silver:      #6b7280;
-  --silver2:     #9ca3af;
-  --text:        #f4f4f5;
-  --text2:       #a1a1aa;
-  --glow:        rgba(167,139,250,0.08);
-  --glow2:       rgba(52,211,153,0.06);
-  --panel-bg:    linear-gradient(145deg, rgba(28,28,31,0.97), rgba(22,22,24,0.99));
-  --panel-border: rgba(167,139,250,0.14);
+  --navy:        #f7f6f3;
+  --navy2:       #efeee8;
+  --navy3:       #e6e4dc;
+  --blue:        #dedad0;
+  --chrome:      #57534e;
+  --chrome2:     #292524;
+  --accent:      #7c3aed;
+  --accent2:     #6d28d9;
+  --teal:        #059669;
+  --teal2:       #047857;
+  --silver:      #78716c;
+  --silver2:     #57534e;
+  --text:        #1c1917;
+  --text2:       #44403c;
+  --glow:        rgba(124,58,237,0.06);
+  --glow2:       rgba(5,150,105,0.05);
+  --panel-bg:    linear-gradient(145deg, rgba(255,255,255,0.92), rgba(247,246,243,0.97));
+  --panel-border: rgba(28,25,23,0.1);
+  --panel-col:  rgba(255,255,255,0.9);
+  --panel-col2: rgba(255,255,255,0.85);
+  --panel-col3: rgba(255,255,255,0.8);
+  --chrome-bg:  rgba(255,255,255,0.9);
+  --chrome-bg2: rgba(255,255,255,0.85);
   --orb: 'Helvetica Neue', 'Arial', sans-serif;
   --raj: 'Helvetica Neue', 'Arial', sans-serif;
   --exo: 'SF Mono', 'Fira Code', 'Courier New', monospace;
@@ -198,11 +203,11 @@ html[data-theme="ivory"] body {
 
 html[data-theme="ivory"] body {
   background:
-    linear-gradient(rgba(167,139,250,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(167,139,250,0.03) 1px, transparent 1px),
-    radial-gradient(ellipse at 20% 50%, rgba(167,139,250,0.04) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(52,211,153,0.03) 0%, transparent 50%),
-    #161618 !important;
+    linear-gradient(rgba(124,58,237,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.025) 1px, transparent 1px),
+    radial-gradient(ellipse at 20% 50%, rgba(124,58,237,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(5,150,105,0.025) 0%, transparent 50%),
+    #f7f6f3 !important;
   background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% !important;
 }
 
@@ -224,9 +229,9 @@ html[data-theme="ivory"] #notes-out,
 html[data-theme="ivory"] .lib-notes,
 html[data-theme="ivory"] .chatwin,
 html[data-theme="ivory"] #comp-win {
-  background: rgba(18,18,20,0.8) !important;
-  border-color: rgba(167,139,250,0.1) !important;
-  color: #f4f4f5 !important;
+  background: rgba(255,255,255,0.85) !important;
+  border-color: rgba(28,25,23,0.1) !important;
+  color: #1c1917 !important;
 }
 
 /* cards and panels that use inline dark backgrounds */
@@ -235,9 +240,9 @@ html[data-theme="ivory"] .home-card,
 html[data-theme="ivory"] .fc-card,
 html[data-theme="ivory"] .lb-row,
 html[data-theme="ivory"] .journal-entry {
-  background: linear-gradient(145deg, rgba(28,28,31,0.97), rgba(22,22,24,0.99)) !important;
-  border-color: rgba(167,139,250,0.14) !important;
-  color: #f4f4f5 !important;
+  background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(247,246,243,0.97)) !important;
+  border-color: rgba(28,25,23,0.1) !important;
+  color: #1c1917 !important;
 }
 
 html[data-theme="ivory"] .nb {
@@ -249,53 +254,54 @@ html[data-theme="ivory"] .nb.on {
 }
 
 html[data-theme="ivory"] #hdr {
-  background: rgba(22,22,24,0.92);
-  border-bottom: 1px solid rgba(167,139,250,0.12);
+  background: rgba(255,255,255,0.88);
+  border-bottom: 1px solid rgba(28,25,23,0.08);
 }
 html[data-theme="ivory"] #hdr::after {
   background: linear-gradient(90deg, transparent, rgba(167,139,250,0.3), rgba(52,211,153,0.2), transparent);
 }
 html[data-theme="ivory"] .hdr-logo {
-  background: linear-gradient(135deg, #a78bfa, #34d399);
+  background: linear-gradient(135deg, #7c3aed, #059669);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-html[data-theme="ivory"] .pulse { background: #34d399; box-shadow: 0 0 8px #34d399; }
+html[data-theme="ivory"] .pulse { background: #059669; box-shadow: 0 0 8px #059669; }
 html[data-theme="ivory"] #sb {
-  background: rgba(22,22,24,0.9);
-  border-right: 1px solid rgba(167,139,250,0.1);
+  background: rgba(255,255,255,0.85);
+  border-right: 1px solid rgba(28,25,23,0.08);
 }
-html[data-theme="ivory"] .nb { color: #7a746c; }
-html[data-theme="ivory"] .nb:hover { color: #3d3a36; }
+html[data-theme="ivory"] .nb { color: #78716c; }
+html[data-theme="ivory"] .nb:hover { color: #292524; }
 html[data-theme="ivory"] .nb:hover::before {
-  background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(52,211,153,0.05));
+  background: linear-gradient(135deg, rgba(124,58,237,0.07), rgba(5,150,105,0.05));
 }
 html[data-theme="ivory"] .nb.on {
-  background: linear-gradient(135deg, rgba(167,139,250,0.12), rgba(52,211,153,0.07));
-  color: #a78bfa;
+  background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(5,150,105,0.06));
+  color: #7c3aed;
 }
-html[data-theme="ivory"] .nb.on::after { background: linear-gradient(180deg, #a78bfa, #34d399); }
+html[data-theme="ivory"] .nb.on::after { background: linear-gradient(180deg, #7c3aed, #059669); }
 html[data-theme="ivory"] #main { background: transparent; }
 html[data-theme="ivory"] .set-section,
 html[data-theme="ivory"] .ps-card {
-  background: linear-gradient(145deg, rgba(28,28,31,0.97), rgba(22,22,24,0.99));
-  border-color: rgba(167,139,250,0.14);
+  background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(247,246,243,0.95));
+  border-color: rgba(28,25,23,0.1);
 }
 html[data-theme="ivory"] .bubble.bot {
-  background: rgba(239,237,232,0.95);
-  border: 1px solid rgba(176,125,74,0.15);
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(28,25,23,0.1);
   color: #1a1816;
 }
 html[data-theme="ivory"] .bubble.user {
   background: linear-gradient(135deg, #7c3aed, #059669);
+  color: #fff;
 }
 html[data-theme="ivory"] .chatbar {
-  background: rgba(22,22,24,0.95);
-  border-top: 1px solid rgba(167,139,250,0.1);
+  background: rgba(255,255,255,0.95);
+  border-top: 1px solid rgba(28,25,23,0.08);
 }
 html[data-theme="ivory"] .chat-input {
-  background: rgba(28,28,31,0.9);
-  border-color: rgba(167,139,250,0.15);
-  color: #f4f4f5;
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(28,25,23,0.12);
+  color: #1c1917;
 }
 html[data-theme="ivory"] .send-btn {
   background: linear-gradient(135deg, #7c3aed, #059669);
@@ -305,25 +311,25 @@ html[data-theme="ivory"] .abtn {
   background: linear-gradient(135deg, #7c3aed, #059669);
 }
 html[data-theme="ivory"] #splash {
-  background: radial-gradient(ellipse at center, #1c1c1f 0%, #111113 100%);
+  background: radial-gradient(ellipse at center, #f7f6f3 0%, #efeee8 100%);
 }
 html[data-theme="ivory"] .splash-panel {
-  background: linear-gradient(145deg, rgba(28,28,31,0.97), rgba(22,22,24,0.99));
-  border-color: rgba(167,139,250,0.18);
-  box-shadow: 0 0 60px rgba(167,139,250,0.08), 0 0 120px rgba(52,211,153,0.04);
+  background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(247,246,243,0.98));
+  border-color: rgba(28,25,23,0.12);
+  box-shadow: 0 0 60px rgba(124,58,237,0.06), 0 0 120px rgba(5,150,105,0.03);
 }
 html[data-theme="ivory"] .splash-logo {
-  background: linear-gradient(135deg, #a78bfa, #34d399);
+  background: linear-gradient(135deg, #7c3aed, #059669);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 html[data-theme="ivory"] .key-input {
-  background: rgba(28,28,31,0.9);
-  border-color: rgba(167,139,250,0.2);
-  color: #f4f4f5;
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(28,25,23,0.15);
+  color: #1c1917;
 }
 html[data-theme="ivory"] .key-input:focus {
-  border-color: #a78bfa;
-  box-shadow: 0 0 0 3px rgba(167,139,250,0.12);
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
 }
 html[data-theme="ivory"] .tab-panel,
 html[data-theme="ivory"] #main > .tab {
@@ -331,20 +337,20 @@ html[data-theme="ivory"] #main > .tab {
 }
 html[data-theme="ivory"] .ps-subnav,
 html[data-theme="ivory"] .ap-subnav {
-  border-bottom-color: rgba(167,139,250,0.12);
+  border-bottom-color: rgba(28,25,23,0.1);
 }
 html[data-theme="ivory"] .ps-tab,
 html[data-theme="ivory"] .ap-tab {
-  color: #6b7280;
+  color: #78716c;
 }
 html[data-theme="ivory"] .ps-tab.on,
 html[data-theme="ivory"] .ap-tab.on {
-  color: #a78bfa;
-  border-bottom-color: #a78bfa;
+  color: #7c3aed;
+  border-bottom-color: #7c3aed;
 }
-html[data-theme="ivory"] .confirm-overlay { background: rgba(0,0,0,0.7); }
+html[data-theme="ivory"] .confirm-overlay { background: rgba(0,0,0,0.5); }
 html[data-theme="ivory"] .confirm-box {
-  background: linear-gradient(145deg, rgba(28,28,31,0.99), rgba(22,22,24,0.99));
+  background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(247,246,243,0.98));
 }
 
 
@@ -366,27 +372,68 @@ html[data-theme="ivory"] .tog-btn { border-color: rgba(167,139,250,0.2); }
 html[data-theme="ivory"] input,
 html[data-theme="ivory"] textarea,
 html[data-theme="ivory"] select {
-  background: rgba(28,28,31,0.9) !important;
-  border-color: rgba(167,139,250,0.15) !important;
-  color: #f4f4f5 !important;
+  background: rgba(255,255,255,0.9) !important;
+  border-color: rgba(28,25,23,0.12) !important;
+  color: #1c1917 !important;
 }
 html[data-theme="ivory"] input:focus,
 html[data-theme="ivory"] textarea:focus {
   border-color: var(--accent) !important;
-  box-shadow: 0 0 0 3px rgba(167,139,250,0.12) !important;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.12) !important;
 }
 
 
 html[data-theme="ivory"] #search-modal,
 html[data-theme="ivory"] #msearch-modal {
   background: var(--panel-col2) !important;
-  border-color: rgba(167,139,250,0.3) !important;
+  border-color: rgba(28,25,23,0.15) !important;
 }
 html[data-theme="ivory"] #search-modal input,
 html[data-theme="ivory"] #msearch-modal input {
   background: var(--panel-col) !important;
   color: var(--text) !important;
-  border-color: rgba(167,139,250,0.2) !important;
+  border-color: rgba(28,25,23,0.12) !important;
+}
+
+/* Fixes for hardcoded colors that don't adapt to ivory's light background */
+html[data-theme="ivory"] #edit-widgets-btn {
+  background: rgba(255,255,255,.75) !important;
+  color: var(--accent2) !important;
+  border-color: rgba(28,25,23,0.12) !important;
+}
+html[data-theme="ivory"] .journal-filter-group button[onclick*="exportJournalPDF"] {
+  color: #6d28d9 !important;
+  background: rgba(124,58,237,.08) !important;
+  border-color: rgba(124,58,237,.25) !important;
+}
+html[data-theme="ivory"] .pw-btn[onclick="clearAllPlannerEvents()"] {
+  color: #b91c1c !important;
+  border-color: rgba(185,28,28,.3) !important;
+}
+html[data-theme="ivory"] #tab-chat button[onclick="clearCompChat()"] {
+  color: #dc2626 !important;
+  border-color: rgba(220,38,38,.3) !important;
+}
+html[data-theme="ivory"] .forum-cat-btn.on {
+  color: var(--accent2) !important;
+  background: rgba(124,58,237,.12) !important;
+  border-color: var(--accent) !important;
+}
+html[data-theme="ivory"] #theme-tile-card { display: none !important; }
+
+/* Planner subject-color events use light pastel text meant for dark backgrounds — fix for ivory */
+html[data-theme="ivory"] .ec-maths    {background:rgba(77,159,255,.14);color:#1e3a8a;}
+html[data-theme="ivory"] .ec-science  {background:rgba(0,212,170,.14);color:#065f46;}
+html[data-theme="ivory"] .ec-english  {background:rgba(192,132,252,.14);color:#581c87;}
+html[data-theme="ivory"] .ec-history  {background:rgba(251,191,36,.16);color:#78350f;}
+html[data-theme="ivory"] .ec-break    {background:rgba(34,197,94,.14);color:#14532d;}
+html[data-theme="ivory"] .ec-revision {background:rgba(251,146,60,.16);color:#7c2d12;}
+html[data-theme="ivory"] .ec-sport    {background:rgba(244,114,182,.14);color:#831843;}
+html[data-theme="ivory"] .ec-other    {background:rgba(99,102,241,.14);color:#312e81;}
+html[data-theme="ivory"] button[onclick="openExamModal()"] {
+  color: #92400e !important;
+  background: rgba(251,191,36,.18) !important;
+  border-color: rgba(251,191,36,.4) !important;
 }
 /* ── Ivory theme: swoop away veda-only sections ── */
 .veda-only-section {
@@ -2403,7 +2450,7 @@ body.fs-large { font-size: 17px; }
 
         <!-- Edit Widgets button -->
         <div style="position:absolute;top:14px;right:18px;z-index:20;">
-          <button onclick="openWidgetEditor()" style="background:rgba(8,12,26,.7);backdrop-filter:blur(12px);border:1px solid rgba(77,159,255,.25);border-radius:999px;padding:6px 16px;font-family:var(--exo);font-size:.68rem;color:var(--accent2);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;" onmouseover="this.style.borderColor='rgba(77,159,255,.55)'" onmouseout="this.style.borderColor='rgba(77,159,255,.25)'">⊹ Edit Widgets</button>
+          <button id="edit-widgets-btn" onclick="openWidgetEditor()" style="background:rgba(8,12,26,.7);backdrop-filter:blur(12px);border:1px solid rgba(77,159,255,.25);border-radius:999px;padding:6px 16px;font-family:var(--exo);font-size:.68rem;color:var(--accent2);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;" onmouseover="this.style.borderColor='rgba(77,159,255,.55)'" onmouseout="this.style.borderColor='rgba(77,159,255,.25)'">⊹ Edit Widgets</button>
         </div>
 
         <!-- Widget Editor Overlay -->
@@ -3421,7 +3468,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               </div>
             </div>
 
-            <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card" id="theme-tile-card" style="margin-top:12px;">
               <div class="ps-card-label">// THEME</div>
               <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
                 <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on">✨ Vibes</button><button class="tcat">🎨 Aesthetic</button><button class="tcat">◻️ Minimal</button></div>
@@ -4585,431 +4632,404 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
 
         <!-- View area -->
-        <div class="planner-grid-wrap" id="planner-view-area"><div class="planner-week-grid"><div class="pgrid-corner"><span style="font-family:var(--exo);font-size:.5rem;color:var(--silver);opacity:.4;">GMT</span></div><div class="pgrid-day-head " onclick="setPlannerView('day',null,0)">
+        <div class="planner-grid-wrap" id="planner-view-area"><div class="planner-week-grid"><div class="pgrid-corner"><span style="font-family:var(--exo);font-size:.5rem;color:var(--silver);opacity:.4;">GMT</span></div><div class="pgrid-day-head today-head" onclick="setPlannerView('day',null,0)">
       <div class="pgrid-day-name">Mon</div>
-      <div class="pgrid-day-num">20<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+      <div class="pgrid-day-num">13<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Jul</span></div>
     </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,1)">
       <div class="pgrid-day-name">Tue</div>
-      <div class="pgrid-day-num">21<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+      <div class="pgrid-day-num">14<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Jul</span></div>
     </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,2)">
       <div class="pgrid-day-name">Wed</div>
-      <div class="pgrid-day-num">22<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+      <div class="pgrid-day-num">15<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Jul</span></div>
     </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,3)">
       <div class="pgrid-day-name">Thu</div>
-      <div class="pgrid-day-num">23<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+      <div class="pgrid-day-num">16<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Jul</span></div>
     </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,4)">
       <div class="pgrid-day-name">Fri</div>
-      <div class="pgrid-day-num">24<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+      <div class="pgrid-day-num">17<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Jul</span></div>
     </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,5)">
       <div class="pgrid-day-name">Sat</div>
-      <div class="pgrid-day-num">25<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
-    </div><div class="pgrid-day-head today-head" onclick="setPlannerView('day',null,6)">
+      <div class="pgrid-day-num">18<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Jul</span></div>
+    </div><div class="pgrid-day-head " onclick="setPlannerView('day',null,6)">
       <div class="pgrid-day-name">Sun</div>
-      <div class="pgrid-day-num">26<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Apr</span></div>
+      <div class="pgrid-day-num">19<span style="font-size:.45rem;font-weight:400;opacity:.55;margin-left:2px;">Jul</span></div>
     </div><div class="pgrid-time-col"><div class="pgrid-time-slot">07:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',7)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',7)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',7)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',7)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',7)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',7)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',7)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',7)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',7)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',7)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',7)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',7)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',7)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',7)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">08:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',8)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',8)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',8)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',8)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',8)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',8)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',8)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',8)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',8)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',8)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',8)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',8)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',8)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',8)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">09:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',9)">
-          <div class="plan-event ec-maths" style="top:0px;height:76px;" onclick="event.stopPropagation();openPlannerModal('1776947529645')">
-    <div class="plan-event-title">Mathematics</div>
-    <div class="plan-event-sub">09:00 · 1h30m</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',9)">
-          <div class="plan-event ec-science" style="top:0px;height:76px;" onclick="event.stopPropagation();openPlannerModal('1776947529649')">
-    <div class="plan-event-title">Physics</div>
-    <div class="plan-event-sub">09:00 · 1h30m</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',9)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',9)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',9)">
-          <div class="plan-event ec-science" style="top:26px;height:76px;" onclick="event.stopPropagation();openPlannerModal('1776947529652')">
-    <div class="plan-event-title">Chemistry</div>
-    <div class="plan-event-sub">09:30 · 1h30m</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',9)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',9)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',9)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',9)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',9)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',9)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',9)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',9)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',9)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">10:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',10)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',10)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',10)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',10)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',10)">
-          <div class="plan-event ec-history" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776947529651')">
-    <div class="plan-event-title">History</div>
-    <div class="plan-event-sub">10:00 · 1h</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',10)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',10)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',10)">
-          <div class="plan-event ec-maths" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776947529653')">
-    <div class="plan-event-title">Mathematics</div>
-    <div class="plan-event-sub">10:00 · 1h</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',10)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',10)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',10)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',10)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',10)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',10)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">11:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',11)">
-          <div class="plan-event ec-english" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776947529647')">
-    <div class="plan-event-title">English</div>
-    <div class="plan-event-sub">11:00 · 1h</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',11)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',11)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',11)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',11)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',11)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',11)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',11)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',11)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',11)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',11)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',11)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',11)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',11)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">12:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',12)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',12)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',12)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',12)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',12)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',12)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',12)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',12)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',12)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',12)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',12)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',12)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',12)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',12)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">13:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',13)">
-          <div class="plan-event ec-break" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776947529648')">
-    <div class="plan-event-title">Break / Lunch</div>
-    <div class="plan-event-sub">13:00 · 1h</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',13)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',13)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',13)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',13)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',13)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',13)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',13)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',13)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',13)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',13)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',13)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',13)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',13)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">14:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',14)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',14)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',14)">
-          <div class="plan-event ec-revision" style="top:0px;height:50px;" onclick="event.stopPropagation();openPlannerModal('1776947529650')">
-    <div class="plan-event-title">Revision</div>
-    <div class="plan-event-sub">14:00 · 1h</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',14)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',14)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',14)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',14)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',14)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',14)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',14)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',14)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',14)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',14)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',14)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">15:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',15)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',15)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',15)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',15)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',15)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',15)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',15)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',15)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',15)">
-          <div class="plan-event ec-revision" style="top:0px;height:102px;" onclick="event.stopPropagation();openPlannerModal('1776947529654')">
-    <div class="plan-event-title">Revision</div>
-    <div class="plan-event-sub">15:00 · 2h</div>
-  </div>
-        </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',15)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',15)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',15)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',15)">
+          
+        </div></div><div class="pgrid-cell-col">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',15)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">16:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',16)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',16)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',16)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',16)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',16)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',16)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',16)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',16)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',16)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',16)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',16)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',16)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',16)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',16)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">17:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',17)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',17)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',17)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',17)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',17)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',17)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',17)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',17)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',17)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',17)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',17)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',17)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',17)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',17)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">18:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',18)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',18)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',18)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',18)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',18)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',18)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',18)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',18)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',18)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',18)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',18)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',18)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',18)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',18)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">19:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',19)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',19)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',19)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',19)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',19)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',19)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',19)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',19)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',19)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',19)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',19)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',19)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',19)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',19)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">20:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',20)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',20)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',20)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',20)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',20)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',20)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',20)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',20)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',20)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',20)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',20)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',20)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',20)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',20)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">21:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',21)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',21)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',21)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',21)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',21)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',21)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',21)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',21)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',21)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',21)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',21)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',21)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',21)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',21)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">22:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',22)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',22)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',22)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',22)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',22)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',22)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',22)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',22)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',22)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',22)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',22)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',22)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',22)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',22)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">23:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',23)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',23)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',23)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',23)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',23)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',23)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',23)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',23)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',23)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',23)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',23)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',23)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',23)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',23)">
           
         </div></div><div class="pgrid-time-col"><div class="pgrid-time-slot">24:00</div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-19',24)">
+        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-07-13',24)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-20',24)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-14',24)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-21',24)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-15',24)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-22',24)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-16',24)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-23',24)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-17',24)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-04-24',24)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-18',24)">
           
         </div></div><div class="pgrid-cell-col">
-        <div class="pgrid-cell today-col" onclick="openPlannerModal(null,'2026-04-25',24)">
+        <div class="pgrid-cell " onclick="openPlannerModal(null,'2026-07-19',24)">
           
         </div></div></div></div>
       </div>
@@ -10601,26 +10621,20 @@ function setMasterTheme(theme, el) {
   const html = document.documentElement;
   if (theme === 'ivory') {
     html.setAttribute('data-theme', 'ivory');
-    // Swoop away theme section
+    // Swoop away theme section — the dark gradient tile picker doesn't apply to a light theme
     const themeCard = document.getElementById('veda-only-theme');
     if (themeCard) { themeCard.classList.add('veda-only-section'); setTimeout(() => themeCard.classList.add('swooped'), 10); }
     // Clear any inline body background set by applyBg so CSS rule takes over
     document.body.style.background = '';
     document.body.style.backgroundSize = '';
     document.body.classList.remove('anim-bg');
-    // Reset CSS vars that applyBg might have changed
-    html.style.removeProperty('--accent');
-    html.style.removeProperty('--accent2');
-    html.style.removeProperty('--navy2');
-    // Reset chrome-bg and panel vars to ivory values
-    html.style.setProperty('--chrome-bg',   'rgba(22,22,24,0.92)');
-    html.style.setProperty('--chrome-bg2',  'rgba(22,22,24,0.85)');
-    html.style.setProperty('--panel-col',   'rgba(28,28,31,0.85)');
-    html.style.setProperty('--panel-col2',  'rgba(28,28,31,0.97)');
-    html.style.setProperty('--panel-col3',  'rgba(28,28,31,0.75)');
-    // Re-apply saved theme tile as ivory-mode tint
-    const saved = localStorage.getItem('studly_theme');
-    if (saved) { try { applyBg(JSON.parse(saved)); } catch(e){} }
+    // Clear every inline CSS var override so the ivory stylesheet variables
+    // (genuine light-mode values) can actually take effect, instead of
+    // fighting a leftover dark color tile the user picked earlier.
+    ['--accent','--accent2','--navy2','--navy','--chrome-bg','--chrome-bg2',
+     '--panel-col','--panel-col2','--panel-col3','--panel-bg','--panel-border',
+     '--text','--text2','--silver','--silver2','--teal','--teal2','--glow','--glow2']
+      .forEach(v => html.style.removeProperty(v));
   } else {
     html.removeAttribute('data-theme');
     // Swoop back theme section
@@ -10701,6 +10715,13 @@ function loadPersonalizePrefs() {
   const masterTheme = localStorage.getItem('veda_master_theme') || 'veda';
   if (masterTheme === 'ivory') {
     document.documentElement.setAttribute('data-theme', 'ivory');
+    document.body.style.background = '';
+    document.body.style.backgroundSize = '';
+    document.body.classList.remove('anim-bg');
+    ['--accent','--accent2','--navy2','--navy','--chrome-bg','--chrome-bg2',
+     '--panel-col','--panel-col2','--panel-col3','--panel-bg','--panel-border',
+     '--text','--text2','--silver','--silver2','--teal','--teal2','--glow','--glow2']
+      .forEach(v => document.documentElement.style.removeProperty(v));
     const ivoryDot  = document.getElementById('ivory-active-dot');
     const vedaDot   = document.getElementById('veda-active-dot');
     const vedaCard  = document.getElementById('master-theme-veda');
@@ -15399,7 +15420,7 @@ window.loadForumFeed = async function loadForumFeed() {
       feed.innerHTML = '<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">Failed to load posts. Check connection.</div>';
     });
   } catch(e) {
-    feed.innerHTML = `<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">${e.message}</div>`;
+    feed.innerHTML = `<div style="text-align:center;padding:30px;font-family:var(--exo);color:#ff6680;">Couldn't load the forum. ${e && e.message ? escHtml(e.message) : 'Check your connection and try again.'}</div>`;
   }
 }
 
