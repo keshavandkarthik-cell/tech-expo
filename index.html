@@ -1694,6 +1694,17 @@ body.fs-large { font-size: 17px; }
 .ps-key-dot { width:8px; height:8px; border-radius:50%; background:var(--silver); flex-shrink:0; }
 .ps-key-dot.active { background:var(--teal); box-shadow:0 0 8px var(--teal); animation:pulse 2s infinite; }
 .ps-key-dot.inactive { background:#ff6680; }
+.model-tier-btn.on { background: rgba(77,159,255,.08) !important; border-color: var(--accent) !important; }
+.model-tier-btn:hover { border-color: rgba(77,159,255,.4) !important; }
+.muse-chip {
+  background: rgba(236,72,153,.06); border: 1px solid rgba(236,72,153,.2);
+  border-radius: 999px; padding: 7px 16px; font-family: var(--exo); font-size: .78rem;
+  color: var(--silver2); cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.muse-chip.on, .muse-chip:hover {
+  background: linear-gradient(120deg, rgba(236,72,153,.18), rgba(168,85,247,.15));
+  border-color: #ec4899; color: #f0abfc;
+}
 .ps-key-instructions { margin-top:18px; display:flex; flex-direction:column; gap:8px; }
 .ps-key-step { display:flex; align-items:center; gap:10px; font-family:var(--exo); font-size:.78rem; color:var(--silver); }
 .ps-key-num { width:20px; height:20px; border-radius:50%; background:rgba(77,159,255,.15); border:1px solid rgba(77,159,255,.3); color:var(--accent2); font-family:var(--orb); font-size:.5rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -2431,6 +2442,7 @@ body.fs-large { font-size: 17px; }
       </nav>
       <div class="sb-foot">
         <div class="sb-foot-text" id="key-indicator">KEY: ACTIVE</div>
+        <div class="sb-foot-text" id="token-indicator" style="opacity:.55;font-size:.62rem;margin-top:2px;" title="Tokens used today across all AI features">⬡ 0 tokens today</div>
         <div class="sb-bar">
           <div class="sb-bar-seg"></div><div class="sb-bar-seg"></div>
           <div class="sb-bar-seg"></div><div class="sb-bar-seg"></div>
@@ -3757,6 +3769,28 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             </div>
           </div>
 
+          <!-- MODEL TIER -->
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label">// AI MODEL</div>
+            <div class="ps-form-label" style="margin-bottom:14px;line-height:1.7;">
+              Choose which Gemini model powers your AI features. Higher quality models have much stricter free-tier rate limits.
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <button class="model-tier-btn" data-model="gemini-2.5-pro" onclick="setAIModel(this.dataset.model)" style="text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;">
+                <div style="font-family:var(--exo);font-size:.8rem;font-weight:700;color:var(--text);">🏆 PRO <span style="font-weight:400;color:var(--silver);font-size:.72rem;">— gemini-2.5-pro</span></div>
+                <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);margin-top:3px;">Best reasoning quality. Free tier: 5 requests/min, 100/day — hits limits fast.</div>
+              </button>
+              <button class="model-tier-btn on" data-model="gemini-3.5-flash" onclick="setAIModel(this.dataset.model)" style="text-align:left;background:rgba(77,159,255,.08);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;">
+                <div style="font-family:var(--exo);font-size:.8rem;font-weight:700;color:var(--accent2);">⚖️ DEFAULT <span style="font-weight:400;color:var(--silver);font-size:.72rem;">— gemini-3.5-flash</span></div>
+                <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);margin-top:3px;">Latest flagship, great balance. 250k tokens/min, 15 requests/min, up to 1,500/day free.</div>
+              </button>
+              <button class="model-tier-btn" data-model="gemini-3.1-flash-lite" onclick="setAIModel(this.dataset.model)" style="text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.15);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;">
+                <div style="font-family:var(--exo);font-size:.8rem;font-weight:700;color:var(--text);">⚡ SAVER <span style="font-weight:400;color:var(--silver);font-size:.72rem;">— gemini-3.1-flash-lite</span></div>
+                <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);margin-top:3px;">Fastest and cheapest. Best for quick chats — 15 requests/min, up to 1,000/day free.</div>
+              </button>
+            </div>
+          </div>
+
           <!-- KEY POOL -->
           <div class="ps-card" id="ps-key-pool-card" style="margin-top:12px;">
             <div class="ps-card-label">// BACKUP KEY POOL</div>
@@ -4413,6 +4447,48 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
         </div>
         <div id="game-play-area" class="game-area"></div>
+      </div>
+
+      <!-- ══ ART STUDIO TAB ══ -->
+      <div class="tab" id="tab-art" style="padding:0;">
+        <div style="background:linear-gradient(120deg, rgba(236,72,153,.15), rgba(139,92,246,.15), rgba(251,146,60,.12));border-bottom:1px solid rgba(236,72,153,.2);padding:28px 28px 22px;margin-bottom:20px;">
+          <div style="font-family:var(--orb);font-size:1.3rem;font-weight:700;background:linear-gradient(120deg,#ec4899,#a855f7,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.5px;">🌌 Muse</div>
+          <div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);margin-top:6px;">Describe an idea — Muse writes the full creative brief and paints it for you.</div>
+        </div>
+
+        <div style="padding:0 28px;">
+          <div class="exam-row-scroll" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;" id="art-style-chips">
+            <button class="muse-chip on" data-style="" onclick="artSetStyle(this,'')">✨ Surprise me</button>
+            <button class="muse-chip" data-style="photorealistic, high detail, natural lighting" onclick="artSetStyle(this,this.dataset.style)">📷 Photorealistic</button>
+            <button class="muse-chip" data-style="anime style, vibrant, clean linework" onclick="artSetStyle(this,this.dataset.style)">🌸 Anime</button>
+            <button class="muse-chip" data-style="watercolor painting, soft edges, paper texture" onclick="artSetStyle(this,this.dataset.style)">🎨 Watercolor</button>
+            <button class="muse-chip" data-style="3D render, studio lighting, octane render" onclick="artSetStyle(this,this.dataset.style)">🧊 3D Render</button>
+            <button class="muse-chip" data-style="pencil sketch, hand-drawn, cross-hatching" onclick="artSetStyle(this,this.dataset.style)">✏️ Sketch</button>
+            <button class="muse-chip" data-style="minimalist flat design, simple shapes, clean" onclick="artSetStyle(this,this.dataset.style)">🔷 Minimalist</button>
+            <button class="muse-chip" data-style="diagram style, labelled, educational infographic" onclick="artSetStyle(this,this.dataset.style)">📊 Diagram</button>
+          </div>
+
+          <div style="position:relative;margin-bottom:22px;">
+            <input id="art-prompt" placeholder="A lighthouse guiding ships through a storm..." onkeydown="if(event.key==='Enter')genArt()"
+              style="width:100%;background:var(--panel-col2);border:1px solid rgba(236,72,153,.3);border-radius:16px;padding:16px 130px 16px 18px;color:var(--text);font-family:var(--raj);font-size:.95rem;outline:none;box-shadow:0 4px 24px rgba(139,92,246,.08);">
+            <button onclick="genArt()" id="art-gen-btn"
+              style="position:absolute;right:6px;top:6px;bottom:6px;background:linear-gradient(120deg,#ec4899,#a855f7);border:none;border-radius:11px;padding:0 20px;color:#fff;font-family:var(--exo);font-weight:700;font-size:.8rem;cursor:pointer;">Create</button>
+          </div>
+
+          <div id="art-gallery" style="padding-bottom:20px;"></div>
+        </div>
+      </div>
+
+      <!-- ══ VAULT TAB ══ -->
+      <div class="tab" id="tab-vault">
+        <div class="ttl">🗂️ Vault</div>
+        <div class="tsub"><span class="prm">›</span>Anything you save from Homework, Study, or Notes lives here as a plain text file</div>
+
+        <div style="display:flex;gap:8px;align-items:center;margin:14px 0;">
+          <input id="vault-search" type="text" placeholder="🔍 Search saved files..." oninput="renderVault()" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 14px;color:var(--text);font-family:var(--exo);font-size:.82rem;outline:none;">
+        </div>
+
+        <div id="vault-list"></div>
       </div>
 
       <!-- ══ EXAM PAPERS TAB ══ -->
@@ -5247,6 +5323,12 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 <script>
 // ── API KEY ──
 let API_KEY = localStorage.getItem('studly_key') || '';
+let AI_MODEL = localStorage.getItem('veda_ai_model') || 'gemini-3.5-flash';
+function setAIModel(model) {
+  AI_MODEL = model;
+  localStorage.setItem('veda_ai_model', model);
+  document.querySelectorAll('.model-tier-btn').forEach(b => b.classList.toggle('on', b.dataset.model === model));
+}
 // ── KEY POOL ──
 function getKeyPool() { try { return JSON.parse(localStorage.getItem('studly_key_pool') || '[]'); } catch { return []; } }
 function saveKeyPool(arr) { localStorage.setItem('studly_key_pool', JSON.stringify(arr)); }
@@ -5718,6 +5800,8 @@ function go(name) {
   }
   if (name === 'library') setTimeout(initLibrary, 0);
   if (name === 'games') setTimeout(renderGameLocks, 0);
+  if (name === 'art') setTimeout(renderArtGallery, 0);
+  if (name === 'vault') setTimeout(renderVault, 0);
   if (name === 'todo') setTimeout(renderTodos, 0);
   if (name === 'tracker') setTimeout(initTracker, 0);
   if (name === 'planner') setTimeout(renderPlanner, 30);
@@ -5747,6 +5831,8 @@ const NAV_TABS = [
   { id:'journal',     icon:'📓', label:'Journal' },
   { id:'profile',     icon:'👤', label:'Profile' },
   { id:'games',       icon:'🎮', label:'Games' },
+  { id:'art',         icon:'🌌', label:'Muse' },
+  { id:'vault',       icon:'🗂️', label:'Vault' },
   { id:'exam',        icon:'📄', label:'Exam Papers' },
   { id:'tracker',     icon:'📊', label:'Paper Tracker' },
   { id:'planner',     icon:'📅', label:'Study Planner' },
@@ -5898,6 +5984,266 @@ function setTopic(el, t) {
 }
 
 // ── GEMINI API ──
+function getTokenUsage() {
+  const today = new Date().toISOString().slice(0,10);
+  try {
+    const saved = JSON.parse(localStorage.getItem('veda_token_usage') || 'null');
+    if (saved && saved.date === today) return saved;
+  } catch {}
+  return { date: today, tokens: 0 };
+}
+
+function trackTokenUsage(count) {
+  const usage = getTokenUsage();
+  usage.tokens += count;
+  localStorage.setItem('veda_token_usage', JSON.stringify(usage));
+  updateTokenDisplay();
+}
+
+function updateTokenDisplay() {
+  const el = document.getElementById('token-indicator');
+  if (!el) return;
+  const usage = getTokenUsage();
+  const formatted = usage.tokens >= 1000 ? (usage.tokens/1000).toFixed(1) + 'k' : usage.tokens;
+  // Blended estimate: Gemini 2.5 Flash paid pricing is $0.30/1M input + $2.50/1M output tokens.
+  // We only track combined totals, so this assumes a rough 30/70 input/output split typical of
+  // generated study content — labelled "~" since it's an estimate, not exact accounting.
+  const blendedRatePerToken = (0.3*0.30 + 0.7*2.50) / 1_000_000;
+  const savedUSD = usage.tokens * blendedRatePerToken;
+  const savedStr = savedUSD < 0.01 ? '<$0.01' : '$' + savedUSD.toFixed(2);
+  el.textContent = `⬡ ${formatted}/250k tokens · ~${savedStr} saved`;
+  el.title = 'Tokens used today vs Gemini 2.5 Flash\'s free-tier limit (250k tokens/min). Savings are an estimate based on paid-tier pricing.';
+}
+
+async function geminiImage(prompt) {
+  if (!API_KEY) throw new Error('No API key set — go to Settings to add your free Gemini key.');
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${API_KEY}`;
+  const body = JSON.stringify({
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { responseModalities: ["TEXT", "IMAGE"] }
+  });
+  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+  const data = await res.json();
+  if (data.error) {
+    const err = new Error(data.error.message);
+    err.status = data.error.code;
+    throw err;
+  }
+  if (data.usageMetadata?.totalTokenCount) trackTokenUsage(data.usageMetadata.totalTokenCount);
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  const imgPart = parts.find(p => p.inline_data || p.inlineData);
+  if (!imgPart) throw new Error('No image was returned — try rephrasing your prompt.');
+  const inline = imgPart.inline_data || imgPart.inlineData;
+  return { base64: inline.data, mimeType: inline.mime_type || inline.mimeType || 'image/png' };
+}
+
+// ── VAULT (text artifacts) ──
+function getVault() {
+  try { return JSON.parse(localStorage.getItem('veda_artifacts') || '[]'); } catch { return []; }
+}
+function saveVault(items) {
+  try { localStorage.setItem('veda_artifacts', JSON.stringify(items)); return true; }
+  catch { return false; }
+}
+
+function slugifyVaultTitle(title) {
+  return title.trim().replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '').slice(0, 40) || 'Untitled';
+}
+
+function saveToVault(title, content, source) {
+  const items = getVault();
+  const item = { id: Date.now(), title: title.trim() || 'Untitled', content, source, date: new Date().toISOString() };
+  items.unshift(item);
+  if (!saveVault(items)) {
+    showToast('⚠️ Vault storage full — delete an old file to make room');
+    return false;
+  }
+  showToast('🗂️ Saved to Vault!');
+  return true;
+}
+
+function deleteVaultItem(id) {
+  saveVault(getVault().filter(i => i.id !== id));
+  renderVault();
+}
+
+function copyVaultItem(id) {
+  const item = getVault().find(i => i.id === id);
+  if (!item) return;
+  navigator.clipboard.writeText(item.content).then(() => showToast('📋 Copied!'));
+}
+
+function downloadVaultItem(id) {
+  const item = getVault().find(i => i.id === id);
+  if (!item) return;
+  const blob = new Blob([item.content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${slugifyVaultTitle(item.title)}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function vaultTimeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  return Math.floor(hrs / 24) + 'd ago';
+}
+
+function renderVault() {
+  const wrap = document.getElementById('vault-list');
+  if (!wrap) return;
+  const q = (document.getElementById('vault-search')?.value || '').toLowerCase().trim();
+  let items = getVault();
+  if (q) items = items.filter(i => i.title.toLowerCase().includes(q) || i.content.toLowerCase().includes(q));
+
+  if (!items.length) {
+    wrap.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;opacity:.7;">
+        <div style="font-size:2.6rem;margin-bottom:14px;">🗂️</div>
+        <div style="font-family:var(--raj);font-size:1rem;font-weight:600;color:var(--text2);margin-bottom:6px;">${q ? 'No files match' : 'Vault is empty'}</div>
+        <div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.75;line-height:1.6;max-width:300px;">${q ? 'Try a different search.' : 'Look for a "💾 Save to Vault" button after generating something in Smart Study, Homework, or Notes.'}</div>
+      </div>`;
+    return;
+  }
+
+  wrap.innerHTML = items.map(i => `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--panel-col3);border:1px solid var(--panel-border);border-radius:12px;margin-bottom:8px;">
+      <div style="font-size:1.3rem;width:40px;height:40px;flex-shrink:0;border-radius:10px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;">📄</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--raj);font-size:.86rem;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${slugifyVaultTitle(i.title)}.txt</div>
+        <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);opacity:.7;margin-top:2px;">${i.source ? i.source + ' · ' : ''}${vaultTimeAgo(i.date)}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button title="Copy" onclick="copyVaultItem(${i.id})" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 9px;color:var(--silver2);cursor:pointer;font-size:.8rem;">📋</button>
+        <button title="Download .txt" onclick="downloadVaultItem(${i.id})" style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.25);border-radius:8px;padding:6px 9px;color:var(--accent2);cursor:pointer;font-size:.8rem;">⬇</button>
+        <button title="Delete" onclick="deleteVaultItem(${i.id})" style="background:rgba(255,102,128,.08);border:1px solid rgba(255,102,128,.25);border-radius:8px;padding:6px 9px;color:#ff8899;cursor:pointer;font-size:.8rem;">🗑</button>
+      </div>
+    </div>`).join('');
+}
+let artStyle = '';
+const ART_GALLERY_MAX = 8;
+function artEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function artSetStyle(btn, style) {
+  artStyle = style;
+  document.querySelectorAll('#art-style-chips .exam-chip').forEach(c => c.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function getArtGallery() {
+  try { return JSON.parse(localStorage.getItem('veda_art_gallery') || '[]'); } catch { return []; }
+}
+
+function saveArtGallery(gallery) {
+  try {
+    localStorage.setItem('veda_art_gallery', JSON.stringify(gallery));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function enhanceArtPrompt(idea, styleModifier) {
+  const instruction = `You are a professional AI image-prompt engineer. Expand this simple idea into one rich, vivid image-generation prompt.
+Describe the subject, composition, lighting, mood, and materials/textures in flowing descriptive prose (2-4 sentences, not a list).
+Narrative, specific prompts produce far better images than keyword lists — write it that way.
+Do not add quotation marks, labels, or any commentary — output ONLY the expanded prompt itself.
+Idea: ${idea}
+${styleModifier ? 'Desired style: ' + styleModifier : ''}`;
+  try {
+    const expanded = await gemini(instruction);
+    return expanded.trim().replace(/^["']|["']$/g, '');
+  } catch (e) {
+    // If enhancement fails for any reason, fall back to the raw idea rather than blocking generation
+    return styleModifier ? `${idea}, ${styleModifier}` : idea;
+  }
+}
+
+async function genArt() {
+  const input = document.getElementById('art-prompt');
+  const userPrompt = input.value.trim();
+  if (!userPrompt) { showToast('⚠️ Describe what you want to create first'); return; }
+  const btn = document.getElementById('art-gen-btn');
+  btn.disabled = true; btn.textContent = 'Refining idea...';
+
+  try {
+    const enhancedPrompt = await enhanceArtPrompt(userPrompt, artStyle);
+    btn.textContent = 'Painting...';
+    const img = await geminiImage(enhancedPrompt);
+    const gallery = getArtGallery();
+    gallery.unshift({
+      id: Date.now(),
+      prompt: userPrompt,
+      enhancedPrompt,
+      style: artStyle,
+      image: `data:${img.mimeType};base64,${img.base64}`,
+      date: new Date().toISOString()
+    });
+    if (gallery.length > ART_GALLERY_MAX) gallery.length = ART_GALLERY_MAX;
+    if (!saveArtGallery(gallery)) {
+      showToast('⚠️ Gallery storage full — delete an old piece to make room');
+      gallery.shift(); // undo the unshift, don't lose older ones silently
+    } else {
+      showToast('✨ Artwork created!');
+      input.value = '';
+    }
+    renderArtGallery();
+  } catch (e) {
+    showToast('❌ ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Generate';
+  }
+}
+
+function deleteArtPiece(id) {
+  const gallery = getArtGallery().filter(a => a.id !== id);
+  saveArtGallery(gallery);
+  renderArtGallery();
+}
+
+function downloadArtPiece(id) {
+  const piece = getArtGallery().find(a => a.id === id);
+  if (!piece) return;
+  const a = document.createElement('a');
+  a.href = piece.image;
+  a.download = `veda-art-${piece.id}.png`;
+  a.click();
+}
+
+function renderArtGallery() {
+  const wrap = document.getElementById('art-gallery');
+  if (!wrap) return;
+  const gallery = getArtGallery();
+  if (!gallery.length) {
+    wrap.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;opacity:.7;">
+        <div style="font-size:2.6rem;margin-bottom:14px;">🎨</div>
+        <div style="font-family:var(--raj);font-size:1rem;font-weight:600;color:var(--text2);margin-bottom:6px;">Nothing created yet</div>
+        <div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.75;line-height:1.6;max-width:280px;">Pick a style, describe your idea, and hit <strong>Generate</strong> — your artwork will show up here.</div>
+      </div>`;
+    return;
+  }
+  wrap.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;">` +
+    gallery.map(a => `
+      <div class="dt-widget" style="padding:0;overflow:hidden;">
+        <img src="${a.image}" style="width:100%;aspect-ratio:1;object-fit:cover;display:block;">
+        <div style="padding:10px 12px;">
+          <div style="font-family:var(--exo);font-size:.72rem;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${artEsc(a.prompt)}">${artEsc(a.prompt)}</div>
+          <div style="display:flex;gap:6px;margin-top:8px;">
+            <button class="abtn sec" style="flex:1;font-size:.68rem;padding:6px;" onclick="downloadArtPiece(${a.id})">⬇ Save</button>
+            <button class="abtn sec" style="font-size:.68rem;padding:6px 10px;" onclick="deleteArtPiece(${a.id})">🗑</button>
+          </div>
+        </div>
+      </div>`).join('') +
+    `</div>`;
+}
+
 async function gemini(prompt, imageData) {
   if (!API_KEY) throw new Error('No API key set — go to Settings to add your free Gemini key.');
   const profileCtx = buildAIContext();
@@ -5907,7 +6253,7 @@ async function gemini(prompt, imageData) {
   const body = JSON.stringify({ contents: [{ parts }] });
 
   async function _callWithKey(key) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODEL}:generateContent?key=${key}`;
     const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
     const data = await res.json();
     if (data.error) {
@@ -5915,6 +6261,7 @@ async function gemini(prompt, imageData) {
       err.status = data.error.code;
       throw err;
     }
+    if (data.usageMetadata?.totalTokenCount) trackTokenUsage(data.usageMetadata.totalTokenCount);
     return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
   }
 
@@ -6248,13 +6595,13 @@ IMPORTANT TERMS:
 SUMMARY:
 [2-3 sentences]
 
-No markdown symbols. Notes:\n\n${notesText}`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph. Notes:\n\n${notesText}`,
     bullets: `${imageInstruction}Convert these notes to clean bullet points grouped by topic. Format:
 [SECTION HEADING]
   • main point
     - sub point
 
-No markdown symbols. Notes:\n\n${notesText}`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph. Notes:\n\n${notesText}`,
     essay: `${imageInstruction}Create a detailed essay plan from these notes. Format:
 TITLE: [suggested essay title]
 
@@ -6275,13 +6622,13 @@ CONCLUSION:
 - Summary of arguments
 - Final thought
 
-No markdown symbols. Notes:\n\n${notesText}`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph. Notes:\n\n${notesText}`,
     glossary: `${imageInstruction}Extract all key terms from these notes and create a glossary. Format:
 GLOSSARY: [Topic]
 
 [TERM]: [clear, student-friendly definition]
 
-[List terms alphabetically. No markdown symbols.]
+[List terms alphabetically. No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.]
 
 Notes:\n\n${notesText}`,
     eli5: `${imageInstruction}Explain these notes as simply as possible, like explaining to a 10-year-old. Use simple words, real-life analogies, short sentences. Format:
@@ -6292,14 +6639,14 @@ TOPIC: [simple title]
 THE EASY VERSION:
 [One sentence a child could understand]
 
-No markdown symbols. Notes:\n\n${notesText}`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph. Notes:\n\n${notesText}`,
     timeline: `${imageInstruction}Extract all events, dates and sequences from these notes and create a chronological timeline. Format:
 TIMELINE: [Topic]
 
 [DATE/PERIOD] — [Event]
   → Why it matters: [brief note]
 
-[If no dates, order logically. No markdown symbols.]
+[If no dates, order logically. No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.]
 
 Notes:\n\n${notesText}`
   };
@@ -6608,6 +6955,24 @@ function changeStudyCount(delta) {
   if (el) el.textContent = studyCount;
 }
 
+function formatStudyOutput(text) {
+  let t = text.trim();
+  // Force a line break before numbered points like "1." "2." when they run on from prior text
+  t = t.replace(/([.!?:)])\s+(\d{1,2}\.\s)/g, '$1\n\n$2');
+  t = t.replace(/^(\d{1,2}\.\s)/gm, '\n$1');
+  // Force a line break before "Q1." "Q2." style question markers
+  t = t.replace(/([.!?):])\s+(Q\d+[.:])/g, '$1\n\n$2');
+  // Force a line break before bullet points
+  t = t.replace(/([.!?):])\s+([•\-]\s)/g, '$1\n$2');
+  // Force a line break before ALL-CAPS section headers (2+ capital words in a row, with or without a trailing colon)
+  t = t.replace(/([.!?:)])\s+([A-Z][A-Z\s\/]{5,40}(?::|(?=\s[A-Z0-9])))/g, '$1\n\n$2');
+  // Force a line break before lettered sub-points "a." "b." after punctuation or a closing paren
+  t = t.replace(/([.!?:)])\s+([a-d]\.\s)/g, '$1\n$2');
+  // Collapse 3+ blank lines down to 2, tidy leading blank lines
+  t = t.replace(/\n{3,}/g, '\n\n').replace(/^\n+/, '');
+  return t;
+}
+
 async function genStudy() {
   const t = document.getElementById('study-in').value.trim();
   if (!t && !studyImageData) return;
@@ -6670,7 +7035,7 @@ Q1. [Question] (2 marks) [Easy]
 Q2. [Question] (4 marks) [Medium]
 Q3. [Question] (6 marks) [Hard]
 
-No answers — questions only. No markdown symbols.`,
+No answers — questions only. No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`,
 
       markscheme: `${imageInstruction}Create ${studyCount} exam questions with full mark schemes for: ${topic_text}
 Format:
@@ -6682,7 +7047,7 @@ Answer:
 • [marking point] (1 mark)
 [Award up to X marks]
 
-No markdown symbols.`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`,
 
       cloze: `${imageInstruction}Create ${Math.max(2,Math.round(studyCount/3))} cloze passages for: ${topic_text}
 Replace key terms with blanks labelled (1), (2) etc. Format:
@@ -6694,7 +7059,7 @@ PASSAGE 1:
 ANSWER KEY:
 Passage 1: (1) answer, (2) answer...
 
-No markdown symbols.`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`,
 
       formula: `${imageInstruction}Create a formula sheet for: ${topic_text}
 Format:
@@ -6705,7 +7070,7 @@ Formula: [equation or rule]
 Variables: [what each symbol means]
 Used for: [when to apply it]
 
-No markdown symbols.`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`,
 
       cornell: `${imageInstruction}Create Cornell Notes for: ${topic_text}
 Format:
@@ -6719,7 +7084,7 @@ CUES / QUESTIONS          |  NOTES
 SUMMARY:
 [3-5 sentence summary in plain language]
 
-No markdown symbols.`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`,
 
       mnemonics: `${imageInstruction}Create memory aids and mnemonics for: ${topic_text}
 Format:
@@ -6735,7 +7100,7 @@ Remembers: [what]
 STORY METHOD:
 [Short memorable story linking key concepts]
 
-Make them fun and genuinely memorable. No markdown symbols.`,
+Make them fun and genuinely memorable. No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`,
 
       predicted: `${imageInstruction}Predict the most likely exam questions for: ${topic_text}
 Format:
@@ -6756,7 +7121,7 @@ STRETCH / TRICKY:
 REVISION TIPS:
 • [What to focus on]
 
-No markdown symbols.`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`,
 
       mistakes: `${imageInstruction}List the most common student mistakes for: ${topic_text}
 Format:
@@ -6772,7 +7137,7 @@ Why: [explanation]
 EXAM TRAPS:
 • [Trick questions to watch for]
 
-No markdown symbols.`,
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`,
 
       comparison: `${imageInstruction}Create comparison tables for the key concepts in: ${topic_text}
 Format:
@@ -6791,11 +7156,11 @@ KEY DIFFERENCES:
 KEY SIMILARITIES:
 • [What they share]
 
-No markdown symbols.`
+No markdown symbols. Use REAL line breaks (actual newlines) between every numbered point, section, and paragraph — never write it as one continuous run-on paragraph.`
     };
 
     try {
-      const ans = await gemini(textPrompts[sMode], imageToSend);
+      const ans = formatStudyOutput(await gemini(textPrompts[sMode], imageToSend));
       out.innerHTML = '';
       const pre = document.createElement('pre');
       pre.style.cssText = 'white-space:pre-wrap;font-family:var(--exo);font-size:.88rem;color:var(--text2);line-height:1.75;background:var(--panel-col);border:1px solid rgba(77,159,255,.12);border-radius:12px;padding:16px;';
@@ -6807,6 +7172,15 @@ No markdown symbols.`
       copyBtn.textContent = '📋 Copy';
       copyBtn.onclick = () => { navigator.clipboard.writeText(ans); copyBtn.textContent = '✓ Copied!'; setTimeout(()=>copyBtn.textContent='📋 Copy',1500); };
       out.appendChild(copyBtn);
+      const vaultBtn = document.createElement('button');
+      vaultBtn.className = 'abtn sec';
+      vaultBtn.style.cssText = 'margin-top:10px;margin-left:8px;font-size:.72rem;padding:7px 16px;';
+      vaultBtn.textContent = '🗂️ Save to Vault';
+      vaultBtn.onclick = () => {
+        const title = (document.getElementById('study-in')?.value || sMode || 'Study output');
+        saveToVault(`${sMode}_${title}`, ans, 'Smart Study');
+      };
+      out.appendChild(vaultBtn);
       trackStat('flashcards');
     } catch(e) {
       const errEl = document.createElement('div');
@@ -10786,6 +11160,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initAcct();
   loadPersonalizePrefs();
   updateHomeStats();
+  updateTokenDisplay();
+  document.querySelectorAll('.model-tier-btn').forEach(b => b.classList.toggle('on', b.dataset.model === AI_MODEL));
 
   // Desktop clock
   function updateDtClock() {
@@ -12935,6 +13311,8 @@ function runSearch(q) {
       { id:'journal',  icon:'📓', title:'Journal',      hint:'Your journal entries' },
       { id:'todo',     icon:'✅', title:'To-Do List',   hint:'Tasks & checklist' },
       { id:'games',    icon:'🎮', title:'Games',        hint:'Play & earn gems' },
+      { id:'art',      icon:'🌌', title:'Muse',   hint:'Turn ideas into images' },
+      { id:'vault',    icon:'🗂️', title:'Vault',   hint:'Saved notes, answers & exports' },
       { id:'exam',     icon:'📄', title:'Exam Papers',  hint:'Mock exam generator' },
       { id:'library',  icon:'🗂️', title:'Topic Library',hint:'Curated study topics' },
       { id:'settings', icon:'🌈', title:'Themes',        hint:'Customise appearance' },
@@ -15650,8 +16028,4 @@ function timeAgo(d) {
 })();
 
 </script>
-
-
-
-
 </body></html>
