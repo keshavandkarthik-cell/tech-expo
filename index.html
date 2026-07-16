@@ -4482,7 +4482,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       <!-- ══ VAULT TAB ══ -->
       <div class="tab" id="tab-vault">
         <div class="ttl">🗂️ Vault</div>
-        <div class="tsub"><span class="prm">›</span>Anything you save from Homework, Study, or Notes lives here as a plain text file</div>
+        <div class="tsub"><span class="prm">›</span>Everything you've saved or created — Homework, Study, Notes, and Muse — all in one place</div>
+        <div id="vault-count" style="font-family:var(--exo);font-size:.7rem;color:var(--accent2);opacity:.8;margin-top:4px;">0 total assets</div>
 
         <div style="display:flex;gap:8px;align-items:center;margin:14px 0;">
           <input id="vault-search" type="text" placeholder="🔍 Search saved files..." oninput="renderVault()" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 14px;color:var(--text);font-family:var(--exo);font-size:.82rem;outline:none;">
@@ -4611,6 +4612,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             <div class="exam-row-scroll" style="display:flex;gap:8px;flex-wrap:wrap;">
               <button class="exam-out-btn" onclick="examPrint()">🖨️ Print / Save PDF</button>
               <button class="exam-out-btn" onclick="examShowAnswers()">👁 Toggle Answers</button>
+              <button class="exam-out-btn" onclick="saveToVault(window._lastExamTitle || 'Exam paper', examToPlainText(window._lastExamRaw||'', window._lastExamTitle||'Exam'), 'Exam Papers')">🗂️ Save to Vault</button>
               <button class="exam-out-btn accent" onclick="examNewPaper()">+ New Paper</button>
             </div>
           </div>
@@ -5323,7 +5325,18 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 <script>
 // ── API KEY ──
 let API_KEY = localStorage.getItem('studly_key') || '';
+// Deprecated/retired model tags get auto-migrated to their current equivalent,
+// so a preference saved before a model was retired doesn't keep silently failing.
+const MODEL_MIGRATIONS = {
+  'gemini-2.5-flash-lite': 'gemini-3.1-flash-lite',
+  'gemini-1.5-flash': 'gemini-3.5-flash',
+  'gemini-1.5-pro': 'gemini-2.5-pro',
+};
 let AI_MODEL = localStorage.getItem('veda_ai_model') || 'gemini-3.5-flash';
+if (MODEL_MIGRATIONS[AI_MODEL]) {
+  AI_MODEL = MODEL_MIGRATIONS[AI_MODEL];
+  localStorage.setItem('veda_ai_model', AI_MODEL);
+}
 function setAIModel(model) {
   AI_MODEL = model;
   localStorage.setItem('veda_ai_model', model);
@@ -6038,6 +6051,61 @@ async function geminiImage(prompt) {
 }
 
 // ── VAULT (text artifacts) ──
+function vaultEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Turns plain-text content into nicely styled HTML for in-app viewing only.
+// The underlying saved/downloaded .txt content is never touched — this is display-only.
+function renderVaultText(content) {
+  const lines = content.split('\n');
+  let html = '';
+  for (let raw of lines) {
+    const line = raw.trim();
+    if (!line) { html += '<div style="height:10px;"></div>'; continue; }
+    const isHeader = /^[A-Z][A-Z0-9\s/&:.,'-]{4,}$/.test(line.replace(/:$/, '')) && line === line.toUpperCase();
+    const isNumbered = /^\d{1,2}\.\s/.test(line);
+    const isQ = /^Q\d+[.:]/.test(line);
+    const isLettered = /^[a-d]\.\s/.test(line);
+    const isBullet = /^[•\-]\s/.test(line);
+    if (isHeader) {
+      html += `<div style="font-family:var(--raj);font-weight:700;font-size:.95rem;color:var(--accent2);margin:14px 0 6px;letter-spacing:.3px;">${vaultEsc(line)}</div>`;
+    } else if (isQ) {
+      html += `<div style="font-family:var(--exo);font-weight:700;font-size:.85rem;color:var(--teal2);margin:10px 0 3px;">${vaultEsc(line)}</div>`;
+    } else if (isNumbered) {
+      html += `<div style="font-family:var(--exo);font-size:.85rem;color:var(--text);margin:8px 0 2px;padding-left:2px;">${vaultEsc(line)}</div>`;
+    } else if (isLettered || isBullet) {
+      html += `<div style="font-family:var(--exo);font-size:.82rem;color:var(--text2);margin:2px 0 2px 18px;">${vaultEsc(line)}</div>`;
+    } else {
+      html += `<div style="font-family:var(--exo);font-size:.85rem;color:var(--text2);line-height:1.7;margin:2px 0;">${vaultEsc(line)}</div>`;
+    }
+  }
+  return html;
+}
+
+function openVaultPreview(id) {
+  const item = getVault().find(i => i.id === id);
+  if (!item) return;
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+  modal.innerHTML = `
+    <div style="background:var(--panel-col2);border:1px solid var(--panel-border);border-radius:16px;padding:22px;width:100%;max-width:560px;max-height:80vh;display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div>
+          <div style="font-family:var(--raj);font-size:1rem;font-weight:700;color:var(--text);">${slugifyVaultTitle(item.title)}.txt</div>
+          <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);opacity:.7;margin-top:2px;">${item.source ? item.source + ' · ' : ''}${vaultTimeAgo(item.date)}</div>
+        </div>
+        <button id="vault-preview-close" style="background:none;border:none;color:var(--silver);font-size:1.1rem;cursor:pointer;">✕</button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding-right:4px;">${renderVaultText(item.content)}</div>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="abtn sec" style="flex:1;" onclick="copyVaultItem(${item.id})">📋 Copy</button>
+        <button class="abtn sec" style="flex:1;" onclick="downloadVaultItem(${item.id})">⬇ Download .txt</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.querySelector('#vault-preview-close').onclick = () => modal.remove();
+}
+
 function getVault() {
   try { return JSON.parse(localStorage.getItem('veda_artifacts') || '[]'); } catch { return []; }
 }
@@ -6095,34 +6163,60 @@ function vaultTimeAgo(iso) {
   return Math.floor(hrs / 24) + 'd ago';
 }
 
+function deleteAsset(id, type) {
+  if (type === 'image') deleteArtPiece(id); else deleteVaultItem(id);
+}
+function downloadAsset(id, type) {
+  if (type === 'image') downloadArtPiece(id); else downloadVaultItem(id);
+}
+
 function renderVault() {
   const wrap = document.getElementById('vault-list');
   if (!wrap) return;
   const q = (document.getElementById('vault-search')?.value || '').toLowerCase().trim();
-  let items = getVault();
-  if (q) items = items.filter(i => i.title.toLowerCase().includes(q) || i.content.toLowerCase().includes(q));
+
+  const textItems = getVault().map(i => ({ ...i, _type: 'text' }));
+  const imageItems = getArtGallery().map(i => ({ ...i, _type: 'image', title: i.prompt }));
+  let items = [...textItems, ...imageItems].sort((a,b) => b.id - a.id);
+
+  if (q) items = items.filter(i => i.title.toLowerCase().includes(q) || (i.content||'').toLowerCase().includes(q));
+
+  const countLabel = document.getElementById('vault-count');
+  if (countLabel) countLabel.textContent = `${textItems.length + imageItems.length} total asset${(textItems.length+imageItems.length)===1?'':'s'} · ${textItems.length} file${textItems.length===1?'':'s'} · ${imageItems.length} image${imageItems.length===1?'':'s'}`;
 
   if (!items.length) {
     wrap.innerHTML = `
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;opacity:.7;">
         <div style="font-size:2.6rem;margin-bottom:14px;">🗂️</div>
-        <div style="font-family:var(--raj);font-size:1rem;font-weight:600;color:var(--text2);margin-bottom:6px;">${q ? 'No files match' : 'Vault is empty'}</div>
-        <div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.75;line-height:1.6;max-width:300px;">${q ? 'Try a different search.' : 'Look for a "💾 Save to Vault" button after generating something in Smart Study, Homework, or Notes.'}</div>
+        <div style="font-family:var(--raj);font-size:1rem;font-weight:600;color:var(--text2);margin-bottom:6px;">${q ? 'No assets match' : 'Vault is empty'}</div>
+        <div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.75;line-height:1.6;max-width:300px;">${q ? 'Try a different search.' : 'Look for a "🗂️ Save to Vault" button in Homework, Smart Study, Notes, or Exam Papers — plus every image you create in Muse.'}</div>
       </div>`;
     return;
   }
 
-  wrap.innerHTML = items.map(i => `
+  wrap.innerHTML = items.map(i => i._type === 'image' ? `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--panel-col3);border:1px solid var(--panel-border);border-radius:12px;margin-bottom:8px;">
+      <img src="${i.image}" style="width:40px;height:40px;flex-shrink:0;border-radius:10px;object-fit:cover;">
+      <div style="flex:1;min-width:0;cursor:pointer;" onclick="window.open('${i.image}','_blank')">
+        <div style="font-family:var(--raj);font-size:.86rem;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${vaultEsc(i.title)}</div>
+        <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);opacity:.7;margin-top:2px;">🌌 Muse · ${vaultTimeAgo(i.date)}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button title="Download" onclick="downloadAsset(${i.id},'image')" style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.25);border-radius:8px;padding:6px 9px;color:var(--accent2);cursor:pointer;font-size:.8rem;">⬇</button>
+        <button title="Delete" onclick="deleteAsset(${i.id},'image')" style="background:rgba(255,102,128,.08);border:1px solid rgba(255,102,128,.25);border-radius:8px;padding:6px 9px;color:#ff8899;cursor:pointer;font-size:.8rem;">🗑</button>
+      </div>
+    </div>` : `
     <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--panel-col3);border:1px solid var(--panel-border);border-radius:12px;margin-bottom:8px;">
       <div style="font-size:1.3rem;width:40px;height:40px;flex-shrink:0;border-radius:10px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;">📄</div>
-      <div style="flex:1;min-width:0;">
+      <div style="flex:1;min-width:0;cursor:pointer;" onclick="openVaultPreview(${i.id})">
         <div style="font-family:var(--raj);font-size:.86rem;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${slugifyVaultTitle(i.title)}.txt</div>
         <div style="font-family:var(--exo);font-size:.68rem;color:var(--silver);opacity:.7;margin-top:2px;">${i.source ? i.source + ' · ' : ''}${vaultTimeAgo(i.date)}</div>
       </div>
       <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button title="Preview" onclick="openVaultPreview(${i.id})" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 9px;color:var(--silver2);cursor:pointer;font-size:.8rem;">👁</button>
         <button title="Copy" onclick="copyVaultItem(${i.id})" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 9px;color:var(--silver2);cursor:pointer;font-size:.8rem;">📋</button>
-        <button title="Download .txt" onclick="downloadVaultItem(${i.id})" style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.25);border-radius:8px;padding:6px 9px;color:var(--accent2);cursor:pointer;font-size:.8rem;">⬇</button>
-        <button title="Delete" onclick="deleteVaultItem(${i.id})" style="background:rgba(255,102,128,.08);border:1px solid rgba(255,102,128,.25);border-radius:8px;padding:6px 9px;color:#ff8899;cursor:pointer;font-size:.8rem;">🗑</button>
+        <button title="Download .txt" onclick="downloadAsset(${i.id},'text')" style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.25);border-radius:8px;padding:6px 9px;color:var(--accent2);cursor:pointer;font-size:.8rem;">⬇</button>
+        <button title="Delete" onclick="deleteAsset(${i.id},'text')" style="background:rgba(255,102,128,.08);border:1px solid rgba(255,102,128,.25);border-radius:8px;padding:6px 9px;color:#ff8899;cursor:pointer;font-size:.8rem;">🗑</button>
       </div>
     </div>`).join('');
 }
@@ -6517,6 +6611,12 @@ Student's working: ${question}`
         }
       }
     }
+    const hwVaultBtn = document.createElement('button');
+    hwVaultBtn.className = 'abtn sec';
+    hwVaultBtn.style.cssText = 'font-size:.68rem;padding:6px 14px;margin-top:8px;';
+    hwVaultBtn.textContent = '🗂️ Save to Vault';
+    hwVaultBtn.onclick = () => saveToVault(question.slice(0, 40) || 'Homework answer', ans, 'Homework');
+    wrapper.appendChild(hwVaultBtn);
   } catch (e) {
     hwWin.removeChild(thinking);
     addBub('Error: ' + e.message + ' — check your API key.', 'bot');
@@ -6653,7 +6753,7 @@ Notes:\n\n${notesText}`
   const imageToSend = notesImageData;
   if (notesImageData) clearNotesImage();
   try {
-    const ans = await gemini(prompts[mode], imageToSend);
+    const ans = formatStudyOutput(await gemini(prompts[mode], imageToSend));
     out.textContent = ans;
     trackStat('notes');
     // Save to localStorage for search indexing
@@ -6664,6 +6764,16 @@ Notes:\n\n${notesText}`
       if (savedNotes.length > 30) savedNotes.length = 30;
       localStorage.setItem('studly_saved_notes', JSON.stringify(savedNotes));
     } catch(e2) { /* non-critical */ }
+    const existingBtn = document.getElementById('notes-vault-btn');
+    if (existingBtn) existingBtn.remove();
+    const notesVaultBtn = document.createElement('button');
+    notesVaultBtn.id = 'notes-vault-btn';
+    notesVaultBtn.className = 'abtn sec';
+    notesVaultBtn.style.cssText = 'font-size:.68rem;padding:6px 14px;margin-top:10px;';
+    notesVaultBtn.textContent = '🗂️ Save to Vault';
+    const noteTitle = document.getElementById('notes-in')?.value.trim().slice(0,40) || mode;
+    notesVaultBtn.onclick = () => saveToVault(`${mode}_${noteTitle}`, ans, 'Smart Notes');
+    out.parentElement.insertBefore(notesVaultBtn, out.nextSibling);
   } catch (e) { out.textContent = 'Error: ' + e.message; }
 }
 
@@ -12848,6 +12958,29 @@ function renderExamPaper(raw, subject, typeLabels) {
   // Award gems and track exam stat
   trackStat && trackStat('exams');
   awardGems(5, 'Exam paper generated! 📄');
+  window._lastExamRaw = raw;
+  window._lastExamTitle = title;
+}
+
+function examToPlainText(raw, title) {
+  const lines = raw.split('\n');
+  let out = title + '\n' + '='.repeat(title.length) + '\n\n';
+  let qNum = 0;
+  for (const line of lines) {
+    const t = line.trim();
+    if (t.startsWith('[SECTION]:')) out += '\n' + t.replace('[SECTION]:','').trim().toUpperCase() + '\n\n';
+    else if (t.startsWith('[SECTION_INST]:')) out += t.replace('[SECTION_INST]:','').trim() + '\n\n';
+    else if (t.startsWith('[Q]:')) {
+      qNum++;
+      const marksMatch = t.match(/\[MARKS?:(\d+)\]/i);
+      const marks = marksMatch ? marksMatch[1] : '1';
+      const qText = t.replace('[Q]:','').replace(/\[MARKS?:\d+\]/i,'').trim();
+      out += `Q${qNum}. ${qText} [${marks} mark${marks==='1'?'':'s'}]\n\n`;
+    }
+    else if (t.startsWith('[OPT]:')) out += '   ' + t.replace('[OPT]:','').trim() + '\n';
+    else if (t.startsWith('[ANS]:')) out += 'Answer: ' + t.replace('[ANS]:','').trim() + '\n\n';
+  }
+  return out;
 }
 
 function examShowAnswers() {
@@ -16028,4 +16161,8 @@ function timeAgo(d) {
 })();
 
 </script>
+
+
+
+
 </body></html>
