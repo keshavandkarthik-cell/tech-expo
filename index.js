@@ -6,36 +6,41 @@
  * (see window._fb.addSafetyAlert in index.html)
  *
  * Looks up the student's guardianEmail on their users/{uid} profile doc,
- * and emails them a plain, non-alarmist notification.
+ * and emails them a plain, non-alarmist notification — sent FROM
+ * noreply@veda-net.com via Resend.
  *
  * Requires the Blaze (pay-as-you-go) plan since it makes an outbound network
  * call (sending email) — you confirmed you're already on Blaze.
  *
  * ── SETUP ──
- * 1. cd functions && npm install
- * 2. Set SMTP credentials as secrets (recommended over functions.config(),
- *    which is deprecated):
- *      firebase functions:secrets:set SMTP_USER
- *      firebase functions:secrets:set SMTP_PASS
- *    If using Gmail: SMTP_USER is the Gmail address, SMTP_PASS is a 16-char
- *    "App Password" (Google Account → Security → 2-Step Verification → App
- *    Passwords) — NOT your normal Gmail password. For anything beyond a
- *    handful of alerts a day, use a transactional provider instead (SendGrid,
- *    Postmark, Resend, etc.) — swap the transport config below accordingly.
- * 3. Deploy: firebase deploy --only functions
+ * 1. Sign up at resend.com (free tier: 3,000 emails/month, plenty for this).
+ * 2. Resend dashboard → Domains → Add Domain → enter veda-net.com.
+ *    It gives you SPF + DKIM DNS records to add wherever veda-net.com's
+ *    DNS is managed (Namecheap, Cloudflare, GoDaddy, etc). This proves you
+ *    own the domain so Resend is allowed to send as noreply@veda-net.com.
+ *    Verification usually takes a few minutes to a few hours after adding
+ *    the records.
+ * 3. Resend dashboard → API Keys → create one, copy it.
+ * 4. cd functions && npm install
+ * 5. firebase functions:secrets:set RESEND_API_KEY
+ *      (paste the key from step 3 when prompted)
+ * 6. firebase deploy --only functions
+ *
+ * No mailbox needed for noreply@veda-net.com — nobody has to log into it,
+ * it's purely a "from" address on outgoing mail.
  */
 
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
 const { defineSecret } = require('firebase-functions/params');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 initializeApp();
 const db = getFirestore();
 
-const SMTP_USER = defineSecret('SMTP_USER');
-const SMTP_PASS = defineSecret('SMTP_PASS');
+const RESEND_API_KEY = defineSecret('RESEND_API_KEY');
+const FROM_ADDRESS = 'Veda Safety Alerts <noreply@veda-net.com>';
 
 const CATEGORY_LABEL = {
   self_harm: 'signs of self-harm or suicidal thoughts',
@@ -43,7 +48,7 @@ const CATEGORY_LABEL = {
 };
 
 exports.onSafetyAlertCreated = onDocumentCreated(
-  { document: 'users/{uid}/safetyAlerts/{alertId}', secrets: [SMTP_USER, SMTP_PASS] },
+  { document: 'users/{uid}/safetyAlerts/{alertId}', secrets: [RESEND_API_KEY] },
   async (event) => {
     const snap = event.data;
     if (!snap) return;
@@ -64,10 +69,7 @@ exports.onSafetyAlertCreated = onDocumentCreated(
     const categoryLabel = CATEGORY_LABEL[alert.category] || 'signs of serious distress';
     const when = alert.createdAt ? new Date(alert.createdAt).toLocaleString() : new Date().toLocaleString();
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail', // swap for a transactional provider's SMTP config in production
-      auth: { user: SMTP_USER.value(), pass: SMTP_PASS.value() },
-    });
+    const resend = new Resend(RESEND_API_KEY.value());
 
     const subject = `Veda Safety Alert — ${studentName} may need support`;
     const text = `Hi,
@@ -82,12 +84,18 @@ This message was sent automatically because a guardian contact is registered on 
 
 — Veda`;
 
-    await transporter.sendMail({
-      from: `Veda Safety Alerts <${SMTP_USER.value()}>`,
+    const { error } = await resend.emails.send({
+      from: FROM_ADDRESS,
       to: guardianEmail,
       subject,
       text,
     });
+
+    if (error) {
+      console.error(`Resend failed to send safety alert for uid ${uid}:`, error);
+      await snap.ref.update({ notified: false, notifiedReason: 'send_failed', error: String(error.message || error) });
+      return;
+    }
 
     await snap.ref.update({ notified: true, notifiedAt: new Date().toISOString() });
     console.log(`Safety alert emailed to guardian for uid ${uid}.`);
