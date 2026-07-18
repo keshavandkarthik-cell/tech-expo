@@ -35,7 +35,7 @@
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc, updateDoc }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -55,7 +55,7 @@ const _prov = new GoogleAuthProvider();
 
 /* expose to regular scripts */
 window._fb = {
-  signIn:  () => signInWithPopup(_auth, _prov),
+  signIn:  () => signInWithRedirect(_auth, _prov),
   signOut: () => signOut(_auth),
   save:    (uid, data) => setDoc(doc(_db,'users',uid), data, {merge:true}),
   load:    async (uid) => { const s = await getDoc(doc(_db,'users',uid)); return s.exists()?s.data():null; },
@@ -65,6 +65,26 @@ window._fb = {
   deletePaper: (uid, pid) => deleteDoc(doc(_db,'users',uid,'papers',pid)),
   updatePaper: (uid, pid, data) => updateDoc(doc(_db,'users',uid,'papers',pid), data),
 };
+
+/* Complete a pending redirect sign-in (fires once, after Google redirects back to this page).
+   Using redirect instead of popup avoids the Firebase popup internal-assertion bug that was
+   tied to browser Cross-Origin-Opener-Policy blocking popup-close detection. */
+getRedirectResult(_auth).catch(err => {
+  console.warn('[Veda Auth] redirect sign-in error:', err);
+  if (typeof showToast === 'function') showToast('❌ Sign-in failed: ' + (err.message || 'please try again'));
+});
+
+/* Safety net: older Firebase Auth popup internals can throw an uncaught
+   "INTERNAL ASSERTION FAILED: Pending promise was never set" error outside the normal
+   promise chain. Swallow it quietly if it ever resurfaces instead of letting it hit the console
+   as an uncaught error. */
+window.addEventListener('unhandledrejection', (event) => {
+  const msg = String((event.reason && event.reason.message) || event.reason || '');
+  if (msg.includes('INTERNAL ASSERTION FAILED') || msg.includes('Pending promise was never set')) {
+    console.warn('[Veda Auth] suppressed known Firebase popup assertion error:', msg);
+    event.preventDefault();
+  }
+});
 
 onAuthStateChanged(_auth, async user => {
   window._fbUser = user || null;
@@ -455,6 +475,11 @@ html[data-theme="ivory"] button[onclick="openExamModal()"] {
   pointer-events: none;
 }
 
+@keyframes tosShake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-4px); }
+  40%,80% { transform: translateX(4px); }
+}
 /* ── API KEY SPLASH ── */
 #splash {
   position: fixed; inset: 0; z-index: 1000;
@@ -2315,7 +2340,7 @@ body.fs-large { font-size: 17px; }
     <div class="corner-tl"></div><div class="corner-tr"></div>
 
     <!-- Google Sign-In -->
-    <button onclick="window._fb&amp;&amp;window._fb.signIn().catch(e=&gt;showToast('❌ '+e.message))" style="width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:none;border-radius:10px;padding:13px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:600;color:#1f1f1f;cursor:pointer;margin-bottom:16px;transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.35);" onmouseover="this.style.boxShadow='0 6px 22px rgba(0,0,0,.45)';this.style.transform='translateY(-1px)'" onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,.35)';this.style.transform=''">
+    <button id="btn-google-signin" onclick="if(!requireTosAccept())return;window._fb&amp;&amp;window._fb.signIn().catch(e=&gt;showToast('❌ '+e.message))" style="width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:none;border-radius:10px;padding:13px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:600;color:#1f1f1f;cursor:pointer;margin-bottom:16px;transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.35);" onmouseover="this.style.boxShadow='0 6px 22px rgba(0,0,0,.45)';this.style.transform='translateY(-1px)'" onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,.35)';this.style.transform=''">
       <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>
       Continue with Google
     </button>
@@ -2328,11 +2353,58 @@ body.fs-large { font-size: 17px; }
 
     <div class="splash-label">// Gemini API Key</div>
     <div class="splash-desc">Get your free key at <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a> — no credit card needed.</div>
-    <input class="key-input" id="key-in" type="password" placeholder="AIza...your key here" onkeydown="if(event.key==='Enter')saveKey()">
-    <button class="key-btn" onclick="saveKey()">LAUNCH WITHOUT ACCOUNT</button>
+    <input class="key-input" id="key-in" type="password" placeholder="AIza...your key here" onkeydown="if(event.key==='Enter'){if(!requireTosAccept())return;saveKey()}">
+    <button class="key-btn" onclick="if(!requireTosAccept())return;saveKey()">LAUNCH WITHOUT ACCOUNT</button>
     <div style="margin-top:14px;">
-      <button onclick="continueAsGuest()" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(77,159,255,0.2);border-radius:10px;padding:11px;color:var(--silver2);font-family:var(--raj);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.3px;" onmouseover="this.style.background='rgba(77,159,255,0.08)';this.style.borderColor='rgba(77,159,255,0.4)';this.style.color='var(--accent2)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(77,159,255,0.2)';this.style.color='var(--silver2)'">👤 Continue as Guest</button>
+      <button onclick="if(!requireTosAccept())return;continueAsGuest()" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(77,159,255,0.2);border-radius:10px;padding:11px;color:var(--silver2);font-family:var(--raj);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.3px;" onmouseover="this.style.background='rgba(77,159,255,0.08)';this.style.borderColor='rgba(77,159,255,0.4)';this.style.color='var(--accent2)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(77,159,255,0.2)';this.style.color='var(--silver2)'">👤 Continue as Guest</button>
       <div class="key-note" style="margin-top:8px;">No account needed · data stays on this device only</div>
+    </div>
+
+    <!-- ── T&C / AI Disclaimer ── -->
+    <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(77,159,255,.12);">
+      <div style="background:rgba(0,0,0,.35);padding:10px 12px;border-radius:10px;border:1px solid rgba(77,159,255,.15);font-size:.68rem;color:var(--silver);max-height:96px;overflow-y:auto;line-height:1.55;font-family:var(--raj);">
+        <p style="font-weight:700;color:var(--silver2);margin-bottom:4px;">AI Service Disclaimer:</p>
+        Veda utilizes advanced generative AI systems via third-party APIs. All study outputs, mock papers, and explanations are provided "as-is" for supplemental revision purposes only. Veda does not guarantee absolute accuracy and holds no liability for final academic grades or exam outcomes. Cross-verification with the official IGCSE syllabus is strongly advised.
+      </div>
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:10px;cursor:pointer;font-family:var(--raj);font-size:.75rem;color:var(--silver2);line-height:1.4;">
+        <input type="checkbox" id="tos-checkbox" onchange="onTosCheckboxChange(this.checked)" style="margin-top:2px;flex-shrink:0;width:15px;height:15px;accent-color:var(--accent2);cursor:pointer;">
+        <span>I have read and agree to the <a href="#" onclick="openTosModal();return false;" style="color:var(--accent2);text-decoration:underline;">Terms &amp; Conditions</a>, including the AI accuracy disclaimer above.</span>
+      </label>
+      <div id="tos-warn" style="display:none;margin-top:6px;font-size:.68rem;color:#ff6b6b;font-family:var(--raj);">Please accept the Terms &amp; Conditions to continue.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TERMS & CONDITIONS MODAL ── -->
+<div id="tos-modal-overlay" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)closeTosModal()">
+  <div style="width:min(620px,94vw);max-height:82vh;display:flex;flex-direction:column;background:var(--panel-col2,#12151c);border:1px solid rgba(77,159,255,.3);border-radius:16px;box-shadow:0 32px 80px rgba(0,0,0,.7);overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(77,159,255,.15);flex-shrink:0;">
+      <span style="font-family:var(--exo);font-size:.85rem;letter-spacing:1px;color:var(--accent2);">TERMS &amp; CONDITIONS</span>
+      <span onclick="closeTosModal()" style="cursor:pointer;color:var(--silver);font-size:1.1rem;line-height:1;padding:4px;">✕</span>
+    </div>
+    <div style="padding:18px 22px;overflow-y:auto;font-family:var(--raj);font-size:.83rem;line-height:1.65;color:var(--silver2);">
+      <p style="font-weight:700;color:var(--text);margin-bottom:4px;">1. Acceptance of Terms</p>
+      <p style="margin-bottom:14px;">By creating an account and logging into the Veda application ("Veda"), you ("The User") agree to be legally bound by these Terms and Conditions. If you do not agree to these terms, you must immediately cease using the application.</p>
+
+      <p style="font-weight:700;color:var(--text);margin-bottom:4px;">2. Third-Party Artificial Intelligence Services &amp; API Disclaimer</p>
+      <p style="margin-bottom:8px;">Veda leverages third-party Application Programming Interfaces (APIs), specifically the Google Gemini API, to generate personalized study plans, explanations, flashcards, and mock exam papers.</p>
+      <p style="margin-bottom:8px;"><strong style="color:var(--text);">Accuracy &amp; Hallucinations:</strong> The User acknowledges that generative artificial intelligence is an evolving technology. Veda does not warrant, guarantee, or represent that the outputs generated by the AI engine will be 100% accurate, complete, or error-free. The AI engine can produce inaccurate or flawed information ("hallucinations").</p>
+      <p style="margin-bottom:14px;"><strong style="color:var(--text);">Verification:</strong> The User is solely responsible for cross-referencing and verifying all AI-generated study materials against official textbooks, school materials, and authorized IGCSE syllabus documents before relying on them for examinations.</p>
+
+      <p style="font-weight:700;color:var(--text);margin-bottom:4px;">3. Limitation of Liability</p>
+      <p style="margin-bottom:6px;">To the maximum extent permitted by applicable law, Veda, its developers, and affiliates shall not be held liable for any direct, indirect, incidental, or consequential damages resulting from:</p>
+      <p style="margin-bottom:2px;">1. Any errors, omissions, or factual mistakes in content generated by the AI interface.</p>
+      <p style="margin-bottom:2px;">2. Any drop in academic performance, poor exam grades, or failures in official IGCSE examinations.</p>
+      <p style="margin-bottom:14px;">3. Temporary service disruptions, latency, or complete outages of the third-party Gemini API or Firebase database systems.</p>
+
+      <p style="font-weight:700;color:var(--text);margin-bottom:4px;">4. No Official Examination Board Affiliation</p>
+      <p style="margin-bottom:14px;">Veda is an independent educational tool. It is not affiliated with, licensed by, sponsored by, or associated with Cambridge Assessment International Education (CAIE), Pearson Edexcel, or any other official international examination board.</p>
+
+      <p style="font-weight:700;color:var(--text);margin-bottom:4px;">5. Acceptable Use Policy</p>
+      <p style="margin-bottom:2px;">The User agrees not to reverse-engineer Veda's application code, attempt to scrape data metrics maliciously, or inject prompt injections/malicious queries into the integrated AI chat inputs designed to crash or exploit the system architecture.</p>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid rgba(77,159,255,.15);flex-shrink:0;display:flex;justify-content:flex-end;gap:10px;">
+      <button onclick="acceptTosFromModal()" style="background:var(--accent2);border:none;border-radius:8px;padding:9px 18px;color:#0b0d12;font-family:var(--exo);font-size:.75rem;font-weight:700;letter-spacing:.5px;cursor:pointer;">I AGREE</button>
     </div>
   </div>
 </div>
@@ -5380,6 +5452,51 @@ function continueAsGuest() {
   }, 400);
 }
 
+// ── Terms & Conditions gating ──
+function isTosAccepted() { return localStorage.getItem('veda_tos_accepted') === '1'; }
+function setTosAccepted() {
+  localStorage.setItem('veda_tos_accepted', '1');
+  const cb = document.getElementById('tos-checkbox');
+  if (cb) cb.checked = true;
+  const warn = document.getElementById('tos-warn');
+  if (warn) warn.style.display = 'none';
+}
+function onTosCheckboxChange(checked) {
+  if (checked) {
+    localStorage.setItem('veda_tos_accepted', '1');
+    const warn = document.getElementById('tos-warn');
+    if (warn) warn.style.display = 'none';
+  } else {
+    localStorage.removeItem('veda_tos_accepted');
+  }
+}
+function requireTosAccept() {
+  if (isTosAccepted()) return true;
+  const warn = document.getElementById('tos-warn');
+  if (warn) warn.style.display = 'block';
+  const cb = document.getElementById('tos-checkbox');
+  if (cb) { cb.focus(); cb.parentElement.style.animation = 'none'; requestAnimationFrame(() => { cb.parentElement.style.animation = 'tosShake .35s'; }); }
+  showToast('⚠️ Please accept the Terms & Conditions to continue');
+  return false;
+}
+function openTosModal() {
+  const ov = document.getElementById('tos-modal-overlay');
+  if (ov) ov.style.display = 'flex';
+}
+function closeTosModal() {
+  const ov = document.getElementById('tos-modal-overlay');
+  if (ov) ov.style.display = 'none';
+}
+function acceptTosFromModal() {
+  setTosAccepted();
+  closeTosModal();
+}
+(function initTosCheckboxState() {
+  const apply = () => { const cb = document.getElementById('tos-checkbox'); if (cb) cb.checked = isTosAccepted(); };
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+})();
+
 function skipSplash() {
   document.getElementById('splash').style.opacity = '0';
   document.getElementById('splash').style.transition = 'opacity .4s';
@@ -6226,7 +6343,7 @@ function artEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&l
 
 function artSetStyle(btn, style) {
   artStyle = style;
-  document.querySelectorAll('#art-style-chips .exam-chip').forEach(c => c.classList.remove('on'));
+  document.querySelectorAll('#art-style-chips .muse-chip').forEach(c => c.classList.remove('on'));
   btn.classList.add('on');
 }
 
@@ -16165,4 +16282,4 @@ function timeAgo(d) {
 
 
 
-</body></html>
+</body></html>s
