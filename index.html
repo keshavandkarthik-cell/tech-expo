@@ -64,7 +64,6 @@ window._fb = {
   getPapers: async (uid) => { const s = await getDocs(collection(_db,'users',uid,'papers')); return s.docs.map(d=>({id:d.id,...d.data()})); },
   deletePaper: (uid, pid) => deleteDoc(doc(_db,'users',uid,'papers',pid)),
   updatePaper: (uid, pid, data) => updateDoc(doc(_db,'users',uid,'papers',pid), data),
-  addSafetyAlert: (uid, data) => addDoc(collection(_db,'users',uid,'safetyAlerts'), data),
 };
 
 /* Complete a pending redirect sign-in (fires once, after Google redirects back to this page).
@@ -2164,7 +2163,6 @@ body.fs-large { font-size: 17px; }
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Edexcel A-Level')">🌍 Edexcel A-Level</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','IB')">🌍 IB</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','University')">🎓 University</div>
-      <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Primary School')">🎈 Primary School</div>
       <div class="ob-chip" onclick="obChipSelect(this,'ob-curriculum-grid','Other')">Other</div>
     </div>
     <div style="display:flex;gap:10px;margin-top:4px;">
@@ -3539,7 +3537,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
                   <div class="skin-preview skin-prev-default"></div>
                   <div class="skin-label">🖥️ Default</div>
                 </div>
-                <div class="skin-card" id="style-hacker" onclick="setUIStyle('hacker',this)">
+                <div class="skin-card on" id="style-hacker" onclick="setUIStyle('hacker',this)">
                   <div class="skin-preview skin-prev-hacker"></div>
                   <div class="skin-label">💻 Hacker</div>
                 </div>
@@ -3664,7 +3662,6 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
                 <div class="aip-chip" data-val="Edexcel A-Level">🌍 Edexcel A-Level</div>
                 <div class="aip-chip" data-val="IB">🌍 IB</div>
                 <div class="aip-chip" data-val="University">🎓 University</div>
-                <div class="aip-chip" data-val="Primary School">🎈 Primary School</div>
                 <div class="aip-chip" data-val="Other">Other</div>
               </div>
             </div>
@@ -3684,12 +3681,6 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
                 <div class="aip-chip" data-val="Year 3">Y3</div>
                 <div class="aip-chip" data-val="Year 4">Y4</div>
                 <div class="aip-chip" data-val="Postgraduate">Postgrad</div>
-                <div class="aip-chip" data-val="Primary Year 1">PY1</div>
-                <div class="aip-chip" data-val="Primary Year 2">PY2</div>
-                <div class="aip-chip" data-val="Primary Year 3">PY3</div>
-                <div class="aip-chip" data-val="Primary Year 4">PY4</div>
-                <div class="aip-chip" data-val="Primary Year 5">PY5</div>
-                <div class="aip-chip" data-val="Primary Year 6">PY6</div>
                 <div class="aip-chip" data-val="Other">Other</div>
               </div>
             </div>
@@ -3811,25 +3802,6 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path></svg>
               Sign in with Google
             </button>
-          </div>
-
-          <!-- GUARDIAN / SAFETY CONTACT -->
-          <div class="ps-card" id="ps-guardian-card" style="margin-bottom:12px;">
-            <div class="ps-card-label">// SAFETY & GUARDIAN CONTACT</div>
-            <div class="ps-form-label" style="margin-bottom:14px;line-height:1.7;">
-              If Companion notices signs of serious distress, self-harm, or abuse in a chat, we'll let a trusted adult know so you can get real support — and we'll always tell you in the chat first. This isn't monitoring every message; it only ever triggers on clear signs someone needs help.
-            </div>
-            <div id="ps-guardian-signedout-note" style="display:none;font-family:var(--exo);font-size:.78rem;color:var(--silver);opacity:.8;margin-bottom:8px;">Sign in with Google above to set this up — it needs a synced account to work.</div>
-            <div id="ps-guardian-form">
-              <div class="ps-form-group">
-                <div class="ps-form-label">Parent / Guardian Email</div>
-                <div class="set-row" style="margin-top:6px;">
-                  <input class="set-input" id="ps-guardian-email" type="email" placeholder="parent@example.com">
-                  <button class="set-btn accent" onclick="saveGuardianEmail()">Save</button>
-                </div>
-              </div>
-              <div id="ps-guardian-status" style="margin-top:10px;font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.8;"></div>
-            </div>
           </div>
 
           <!-- GEMINI KEY (existing) -->
@@ -5998,10 +5970,6 @@ const NAV_TABS = [
   { id:'forum',       icon:'🌐', label:'Forum' },
 ];
 const NAV_VISIBLE = 7; // max shown before "More"
-const SOCIAL_TAB_IDS = ['leaderboard','forum'];
-function getVisibleNavTabs() {
-  return isSocialRestricted() ? NAV_TABS.filter(t => !SOCIAL_TAB_IDS.includes(t.id)) : NAV_TABS;
-}
 
 // ── MOBILE MODE ──
 function checkMobileMode() {
@@ -6018,7 +5986,7 @@ function renderMobileFab() {
   if (!list) return;
   const items = [
     { id:'home', icon:'🏠', label:'Home' },
-    ...getVisibleNavTabs(),
+    ...NAV_TABS,
     { id:'settings', icon:'⚙️', label:'Settings' },
   ];
   list.innerHTML = items.map((it, i) =>
@@ -6066,7 +6034,7 @@ function bumpNavCount(name) {
 function renderNav() {
   const counts = getNavCounts();
   // Sort by usage desc, preserve original order for ties
-  const sorted = [...getVisibleNavTabs()].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
+  const sorted = [...NAV_TABS].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
   const top = sorted.slice(0, NAV_VISIBLE);
   const rest = sorted.slice(NAV_VISIBLE);
 
@@ -6117,10 +6085,6 @@ function collapseNavMore() {
 // Hook go() to track usage and re-render nav
 const _goOrig = window.go;
 window.go = function(name) {
-  if ((name === 'forum' || name === 'leaderboard') && isSocialRestricted()) {
-    showToast('This section isn\'t available for your account type.');
-    name = 'home';
-  }
   if (name !== 'home' && name !== 'settings' && name !== 'music') {
     bumpNavCount(name);
     renderNav();
@@ -8112,9 +8076,6 @@ function checkEasterEgg(msg) {
 async function respondComp(userMsg, imageData) {
   const thinking = addCompBubble('Thinking <span class="dots"><span>·</span><span>·</span><span>·</span></span>', 'bot thinking');
 
-  // Fire-and-forget safety check — runs alongside the normal reply, never blocks or delays it.
-  if (userMsg) checkSafetySignal(userMsg).then(r => handleSafetySignal(r, userMsg)).catch(() => {});
-
   // Check for easter eggs first (skip if image is attached)
   if (!imageData && userMsg) {
     const egg = checkEasterEgg(userMsg);
@@ -8173,98 +8134,7 @@ Current mood context: ${compMood || 'unknown'}${memoryContext}`;
   compWin.scrollTop = compWin.scrollHeight;
 }
 
-// ── SAFETY SIGNAL DETECTION (Companion chat) ──
-// Runs a lightweight, conservative classifier on the student's own messages.
-// Fails open by design: any error, timeout, or parse failure = no flag, chat continues normally.
-const SAFETY_COOLDOWN_MS = 30 * 60 * 1000; // don't re-notify a guardian more than once per 30 min
-
-async function checkSafetySignal(text) {
-  if (!text || !API_KEY) return { flag: 'none' };
-  try {
-    const instruction = `You are a safety classifier for a study app used by teenagers (IGCSE students). Read the student's message and decide if it shows CLEAR signs of:
-- "self_harm": suicidal ideation, self-harm intent, or a plan to hurt themselves
-- "abuse": being physically, sexually, or emotionally abused, or endangered by someone
-
-Be conservative. Normal teenage venting about stress, a bad grade, exhaustion, or hyperbole ("this exam is killing me") is NOT a flag — only flag clear, genuine signs that someone is in danger.
-
-Student message: """${text.slice(0, 2000)}"""
-
-Respond with ONLY this JSON and nothing else: {"flag":"none|self_harm|abuse","severity":"low|high"}`;
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
-    const body = JSON.stringify({
-      contents: [{ parts: [{ text: instruction }] }],
-      generationConfig: { responseMimeType: 'application/json', temperature: 0 }
-    });
-    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
-    const data = await res.json();
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-    const parsed = JSON.parse(raw);
-    if (parsed && (parsed.flag === 'self_harm' || parsed.flag === 'abuse')) return parsed;
-    return { flag: 'none' };
-  } catch (e) {
-    console.warn('[Veda Safety] classifier failed, failing open:', e);
-    return { flag: 'none' };
-  }
-}
-
-function safetyCooldownActive() {
-  const last = Number(localStorage.getItem('veda_last_safety_alert') || 0);
-  return (Date.now() - last) < SAFETY_COOLDOWN_MS;
-}
-
-async function handleSafetySignal(result) {
-  if (!result || result.flag === 'none') return;
-  const onCooldown = safetyCooldownActive();
-
-  const resourceHtml = `<div style="font-weight:700;margin-bottom:6px;">💙 That sounds really heavy — you don't have to deal with it alone.</div>
-    <div style="line-height:1.7;">
-      Please talk to someone you trust — a parent, teacher, or counsellor. If you're in immediate danger, contact your local emergency number right now.<br><br>
-      <strong>Some helplines:</strong><br>
-      🇲🇾 Malaysia — Befrienders KL: 03-7627 2929<br>
-      🇺🇸🇨🇦 US / Canada — 988<br>
-      🇬🇧🇮🇪 UK / Ireland — Samaritans: 116 123<br>
-      🌍 Elsewhere — befrienders.org lists local helplines
-    </div>`;
-
-  const canNotify = !!(window._fbUser && !window._isGuest && window._fb);
-  let guardianEmail = null;
-  if (canNotify) {
-    try {
-      const data = await window._fb.load(window._fbUser.uid);
-      guardianEmail = data && data.guardianEmail;
-    } catch (e) { console.warn('[Veda Safety] guardian lookup failed:', e); }
-  }
-
-  let transparencyHtml;
-  if (canNotify && guardianEmail && !onCooldown) {
-    transparencyHtml = `<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);font-size:.85em;opacity:.9;">🔔 Because of what you shared, we're letting your listed guardian know so they can check in with you.</div>`;
-  } else if (canNotify && !guardianEmail) {
-    transparencyHtml = `<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);font-size:.85em;opacity:.75;">No guardian contact is set on this account, so no one's been notified automatically — please still reach out to someone yourself.</div>`;
-  } else if (!canNotify) {
-    transparencyHtml = `<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);font-size:.85em;opacity:.75;">You're not signed in, so automatic guardian notification isn't available — please still reach out to someone yourself.</div>`;
-  } else {
-    transparencyHtml = ''; // on cooldown — already notified recently, don't repeat the line every message
-  }
-
-  addCompBubble(resourceHtml + transparencyHtml, 'bot system');
-  compWin.scrollTop = compWin.scrollHeight;
-
-  if (canNotify && guardianEmail && !onCooldown) {
-    localStorage.setItem('veda_last_safety_alert', String(Date.now()));
-    try {
-      await window._fb.addSafetyAlert(window._fbUser.uid, {
-        category: result.flag,
-        severity: result.severity || 'high',
-        createdAt: new Date().toISOString(),
-        studentName: window._fbUser.displayName || 'Student',
-      });
-    } catch (e) {
-      console.warn('[Veda Safety] failed to write alert (guardian will not be notified this time):', e);
-    }
-  }
-}
-
-
+// ── DEBATE ME MODE ──
 let debateActive = false;
 let debateTopic = '';
 let debateSide = '';
@@ -9291,8 +9161,6 @@ function saveAIProfile() {
     pressure:   aipGetVal('aip-pressure'),
   };
   localStorage.setItem('veda_student_profile', JSON.stringify(p));
-  renderNav();
-  applyWidgetVisibility();
   showToast('🤖 AI Profile saved! All AI responses are now personalised.');
 }
 
@@ -11648,13 +11516,11 @@ function aipAddCustomSubject(btn) {
 
 const SCHOOL_YEARS = ['Form 1','Form 2','Form 3','Form 4','Form 5','Form 6','Other'];
 const UNI_YEARS = ['Year 1','Year 2','Year 3','Year 4','Postgraduate','Other'];
-// Distinct labels ("Primary Year N") so these never collide with the university "Year 4" etc. above.
-const PRIMARY_YEARS = ['Primary Year 1','Primary Year 2','Primary Year 3','Primary Year 4','Primary Year 5','Primary Year 6'];
 function buildObYearChips(list) {
   return list.map(val => `<div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','${val}')">${val}</div>`).join('');
 }
 function buildAipYearChips(list) {
-  return list.map(val => `<div class="aip-chip" data-val="${val}">${val.replace('Postgraduate','Postgrad').replace('Primary Year ','P').replace('Form ','F').replace('Year ','Y')}</div>`).join('');
+  return list.map(val => `<div class="aip-chip" data-val="${val}">${val.replace('Postgraduate','Postgrad').replace('Form ','F').replace('Year ','Y')}</div>`).join('');
 }
 
 function obShowSlide(n) {
@@ -11663,14 +11529,13 @@ function obShowSlide(n) {
   const prog = document.getElementById('ob-progress');
   if (prog) prog.style.width = ((n / (OB_SLIDES - 1)) * 100) + '%';
   obSlide = n;
-  // Swap year options based on curriculum — Form 1-6 for school, Year 1-4/Postgrad for university, Primary Year 1-6 for primary
+  // Swap year options based on curriculum — Form 1-6 for school, Year 1-4/Postgrad for university
   if (n === 3) {
-    const curriculum = obGetChipValue('ob-curriculum-grid');
+    const isUni = obGetChipValue('ob-curriculum-grid') === 'University';
     const grid = document.getElementById('ob-year-grid');
-    const wantMode = curriculum === 'University' ? 'uni' : curriculum === 'Primary School' ? 'primary' : 'school';
+    const wantMode = isUni ? 'uni' : 'school';
     if (grid.dataset.mode !== wantMode) {
-      const list = wantMode === 'uni' ? UNI_YEARS : wantMode === 'primary' ? PRIMARY_YEARS : SCHOOL_YEARS;
-      grid.innerHTML = buildObYearChips(list);
+      grid.innerHTML = buildObYearChips(isUni ? UNI_YEARS : SCHOOL_YEARS);
       grid.dataset.mode = wantMode;
     }
   }
@@ -11771,14 +11636,6 @@ function getStudentProfile() {
   try { return JSON.parse(localStorage.getItem('veda_student_profile') || '{}'); } catch { return {}; }
 }
 
-// ── CHILD SAFETY: restrict public social features (Forum, Leaderboard) for young students ──
-// Add more values here if the school wants a wider age range covered — e.g. all of PRIMARY_YEARS.
-const SOCIAL_RESTRICTED_YEARS = ['Primary Year 4'];
-function isSocialRestricted() {
-  const p = getStudentProfile();
-  return SOCIAL_RESTRICTED_YEARS.includes(p.year);
-}
-
 function buildAIContext() {
   const p = getStudentProfile();
   const a = getAcct();
@@ -11810,8 +11667,6 @@ function obFinish() {
     document.getElementById('app').style.display = 'flex';
     renderAcctPage();
     updateHomeStats();
-    renderNav();
-    applyWidgetVisibility();
   }, 400);
 }
 
@@ -11826,8 +11681,6 @@ function obSkipKey() {
     document.getElementById('app').style.display = 'flex';
     renderAcctPage();
     updateHomeStats();
-    renderNav();
-    applyWidgetVisibility();
     showToast('👀 Browse mode — add a Gemini API key in Settings to use AI features');
   }, 400);
 }
@@ -11864,13 +11717,11 @@ function wIsOn(cfg) {
 }
 
 function applyWidgetVisibility() {
-  const restricted = isSocialRestricted();
   WIDGET_CONFIG.forEach(cfg => {
     const el = cfg.parentSel
       ? document.querySelector(cfg.parentSel)
       : document.getElementById(cfg.id);
     if (!el) return;
-    if (cfg.id === 'lb-home-widget' && restricted) { el.style.display = 'none'; return; }
     const on = wIsOn(cfg);
     el.style.display = on ? '' : 'none';
     if (on && cfg.extra) loadExtraWidget(cfg.id);
@@ -12540,53 +12391,12 @@ window.nwCloudUI = function(user) {
     if (av && user.photoURL) av.src = user.photoURL;
     if (nm) nm.textContent  = user.displayName || 'Student';
     if (em) em.textContent  = user.email || '';
-    const gForm = document.getElementById('ps-guardian-form');
-    const gNote = document.getElementById('ps-guardian-signedout-note');
-    if (gForm) gForm.style.display = 'block';
-    if (gNote) gNote.style.display = 'none';
-    loadGuardianEmail();
   } else {
     if (hdrUser)   hdrUser.style.display   = 'none';
     if (signedIn)  signedIn.style.display  = 'none';
     if (signedOut) signedOut.style.display = 'block';
-    const gForm = document.getElementById('ps-guardian-form');
-    const gNote = document.getElementById('ps-guardian-signedout-note');
-    if (gForm) gForm.style.display = 'none';
-    if (gNote) gNote.style.display = 'block';
   }
 };
-
-// ── Guardian / safety contact ──
-async function loadGuardianEmail() {
-  const user = window._fbUser;
-  const status = document.getElementById('ps-guardian-status');
-  const input = document.getElementById('ps-guardian-email');
-  if (!user || !window._fb || window._isGuest) return;
-  try {
-    const data = await window._fb.load(user.uid);
-    const email = data && data.guardianEmail;
-    if (input) input.value = email || '';
-    if (status) status.textContent = email ? `✅ Guardian contact set: ${email}` : '⚠️ No guardian contact set yet — the safety-alert feature can\'t reach anyone until this is filled in.';
-  } catch (e) {
-    console.warn('Guardian email load failed:', e);
-  }
-}
-
-async function saveGuardianEmail() {
-  const user = window._fbUser;
-  const status = document.getElementById('ps-guardian-status');
-  if (!user || !window._fb || window._isGuest) { showToast('⚠️ Sign in with Google first'); return; }
-  const input = document.getElementById('ps-guardian-email');
-  const email = (input && input.value || '').trim();
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('⚠️ Enter a valid email address'); return; }
-  try {
-    await window._fb.save(user.uid, { guardianEmail: email || null });
-    if (status) status.textContent = email ? `✅ Guardian contact set: ${email}` : 'Guardian contact removed.';
-    showToast(email ? '✅ Guardian contact saved' : 'Guardian contact removed');
-  } catch (e) {
-    showToast('❌ Failed to save: ' + e.message);
-  }
-}
 
 // ── Sign out ──
 window.nwSignOut = async function() {
@@ -13765,7 +13575,6 @@ function runSearch(q) {
       { id:'settings', icon:'⚙️', title:'Settings & Profile', hint:'Account, badges, stats' },
     ];
     pages.forEach(p => {
-      if (SOCIAL_TAB_IDS.includes(p.id) && isSocialRestricted()) return;
       if (p.title.toLowerCase().includes(q) || p.hint.toLowerCase().includes(q)) {
         results.push({ type:'page', icon:p.icon, title:p.title, sub:p.hint, action:() => { closeSearch(); go(p.id); } });
       }
@@ -16473,4 +16282,4 @@ function timeAgo(d) {
 
 
 
-</body></html>
+</body></html>s
