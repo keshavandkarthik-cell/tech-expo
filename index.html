@@ -65,6 +65,9 @@ window._fb = {
   deletePaper: (uid, pid) => deleteDoc(doc(_db,'users',uid,'papers',pid)),
   updatePaper: (uid, pid, data) => updateDoc(doc(_db,'users',uid,'papers',pid), data),
   addSafetyAlert: (uid, data) => addDoc(collection(_db,'users',uid,'safetyAlerts'), data),
+  saveLeaderboard: (uid, data) => setDoc(doc(_db,'leaderboardPublic',uid), data, {merge:true}),
+  loadLeaderboard: async (uid) => { const s = await getDoc(doc(_db,'leaderboardPublic',uid)); return s.exists()?s.data():null; },
+  leaderboardCol: () => collection(_db,'leaderboardPublic'),
 };
 
 /* Safety net only — signInWithPopup itself is back to the original working flow.
@@ -2370,7 +2373,6 @@ body.fs-large { font-size: 17px; }
   </div>
 </div>
 
-<!-- ── TERMS & CONDITIONS MODAL ── -->
 <div id="tos-modal-overlay" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)closeTosModal()">
   <div style="width:min(620px,94vw);max-height:82vh;display:flex;flex-direction:column;background:var(--panel-col2,#12151c);border:1px solid rgba(77,159,255,.3);border-radius:16px;box-shadow:0 32px 80px rgba(0,0,0,.7);overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(77,159,255,.15);flex-shrink:0;">
@@ -4585,6 +4587,21 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <div id="vault-list"></div>
       </div>
 
+      <!-- ══ PAST PAPERS TAB ══ -->
+      <div class="tab" id="tab-pastpapers">
+        <div class="ttl">📚 Past Papers</div>
+        <div class="tsub"><span class="prm">›</span>Public library — free Cambridge IGCSE past papers by subject, no sign-in needed</div>
+
+        <div style="display:flex;gap:8px;align-items:center;margin:14px 0;">
+          <input id="pastpapers-search" type="text" placeholder="🔍 Search subject…" oninput="renderPapersLibrary(this.value)" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 14px;color:var(--text);font-family:var(--exo);font-size:.82rem;outline:none;">
+        </div>
+        <div style="font-family:var(--raj);font-size:.7rem;color:var(--silver);opacity:.75;margin-bottom:14px;line-height:1.5;">
+          Links out to free, well-established past-paper archives (savemyexams.com) rather than files hosted here — official exam board papers are copyrighted, so we point you to legitimate sources instead of hosting copies ourselves.
+        </div>
+
+        <div id="pastpapers-list"></div>
+      </div>
+
       <!-- ══ EXAM PAPERS TAB ══ -->
       <div class="tab" id="tab-exam">
         <div class="ttl">📄 Exam Papers</div>
@@ -5209,6 +5226,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       <div class="tab" id="tab-tracker">
         <div class="ttl">📊 Paper Tracker</div>
         <div class="tsub"><span class="prm">›</span>Log your past year papers — track attempts, scores, and progress per subject</div>
+        <button onclick="go('pastpapers')" style="background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.3);border-radius:10px;padding:10px 16px;color:var(--teal2);font-family:var(--exo);font-size:.75rem;font-weight:700;letter-spacing:.5px;cursor:pointer;margin-bottom:18px;">📚 Browse Public Past Papers Library →</button>
 
         <!-- Stats row -->
         <div id="tracker-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px;">
@@ -5512,6 +5530,160 @@ function acceptTosFromModal() {
   setTosAccepted();
   closeTosModal();
 }
+
+// ── PUBLIC PAST PAPERS LIBRARY ──
+// Link-out directory only — we don't host copyrighted exam board papers ourselves.
+// Curated URLs point to savemyexams.com's free, no-login past-paper pages, covering both
+// Cambridge (CIE) and Edexcel IGCSE where that board offers the subject. Subjects/boards
+// without a verified curated link are simply omitted rather than risking a wrong/broken URL.
+const PUBLIC_PAPERS_LIBRARY = [
+  { subject:'Mathematics', icon:'📐', boards:[
+    { name:'Cambridge (0580)', url:'https://www.savemyexams.com/igcse/maths/cie/past-papers/' },
+    { name:'Cambridge Int\'l (0607)', url:'https://www.savemyexams.com/igcse/maths/cie/international-maths/past-papers/' },
+    { name:'Edexcel A', url:'https://www.savemyexams.com/igcse/maths/edexcel/a/past-papers/' },
+  ]},
+  { subject:'Additional / Further Maths', icon:'➕', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/further-maths/cie/additional-maths/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/further-maths/edexcel/past-papers/' },
+  ]},
+  { subject:'Statistics', icon:'📊', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/statistics/cie/past-papers/' },
+  ]},
+  { subject:'Physics', icon:'⚛️', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/physics/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/physics/edexcel/past-papers/' },
+  ]},
+  { subject:'Chemistry', icon:'🧪', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/chemistry/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/chemistry/edexcel/past-papers/' },
+  ]},
+  { subject:'Biology', icon:'🧬', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/biology/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/biology/edexcel/past-papers/' },
+  ]},
+  { subject:'Combined / Co-ordinated Science', icon:'🔬', boards:[
+    { name:'Cambridge Co-ordinated', url:'https://www.savemyexams.com/igcse/science/cie/co-ordinated-sciences-double-award/past-papers/' },
+    { name:'Cambridge Combined', url:'https://www.savemyexams.com/igcse/science/cie/combined-science/past-papers/' },
+    { name:'Edexcel Double Award', url:'https://www.savemyexams.com/igcse/science/edexcel/double-award/past-papers/' },
+  ]},
+  { subject:'Psychology', icon:'🧠', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/psychology/cie/past-papers/' },
+  ]},
+  { subject:'Computer Science', icon:'💻', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/computer-science/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/computer-science/edexcel/past-papers/' },
+  ]},
+  { subject:'ICT', icon:'🖥️', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/ict/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/ict/edexcel/past-papers/' },
+  ]},
+  { subject:'Accounting', icon:'🧾', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/accounting/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/accounting/edexcel/past-papers/' },
+  ]},
+  { subject:'Business', icon:'💼', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/business/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/business/edexcel/past-papers/' },
+  ]},
+  { subject:'Economics', icon:'📈', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/economics/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/economics/edexcel/past-papers/' },
+  ]},
+  { subject:'English Language', icon:'🇬🇧', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/english-language/cie/past-papers/' },
+    { name:'Edexcel A', url:'https://www.savemyexams.com/igcse/english-language/edexcel/a/past-papers/' },
+  ]},
+  { subject:'English Literature', icon:'📚', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/english-literature/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/english-literature/edexcel/past-papers/' },
+  ]},
+  { subject:'History', icon:'📜', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/history/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/history/edexcel/past-papers/' },
+  ]},
+  { subject:'Geography', icon:'🌏', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/geography/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/geography/edexcel/past-papers/' },
+  ]},
+  { subject:'Environmental Management', icon:'🌱', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/environmental-management/cie/past-papers/' },
+  ]},
+  { subject:'Religious Studies', icon:'🕊️', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/religious-studies/cie/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/religious-studies/edexcel/past-papers/' },
+  ]},
+  { subject:'Sociology', icon:'👥', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/sociology/cie/past-papers/' },
+  ]},
+  { subject:'Social Studies', icon:'🌐', boards:[
+    { name:'Cambridge (Pakistan Studies)', url:'https://www.savemyexams.com/igcse/social-studies/cie/pakistan-studies/past-papers/' },
+    { name:'Edexcel (Pakistan Studies)', url:'https://www.savemyexams.com/igcse/social-studies/edexcel/pakistan-studies/past-papers/' },
+    { name:'Edexcel (Bangladesh Studies)', url:'https://www.savemyexams.com/igcse/social-studies/edexcel/bangladesh-studies/past-papers/' },
+  ]},
+  { subject:'Citizenship Studies', icon:'🏛️', boards:[
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/citizenship-studies/edexcel/global-citizenship/past-papers/' },
+  ]},
+  { subject:'Design & Technology', icon:'🛠️', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/design-and-technology/cie/past-papers/' },
+  ]},
+  { subject:'Food & Nutrition', icon:'🍳', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/food-and-nutrition/cie/past-papers/' },
+  ]},
+  { subject:'Art & Design', icon:'🎨', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/art-and-design/cie/past-papers/' },
+    { name:'Edexcel (3D Design)', url:'https://www.savemyexams.com/igcse/art-and-design/edexcel/3d-design/past-papers/' },
+    { name:'Edexcel (Graphic Comm.)', url:'https://www.savemyexams.com/igcse/art-and-design/edexcel/graphic-communication/past-papers/' },
+  ]},
+  { subject:'Drama', icon:'🎭', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/drama/cie/past-papers/' },
+  ]},
+  { subject:'Music', icon:'🎵', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/music/cie/past-papers/' },
+  ]},
+  { subject:'French', icon:'🇫🇷', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/french/cie/first-language/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/french/edexcel/past-papers/' },
+  ]},
+  { subject:'German', icon:'🇩🇪', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/german/cie/first-language/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/german/edexcel/past-papers/' },
+  ]},
+  { subject:'Spanish', icon:'🇪🇸', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/spanish/cie/first-language/past-papers/' },
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/spanish/edexcel/past-papers/' },
+  ]},
+  { subject:'Chinese', icon:'🇨🇳', boards:[
+    { name:'Edexcel', url:'https://www.savemyexams.com/igcse/chinese/edexcel/past-papers/' },
+  ]},
+  { subject:'Italian', icon:'🇮🇹', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/italian/cie/foreign-language/past-papers/' },
+  ]},
+  { subject:'Latin', icon:'🏛️', boards:[
+    { name:'Cambridge', url:'https://www.savemyexams.com/igcse/latin/cie/past-papers/' },
+  ]},
+  { subject:'Bahasa Malaysia', icon:'🇲🇾', boards:[] },
+];
+
+function renderPapersLibrary(filter) {
+  const list = document.getElementById('pastpapers-list');
+  if (!list) return;
+  const q = (filter || '').trim().toLowerCase();
+  const rows = PUBLIC_PAPERS_LIBRARY.filter(p => !q || p.subject.toLowerCase().includes(q));
+  if (!rows.length) {
+    list.innerHTML = `<div style="text-align:center;padding:20px;font-family:var(--raj);color:var(--silver);font-size:.85rem;">No matching subject — try the search on Google instead:<br><a href="https://www.google.com/search?q=${encodeURIComponent((filter||'')+' IGCSE past papers')}" target="_blank" rel="noopener" style="color:var(--accent2);">Search "${escHtml(filter||'')} IGCSE past papers" →</a></div>`;
+    return;
+  }
+  list.innerHTML = rows.map(p => {
+    const boardLinks = (p.boards && p.boards.length)
+      ? p.boards.map(b => `<a href="${b.url}" target="_blank" rel="noopener" style="display:inline-block;padding:5px 10px;margin:3px 6px 3px 0;background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.3);border-radius:7px;text-decoration:none;color:var(--accent2);font-family:var(--exo);font-size:.68rem;font-weight:700;letter-spacing:.3px;" onmouseover="this.style.background='rgba(0,212,170,.16)'" onmouseout="this.style.background='rgba(0,212,170,.08)'">${escHtml(b.name)} →</a>`).join('')
+      : `<a href="https://www.google.com/search?q=${encodeURIComponent(p.subject+' IGCSE past papers')}" target="_blank" rel="noopener" style="display:inline-block;padding:5px 10px;margin:3px 0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:7px;text-decoration:none;color:var(--silver);font-family:var(--exo);font-size:.68rem;font-weight:700;">Search Google →</a>`;
+    return `<div style="padding:12px 14px;margin-bottom:8px;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.15);border-radius:10px;">
+      <div style="font-family:var(--raj);font-size:.9rem;color:var(--text);margin-bottom:6px;">${p.icon} ${escHtml(p.subject)}</div>
+      <div>${boardLinks}</div>
+    </div>`;
+  }).join('');
+}
+
 (function initTosCheckboxState() {
   const apply = () => { const cb = document.getElementById('tos-checkbox'); if (cb) cb.checked = isTosAccepted(); };
   apply();
@@ -5953,6 +6125,7 @@ function go(name) {
   if (name === 'games') setTimeout(renderGameLocks, 0);
   if (name === 'art') setTimeout(renderArtGallery, 0);
   if (name === 'vault') setTimeout(renderVault, 0);
+  if (name === 'pastpapers') setTimeout(() => renderPapersLibrary(''), 0);
   if (name === 'todo') setTimeout(renderTodos, 0);
   if (name === 'tracker') setTimeout(initTracker, 0);
   if (name === 'planner') setTimeout(renderPlanner, 30);
@@ -5975,6 +6148,7 @@ function go(name) {
 const NAV_TABS = [
   { id:'homework',    icon:'📚', label:'Homework' },
   { id:'library',     icon:'🗂️', label:'Topic Library' },
+  { id:'pastpapers',  icon:'📚', label:'Past Papers' },
   { id:'notes',       icon:'📝', label:'Notes' },
   { id:'study',       icon:'🧠', label:'Smart Study' },
   { id:'chat',        icon:'💬', label:'Companion' },
@@ -13750,6 +13924,7 @@ function runSearch(q) {
       { id:'vault',    icon:'🗂️', title:'Vault',   hint:'Saved notes, answers & exports' },
       { id:'exam',     icon:'📄', title:'Exam Papers',  hint:'Mock exam generator' },
       { id:'library',  icon:'🗂️', title:'Topic Library',hint:'Curated study topics' },
+      { id:'pastpapers', icon:'📚', title:'Past Papers', hint:'Free public past-paper library by subject' },
       { id:'settings', icon:'🌈', title:'Themes',        hint:'Customise appearance' },
       { id:'music',    icon:'🎵', title:'Music',          hint:'Study music & playlists' },
       { id:'planner',  icon:'📅', title:'Study Planner',  hint:'Weekly timetable & schedule' },
@@ -15739,7 +15914,7 @@ async function lbPushStats() {
   const topGame  = Math.max(hiSnake, hiTyping, hiMath);
   const name = acct.name || window._fbUser.displayName || 'Scholar';
   try {
-    await window._fb.save(uid, {
+    await window._fb.saveLeaderboard(uid, {
       lbCode:    code,
       lbName:    name,
       lbAvatar:  acct.avatar  || '🎓',
@@ -15841,7 +16016,7 @@ function lbUpdateVisibilityBtn() {
 
 // ── Fetch user data from Firestore by UID ──
 async function lbFetchUser(uid) {
-  try { return await window._fb.load(uid); } catch { return null; }
+  try { return await window._fb.loadLeaderboard(uid); } catch { return null; }
 }
 
 // ── Get the sort value based on current tab ──
@@ -15892,7 +16067,7 @@ async function lbRender() {
       const { getFirestore, collection, query, where, orderBy, limit, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
       const db = getFirestore();
       const field = lbTab === 'gems' ? 'lbGems' : lbTab === 'streak' ? 'lbStreak' : 'lbGames';
-      const q = query(collection(db,'users'), where('lbVisible','==',true), orderBy(field,'desc'), limit(50));
+      const q = query(collection(db,'leaderboardPublic'), where('lbVisible','==',true), orderBy(field,'desc'), limit(50));
       const snap = await getDocs(q);
       entries = snap.docs.map(d => ({uid:d.id, data:d.data()}));
       // Inject self if not visible but user wants to see their rank
