@@ -1,8 +1,7 @@
-// Veda Service Worker — v1.0
-const CACHE_NAME      = 'veda-shell-v2';
-const RUNTIME_CACHE   = 'veda-runtime-v2';
+// Veda Service Worker — v1.1
+const CACHE_NAME      = 'veda-shell-v3';
+const RUNTIME_CACHE   = 'veda-runtime-v3';
 const OFFLINE_URL     = '/offline.html';
-
 // App shell — files to cache immediately on install
 const SHELL_ASSETS = [
   '/',
@@ -12,7 +11,6 @@ const SHELL_ASSETS = [
   '/image_2.png',
   '/offline.html'
 ];
-
 // ── INSTALL ──────────────────────────────────────────────
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -21,7 +19,6 @@ self.addEventListener('install', event => {
       .then(() => self.skipWaiting())
   );
 });
-
 // ── ACTIVATE ─────────────────────────────────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
@@ -34,20 +31,21 @@ self.addEventListener('activate', event => {
     ).then(() => self.clients.claim())
   );
 });
-
 // ── FETCH ─────────────────────────────────────────────────
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
-
   // Skip non-GET and cross-origin requests (Firebase, Google APIs etc)
   if (request.method !== 'GET') return;
   if (url.origin !== location.origin) return;
-
-  // Navigation requests — network first, fallback to shell/offline
+  // Navigation requests — network first, fallback to shell/offline.
+  // cache:'no-store' forces this fetch to bypass the browser's/CDN's own HTTP
+  // cache and hit the origin directly — otherwise "network first" can still
+  // silently resolve to a stale cached response before it ever reaches here,
+  // which then gets re-cached, making the app look stuck on an old version.
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
+      fetch(request, { cache: 'no-store' })
         .then(response => {
           // Cache a fresh copy
           const clone = response.clone();
@@ -61,7 +59,6 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
-
   // Static assets — cache first, then network
   if (
     url.pathname.match(/\.(png|jpg|jpeg|svg|gif|webp|ico|woff2?|ttf|css)$/)
@@ -79,7 +76,6 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
-
   // Everything else — network first, fallback to cache
   event.respondWith(
     fetch(request)
@@ -92,7 +88,6 @@ self.addEventListener('fetch', event => {
       .catch(() => caches.match(request))
   );
 });
-
 // ── PUSH NOTIFICATIONS (ready for future use) ─────────────
 self.addEventListener('push', event => {
   const data = event.data?.json() || {};
@@ -106,7 +101,6 @@ self.addEventListener('push', event => {
     })
   );
 });
-
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(
