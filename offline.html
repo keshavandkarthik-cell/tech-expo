@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veda — Offline</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #080c1a;
+      color: #e8eaf6;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 24px;
+    }
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 24px rgba(77,159,255,.4));
+    }
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #4d9fff;
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: .9rem;
+      color: rgba(232,234,246,.5);
+      max-width: 280px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .tip {
+      background: rgba(77,159,255,.08);
+      border: 1px solid rgba(77,159,255,.2);
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: .8rem;
+      color: rgba(232,234,246,.7);
+      max-width: 300px;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .tip strong { color: #4d9fff; }
+    button {
+      background: rgba(77,159,255,.15);
+      border: 1px solid rgba(77,159,255,.3);
+      border-radius: 999px;
+      color: #4d9fff;
+      font-size: .85rem;
+      font-weight: 600;
+      padding: 12px 28px;
+      cursor: pointer;
+      letter-spacing: .5px;
+      transition: all .2s;
+    }
+    button:hover {
+      background: rgba(77,159,255,.25);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">📚</div>
+  <h1>VEDA</h1>
+  <p>You're offline right now. Connect to the internet to access AI features.</p>
+  <div class="tip">
+    <strong>💡 Study tip while you wait:</strong><br>
+    Try recalling everything you know about your current topic from memory — the retrieval practice effect boosts retention more than re-reading.
+  </div>
+  <button onclick="location.reload()">↻ Try Again</button>
+</body>
+</html>
