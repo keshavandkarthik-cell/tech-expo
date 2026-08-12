@@ -11806,7 +11806,7 @@ function getPlannerMonday(offset) {
   d.setDate(d.getDate() + ((day===0?-6:1-day) + offset*7));
   d.setHours(0,0,0,0); return d;
 }
-function plannerFmtDate(d) { return d.toISOString().slice(0,10); }
+function plannerFmtDate(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function plannerTodayStr()  { return plannerFmtDate(new Date()); }
 function getPlannerWeekDates(offset) {
   const mon = getPlannerMonday(offset);
