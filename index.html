@@ -12654,9 +12654,10 @@ function toggleTodo(id) {
   if (!task) return;
   const wasUndone = !task.done;
   task.done = !task.done;
-  saveTodos(todos);
-  if (wasUndone) {
-    // award gem + track stat
+  if (wasUndone && !task.rewarded) {
+    task.rewarded = true;
+    saveTodos(todos);
+    // award gem (once per task, ever) + track stat
     const a = getAcct();
     a.gems = (a.gems||0) + 1;
     if (!a.stats) a.stats = {};
@@ -12665,6 +12666,8 @@ function toggleTodo(id) {
     checkBadges();
     showToast(t('todo_toast_task_done'));
     renderAcctPage();
+  } else {
+    saveTodos(todos);
   }
   renderTodos();
 }
