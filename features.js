@@ -270,8 +270,10 @@ let dcCountdownTimer = null;
 function showDCResult(state, showCountdown = false) {
   const qWrap = document.getElementById('dc-question-wrap');
   const rWrap = document.getElementById('dc-result-wrap');
+  const noKey = document.getElementById('dc-no-key-msg');
   if (!rWrap) return;
   if (qWrap) qWrap.style.display = 'none';
+  if (noKey) noKey.style.display = 'none';
   rWrap.style.display = 'block';
   stopDCTimer();
   if (dcCountdownTimer) { clearInterval(dcCountdownTimer); dcCountdownTimer = null; }
