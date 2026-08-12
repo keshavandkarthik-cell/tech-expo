@@ -472,6 +472,7 @@ nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrol
   margin-bottom: 16px;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 .panel::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
