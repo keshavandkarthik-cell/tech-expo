@@ -2632,13 +2632,6 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-hi" id="hi-asteroids"><span data-i18n="games_best">Best:</span> 0</div>
               <div class="game-lock" id="lock-asteroids" style="color: rgb(255, 180, 0);">🔒 <span>50 💎 <span data-i18n="games_to_unlock">to unlock</span></span></div>
             </div>
-            <div class="game-card locked" data-cat="arcade" data-game="whackamole" data-cost="50" onclick="tryStartGame('whackamole',50)">
-              <div class="game-icon">🔨</div>
-              <div class="game-name" data-i18n="games_whackamole_name">Whack-a-Mole</div>
-              <div class="game-desc" data-i18n="games_whackamole_desc">Bonk the moles as fast as they pop up!</div>
-              <div class="game-hi" id="hi-whackamole"><span data-i18n="games_best">Best:</span> 0</div>
-              <div class="game-lock" id="lock-whackamole" style="color: rgb(255, 180, 0);">🔒 <span>50 💎 <span data-i18n="games_to_unlock">to unlock</span></span></div>
-            </div>
           </div>
 
           <!-- PUZZLE -->
@@ -4204,8 +4197,6 @@ const LANGS = {
     games_typing_desc: 'How fast can you type?',
     games_typing_name: 'Typing Speed',
     games_unlocked: 'Unlocked',
-    games_whackamole_desc: 'Bonk the moles as fast as they pop up!',
-    games_whackamole_name: 'Whack-a-Mole',
     games_wordle_desc: 'Guess the 5-letter word in 6 tries',
     games_wordle_name: 'Wordle',
     games_wpm: 'WPM',
@@ -4834,8 +4825,6 @@ const LANGS = {
     games_typing_desc: '¿Qué tan rápido puedes escribir?',
     games_typing_name: 'Velocidad de Escritura',
     games_unlocked: 'Desbloqueado',
-    games_whackamole_desc: '¡Golpea los topos tan rápido como aparezcan!',
-    games_whackamole_name: 'Golpea al Topo',
     games_wordle_desc: 'Adivina la palabra de 5 letras en 6 intentos',
     games_wordle_name: 'Wordle',
     games_wpm: 'PPM',
@@ -5388,8 +5377,6 @@ const LANGS = {
     games_typing_desc: 'Berapa laju anda boleh menaip?',
     games_typing_name: 'Kelajuan Menaip',
     games_unlocked: 'Dibuka',
-    games_whackamole_desc: 'Ketuk tikus mondok secepat ia muncul!',
-    games_whackamole_name: 'Ketuk Tikus Mondok',
     games_wordle_desc: 'Teka perkataan 5 huruf dalam 6 percubaan',
     games_wordle_name: 'Wordle',
     games_wpm: 'PPM',
@@ -5942,8 +5929,6 @@ const LANGS = {
     games_typing_desc: '你能打多快？',
     games_typing_name: '打字速度',
     games_unlocked: '已解锁',
-    games_whackamole_desc: '地鼠一冒头就快速敲打！',
-    games_whackamole_name: '打地鼠',
     games_wordle_desc: '6次机会猜出5字母单词',
     games_wordle_name: 'Wordle',
     games_wpm: 'WPM',
@@ -6496,8 +6481,6 @@ const LANGS = {
     games_typing_desc: 'どれだけ速くタイプできる？',
     games_typing_name: 'タイピング速度',
     games_unlocked: 'アンロック済み',
-    games_whackamole_desc: '出てきたモグラをすばやく叩こう！',
-    games_whackamole_name: 'モグラたたき',
     games_wordle_desc: '6回以内で5文字の単語を当てよう',
     games_wordle_name: 'Wordle',
     games_wpm: 'WPM',
@@ -14065,17 +14048,6 @@ function startAsteroids(area) {
     requestAnimationFrame(loop);
   }
   loop();
-}
-
-// ── WHACK-A-MOLE ──
-function startWhackAMole(area) {
-  let score=0,timeLeft=30,holes=Array(9).fill(false),timers=[];
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="wm-score">0</span></div><div class="gscore">Time: <span id="wm-time">30</span>s</div></div><button class="abtn sec" onclick="exitGame(${score},'Whack-a-Mole','')">Quit</button></div><div id="wm-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px;max-width:360px;margin:0 auto;"></div>`;
-  function render(){const g=document.getElementById('wm-grid');if(!g)return;g.innerHTML='';holes.forEach((up,i)=>{const d=document.createElement('div');d.style.cssText=`height:90px;border-radius:50%;background:${up?'#f59e0b':'#1a2744'};border:3px solid ${up?'#d97706':'rgba(77,159,255,.2)'};display:flex;align-items:center;justify-content:center;font-size:2.4rem;cursor:${up?'pointer':'default'};transition:all .15s;box-shadow:${up?'0 4px 20px rgba(245,158,11,.4)':'none'};`;d.textContent=up?'🐹':'';if(up)d.onclick=()=>{holes[i]=false;score++;const se=document.getElementById('wm-score');if(se)se.textContent=score;render();};g.appendChild(d);});}
-  function popMole(){const i=Math.floor(Math.random()*9);if(!holes[i]){holes[i]=true;render();const t=setTimeout(()=>{holes[i]=false;render();},900);timers.push(t);}}
-  render();
-  const popInt=setInterval(popMole,600);
-  gameTimer=setInterval(()=>{timeLeft--;const te=document.getElementById('wm-time');if(te)te.textContent=timeLeft;if(timeLeft<=0){clearInterval(gameTimer);clearInterval(popInt);timers.forEach(clearTimeout);exitGame(score,'Whack-a-Mole','Final score');}},1000);
 }
 
 // ── 2048 ──
