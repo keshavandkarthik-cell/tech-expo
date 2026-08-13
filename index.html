@@ -1092,14 +1092,14 @@ onAuthStateChanged(_auth, async user => {
               <span data-i18n="hw_starters_trigger">✨ Quick starters</span><span class="vdd-chev">▾</span>
             </button>
             <div class="vdd-menu" id="hw-starters-menu">
-              <button class="vdd-opt" onclick="pickHwStarter('Explain this concept to me: ')"><span class="vdd-opt-label" data-i18n="hw_starter_explain">💬 Explain this...</span></button>
-              <button class="vdd-opt" onclick="pickHwStarter('Check my working: ')"><span class="vdd-opt-label" data-i18n="hw_starter_checkworking">📝 Check my working</span></button>
-              <button class="vdd-opt" onclick="pickHwStarter('Why is this wrong: ')"><span class="vdd-opt-label" data-i18n="hw_starter_whywrong">❌ Why is this wrong?</span></button>
-              <button class="vdd-opt" onclick="pickHwStarter('How do I start this question: ')"><span class="vdd-opt-label" data-i18n="hw_starter_howstart">🤔 How do I start?</span></button>
-              <button class="vdd-opt" onclick="pickHwStarter('Give me a similar example for: ')"><span class="vdd-opt-label" data-i18n="hw_starter_similar">🔁 Similar example</span></button>
-              <button class="vdd-opt" onclick="pickHwStarter('What formula do I need for: ')"><span class="vdd-opt-label" data-i18n="hw_starter_formula">🧮 What formula?</span></button>
-              <button class="vdd-opt" onclick="pickHwStarter('Summarise this topic for me: ')"><span class="vdd-opt-label" data-i18n="hw_starter_summarise">✨ Summarise topic</span></button>
-              <button class="vdd-opt" onclick="pickHwStarter('What are the key words I need to use for: ')"><span class="vdd-opt-label" data-i18n="hw_starter_keywords">🔑 Key words</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('hw_starter_explain_prefix')"><span class="vdd-opt-label" data-i18n="hw_starter_explain">💬 Explain this...</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('hw_starter_checkworking_prefix')"><span class="vdd-opt-label" data-i18n="hw_starter_checkworking">📝 Check my working</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('hw_starter_whywrong_prefix')"><span class="vdd-opt-label" data-i18n="hw_starter_whywrong">❌ Why is this wrong?</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('hw_starter_howstart_prefix')"><span class="vdd-opt-label" data-i18n="hw_starter_howstart">🤔 How do I start?</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('hw_starter_similar_prefix')"><span class="vdd-opt-label" data-i18n="hw_starter_similar">🔁 Similar example</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('hw_starter_formula_prefix')"><span class="vdd-opt-label" data-i18n="hw_starter_formula">🧮 What formula?</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('hw_starter_summarise_prefix')"><span class="vdd-opt-label" data-i18n="hw_starter_summarise">✨ Summarise topic</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('hw_starter_keywords_prefix')"><span class="vdd-opt-label" data-i18n="hw_starter_keywords">🔑 Key words</span></button>
             </div>
           </div>
         </div>
@@ -4415,6 +4415,10 @@ const LANGS = {
     hw_starter_whywrong: '❌ Why is this wrong?', hw_starter_howstart: '🤔 How do I start?',
     hw_starter_similar: '🔁 Similar example', hw_starter_formula: '🧮 What formula?',
     hw_starter_summarise: '✨ Summarise topic', hw_starter_keywords: '🔑 Key words',
+    hw_starter_explain_prefix: 'Explain this concept to me: ', hw_starter_checkworking_prefix: 'Check my working: ',
+    hw_starter_whywrong_prefix: 'Why is this wrong: ', hw_starter_howstart_prefix: 'How do I start this question: ',
+    hw_starter_similar_prefix: 'Give me a similar example for: ', hw_starter_formula_prefix: 'What formula do I need for: ',
+    hw_starter_summarise_prefix: 'Summarise this topic for me: ', hw_starter_keywords_prefix: 'What are the key words I need to use for: ',
     hw_img_hint: 'Image attached — ask a question about it or just hit Send',
     attach_generic_hint: '📎 {file} attached — ask about it or just hit Send',
     hw_ph_topic: 'Ask a {topic} question...', hw_ph_image: 'Ask about the image, or just hit Send...', hw_ph_attach: 'Ask about the file, or just hit Send...',
@@ -5043,6 +5047,10 @@ const LANGS = {
     hw_starter_whywrong: '❌ ¿Por qué está mal?', hw_starter_howstart: '🤔 ¿Cómo empiezo?',
     hw_starter_similar: '🔁 Ejemplo similar', hw_starter_formula: '🧮 ¿Qué fórmula necesito?',
     hw_starter_summarise: '✨ Resumir este tema', hw_starter_keywords: '🔑 Palabras clave',
+    hw_starter_explain_prefix: 'Explícame este concepto: ', hw_starter_checkworking_prefix: 'Revisa mi procedimiento: ',
+    hw_starter_whywrong_prefix: '¿Por qué está mal esto?: ', hw_starter_howstart_prefix: '¿Cómo empiezo esta pregunta?: ',
+    hw_starter_similar_prefix: 'Dame un ejemplo similar de: ', hw_starter_formula_prefix: '¿Qué fórmula necesito para: ',
+    hw_starter_summarise_prefix: 'Resume este tema para mí: ', hw_starter_keywords_prefix: '¿Cuáles son las palabras clave que necesito para: ',
     hw_img_hint: 'Imagen adjunta — haz una pregunta sobre ella o pulsa Enviar',
     attach_generic_hint: '📎 {file} adjunto — pregunta sobre él o pulsa Enviar',
     hw_ph_topic: 'Haz una pregunta de {topic}...', hw_ph_image: 'Pregunta sobre la imagen, o pulsa Enviar...', hw_ph_attach: 'Pregunta sobre el archivo, o pulsa Enviar...',
@@ -5595,6 +5603,10 @@ const LANGS = {
     hw_starter_whywrong: '❌ Kenapa ini salah?', hw_starter_howstart: '🤔 Macam mana nak mula?',
     hw_starter_similar: '🔁 Contoh serupa', hw_starter_formula: '🧮 Formula apa yang diperlukan?',
     hw_starter_summarise: '✨ Ringkaskan topik', hw_starter_keywords: '🔑 Kata kunci',
+    hw_starter_explain_prefix: 'Terangkan konsep ini kepada saya: ', hw_starter_checkworking_prefix: 'Semak kerja saya: ',
+    hw_starter_whywrong_prefix: 'Kenapa ini salah: ', hw_starter_howstart_prefix: 'Bagaimana saya nak mulakan soalan ini: ',
+    hw_starter_similar_prefix: 'Beri saya contoh serupa untuk: ', hw_starter_formula_prefix: 'Formula apa yang saya perlukan untuk: ',
+    hw_starter_summarise_prefix: 'Ringkaskan topik ini untuk saya: ', hw_starter_keywords_prefix: 'Apakah kata kunci yang saya perlu gunakan untuk: ',
     hw_img_hint: 'Imej dilampirkan — tanya soalan tentangnya atau tekan Hantar',
     attach_generic_hint: '📎 {file} dilampirkan — tanya tentangnya atau tekan Hantar',
     hw_ph_topic: 'Tanya soalan {topic}...', hw_ph_image: 'Tanya tentang imej, atau terus tekan Hantar...', hw_ph_attach: 'Tanya tentang fail, atau terus tekan Hantar...',
@@ -6147,6 +6159,10 @@ const LANGS = {
     hw_starter_whywrong: '❌ 为什么这是错的？', hw_starter_howstart: '🤔 该怎么开始？',
     hw_starter_similar: '🔁 类似例子', hw_starter_formula: '🧮 需要什么公式？',
     hw_starter_summarise: '✨ 总结这个主题', hw_starter_keywords: '🔑 关键词',
+    hw_starter_explain_prefix: '请给我解释这个概念：', hw_starter_checkworking_prefix: '检查我的解题过程：',
+    hw_starter_whywrong_prefix: '为什么这是错的：', hw_starter_howstart_prefix: '我该如何开始这道题：',
+    hw_starter_similar_prefix: '给我一个类似的例子：', hw_starter_formula_prefix: '我需要用什么公式来解：',
+    hw_starter_summarise_prefix: '帮我总结这个主题：', hw_starter_keywords_prefix: '我需要用到哪些关键词来解：',
     hw_img_hint: '已附加图片 — 就图片提问，或直接点击发送',
     attach_generic_hint: '📎 已附加 {file} — 就它提问，或直接点击发送',
     hw_ph_topic: '提问一个{topic}问题...', hw_ph_image: '就图片提问，或直接点击发送...', hw_ph_attach: '就文件提问，或直接点击发送...',
@@ -6699,6 +6715,10 @@ const LANGS = {
     hw_starter_whywrong: '❌ なぜこれは間違い？', hw_starter_howstart: '🤔 どう始めればいい？',
     hw_starter_similar: '🔁 似た例題', hw_starter_formula: '🧮 必要な公式は？',
     hw_starter_summarise: '✨ トピックを要約', hw_starter_keywords: '🔑 キーワード',
+    hw_starter_explain_prefix: 'この概念を説明してください：', hw_starter_checkworking_prefix: '私の解き方をチェックしてください：',
+    hw_starter_whywrong_prefix: 'これはなぜ間違っているのですか：', hw_starter_howstart_prefix: 'この問題はどうやって始めればいいですか：',
+    hw_starter_similar_prefix: '似たような例を教えてください：', hw_starter_formula_prefix: 'どの公式が必要ですか：',
+    hw_starter_summarise_prefix: 'このトピックをまとめてください：', hw_starter_keywords_prefix: '使うべきキーワードは何ですか：',
     hw_img_hint: '画像を添付済み — 画像について質問するか、送信を押してください',
     attach_generic_hint: '📎 {file} を添付済み — それについて質問するか、送信を押してください',
     hw_ph_topic: '{topic}の質問をしてください...', hw_ph_image: '画像について質問するか、送信を押してください...', hw_ph_attach: 'ファイルについて質問するか、送信を押してください...',
@@ -7917,8 +7937,8 @@ function hwStarter(prefix) {
   inp.focus();
   inp.setSelectionRange(prefix.length, prefix.length);
 }
-function pickHwStarter(prefix) {
-  hwStarter(prefix);
+function pickHwStarter(prefixKey) {
+  hwStarter(t(prefixKey));
   document.getElementById('hw-starters-wrap')?.classList.remove('open');
 }
 
