@@ -123,7 +123,6 @@ function startGame(type) {
   else if (type === 'game2048') start2048(area);
   else if (type === 'wordle') startWordle(area);
   else if (type === 'memorymatch') startMemoryMatch(area);
-  else if (type === 'lightsout') startLightsOut(area);
   else if (type === 'aimtrainer') startAimTrainer(area);
   else if (type === 'simonmemory') startSimonMemory(area);
   else if (type === 'numbertouch') startNumberTouch(area);
@@ -185,7 +184,7 @@ function backToGames() {
   const activeBtn = document.querySelector('.game-cat-btn.on');
   if (activeBtn) filterGames(activeBtn, _activeCat);
   // refresh hi scores
-  [{g:'bubble'},{g:'scramble'},{g:'math'},{g:'typing'},{g:'reaction'},{g:'snake'},{g:'flags'},{g:'sudoku'},{g:'hangman'},{g:'tetris'},{g:'brickbreaker'},{g:'icytower'},{g:'flappy'},{g:'spaceinvaders'},{g:'pong'},{g:'asteroids'},{g:'game2048'},{g:'wordle'},{g:'memorymatch'},{g:'lightsout'},{g:'aimtrainer'},{g:'simonmemory'},{g:'numbertouch'},{g:'capitals'},{g:'elements'},{g:'timeline'},{g:'blitz'}].forEach(({g}) => {
+  [{g:'bubble'},{g:'scramble'},{g:'math'},{g:'typing'},{g:'reaction'},{g:'snake'},{g:'flags'},{g:'sudoku'},{g:'hangman'},{g:'tetris'},{g:'brickbreaker'},{g:'icytower'},{g:'flappy'},{g:'spaceinvaders'},{g:'pong'},{g:'asteroids'},{g:'game2048'},{g:'wordle'},{g:'memorymatch'},{g:'aimtrainer'},{g:'simonmemory'},{g:'numbertouch'},{g:'capitals'},{g:'elements'},{g:'timeline'},{g:'blitz'}].forEach(({g}) => {
     const el = document.getElementById('hi-'+g);
     const v = localStorage.getItem('hi_'+g) || 0;
     if (!el) return;

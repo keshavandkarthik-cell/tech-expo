@@ -2686,13 +2686,6 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="game-hi" id="hi-memorymatch"><span data-i18n="games_best">Best:</span> 143</div>
               <div class="game-lock" id="lock-memorymatch" style="color: rgb(255, 180, 0);">🔒 <span>25 💎 <span data-i18n="games_to_unlock">to unlock</span></span></div>
             </div>
-            <div class="game-card locked" data-cat="puzzle" data-game="lightsout" data-cost="25" onclick="tryStartGame('lightsout',25)">
-              <div class="game-icon">💡</div>
-              <div class="game-name" data-i18n="games_lightsout_name">Lights Out</div>
-              <div class="game-desc" data-i18n="games_lightsout_desc">Toggle lights to turn them all off!</div>
-              <div class="game-hi" id="hi-lightsout"><span data-i18n="games_best">Best:</span> 0</div>
-              <div class="game-lock" id="lock-lightsout" style="color: rgb(255, 180, 0);">🔒 <span>25 💎 <span data-i18n="games_to_unlock">to unlock</span></span></div>
-            </div>
           </div>
 
           <!-- REFLEX -->
@@ -4165,8 +4158,6 @@ const LANGS = {
     games_hangman_name: 'Hangman',
     games_icytower_desc: 'Jump up the tower as high as you can!',
     games_icytower_name: 'Icy Tower',
-    games_lightsout_desc: 'Toggle lights to turn them all off!',
-    games_lightsout_name: 'Lights Out',
     games_math_desc: 'Quick fire maths questions',
     games_math_name: 'Maths Blitz',
     games_memorymatch_desc: 'Flip cards and find matching pairs!',
@@ -4793,8 +4784,6 @@ const LANGS = {
     games_hangman_name: 'Ahorcado',
     games_icytower_desc: '¡Salta la torre lo más alto que puedas!',
     games_icytower_name: 'Torre Helada',
-    games_lightsout_desc: '¡Alterna las luces para apagarlas todas!',
-    games_lightsout_name: 'Apaga las Luces',
     games_math_desc: 'Preguntas rápidas de matemáticas',
     games_math_name: 'Ráfaga de Matemáticas',
     games_memorymatch_desc: '¡Voltea cartas y encuentra los pares!',
@@ -5345,8 +5334,6 @@ const LANGS = {
     games_hangman_name: 'Hangman',
     games_icytower_desc: 'Lompat menara setinggi mungkin!',
     games_icytower_name: 'Menara Ais',
-    games_lightsout_desc: 'Togol lampu untuk padamkan semua!',
-    games_lightsout_name: 'Padam Lampu',
     games_math_desc: 'Soalan matematik pantas',
     games_math_name: 'Blitz Matematik',
     games_memorymatch_desc: 'Terbalikkan kad dan cari pasangan!',
@@ -5897,8 +5884,6 @@ const LANGS = {
     games_hangman_name: '猜单词',
     games_icytower_desc: '尽可能跳得更高！',
     games_icytower_name: '冰塔',
-    games_lightsout_desc: '切换灯光，全部关闭！',
-    games_lightsout_name: '熄灯',
     games_math_desc: '快速数学问答',
     games_math_name: '数学冲刺',
     games_memorymatch_desc: '翻牌找出配对！',
@@ -6449,8 +6434,6 @@ const LANGS = {
     games_hangman_name: 'ハングマン',
     games_icytower_desc: 'できるだけ高くタワーを登ろう！',
     games_icytower_name: 'アイシータワー',
-    games_lightsout_desc: 'ライトを切り替えて全部消そう！',
-    games_lightsout_name: 'ライツアウト',
     games_math_desc: 'スピード算数クイズ',
     games_math_name: 'マスブリッツ',
     games_memorymatch_desc: 'カードをめくってペアを見つけよう！',
@@ -14089,16 +14072,6 @@ function startMemoryMatch(area) {
   function render(){const g=document.getElementById('mm-grid');if(!g)return;g.innerHTML='';cards.forEach(c=>{const d=document.createElement('div');d.style.cssText=`height:64px;border-radius:10px;background:${c.flipped||c.matched?'rgba(77,159,255,.15)':'rgba(255,255,255,.05)'};border:2px solid ${c.matched?'#00d4aa':c.flipped?'rgba(77,159,255,.5)':'rgba(255,255,255,.1)'};display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:${c.matched||locked?'default':'pointer'};transition:all .2s;`;d.textContent=c.flipped||c.matched?c.emoji:'';if(!c.matched&&!locked)d.onclick=()=>flip(c.id);g.appendChild(d);});}
   function flip(id){if(locked)return;const c=cards[id];if(c.flipped||c.matched)return;c.flipped=true;flipped.push(id);render();if(flipped.length===2){moves++;locked=true;const[a,b]=flipped.map(i=>cards[i]);if(a.emoji===b.emoji){a.matched=b.matched=true;score+=10;flipped=[];locked=false;render();if(cards.every(c=>c.matched)){const t=Math.round((Date.now()-startTime)/1000);exitGame(score+Math.max(0,100-t),'Memory Match',`All matched in ${t}s!`);}}else{setTimeout(()=>{a.flipped=b.flipped=false;flipped=[];locked=false;render();},900);}}}
   area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="mm-score">0</span></div></div><button class="abtn sec" onclick="exitGame(${score},'Memory Match','')">Quit</button></div><div id="mm-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;max-width:340px;margin:0 auto;"></div>`;
-  render();
-}
-
-// ── LIGHTS OUT ──
-function startLightsOut(area) {
-  let size=5,grid=Array.from({length:5},()=>Array(5).fill(false)),moves=0,startTime=Date.now();
-  // random solvable puzzle
-  for(let i=0;i<12;i++){const r=Math.floor(Math.random()*5),c=Math.floor(Math.random()*5);[[r,c],[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr>=0&&rr<5&&cc>=0&&cc<5)grid[rr][cc]=!grid[rr][cc];});}
-  function render(){const g=document.getElementById('lo-grid');if(!g)return;g.innerHTML='';grid.forEach((row,r)=>row.forEach((on,c)=>{const d=document.createElement('div');d.style.cssText=`height:56px;border-radius:10px;background:${on?'#fbbf24':'rgba(255,255,255,.05)'};border:2px solid ${on?'#f59e0b':'rgba(255,255,255,.1)'};cursor:pointer;transition:all .15s;box-shadow:${on?'0 0 16px rgba(251,191,36,.5)':'none'};`;d.onclick=()=>{[[r,c],[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([rr,cc])=>{if(rr>=0&&rr<5&&cc>=0&&cc<5)grid[rr][cc]=!grid[rr][cc];});moves++;const me=document.getElementById('lo-moves');if(me)me.textContent=moves;render();if(grid.every(row=>row.every(v=>!v))){const t=Math.round((Date.now()-startTime)/1000);exitGame(Math.max(10,200-moves*5),'Lights Out',`Solved in ${moves} moves, ${t}s!`);}};g.appendChild(d);}));}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Moves: <span id="lo-moves">0</span></div></div><button class="abtn sec" onclick="exitGame(0,'Lights Out','')">Quit</button></div><div id="lo-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:10px;max-width:340px;margin:0 auto;"></div><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:8px;">Click tiles to toggle — turn them all off!</div>`;
   render();
 }
 
