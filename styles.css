@@ -1956,6 +1956,12 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
   color: var(--silver);
   margin-top: 1px;
 }
+.lb-title-tag {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: rgba(0,212,170,.1); border: 1px solid rgba(0,212,170,.3);
+  border-radius: 999px; padding: 1px 8px; margin-top: 1px;
+  font-family: var(--exo); font-size: .62rem; font-weight: 600; color: var(--teal2);
+}
 .lb-val {
   font-family: var(--orb);
   font-size: .9rem;

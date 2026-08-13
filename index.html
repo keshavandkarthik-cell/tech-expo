@@ -1628,6 +1628,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <button class="ps-tab" onclick="psGo('goals',this)">🎯 Goals</button>
               <button class="ps-tab" onclick="psGo('stats',this)">📊 Stats</button>
               <button class="ps-tab" onclick="psGo('badges',this)">🏅 Badges</button>
+              <button class="ps-tab" onclick="psGo('titles',this)">🏷️ Titles</button>
             </div>
           </div>
           <div class="ps-subnav-group">
@@ -2015,6 +2016,17 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       <div class="badge-name">Explorer</div>
       <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Visited every section of Veda</div>
     </div></div>
+        </div>
+
+        <div class="ps-panel" id="ps-titles">
+          <div class="ps-badges-header">
+            <div>
+              <div class="ps-card-label">// TITLES</div>
+              <div class="ps-form-label" id="ps-titles-count" style="margin-top:4px;">0 of 10 unlocked</div>
+            </div>
+          </div>
+          <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.75;margin:2px 0 14px;line-height:1.5;">Earned from lifetime gems — spending gems on games or the shop never locks a title back up. Tap any unlocked title to display it next to your name on the leaderboard.</div>
+          <div class="ps-badges-full" id="titles-grid"></div>
         </div>
 
         <div class="ps-panel" id="ps-appearance">
@@ -6813,11 +6825,13 @@ function applyLang() {
   document.querySelectorAll('.mood-chip').forEach((chip, i) => {
     if (moodKeys[i]) chip.textContent = t(moodKeys[i]);
   });
-  // Settings sub-nav — now one merged tab with 7 buttons across two groups
-  // (Account: profile/goals/stats/badges, Preferences: appearance/aiprofile/apikey),
-  // in the same order they appear in the DOM.
+  // Settings sub-nav — now one merged tab with 8 buttons across two groups
+  // (Account: profile/goals/stats/badges/titles, Preferences: appearance/aiprofile/apikey),
+  // in the same order they appear in the DOM. `null` = no i18n key for that
+  // button (Titles is English-only, like this session's other additions) —
+  // keeps the positional index aligned for every button after it.
   const settingsTabMap = [
-    {key:'set_profile'},{key:'set_goals'},{key:'set_stats'},{key:'set_badges'},
+    {key:'set_profile'},{key:'set_goals'},{key:'set_stats'},{key:'set_badges'},null,
     {key:'set_appearance'},{key:'set_aiprofile'},{key:'set_apikey'}
   ];
   const settingsTab = document.getElementById('tab-settings');
@@ -6866,6 +6880,7 @@ function applyLang() {
   // Settings: badges/stats/goals panels are rebuilt from JS on every visit —
   // re-render the currently active one so an open panel updates immediately.
   if (typeof renderBadgesPanel === 'function' && document.getElementById('ps-badges')?.classList.contains('on')) renderBadgesPanel();
+  if (typeof renderTitlesPanel === 'function' && document.getElementById('ps-titles')?.classList.contains('on')) renderTitlesPanel();
   if (typeof renderStatsPanel === 'function' && document.getElementById('ps-stats')?.classList.contains('on')) renderStatsPanel();
   if (typeof renderGoalsPanel === 'function' && document.getElementById('ps-goals')?.classList.contains('on')) renderGoalsPanel();
   if (typeof renderApiHub === 'function') renderApiHub();
@@ -9746,7 +9761,68 @@ function badgeDesc(b) { return t(b.descKey); }
 function getAcct() {
   try { return JSON.parse(localStorage.getItem('studly_account') || '{}'); } catch { return {}; }
 }
-function saveAcct(d) { localStorage.setItem('studly_account', JSON.stringify(d)); }
+function saveAcct(d) {
+  // gemsTotal is a high-water mark, not a running total — bumping it here
+  // (the one choke point every gem award/spend already passes through)
+  // means titles never need touching whenever a new place awards gems, and
+  // spending on games/shop never un-unlocks a title already earned.
+  d.gemsTotal = Math.max(d.gemsTotal || 0, d.gems || 0);
+  localStorage.setItem('studly_account', JSON.stringify(d));
+}
+
+// ── TITLES (unlocked by lifetime gems, displayed on the leaderboard) ──
+const TITLE_TIERS = [
+  { id:'novice',     threshold:0,     emoji:'🌱', name:'Novice' },
+  { id:'apprentice', threshold:50,    emoji:'📘', name:'Apprentice' },
+  { id:'scholar',    threshold:150,   emoji:'📚', name:'Scholar' },
+  { id:'adept',      threshold:400,   emoji:'⚡', name:'Adept' },
+  { id:'sage',       threshold:800,   emoji:'🦉', name:'Sage' },
+  { id:'luminary',   threshold:1500,  emoji:'✨', name:'Luminary' },
+  { id:'virtuoso',   threshold:3000,  emoji:'🎯', name:'Virtuoso' },
+  { id:'prodigy',    threshold:6000,  emoji:'🧠', name:'Prodigy' },
+  { id:'legend',     threshold:10000, emoji:'🏆', name:'Legend' },
+  { id:'mythic',     threshold:20000, emoji:'👑', name:'Mythic' },
+];
+function getUnlockedTitles(a) {
+  const total = a.gemsTotal || a.gems || 0;
+  return TITLE_TIERS.filter(tt => total >= tt.threshold);
+}
+// The title actually shown on the leaderboard: the student's own pick if
+// they've unlocked it, else their highest unlocked tier (never blank).
+function getSelectedTitle(a) {
+  const unlocked = getUnlockedTitles(a);
+  return unlocked.find(tt => tt.id === a.selectedTitle) || unlocked[unlocked.length - 1] || TITLE_TIERS[0];
+}
+function selectTitle(id) {
+  const a = getAcct();
+  if (!getUnlockedTitles(a).find(tt => tt.id === id)) return; // can't equip a locked title
+  a.selectedTitle = id;
+  saveAcct(a);
+  renderTitlesPanel();
+  if (typeof lbPushStats === 'function') lbPushStats();
+  showToast('🏷️ Title equipped!');
+}
+function renderTitlesPanel() {
+  const a = getAcct();
+  const total = a.gemsTotal || a.gems || 0;
+  const unlocked = getUnlockedTitles(a);
+  const current = getSelectedTitle(a);
+  const countEl = document.getElementById('ps-titles-count');
+  if (countEl) countEl.textContent = `${unlocked.length} of ${TITLE_TIERS.length} unlocked · ${total} lifetime gems`;
+  const grid = document.getElementById('titles-grid');
+  if (!grid) return;
+  grid.innerHTML = TITLE_TIERS.map(tt => {
+    const isUnlocked = total >= tt.threshold;
+    const isSelected = current.id === tt.id;
+    const border = isSelected ? 'border-color:var(--accent);background:rgba(77,159,255,.12);' : '';
+    return `<div class="badge-item ${isUnlocked ? 'earned' : 'locked'}" title="${isUnlocked ? (isSelected ? 'Currently equipped' : 'Tap to equip') : `Reach ${tt.threshold} lifetime gems to unlock`}" ${isUnlocked ? `onclick="selectTitle('${tt.id}')" style="cursor:pointer;${border}"` : ''}>
+      ${isSelected ? '<div class="badge-earned-tick" style="background:var(--accent);">✓</div>' : (isUnlocked ? '<div class="badge-earned-tick">✓</div>' : '')}
+      <div class="badge-emoji">${tt.emoji}</div>
+      <div class="badge-name">${tt.name}</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">${isUnlocked ? (isSelected ? 'Equipped' : 'Tap to equip') : `${tt.threshold} lifetime gems`}</div>
+    </div>`;
+  }).join('');
+}
 
 function initAcct() {
   const a = getAcct();
@@ -9849,6 +9925,7 @@ function psGo(panel, btn) {
   }
   if (panel === 'stats') renderStatsPanel();
   if (panel === 'badges') renderBadgesPanel();
+  if (panel === 'titles') renderTitlesPanel();
   if (panel === 'goals') renderGoalsPanel();
   if (panel === 'apikey') renderApiKeyPanel();
   if (panel === 'profile') renderProfilePanel();

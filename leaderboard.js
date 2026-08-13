@@ -37,6 +37,7 @@ async function lbPushStats() {
   const hiMath   = parseInt(localStorage.getItem('hi_math')   || 0);
   const topGame  = Math.max(hiSnake, hiTyping, hiMath);
   const name = acct.name || window._fbUser.displayName || 'Scholar';
+  const title = typeof getSelectedTitle === 'function' ? getSelectedTitle(acct) : null;
   try {
     await window._fb.saveLeaderboard(uid, {
       lbCode:    code,
@@ -46,6 +47,8 @@ async function lbPushStats() {
       lbStreak:  acct.streak  || 0,
       lbGames:   topGame,
       lbVisible: visible,
+      lbTitle:      title ? title.name  : '',
+      lbTitleEmoji: title ? title.emoji : '',
       lbUpdated: Date.now(),
     });
   } catch(e) { /* silent */ }
@@ -222,12 +225,16 @@ async function lbRender() {
     const avatar = entry.data.lbAvatar || '🎓';
     const val  = lbValLabel(entry.data);
     const meTag = isMe ? ' <span style="font-family:var(--exo);font-size:.62rem;color:var(--teal2);letter-spacing:1px;">YOU</span>' : '';
+    // Title gets its own line under the name — cramming it onto the name row
+    // alongside the YOU tag pushed YOU past the name's ellipsis on mobile.
+    const titleTag = entry.data.lbTitle ? `<span class="lb-title-tag">${entry.data.lbTitleEmoji || ''} ${entry.data.lbTitle}</span>` : '';
+    const subLine = titleTag || (isMe ? 'Your score' : (entry.data.lbCode || ''));
     return `<div class="lb-row ${isMe?'lb-me':''}">
       <div class="lb-rank ${rankClass}">${rankIcon}</div>
       <div class="lb-avatar">${avatar}</div>
       <div class="lb-info">
         <div class="lb-name">${name}${meTag}</div>
-        <div class="lb-sub">${isMe ? 'Your score' : (entry.data.lbCode || '')}</div>
+        <div class="lb-sub">${subLine}</div>
       </div>
       <div class="lb-val">${val}</div>
     </div>`;
