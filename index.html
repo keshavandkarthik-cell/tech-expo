@@ -1,7 +1,7 @@
 <html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc; font-size: 17px;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Veda:A Study App</title>
+<title>Veda — AI Study Companion</title>
 <meta name="description" content="Your AI-powered study companion — homework help, flashcards, games, planner and more. Personalised to you.">
 <meta name="theme-color" content="#4d9fff">
 <meta name="mobile-web-app-capable" content="yes">
@@ -12,12 +12,12 @@
 <meta name="msapplication-TileColor" content="#0B0D16">
 <meta name="msapplication-TileImage" content="image_2.png">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Veda: AI Study Companion">
+<meta property="og:title" content="Veda — AI Study Companion">
 <meta property="og:description" content="Your AI-powered study companion — homework help, flashcards, games, planner and more.">
 <meta property="og:image" content="https://veda-net.com/image_1.png">
 <meta property="og:url" content="https://veda-net.com">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Veda: AI Study Companion">
+<meta name="twitter:title" content="Veda — AI Study Companion">
 <meta name="twitter:description" content="Your AI-powered study companion — homework help, flashcards, games, planner and more.">
 <meta name="twitter:image" content="https://veda-net.com/image_1.png">
 <link rel="icon" type="image/png" sizes="192x192" href="image_2.png">
@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=10">
+<link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -1098,17 +1098,18 @@ onAuthStateChanged(_auth, async user => {
           <div class="bubble bot" id="hw-intro-bubble">Hey! Ask me anything 🎓 <span class="hw-intro-hint">Pick a <strong>response style</strong> above, use a <strong>quick starter</strong>, or </span>just type your question.<br><span style="font-size:.8em;opacity:.7;">You can also 📷 upload a photo of your question!</span></div>
         </div>
 
-        <!-- Image preview strip -->
+        <!-- Attached-file preview strip -->
         <div id="hw-img-preview" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(77,159,255,.06);border:1px solid rgba(77,159,255,.2);border-radius:10px;align-items:center;gap:10px;">
-          <img id="hw-img-thumb" style="height:48px;width:auto;border-radius:6px;object-fit:cover;" src="" alt="uploaded">
-          <div style="flex:1;font-family:var(--exo);font-size:.75rem;color:var(--silver);" data-i18n="hw_img_hint">Image attached — ask a question about it or just hit Send</div>
-          <button onclick="clearHwImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1.1rem;line-height:1;" aria-label="Remove attached image">✕</button>
+          <img id="hw-img-thumb" style="height:48px;width:auto;border-radius:6px;object-fit:cover;display:none;" src="" alt="uploaded">
+          <span id="hw-file-icon" style="display:none;font-size:1.5rem;width:32px;text-align:center;flex-shrink:0;">📄</span>
+          <div style="flex:1;font-family:var(--exo);font-size:.75rem;color:var(--silver);" id="hw-img-hint" data-i18n="hw_img_hint">Image attached — ask a question about it or just hit Send</div>
+          <button onclick="clearHwImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1.1rem;line-height:1;" aria-label="Remove attached file">✕</button>
         </div>
 
         <div class="in-row">
-          <label class="img-upload-btn" title="Upload an image of your question">
-            📷
-            <input type="file" id="hw-img-in" accept="image/*" style="display:none;" onchange="handleHwImage(this)">
+          <label class="img-upload-btn" title="Attach an image, PDF, or text/code file">
+            📎
+            <input type="file" id="hw-img-in" accept="image/*,application/pdf,.txt,.md,.html,.htm,.css,.js,.jsx,.ts,.tsx,.json,.csv,.tsv,.xml,.yml,.yaml,.py,.java,.c,.cpp,.h,.cs,.rb,.go,.rs,.php,.sql,.log,.svg" style="display:none;" onchange="handleHwImage(this)">
           </label>
           <input class="chat-in" id="hw-in" placeholder="Ask any question..." onkeydown="if(event.key==='Enter')sendHw()">
           <button id="hw-voice-btn" onclick="voiceInput('hw-in','hw-voice-btn')" title="Voice input" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:12px;padding:0 14px;color:var(--silver2);font-size:1rem;cursor:pointer;transition:all .15s;flex-shrink:0;" aria-label="Voice input for homework question">🎙️</button>
@@ -1435,9 +1436,10 @@ onAuthStateChanged(_auth, async user => {
         <div class="ttl">📝 Smart Notes</div>
         <div class="tsub"><span class="prm">›</span>Paste your text and get smart AI-powered notes</div>
         <div id="notes-img-preview" style="display:none;margin-bottom:10px;padding:8px 12px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:10px;align-items:center;gap:10px;">
-          <img id="notes-img-thumb" style="height:48px;width:auto;border-radius:6px;object-fit:cover;" src="" alt="Attached image">
-          <div style="flex:1;font-family:var(--exo);font-size:.75rem;color:var(--silver);" data-i18n="notes_img_hint">Image attached — text will be extracted from it</div>
-          <button onclick="clearNotesImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1.1rem;" aria-label="Remove attached image">✕</button>
+          <img id="notes-img-thumb" style="height:48px;width:auto;border-radius:6px;object-fit:cover;display:none;" src="" alt="Attached image">
+          <span id="notes-file-icon" style="display:none;font-size:1.5rem;width:32px;text-align:center;flex-shrink:0;">📄</span>
+          <div style="flex:1;font-family:var(--exo);font-size:.75rem;color:var(--silver);" id="notes-img-hint" data-i18n="notes_img_hint">Image attached — text will be extracted from it</div>
+          <button onclick="clearNotesImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1.1rem;" aria-label="Remove attached file">✕</button>
         </div>
         <textarea class="nta" id="notes-in" placeholder="Paste your notes, textbook content, or anything you want to study..."></textarea>
         <div class="brow">
@@ -1448,9 +1450,9 @@ onAuthStateChanged(_auth, async user => {
           <button class="abtn" onclick="doNotes('glossary')" style="background:#2563eb;" data-i18n="notes_btn_glossary">🔤 Glossary</button>
           <button class="abtn" onclick="doNotes('eli5')" style="background:#7c3aed;" data-i18n="notes_btn_simplify">🧒 Simplify</button>
           <button class="abtn" onclick="doNotes('timeline')" style="background:#db2777;" data-i18n="notes_btn_timeline">📅 Timeline</button>
-          <label class="abtn sec" style="cursor:pointer;" title="Upload photo of notes">
-            <span data-i18n="notes_btn_upload">📷 Upload</span>
-            <input type="file" id="notes-img-in" accept="image/*" style="display:none;" onchange="handleNotesImage(this)">
+          <label class="abtn sec" style="cursor:pointer;" title="Attach a photo, PDF, or text/code file">
+            <span data-i18n="notes_btn_upload">📎 Upload</span>
+            <input type="file" id="notes-img-in" accept="image/*,application/pdf,.txt,.md,.html,.htm,.css,.js,.jsx,.ts,.tsx,.json,.csv,.tsv,.xml,.yml,.yaml,.py,.java,.c,.cpp,.h,.cs,.rb,.go,.rs,.php,.sql,.log,.svg" style="display:none;" onchange="handleNotesImage(this)">
           </label>
           <button class="abtn sec" onclick="clearNotes()" data-i18n="btn_clear">Clear</button>
         </div>
@@ -1473,19 +1475,29 @@ onAuthStateChanged(_auth, async user => {
       <div class="tab" id="tab-study">
         <div class="ttl">🧠 Smart Study</div>
         <div class="tsub"><span class="prm">›</span>Generate flashcards or quiz questions from any topic or image</div>
-        <div class="study-mode-bar" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-          <div class="mrow" style="margin-bottom:0;flex-wrap:wrap;">
-            <button class="mbtn on" onclick="setMode(this,'flashcards')" data-i18n="study_mode_flashcards">🃏 Flashcards</button>
-            <button class="mbtn" onclick="setMode(this,'quiz')" data-i18n="study_mode_quiz">❓ Quiz Mode</button>
-            <button class="mbtn" onclick="setMode(this,'practice')" data-i18n="study_mode_practice">📝 Practice Qs</button>
-            <button class="mbtn" onclick="setMode(this,'markscheme')" data-i18n="study_mode_markscheme">✅ Mark Scheme</button>
-            <button class="mbtn" onclick="setMode(this,'cloze')" data-i18n="study_mode_cloze">🔲 Cloze</button>
-            <button class="mbtn" onclick="setMode(this,'formula')" data-i18n="study_mode_formula">🧮 Formula Sheet</button>
-            <button class="mbtn" onclick="setMode(this,'cornell')" data-i18n="study_mode_cornell">📓 Cornell Notes</button>
-            <button class="mbtn" onclick="setMode(this,'mnemonics')" data-i18n="study_mode_mnemonics">🎵 Mnemonics</button>
-            <button class="mbtn" onclick="setMode(this,'predicted')" data-i18n="study_mode_predicted">🔮 Predicted Qs</button>
-            <button class="mbtn" onclick="setMode(this,'mistakes')" data-i18n="study_mode_mistakes">⚠️ Mistakes</button>
-            <button class="mbtn" onclick="setMode(this,'comparison')" data-i18n="study_mode_comparison">⚖️ Comparison</button>
+        <div class="study-mode-bar">
+          <div class="study-mode-select-wrap" id="study-mode-wrap">
+            <button class="study-mode-trigger" onclick="toggleStudyModeMenu(event)" aria-haspopup="true" aria-expanded="false">
+              <span id="study-mode-trigger-label">🃏 Flashcards</span>
+              <span class="study-mode-select-chev">▾</span>
+            </button>
+            <div class="study-mode-menu" id="study-mode-menu">
+              <div class="study-mode-menu-group-label">Quick Review</div>
+              <button class="study-mode-opt on" data-mode="flashcards" onclick="pickStudyMode('flashcards','🃏 Flashcards')"><span class="smo-ic">🃏</span>Flashcards<span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="quiz" onclick="pickStudyMode('quiz','❓ Quiz Mode')"><span class="smo-ic">❓</span>Quiz Mode<span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="cloze" onclick="pickStudyMode('cloze','🔲 Cloze')"><span class="smo-ic">🔲</span>Cloze<span class="smo-check">✓</span></button>
+              <div class="study-mode-menu-group-label">Exam Prep</div>
+              <button class="study-mode-opt" data-mode="practice" onclick="pickStudyMode('practice','📝 Practice Qs')"><span class="smo-ic">📝</span>Practice Qs<span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="markscheme" onclick="pickStudyMode('markscheme','✅ Mark Scheme')"><span class="smo-ic">✅</span>Mark Scheme<span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="predicted" onclick="pickStudyMode('predicted','🔮 Predicted Qs')"><span class="smo-ic">🔮</span>Predicted Qs<span class="smo-check">✓</span></button>
+              <div class="study-mode-menu-group-label">Reference</div>
+              <button class="study-mode-opt" data-mode="formula" onclick="pickStudyMode('formula','🧮 Formula Sheet')"><span class="smo-ic">🧮</span>Formula Sheet<span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="cornell" onclick="pickStudyMode('cornell','📓 Cornell Notes')"><span class="smo-ic">📓</span>Cornell Notes<span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="mnemonics" onclick="pickStudyMode('mnemonics','🎵 Mnemonics')"><span class="smo-ic">🎵</span>Mnemonics<span class="smo-check">✓</span></button>
+              <div class="study-mode-menu-group-label">Deeper Understanding</div>
+              <button class="study-mode-opt" data-mode="mistakes" onclick="pickStudyMode('mistakes','⚠️ Mistakes')"><span class="smo-ic">⚠️</span>Mistakes<span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="comparison" onclick="pickStudyMode('comparison','⚖️ Comparison')"><span class="smo-ic">⚖️</span>Comparison<span class="smo-check">✓</span></button>
+            </div>
           </div>
           <div class="study-count-wrap">
             <span class="study-count-label" data-i18n="study_count_label">Count</span>
@@ -1495,23 +1507,24 @@ onAuthStateChanged(_auth, async user => {
           </div>
         </div>
         <div id="study-img-preview" style="display:none;margin-bottom:10px;padding:8px 12px;background:rgba(77,159,255,.06);border:1px solid rgba(77,159,255,.2);border-radius:10px;align-items:center;gap:10px;">
-          <img id="study-img-thumb" style="height:40px;width:auto;border-radius:6px;object-fit:cover;" src="" alt="Attached image">
-          <div style="flex:1;font-family:var(--exo);font-size:.72rem;color:var(--silver);" data-i18n="study_img_hint">Image attached — flashcards will be generated from it</div>
-          <button onclick="clearStudyImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1rem;" aria-label="Remove attached image">✕</button>
+          <img id="study-img-thumb" style="height:40px;width:auto;border-radius:6px;object-fit:cover;display:none;" src="" alt="Attached image">
+          <span id="study-file-icon" style="display:none;font-size:1.3rem;width:28px;text-align:center;flex-shrink:0;">📄</span>
+          <div style="flex:1;font-family:var(--exo);font-size:.72rem;color:var(--silver);" id="study-img-hint" data-i18n="study_img_hint">Image attached — flashcards will be generated from it</div>
+          <button onclick="clearStudyImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1rem;" aria-label="Remove attached file">✕</button>
         </div>
         <div class="in-row" style="margin-bottom:18px;">
-          <label class="img-upload-btn" title="Upload an image to generate flashcards from">
-            📷
-            <input type="file" id="study-img-in" accept="image/*" style="display:none;" onchange="handleStudyImage(this)">
+          <label class="img-upload-btn" title="Attach an image, PDF, or text/code file">
+            📎
+            <input type="file" id="study-img-in" accept="image/*,application/pdf,.txt,.md,.html,.htm,.css,.js,.jsx,.ts,.tsx,.json,.csv,.tsv,.xml,.yml,.yaml,.py,.java,.c,.cpp,.h,.cs,.rb,.go,.rs,.php,.sql,.log,.svg" style="display:none;" onchange="handleStudyImage(this)">
           </label>
           <input class="chat-in" id="study-in" placeholder="Enter a topic, e.g. Photosynthesis or World War 2..." onkeydown="if(event.key==='Enter')genStudy()">
           <button class="send-btn" onclick="genStudy()">GENERATE</button>
         </div>
         <div id="study-out">
-          <div id="study-empty-state" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;opacity:.7;">
-            <div style="font-size:2.6rem;margin-bottom:14px;">🧠</div>
-            <div style="font-family:var(--raj);font-size:1rem;font-weight:600;color:var(--text2);margin-bottom:6px;" data-i18n="study_empty_title">Nothing generated yet</div>
-            <div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);opacity:.75;line-height:1.6;max-width:280px;" id="study-empty-sub">Pick a mode above, type a topic, and hit <strong>Generate</strong> — your flashcards or quiz will show up right here.</div>
+          <div id="study-empty-state" class="panel study-empty-panel">
+            <div class="study-empty-icon">🧠</div>
+            <div class="study-empty-title" data-i18n="study_empty_title">Nothing generated yet</div>
+            <div class="study-empty-sub" id="study-empty-sub">Type a topic above and hit <strong>Generate</strong> — <span id="study-empty-mode"></span> will show up right here.</div>
           </div>
         </div>
         <div id="study-export-row" style="display:none;margin-top:10px;justify-content:flex-end;gap:8px;">
@@ -1559,18 +1572,19 @@ onAuthStateChanged(_auth, async user => {
           <button class="mood-chip" onclick="setMood(this,'🔥 Motivated')">🔥 Motivated</button>
         </div>
         <div class="in-row">
-          <label class="img-upload-btn" title="Upload an image">
-            📷
-            <input type="file" id="comp-img-in" accept="image/*" style="display:none;" onchange="handleCompImage(this)">
+          <label class="img-upload-btn" title="Attach an image, PDF, or text/code file">
+            📎
+            <input type="file" id="comp-img-in" accept="image/*,application/pdf,.txt,.md,.html,.htm,.css,.js,.jsx,.ts,.tsx,.json,.csv,.tsv,.xml,.yml,.yaml,.py,.java,.c,.cpp,.h,.cs,.rb,.go,.rs,.php,.sql,.log,.svg" style="display:none;" onchange="handleCompImage(this)">
           </label>
           <input class="chat-in" id="comp-in" placeholder="Talk to me..." onkeydown="if(event.key==='Enter')sendComp()">
           <button id="comp-voice-btn" onclick="voiceInput('comp-in','comp-voice-btn')" title="Voice input" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:12px;padding:0 14px;color:var(--silver2);font-size:1rem;cursor:pointer;transition:all .15s;flex-shrink:0;" aria-label="Voice input for companion chat">🎙️</button>
           <button class="send-btn" onclick="sendComp()">SEND →</button>
         </div>
         <div id="comp-img-preview" style="display:none;margin-top:6px;padding:7px 10px;background:rgba(77,159,255,.06);border:1px solid rgba(77,159,255,.2);border-radius:10px;align-items:center;gap:10px;">
-          <img id="comp-img-thumb" style="height:40px;width:auto;border-radius:6px;object-fit:cover;" src="" alt="Attached image">
-          <div style="flex:1;font-family:var(--exo);font-size:.72rem;color:var(--silver);" data-i18n="chat_img_hint">Image attached</div>
-          <button onclick="clearCompImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1rem;" aria-label="Remove attached image">✕</button>
+          <img id="comp-img-thumb" style="height:40px;width:auto;border-radius:6px;object-fit:cover;display:none;" src="" alt="Attached image">
+          <span id="comp-file-icon" style="display:none;font-size:1.3rem;width:28px;text-align:center;flex-shrink:0;">📄</span>
+          <div style="flex:1;font-family:var(--exo);font-size:.72rem;color:var(--silver);" id="comp-img-hint" data-i18n="chat_img_hint">Image attached</div>
+          <button onclick="clearCompImage()" style="background:none;border:none;color:#ff6680;cursor:pointer;font-size:1rem;" aria-label="Remove attached file">✕</button>
         </div>
         </div><!-- /comp-panel -->
       </div>
@@ -2946,15 +2960,22 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div id="exam-out-title" style="font-family:var(--orb);font-size:.85rem;color:var(--text);letter-spacing:1px;margin-bottom:3px;"></div>
               <div id="exam-out-meta" style="font-family:var(--exo);font-size:.72rem;color:var(--silver);"></div>
             </div>
-            <div class="exam-row-scroll" style="display:flex;gap:8px;flex-wrap:wrap;">
-              <button class="exam-out-btn" onclick="examPrint()" data-i18n="exam_btn_print">🖨️ Print / Save PDF</button>
-              <button class="exam-out-btn" onclick="examShowAnswers()" data-i18n="exam_btn_toggle_answers">👁 Toggle Answers</button>
-              <button class="exam-out-btn" onclick="saveToVault(window._lastExamTitle || 'Exam paper', examToPlainText(window._lastExamRaw||'', window._lastExamTitle||'Exam'), 'Exam Papers')" data-i18n="exam_btn_save_vault">🗂️ Save to Vault</button>
-              <button class="exam-out-btn accent" onclick="examNewPaper()" data-i18n="exam_btn_new_paper">+ New Paper</button>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button class="exam-out-btn accent" onclick="examStartInteractive()" data-i18n="exam_btn_answer_now">✍️ Answer Now</button>
+              <div class="exam-more-wrap" id="exam-more-wrap">
+                <button class="exam-out-btn exam-more-btn" onclick="toggleExamMoreMenu(event)" aria-label="More actions" aria-haspopup="true">⋯</button>
+                <div class="exam-more-menu" id="exam-more-menu">
+                  <button onclick="closeExamMoreMenu();examPrint()" data-i18n="exam_btn_print">🖨️ Print / Save PDF</button>
+                  <button onclick="closeExamMoreMenu();examShowAnswers()" data-i18n="exam_btn_toggle_answers">👁 Toggle Answers</button>
+                  <button onclick="closeExamMoreMenu();saveToVault(window._lastExamTitle || 'Exam paper', examToPlainText(window._lastExamRaw||'', window._lastExamTitle||'Exam'), 'Exam Papers')" data-i18n="exam_btn_save_vault">🗂️ Save to Vault</button>
+                  <button onclick="closeExamMoreMenu();examNewPaper()" class="danger" data-i18n="exam_btn_new_paper">+ New Paper</button>
+                </div>
+              </div>
             </div>
           </div>
           <div id="exam-paper-wrap" style="flex:1;overflow-y:auto;">
             <div id="exam-paper-content" class="exam-paper-render"></div>
+            <div id="exam-interactive-content" class="exam-paper-render" style="display:none;"></div>
           </div>
         </div>
       </div>
@@ -4385,7 +4406,8 @@ const LANGS = {
     hw_starter_similar: '🔁 Similar example', hw_starter_formula: '🧮 What formula?',
     hw_starter_summarise: '✨ Summarise topic', hw_starter_keywords: '🔑 Key words',
     hw_img_hint: 'Image attached — ask a question about it or just hit Send',
-    hw_ph_topic: 'Ask a {topic} question...', hw_ph_image: 'Ask about the image, or just hit Send...',
+    attach_generic_hint: '📎 {file} attached — ask about it or just hit Send',
+    hw_ph_topic: 'Ask a {topic} question...', hw_ph_image: 'Ask about the image, or just hit Send...', hw_ph_attach: 'Ask about the file, or just hit Send...',
     hw_ph_check: 'Paste your answer or working here...', hw_ph_examtechnique: 'Ask a question or paste an essay title...',
     hw_ph_eli5: 'What do you want explained simply?', hw_ph_quickanswer: 'Ask your question...',
     hw_ph_whyiswrong: 'Paste your working or answer here...',
@@ -4398,7 +4420,7 @@ const LANGS = {
     notes_img_hint: 'Image attached — text will be extracted from it',
     notes_btn_summarise: '✨ Summarise', notes_btn_bullets: '• Bullet Points', notes_btn_mindmap: '🧠 Mind Map',
     notes_btn_essay: '📝 Essay Plan', notes_btn_glossary: '🔤 Glossary', notes_btn_simplify: '🧒 Simplify',
-    notes_btn_timeline: '📅 Timeline', notes_btn_upload: '📷 Upload', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Reset',
+    notes_btn_timeline: '📅 Timeline', notes_btn_upload: '📎 Upload', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Reset',
     notes_generating_mindmap: 'Generating mind map...', notes_processing: 'Processing...',
     // Study tab
     study_mode_flashcards: '🃏 Flashcards', study_mode_quiz: '❓ Quiz Mode', study_mode_practice: '📝 Practice Qs',
@@ -4407,7 +4429,7 @@ const LANGS = {
     study_mode_mistakes: '⚠️ Mistakes', study_mode_comparison: '⚖️ Comparison',
     study_count_label: 'Count', study_img_hint: 'Image attached — flashcards will be generated from it',
     study_empty_title: 'Nothing generated yet',
-    study_empty_sub: 'Pick a mode above, type a topic, and hit <strong>Generate</strong> — your flashcards or quiz will show up right here.',
+    study_empty_sub: 'Type a topic above and hit <strong>Generate</strong> — <span id="study-empty-mode"></span> will show up right here.',
     study_export_btn: '📤 Export Flashcards', study_generating: 'Generating {mode} for ',
     study_err_flashcards: 'Error generating flashcards: ', study_err_quiz: 'Error generating quiz: ',
     study_card_count: 'CARD {n} / {total}', study_learned: 'learned', study_click_flip: 'click to flip',
@@ -4458,7 +4480,7 @@ const LANGS = {
     exam_tpl_mcqonly: '🔘 MCQ Only', exam_tpl_written: '✍️ Written Only', exam_tpl_mixed: '⚡ Full Mixed',
     exam_gen_btn: 'Generate Exam Paper', exam_gen_generating: 'Generating...',
     exam_err_subject: '⚠️ Please select or type a subject first.', exam_err_qtype: '⚠️ Please select at least one question type.',
-    exam_btn_print: '🖨️ Print / Save PDF', exam_btn_toggle_answers: '👁 Toggle Answers',
+    exam_btn_answer_now: '✍️ Answer Now', exam_btn_print: '🖨️ Print / Save PDF', exam_btn_toggle_answers: '👁 Toggle Answers',
     exam_btn_save_vault: '🗂️ Save to Vault', exam_btn_new_paper: '+ New Paper',
     exam_toast_template_loaded: '✅ Template loaded! Pick a subject and generate.',
     exam_toast_answers_shown: '👁 Answers visible', exam_toast_answers_hidden: '🙈 Answers hidden',
@@ -4604,7 +4626,7 @@ const LANGS = {
     exam_tpl_mcqonly: '🔘 Solo MCQ', exam_tpl_written: '✍️ Solo Escrito', exam_tpl_mixed: '⚡ Mixto Completo',
     exam_gen_btn: 'Generar Examen', exam_gen_generating: 'Generando...',
     exam_err_subject: '⚠️ Selecciona o escribe una materia primero.', exam_err_qtype: '⚠️ Selecciona al menos un tipo de pregunta.',
-    exam_btn_print: '🖨️ Imprimir / Guardar PDF', exam_btn_toggle_answers: '👁 Mostrar Respuestas',
+    exam_btn_answer_now: '✍️ Responder Ahora', exam_btn_print: '🖨️ Imprimir / Guardar PDF', exam_btn_toggle_answers: '👁 Mostrar Respuestas',
     exam_btn_save_vault: '🗂️ Guardar en Vault', exam_btn_new_paper: '+ Nuevo Examen',
     exam_toast_template_loaded: '✅ ¡Plantilla cargada! Elige una materia y genera.',
     exam_toast_answers_shown: '👁 Respuestas visibles', exam_toast_answers_hidden: '🙈 Respuestas ocultas',
@@ -5011,7 +5033,8 @@ const LANGS = {
     hw_starter_similar: '🔁 Ejemplo similar', hw_starter_formula: '🧮 ¿Qué fórmula necesito?',
     hw_starter_summarise: '✨ Resumir este tema', hw_starter_keywords: '🔑 Palabras clave',
     hw_img_hint: 'Imagen adjunta — haz una pregunta sobre ella o pulsa Enviar',
-    hw_ph_topic: 'Haz una pregunta de {topic}...', hw_ph_image: 'Pregunta sobre la imagen, o pulsa Enviar...',
+    attach_generic_hint: '📎 {file} adjunto — pregunta sobre él o pulsa Enviar',
+    hw_ph_topic: 'Haz una pregunta de {topic}...', hw_ph_image: 'Pregunta sobre la imagen, o pulsa Enviar...', hw_ph_attach: 'Pregunta sobre el archivo, o pulsa Enviar...',
     hw_ph_check: 'Pega tu respuesta o procedimiento aquí...', hw_ph_examtechnique: 'Haz una pregunta o pega un título de ensayo...',
     hw_ph_eli5: '¿Qué quieres que te expliquen de forma sencilla?', hw_ph_quickanswer: 'Haz tu pregunta...',
     hw_ph_whyiswrong: 'Pega tu procedimiento o respuesta aquí...',
@@ -5024,7 +5047,7 @@ const LANGS = {
     notes_img_hint: 'Imagen adjunta — se extraerá el texto de ella',
     notes_btn_summarise: '✨ Resumir', notes_btn_bullets: '• Viñetas', notes_btn_mindmap: '🧠 Mapa Mental',
     notes_btn_essay: '📝 Plan de Ensayo', notes_btn_glossary: '🔤 Glosario', notes_btn_simplify: '🧒 Simplificar',
-    notes_btn_timeline: '📅 Cronología', notes_btn_upload: '📷 Subir', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Reiniciar',
+    notes_btn_timeline: '📅 Cronología', notes_btn_upload: '📎 Subir', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Reiniciar',
     notes_generating_mindmap: 'Generando mapa mental...', notes_processing: 'Procesando...',
     // Study tab
     study_mode_flashcards: '🃏 Tarjetas', study_mode_quiz: '❓ Modo Cuestionario', study_mode_practice: '📝 Preguntas de Práctica',
@@ -5033,7 +5056,7 @@ const LANGS = {
     study_mode_mistakes: '⚠️ Errores Comunes', study_mode_comparison: '⚖️ Comparación',
     study_count_label: 'Cantidad', study_img_hint: 'Imagen adjunta — se generarán tarjetas a partir de ella',
     study_empty_title: 'Nada generado todavía',
-    study_empty_sub: 'Elige un modo arriba, escribe un tema, y pulsa <strong>Generar</strong> — tus tarjetas o cuestionario aparecerán aquí.',
+    study_empty_sub: 'Escribe un tema arriba y pulsa <strong>Generar</strong> — <span id="study-empty-mode"></span> aparecerá aquí.',
     study_export_btn: '📤 Exportar Tarjetas', study_generating: 'Generando {mode} para ',
     study_err_flashcards: 'Error al generar tarjetas: ', study_err_quiz: 'Error al generar cuestionario: ',
     study_card_count: 'TARJETA {n} / {total}', study_learned: 'aprendidas', study_click_flip: 'clic para voltear',
@@ -5154,7 +5177,7 @@ const LANGS = {
     exam_tpl_mcqonly: '🔘 MCQ Sahaja', exam_tpl_written: '✍️ Bertulis Sahaja', exam_tpl_mixed: '⚡ Campuran Penuh',
     exam_gen_btn: 'Jana Kertas Peperiksaan', exam_gen_generating: 'Menjana...',
     exam_err_subject: '⚠️ Sila pilih atau taip subjek dahulu.', exam_err_qtype: '⚠️ Sila pilih sekurang-kurangnya satu jenis soalan.',
-    exam_btn_print: '🖨️ Cetak / Simpan PDF', exam_btn_toggle_answers: '👁 Tunjuk/Sembunyi Jawapan',
+    exam_btn_answer_now: '✍️ Jawab Sekarang', exam_btn_print: '🖨️ Cetak / Simpan PDF', exam_btn_toggle_answers: '👁 Tunjuk/Sembunyi Jawapan',
     exam_btn_save_vault: '🗂️ Simpan ke Vault', exam_btn_new_paper: '+ Kertas Baharu',
     exam_toast_template_loaded: '✅ Templat dimuatkan! Pilih subjek dan jana.',
     exam_toast_answers_shown: '👁 Jawapan dipaparkan', exam_toast_answers_hidden: '🙈 Jawapan disembunyikan',
@@ -5561,7 +5584,8 @@ const LANGS = {
     hw_starter_similar: '🔁 Contoh serupa', hw_starter_formula: '🧮 Formula apa yang diperlukan?',
     hw_starter_summarise: '✨ Ringkaskan topik', hw_starter_keywords: '🔑 Kata kunci',
     hw_img_hint: 'Imej dilampirkan — tanya soalan tentangnya atau tekan Hantar',
-    hw_ph_topic: 'Tanya soalan {topic}...', hw_ph_image: 'Tanya tentang imej, atau terus tekan Hantar...',
+    attach_generic_hint: '📎 {file} dilampirkan — tanya tentangnya atau tekan Hantar',
+    hw_ph_topic: 'Tanya soalan {topic}...', hw_ph_image: 'Tanya tentang imej, atau terus tekan Hantar...', hw_ph_attach: 'Tanya tentang fail, atau terus tekan Hantar...',
     hw_ph_check: 'Tampal jawapan atau kerja anda di sini...', hw_ph_examtechnique: 'Tanya soalan atau tampal tajuk esei...',
     hw_ph_eli5: 'Apa yang anda mahu diterangkan secara mudah?', hw_ph_quickanswer: 'Tanya soalan anda...',
     hw_ph_whyiswrong: 'Tampal kerja atau jawapan anda di sini...',
@@ -5574,7 +5598,7 @@ const LANGS = {
     notes_img_hint: 'Imej dilampirkan — teks akan diekstrak daripadanya',
     notes_btn_summarise: '✨ Ringkaskan', notes_btn_bullets: '• Poin Utama', notes_btn_mindmap: '🧠 Peta Minda',
     notes_btn_essay: '📝 Rangka Esei', notes_btn_glossary: '🔤 Glosari', notes_btn_simplify: '🧒 Permudahkan',
-    notes_btn_timeline: '📅 Garis Masa', notes_btn_upload: '📷 Muat Naik', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Set Semula',
+    notes_btn_timeline: '📅 Garis Masa', notes_btn_upload: '📎 Muat Naik', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Set Semula',
     notes_generating_mindmap: 'Menjana peta minda...', notes_processing: 'Memproses...',
     // Study tab
     study_mode_flashcards: '🃏 Kad Imbas', study_mode_quiz: '❓ Mod Kuiz', study_mode_practice: '📝 Soalan Latihan',
@@ -5583,7 +5607,7 @@ const LANGS = {
     study_mode_mistakes: '⚠️ Kesilapan Lazim', study_mode_comparison: '⚖️ Perbandingan',
     study_count_label: 'Bilangan', study_img_hint: 'Imej dilampirkan — kad imbas akan dijana daripadanya',
     study_empty_title: 'Belum ada yang dijana',
-    study_empty_sub: 'Pilih mod di atas, taip topik, dan tekan <strong>Jana</strong> — kad imbas atau kuiz anda akan muncul di sini.',
+    study_empty_sub: 'Taip topik di atas dan tekan <strong>Jana</strong> — <span id="study-empty-mode"></span> akan muncul di sini.',
     study_export_btn: '📤 Eksport Kad Imbas', study_generating: 'Menjana {mode} untuk ',
     study_err_flashcards: 'Ralat menjana kad imbas: ', study_err_quiz: 'Ralat menjana kuiz: ',
     study_card_count: 'KAD {n} / {total}', study_learned: 'dikuasai', study_click_flip: 'klik untuk terbalik',
@@ -5704,7 +5728,7 @@ const LANGS = {
     exam_tpl_mcqonly: '🔘 仅选择题', exam_tpl_written: '✍️ 仅书写题', exam_tpl_mixed: '⚡ 完全混合',
     exam_gen_btn: '生成试卷', exam_gen_generating: '生成中...',
     exam_err_subject: '⚠️ 请先选择或输入科目。', exam_err_qtype: '⚠️ 请至少选择一种题型。',
-    exam_btn_print: '🖨️ 打印 / 保存为 PDF', exam_btn_toggle_answers: '👁 显示/隐藏答案',
+    exam_btn_answer_now: '✍️ 立即作答', exam_btn_print: '🖨️ 打印 / 保存为 PDF', exam_btn_toggle_answers: '👁 显示/隐藏答案',
     exam_btn_save_vault: '🗂️ 保存到 Vault', exam_btn_new_paper: '+ 新建试卷',
     exam_toast_template_loaded: '✅ 模板已加载！选择科目后生成。',
     exam_toast_answers_shown: '👁 答案已显示', exam_toast_answers_hidden: '🙈 答案已隐藏',
@@ -6111,7 +6135,8 @@ const LANGS = {
     hw_starter_similar: '🔁 类似例子', hw_starter_formula: '🧮 需要什么公式？',
     hw_starter_summarise: '✨ 总结这个主题', hw_starter_keywords: '🔑 关键词',
     hw_img_hint: '已附加图片 — 就图片提问，或直接点击发送',
-    hw_ph_topic: '提问一个{topic}问题...', hw_ph_image: '就图片提问，或直接点击发送...',
+    attach_generic_hint: '📎 已附加 {file} — 就它提问，或直接点击发送',
+    hw_ph_topic: '提问一个{topic}问题...', hw_ph_image: '就图片提问，或直接点击发送...', hw_ph_attach: '就文件提问，或直接点击发送...',
     hw_ph_check: '在此粘贴你的答案或过程...', hw_ph_examtechnique: '提出问题或粘贴作文题目...',
     hw_ph_eli5: '你想要简单解释什么？', hw_ph_quickanswer: '提出你的问题...',
     hw_ph_whyiswrong: '在此粘贴你的过程或答案...',
@@ -6124,7 +6149,7 @@ const LANGS = {
     notes_img_hint: '已附加图片 — 将从中提取文本',
     notes_btn_summarise: '✨ 总结', notes_btn_bullets: '• 要点列表', notes_btn_mindmap: '🧠 思维导图',
     notes_btn_essay: '📝 作文大纲', notes_btn_glossary: '🔤 术语表', notes_btn_simplify: '🧒 简化',
-    notes_btn_timeline: '📅 时间线', notes_btn_upload: '📷 上传', notes_pdf_btn: '📄 PDF', notes_mm_reset: '重置',
+    notes_btn_timeline: '📅 时间线', notes_btn_upload: '📎 上传', notes_pdf_btn: '📄 PDF', notes_mm_reset: '重置',
     notes_generating_mindmap: '正在生成思维导图...', notes_processing: '处理中...',
     // Study tab
     study_mode_flashcards: '🃏 闪卡', study_mode_quiz: '❓ 测验模式', study_mode_practice: '📝 练习题',
@@ -6133,7 +6158,7 @@ const LANGS = {
     study_mode_mistakes: '⚠️ 常见错误', study_mode_comparison: '⚖️ 对比',
     study_count_label: '数量', study_img_hint: '已附加图片 — 将据此生成闪卡',
     study_empty_title: '尚未生成任何内容',
-    study_empty_sub: '在上方选择模式，输入主题，点击<strong>生成</strong> — 你的闪卡或测验会显示在这里。',
+    study_empty_sub: '在上方输入主题，点击<strong>生成</strong> — <span id="study-empty-mode"></span>会显示在这里。',
     study_export_btn: '📤 导出闪卡', study_generating: '正在生成{mode}，主题：',
     study_err_flashcards: '生成闪卡出错：', study_err_quiz: '生成测验出错：',
     study_card_count: '卡片 {n} / {total}', study_learned: '张已掌握', study_click_flip: '点击翻面',
@@ -6254,7 +6279,7 @@ const LANGS = {
     exam_tpl_mcqonly: '🔘 選択式のみ', exam_tpl_written: '✍️ 記述式のみ', exam_tpl_mixed: '⚡ フルミックス',
     exam_gen_btn: '試験問題を生成', exam_gen_generating: '生成中...',
     exam_err_subject: '⚠️ まず科目を選択または入力してください。', exam_err_qtype: '⚠️ 問題形式を1つ以上選んでください。',
-    exam_btn_print: '🖨️ 印刷 / PDF保存', exam_btn_toggle_answers: '👁 解答の表示切替',
+    exam_btn_answer_now: '✍️ 今すぐ解答', exam_btn_print: '🖨️ 印刷 / PDF保存', exam_btn_toggle_answers: '👁 解答の表示切替',
     exam_btn_save_vault: '🗂️ Vaultに保存', exam_btn_new_paper: '+ 新しい問題',
     exam_toast_template_loaded: '✅ テンプレートを読み込みました！科目を選んで生成しましょう。',
     exam_toast_answers_shown: '👁 解答を表示中', exam_toast_answers_hidden: '🙈 解答を非表示',
@@ -6661,7 +6686,8 @@ const LANGS = {
     hw_starter_similar: '🔁 似た例題', hw_starter_formula: '🧮 必要な公式は？',
     hw_starter_summarise: '✨ トピックを要約', hw_starter_keywords: '🔑 キーワード',
     hw_img_hint: '画像を添付済み — 画像について質問するか、送信を押してください',
-    hw_ph_topic: '{topic}の質問をしてください...', hw_ph_image: '画像について質問するか、送信を押してください...',
+    attach_generic_hint: '📎 {file} を添付済み — それについて質問するか、送信を押してください',
+    hw_ph_topic: '{topic}の質問をしてください...', hw_ph_image: '画像について質問するか、送信を押してください...', hw_ph_attach: 'ファイルについて質問するか、送信を押してください...',
     hw_ph_check: 'あなたの答えや途中式をここに貼り付けてください...', hw_ph_examtechnique: '質問するか、エッセイの題名を貼り付けてください...',
     hw_ph_eli5: '何をやさしく説明してほしいですか？', hw_ph_quickanswer: '質問を入力してください...',
     hw_ph_whyiswrong: 'あなたの途中式や答えをここに貼り付けてください...',
@@ -6674,7 +6700,7 @@ const LANGS = {
     notes_img_hint: '画像を添付済み — テキストが抽出されます',
     notes_btn_summarise: '✨ 要約', notes_btn_bullets: '• 箇条書き', notes_btn_mindmap: '🧠 マインドマップ',
     notes_btn_essay: '📝 エッセイ構成', notes_btn_glossary: '🔤 用語集', notes_btn_simplify: '🧒 簡単に',
-    notes_btn_timeline: '📅 年表', notes_btn_upload: '📷 アップロード', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'リセット',
+    notes_btn_timeline: '📅 年表', notes_btn_upload: '📎 アップロード', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'リセット',
     notes_generating_mindmap: 'マインドマップを生成中...', notes_processing: '処理中...',
     // Study tab
     study_mode_flashcards: '🃏 フラッシュカード', study_mode_quiz: '❓ クイズモード', study_mode_practice: '📝 練習問題',
@@ -6683,7 +6709,7 @@ const LANGS = {
     study_mode_mistakes: '⚠️ よくある間違い', study_mode_comparison: '⚖️ 比較',
     study_count_label: '枚数', study_img_hint: '画像を添付済み — これをもとにフラッシュカードを生成します',
     study_empty_title: 'まだ何も生成されていません',
-    study_empty_sub: '上でモードを選び、トピックを入力して<strong>生成</strong>を押すと、ここにフラッシュカードやクイズが表示されます。',
+    study_empty_sub: '上でトピックを入力して<strong>生成</strong>を押すと、ここに<span id="study-empty-mode"></span>が表示されます。',
     study_export_btn: '📤 フラッシュカードを書き出す', study_generating: '{mode}を生成中：',
     study_err_flashcards: 'フラッシュカードの生成エラー：', study_err_quiz: 'クイズの生成エラー：',
     study_card_count: 'カード {n} / {total}', study_learned: '枚習得', study_click_flip: 'クリックで裏返す',
@@ -6859,7 +6885,7 @@ function applyLang() {
   if (hwIntro && hwWinEl && hwWinEl.children.length <= 1) hwIntro.innerHTML = t('hw_intro_html');
   // Smart Study: empty-state helper text (contains a <strong> tag)
   const studyEmptySub = document.getElementById('study-empty-sub');
-  if (studyEmptySub) studyEmptySub.innerHTML = t('study_empty_sub');
+  if (studyEmptySub) { studyEmptySub.innerHTML = t('study_empty_sub'); if (typeof updateStudyEmptyMode === 'function') updateStudyEmptyMode(); }
   // Topic Library: re-render subject filter chips with translated labels if the tab is open
   if (document.getElementById('lib-cats') && typeof initLibrary === 'function') initLibrary();
 }
@@ -7068,7 +7094,7 @@ function go(name) {
   if (name === 'pastpapers') setTimeout(() => renderPapersLibrary(''), 0);
   if (name === 'todo') setTimeout(renderTodos, 0);
   if (name === 'tracker') setTimeout(initTracker, 0);
-  if (name === 'planner') setTimeout(renderPlanner, 30);
+  if (name === 'planner') setTimeout(renderPlanner, 0);
   // track unique tabs visited for Explorer badge
   try {
     const a = getAcct();
@@ -7662,12 +7688,80 @@ function renderArtGallery() {
     `</div>`;
 }
 
+// ── FILE ATTACHMENTS: shared reader for every "attach a file" input in the app ──
+// Images and PDFs are read as base64 and sent to Gemini as inline binary data (same shape
+// gemini() has always accepted). Anything readable as text — html, code, csv, markdown, plain
+// text — is read as a string instead; gemini() folds that straight into the prompt, since no
+// special file-format handling is needed for the model to read plain text.
+const ATTACH_TEXT_EXT = /\.(txt|md|markdown|html?|css|jsx?|tsx?|json|csv|tsv|xml|ya?ml|py|java|c|cpp|h|cs|rb|go|rs|php|sql|sh|log|ini|conf|svg)$/i;
+const ATTACH_MAX_TEXT_CHARS = 40000; // keep the file + prompt within a sane token budget
+function readAttachedFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error(`Could not read "${file.name}"`));
+    if (file.type.startsWith('image/')) {
+      reader.onload = e => resolve({ kind: 'image', mimeType: file.type, base64: e.target.result.split(',')[1], previewUrl: e.target.result, name: file.name });
+      reader.readAsDataURL(file);
+    } else if (file.type === 'application/pdf') {
+      reader.onload = e => resolve({ kind: 'pdf', mimeType: 'application/pdf', base64: e.target.result.split(',')[1], name: file.name });
+      reader.readAsDataURL(file);
+    } else if (file.type.startsWith('text/') || ATTACH_TEXT_EXT.test(file.name)) {
+      reader.onload = e => {
+        let text = e.target.result;
+        if (text.length > ATTACH_MAX_TEXT_CHARS) text = text.slice(0, ATTACH_MAX_TEXT_CHARS) + '\n...[truncated]';
+        resolve({ kind: 'text', text, name: file.name });
+      };
+      reader.readAsText(file);
+    } else {
+      reject(new Error(`"${file.name}" isn't a supported file type yet — try an image, a PDF, or a text-based file (.txt, .html, .csv, code files, etc.)`));
+    }
+  });
+}
+// Builds the HTML for a chat bubble showing a sent attachment (image thumbnail, or a file
+// chip for pdf/text) plus the optional message text alongside it.
+function attachBubbleHtml(att, text) {
+  const textHtml = text ? `<span>${escapeHtml(text)}</span>` : '';
+  if (att.kind === 'image') {
+    return `<img src="data:${att.mimeType};base64,${att.base64}" style="max-width:180px;max-height:120px;border-radius:8px;display:block;margin-bottom:${text?'8px':'0'};" alt="Image you sent">${textHtml}`;
+  }
+  const icon = att.kind === 'pdf' ? '📄' : '📝';
+  return `<div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border-radius:8px;padding:6px 10px;margin-bottom:${text?'8px':'0'};"><span style="font-size:1.2rem;">${icon}</span><span style="font-size:.78rem;">${escapeHtml(att.name)}</span></div>${textHtml}`;
+}
+// Renders an attachment preview (image thumbnail, or a file icon + name for pdf/text) —
+// shared by Homework, Companion, Smart Notes, and Smart Study's attach-a-file UI.
+function renderAttachPreview(ids, data) {
+  const preview = document.getElementById(ids.previewId);
+  const thumb = document.getElementById(ids.thumbId);
+  const icon = document.getElementById(ids.iconId);
+  const hint = document.getElementById(ids.hintId);
+  if (data.kind === 'image') {
+    if (thumb) { thumb.src = data.previewUrl; thumb.style.display = 'block'; }
+    if (icon) icon.style.display = 'none';
+    if (hint) hint.textContent = t(ids.imageHintKey);
+  } else {
+    if (thumb) { thumb.style.display = 'none'; thumb.src = ''; }
+    if (icon) { icon.textContent = data.kind === 'pdf' ? '📄' : '📝'; icon.style.display = 'block'; }
+    if (hint) hint.textContent = t('attach_generic_hint').replace('{file}', data.name);
+  }
+  if (preview) preview.style.display = 'flex';
+}
+
 async function gemini(prompt, imageData) {
   if (!API_KEY) throw new Error('No API key set — go to Settings to add your free Gemini key.');
   const profileCtx = buildAIContext();
   const parts = [];
-  if (imageData) parts.push({ inline_data: { mime_type: imageData.mimeType, data: imageData.base64 } });
-  parts.push({ text: profileCtx + prompt });
+  let fullPrompt = profileCtx + prompt;
+  if (imageData) {
+    if (imageData.kind === 'text' && imageData.text) {
+      // Text-based attachments (html, code, csv, plain text, ...) are folded straight into the
+      // prompt rather than sent as inline_data — Gemini needs no special handling to read plain
+      // text regardless of the file's original format.
+      fullPrompt += `\n\nAttached file "${imageData.name || 'file'}":\n\`\`\`\n${imageData.text}\n\`\`\``;
+    } else if (imageData.base64) {
+      parts.push({ inline_data: { mime_type: imageData.mimeType, data: imageData.base64 } });
+    }
+  }
+  parts.push({ text: fullPrompt });
   const body = JSON.stringify({ contents: [{ parts }] });
 
   async function _callWithKey(key) {
@@ -7711,22 +7805,17 @@ async function gemini(prompt, imageData) {
 // ── HOMEWORK IMAGE ──
 let hwImageData = null;
 
-function handleHwImage(input) {
+async function handleHwImage(input) {
   const file = input.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const base64Full = e.target.result;
-    const base64 = base64Full.split(',')[1];
-    const mimeType = file.type;
-    hwImageData = { base64, mimeType };
-    const preview = document.getElementById('hw-img-preview');
-    const thumb = document.getElementById('hw-img-thumb');
-    thumb.src = base64Full;
-    preview.style.display = 'flex';
-    document.getElementById('hw-in').placeholder = t('hw_ph_image');
-  };
-  reader.readAsDataURL(file);
+  try {
+    hwImageData = await readAttachedFile(file);
+    renderAttachPreview({ previewId: 'hw-img-preview', thumbId: 'hw-img-thumb', iconId: 'hw-file-icon', hintId: 'hw-img-hint', imageHintKey: 'hw_img_hint' }, hwImageData);
+    document.getElementById('hw-in').placeholder = t(hwImageData.kind === 'image' ? 'hw_ph_image' : 'hw_ph_attach');
+  } catch (e) {
+    showToast('⚠️ ' + e.message);
+    input.value = '';
+  }
 }
 
 function clearHwImage() {
@@ -7814,7 +7903,7 @@ function renderHwUserMsg(msg) {
   if (msg.image) {
     const d = document.createElement('div');
     d.className = 'bubble user';
-    d.innerHTML = `<img src="data:${msg.image.mimeType};base64,${msg.image.base64}" style="max-width:180px;max-height:120px;border-radius:8px;display:block;margin-bottom:${msg.text?'8px':'0'};" alt="Image you sent">${msg.text ? `<span>${escapeHtml(msg.text)}</span>` : ''}`;
+    d.innerHTML = attachBubbleHtml(msg.image, msg.text);
     hwWin.appendChild(d);
     hwWin.scrollTop = hwWin.scrollHeight;
   } else {
@@ -7840,11 +7929,11 @@ function renderHwBotAnswer(ans, question) {
       const parts = line.match(/^(STEP \d+:)\s*(.*)/i);
       const stepNum = parts[1]; const stepTitle = parts[2] || '';
       const d = document.createElement('div'); d.className = 'hw-step';
-      d.innerHTML = `<div class="hw-step-header"><span class="hw-step-badge">${stepNum}</span><span class="hw-step-title">${stepTitle}</span></div><div class="hw-step-body"></div>`;
+      d.innerHTML = `<div class="hw-step-header"><span class="hw-step-badge">${escapeHtml(stepNum)}</span><span class="hw-step-title">${escapeHtml(stepTitle)}</span></div><div class="hw-step-body"></div>`;
       wrapper.appendChild(d);
     } else if (line.startsWith('TIP:')) {
       const d = document.createElement('div'); d.className = 'hw-tip';
-      d.innerHTML = `<div class="hw-tip-icon">💡</div><div class="hw-tip-content"><div class="hw-tip-label">Quick Tip</div><div class="hw-tip-body">${line.replace(/^TIP:/i,'').trim()}</div></div>`;
+      d.innerHTML = `<div class="hw-tip-icon">💡</div><div class="hw-tip-content"><div class="hw-tip-label">Quick Tip</div><div class="hw-tip-body">${escapeHtml(line.replace(/^TIP:/i,'').trim())}</div></div>`;
       wrapper.appendChild(d);
     } else {
       const lastBody = wrapper.querySelector('.hw-step:last-of-type .hw-step-body');
@@ -7909,7 +7998,7 @@ async function sendHw() {
 
   const thinking = addBub(t('comp_thinking') + ' <span class="dots"><span>·</span><span>·</span><span>·</span></span>', 'bot thinking');
   const subj = topic ? `Subject: ${topic}. ` : '';
-  const imageInstruction = hwImageData ? 'The student has uploaded an image. Analyse it carefully and answer based on what you see. ' : '';
+  const imageInstruction = hwImageData ? (hwImageData.kind === 'image' ? 'The student has uploaded an image. Analyse it carefully and answer based on what you see. ' : `The student has attached a file ("${hwImageData.name}"). Review its contents carefully and answer based on it. `) : '';
   const question = q || 'Please explain what is shown in this image step by step.';
 
   const modePrompts = {
@@ -8050,7 +8139,7 @@ async function doNotes(mode) {
     out.style.display = 'none';
     mmContainer.style.display = 'flex';
     mmContainer.innerHTML = `<div style="margin:auto;font-family:var(--exo);font-size:.85rem;color:var(--silver);display:flex;align-items:center;gap:10px;"><span class="dots"><span>·</span><span>·</span><span>·</span></span> ${t('notes_generating_mindmap')}</div>`;
-    const imageInstruction = notesImageData ? 'Extract all key concepts from the image, then ' : '';
+    const imageInstruction = notesImageData ? (notesImageData.kind === 'image' ? 'Extract all key concepts from the image, then ' : `Extract all key concepts from the attached file ("${notesImageData.name}"), then `) : '';
     const notesText = notes || '(extract from image)';
     const prompt = `${imageInstruction}Analyse these notes and create a mind map structure. Respond ONLY with valid JSON:
 {
@@ -8094,7 +8183,7 @@ Notes: ${notesText}`;
   mmContainer.style.display = 'none';
   out.style.display = 'block';
   out.textContent = t('notes_processing');
-  const imageInstruction = notesImageData ? 'The student has uploaded a photo of their notes. Extract all the text from the image and then ' : '';
+  const imageInstruction = notesImageData ? (notesImageData.kind === 'image' ? 'The student has uploaded a photo of their notes. Extract all the text from the image and then ' : `The student has attached a file of their notes ("${notesImageData.name}"). Read its contents and then `) : '';
   const notesText = notes || '(extract content from the uploaded image)';
   const prompts = {
     summary: `${imageInstruction}Summarise these student notes clearly. Format:
@@ -8472,7 +8561,49 @@ function clearNotes() {
 let sMode = 'flashcards', cards = [], cidx = 0, flipped = false;
 let studyCount = 10;
 
-function setMode(el, m) { document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('on')); el.classList.add('on'); sMode = m; }
+const STUDY_MODE_META = {
+  flashcards: { icon: '🃏', name: 'Flashcards', desc: 'front/back cards for quick review' },
+  quiz: { icon: '❓', name: 'Quiz Mode', desc: 'multiple-choice questions with instant answers' },
+  practice: { icon: '📝', name: 'Practice Qs', desc: 'open-ended questions with model answers' },
+  markscheme: { icon: '✅', name: 'Mark Scheme', desc: 'questions graded the way examiners actually mark them' },
+  cloze: { icon: '🔲', name: 'Cloze', desc: 'fill-in-the-blank passages' },
+  formula: { icon: '🧮', name: 'Formula Sheet', desc: 'key formulas with variables explained' },
+  cornell: { icon: '📓', name: 'Cornell Notes', desc: 'cue/note/summary structured notes' },
+  mnemonics: { icon: '🎵', name: 'Mnemonics', desc: 'memory tricks for hard-to-recall facts' },
+  predicted: { icon: '🔮', name: 'Predicted Qs', desc: 'likely exam questions based on common patterns' },
+  mistakes: { icon: '⚠️', name: 'Mistakes', desc: 'the errors students most often make, and why' },
+  comparison: { icon: '⚖️', name: 'Comparison', desc: 'two concepts laid out side by side' }
+};
+function updateStudyEmptyMode() {
+  const el = document.getElementById('study-empty-mode');
+  if (!el) return;
+  const meta = STUDY_MODE_META[sMode];
+  el.innerHTML = meta ? `<strong>${meta.icon} ${escapeHtml(meta.name.toLowerCase())}</strong>` : 'your content';
+}
+function toggleStudyModeMenu(e) {
+  e.stopPropagation();
+  const wrap = document.getElementById('study-mode-wrap');
+  const open = wrap?.classList.toggle('open');
+  wrap?.querySelector('.study-mode-trigger')?.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function closeStudyModeMenu() {
+  const wrap = document.getElementById('study-mode-wrap');
+  wrap?.classList.remove('open');
+  wrap?.querySelector('.study-mode-trigger')?.setAttribute('aria-expanded', 'false');
+}
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('study-mode-wrap');
+  if (wrap && wrap.classList.contains('open') && !wrap.contains(e.target)) closeStudyModeMenu();
+});
+function pickStudyMode(mode, label) {
+  sMode = mode;
+  const trigger = document.getElementById('study-mode-trigger-label');
+  if (trigger) trigger.textContent = label;
+  document.querySelectorAll('.study-mode-opt').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  closeStudyModeMenu();
+  updateStudyEmptyMode();
+}
+updateStudyEmptyMode();
 
 function changeStudyCount(delta) {
   studyCount = Math.max(1, Math.min(20, studyCount + delta));
@@ -8504,8 +8635,8 @@ async function genStudy() {
   if (!topicVal && !studyImageData) return;
   const out = document.getElementById('study-out');
   const label = topicVal || 'the uploaded image';
-  out.innerHTML = `<div class="bubble bot thinking">${t('study_generating').replace('{mode}', t(STUDY_MODE_KEYS[sMode] || sMode))}<strong>${label}</strong> <span class="dots"><span>·</span><span>·</span><span>·</span></span></div>`;
-  const imageInstruction = studyImageData ? 'The student has uploaded an image. Extract the key concepts and topics from it, then ' : '';
+  out.innerHTML = `<div class="bubble bot thinking">${t('study_generating').replace('{mode}', t(STUDY_MODE_KEYS[sMode] || sMode))}<strong>${escapeHtml(label)}</strong> <span class="dots"><span>·</span><span>·</span><span>·</span></span></div>`;
+  const imageInstruction = studyImageData ? (studyImageData.kind === 'image' ? 'The student has uploaded an image. Extract the key concepts and topics from it, then ' : `The student has attached a file ("${studyImageData.name}"). Extract the key concepts and topics from it, then `) : '';
   const topic_text = topicVal || 'the content shown in the image';
   const imageToSend = studyImageData;
   if (studyImageData) clearStudyImage();
@@ -8740,7 +8871,7 @@ function renderCard() {
       <span style="font-family:var(--exo);font-size:.7rem;color:var(--teal);">✓ ${learned} ${t('study_learned')}</span>
     </div>
     <div class="fcard" id="fc" onclick="flipCard()">
-      <div id="fc-txt" style="font-size:1.05rem;">${card.front}</div>
+      <div id="fc-txt" style="font-size:1.05rem;">${escapeHtml(card.front)}</div>
       <div class="fc-hint">${t('study_click_flip')}</div>
     </div>
     <div id="sr-btns" style="display:none;gap:10px;justify-content:center;margin-top:8px;">
@@ -8798,8 +8929,8 @@ document.addEventListener('keydown', e => {
 function renderQuiz(qs) {
   document.getElementById('study-out').innerHTML = qs.map((q, i) => `
     <div class="qq">
-      <div class="qqt"><span class="qn">${t('study_question_label').replace('{n}', i+1)}</span>${q.q}</div>
-      ${q.options.map(o => `<button class="qo" data-ans="${q.answer}" data-opt="${o.charAt(0)}" onclick="checkAns(this)">${o}</button>`).join('')}
+      <div class="qqt"><span class="qn">${t('study_question_label').replace('{n}', i+1)}</span>${escapeHtml(q.q)}</div>
+      ${q.options.map(o => `<button class="qo" data-ans="${escapeHtml(q.answer)}" data-opt="${escapeHtml(o.charAt(0))}" onclick="checkAns(this)">${escapeHtml(o)}</button>`).join('')}
     </div>`).join('');
 }
 function checkAns(btn) {
@@ -8947,17 +9078,15 @@ function applyBg(t) {
 
 // ── COMPANION IMAGE ──
 let compImageData = null;
-function handleCompImage(input) {
+async function handleCompImage(input) {
   const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const b64 = e.target.result.split(',')[1];
-    compImageData = { base64: b64, mimeType: file.type };
-    const prev = document.getElementById('comp-img-preview');
-    document.getElementById('comp-img-thumb').src = e.target.result;
-    prev.style.display = 'flex';
-  };
-  reader.readAsDataURL(file);
+  try {
+    compImageData = await readAttachedFile(file);
+    renderAttachPreview({ previewId: 'comp-img-preview', thumbId: 'comp-img-thumb', iconId: 'comp-file-icon', hintId: 'comp-img-hint', imageHintKey: 'chat_img_hint' }, compImageData);
+  } catch (e) {
+    showToast('⚠️ ' + e.message);
+    input.value = '';
+  }
 }
 function clearCompImage() {
   compImageData = null;
@@ -8968,17 +9097,15 @@ function clearCompImage() {
 
 // ── NOTES IMAGE ──
 let notesImageData = null;
-function handleNotesImage(input) {
+async function handleNotesImage(input) {
   const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const b64 = e.target.result.split(',')[1];
-    notesImageData = { base64: b64, mimeType: file.type };
-    const prev = document.getElementById('notes-img-preview');
-    document.getElementById('notes-img-thumb').src = e.target.result;
-    prev.style.display = 'flex';
-  };
-  reader.readAsDataURL(file);
+  try {
+    notesImageData = await readAttachedFile(file);
+    renderAttachPreview({ previewId: 'notes-img-preview', thumbId: 'notes-img-thumb', iconId: 'notes-file-icon', hintId: 'notes-img-hint', imageHintKey: 'notes_img_hint' }, notesImageData);
+  } catch (e) {
+    showToast('⚠️ ' + e.message);
+    input.value = '';
+  }
 }
 function clearNotesImage() {
   notesImageData = null;
@@ -8989,17 +9116,15 @@ function clearNotesImage() {
 
 // ── STUDY IMAGE ──
 let studyImageData = null;
-function handleStudyImage(input) {
+async function handleStudyImage(input) {
   const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const b64 = e.target.result.split(',')[1];
-    studyImageData = { base64: b64, mimeType: file.type };
-    const prev = document.getElementById('study-img-preview');
-    document.getElementById('study-img-thumb').src = e.target.result;
-    prev.style.display = 'flex';
-  };
-  reader.readAsDataURL(file);
+  try {
+    studyImageData = await readAttachedFile(file);
+    renderAttachPreview({ previewId: 'study-img-preview', thumbId: 'study-img-thumb', iconId: 'study-file-icon', hintId: 'study-img-hint', imageHintKey: 'study_img_hint' }, studyImageData);
+  } catch (e) {
+    showToast('⚠️ ' + e.message);
+    input.value = '';
+  }
 }
 function clearStudyImage() {
   studyImageData = null;
@@ -9041,16 +9166,17 @@ async function sendComp() {
   if (compImageData) {
     const d = document.createElement('div');
     d.className = 'bubble user';
-    d.innerHTML = `<img src="data:${compImageData.mimeType};base64,${compImageData.base64}" style="max-width:160px;max-height:100px;border-radius:8px;display:block;margin-bottom:${msg?'6px':'0'};" alt="Image you sent">${msg ? `<span>${escapeHtml(msg)}</span>` : ''}`;
+    d.innerHTML = attachBubbleHtml(compImageData, msg);
     compWin.appendChild(d); compWin.scrollTop = compWin.scrollHeight;
   } else {
     addCompBubble(escapeHtml(msg), 'user');
   }
 
   const imageToSend = compImageData;
+  const attachFallback = imageToSend ? (imageToSend.kind === 'image' ? 'I shared an image with you' : `I shared a file with you (${imageToSend.name})`) : '';
   if (compImageData) clearCompImage();
-  compHistory.push({ role: 'user', parts: [{ text: msg || '[shared an image]' }] });
-  await respondComp(msg || 'I shared an image with you', imageToSend);
+  compHistory.push({ role: 'user', parts: [{ text: msg || (imageToSend ? '[shared a file]' : '') }] });
+  await respondComp(msg || attachFallback, imageToSend);
 }
 
 // ── EASTER EGGS ──
@@ -9210,7 +9336,7 @@ Current mood context: ${compMood || 'unknown'}${memoryContext}`;
   try {
     const ans = await gemini(prompt, imageData);
     compWin.removeChild(thinking);
-    addCompBubble(ans, 'bot');
+    addCompBubble(escapeHtml(ans), 'bot');
     compHistory.push({ role: 'model', parts: [{ text: ans }] });
     saveCompHistory();
   } catch (e) {
@@ -9340,7 +9466,7 @@ function startDebate() {
   const thinking = addCompBubble('<span class="dots"><span>·</span><span>·</span><span>·</span></span>', 'bot');
   gemini(opening).then(ans => {
     compWin.removeChild(thinking);
-    addCompBubble('⚔️ ' + ans, 'bot');
+    addCompBubble('⚔️ ' + escapeHtml(ans), 'bot');
     compHistory.push({ role:'model', parts:[{text: ans}] });
     saveCompHistory();
     compWin.scrollTop = compWin.scrollHeight;
@@ -12517,6 +12643,9 @@ Be specific, educational, and appropriately challenging for ${examLevel} ${examD
 
 function renderExamPaper(raw, subject, typeLabels) {
   showAnswers = false;
+  const interactiveBox = document.getElementById('exam-interactive-content');
+  if (interactiveBox) interactiveBox.style.display = 'none';
+  document.getElementById('exam-paper-content').style.display = 'block';
   const lines = raw.split('\n');
   let html = '';
   let title = `Mock Examination — ${subject}`;
@@ -12532,32 +12661,39 @@ function renderExamPaper(raw, subject, typeLabels) {
 
   html += `<div class="ep-header">
     <div class="ep-school">✦ VEDA EXAMINATION BOARD ✦</div>
-    <div class="ep-title">${title}</div>
-    <div class="ep-meta">${meta}</div>
-    ${instructions ? `<div style="margin-top:10px;font-family:var(--exo);font-size:.82rem;color:var(--silver);line-height:1.7;max-width:600px;margin-left:auto;margin-right:auto;">${instructions}</div>` : ''}
+    <div class="ep-title">${escapeHtml(title)}</div>
+    <div class="ep-meta">${escapeHtml(meta)}</div>
+    ${instructions ? `<div style="margin-top:10px;font-family:var(--exo);font-size:.82rem;color:var(--silver);line-height:1.7;max-width:600px;margin-left:auto;margin-right:auto;">${escapeHtml(instructions)}</div>` : ''}
   </div>`;
 
   let qNum = 0;
   let i = 0;
+  let curSection = '';
+  const qData = []; // structured question records, parallel to the printable HTML — used by the interactive answer flow
   while (i < lines.length) {
     const line = lines[i].trim();
     if (line.startsWith('[SECTION]:')) {
-      html += `<div class="ep-section">${line.replace('[SECTION]:','').trim()}</div>`;
+      curSection = line.replace('[SECTION]:','').trim();
+      html += `<div class="ep-section">${escapeHtml(curSection)}</div>`;
     } else if (line.startsWith('[SECTION_INST]:')) {
-      html += `<div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);margin-bottom:10px;font-style:italic;">${line.replace('[SECTION_INST]:','').trim()}</div>`;
+      html += `<div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);margin-bottom:10px;font-style:italic;">${escapeHtml(line.replace('[SECTION_INST]:','').trim())}</div>`;
     } else if (line.startsWith('[Q]:')) {
       qNum++;
       const qText = line.replace('[Q]:','').replace(/\[MARKS?:\d+\]/i,'').trim();
       const marksMatch = line.match(/\[MARKS?:(\d+)\]/i);
-      const marks = marksMatch ? marksMatch[1] : '1';
-      // Replace ___ with styled blank spans
-      const styledQ = qText.replace(/_{2,}/g, '<span class="ep-blank"></span>');
-      html += `<div class="ep-q"><span class="ep-q-num">Q${qNum}.</span>${styledQ}<span class="ep-marks">[${marks} mark${marks==='1'?'':'s'}]</span></div>`;
+      const marks = marksMatch ? parseInt(marksMatch[1],10) : 1;
+      // Replace ___ with styled blank spans (escape first, then inject trusted markup)
+      const styledQ = escapeHtml(qText).replace(/_{2,}/g, '<span class="ep-blank"></span>');
+      html += `<div class="ep-q"><span class="ep-q-num">Q${qNum}.</span>${styledQ}<span class="ep-marks">[${marks} mark${marks===1?'':'s'}]</span></div>`;
+      qData.push({ num: qNum, section: curSection, text: qText, marks, options: [], ansRaw: '' });
     } else if (line.startsWith('[OPT]:')) {
-      html += `<div class="ep-opt">${line.replace('[OPT]:','').trim()}</div>`;
+      const optText = line.replace('[OPT]:','').trim();
+      html += `<div class="ep-opt">${escapeHtml(optText)}</div>`;
+      if (qData.length) qData[qData.length-1].options.push(optText);
     } else if (line.startsWith('[ANS]:')) {
       const ansText = line.replace('[ANS]:','').trim();
-      html += `<div class="ep-answer" data-ans>✓ ${ansText}</div>`;
+      html += `<div class="ep-answer" data-ans>✓ ${escapeHtml(ansText)}</div>`;
+      if (qData.length) qData[qData.length-1].ansRaw = ansText;
     }
     // Writing space for short/long answer (heuristic: after a Q with no opts and no T/F)
     i++;
@@ -12565,6 +12701,7 @@ function renderExamPaper(raw, subject, typeLabels) {
 
   const content = document.getElementById('exam-paper-content');
   content.innerHTML = html;
+  window._examQData = qData;
 
   // Update output header
   document.getElementById('exam-out-title').textContent = `📄 ${title}`;
@@ -12624,7 +12761,147 @@ function examNewPaper() {
   document.getElementById('exam-builder').style.display = 'block';
   document.getElementById('exam-output').style.display = 'none';
   showAnswers = false;
+  document.getElementById('exam-interactive-content').style.display = 'none';
+  document.getElementById('exam-paper-content').style.display = 'block';
 }
+
+// ── INTERACTIVE ANSWERING: answer in-app, submit, grade, review ──
+function examStartInteractive() {
+  const qData = window._examQData || [];
+  if (!qData.length) { showToast('⚠️ No questions to answer'); return; }
+
+  document.getElementById('exam-paper-content').style.display = 'none';
+  const box = document.getElementById('exam-interactive-content');
+  box.style.display = 'block';
+
+  let curSection = '';
+  let html = `<div class="ep-header">
+    <div class="ep-school">✦ VEDA EXAMINATION BOARD ✦</div>
+    <div class="ep-title">${escapeHtml(window._lastExamTitle || 'Exam')}</div>
+  </div>`;
+  qData.forEach(q => {
+    if (q.section !== curSection) {
+      curSection = q.section;
+      html += `<div class="ep-section">${escapeHtml(curSection)}</div>`;
+    }
+    const styledQ = escapeHtml(q.text).replace(/_{2,}/g, '<span class="ep-blank"></span>');
+    html += `<div class="ep-iq"><div class="ep-q"><span class="ep-q-num">Q${q.num}.</span>${styledQ}<span class="ep-marks">[${q.marks} mark${q.marks===1?'':'s'}]</span></div>`;
+    if (q.options.length) {
+      html += q.options.map(o => `<label class="ep-opt-input"><input type="radio" name="eiq-r-${q.num}" value="${escapeHtml(o)}"><span>${escapeHtml(o)}</span></label>`).join('');
+    } else {
+      html += `<textarea class="ep-answer-in" id="eia-${q.num}" placeholder="Type your answer..." rows="3"></textarea>`;
+    }
+    html += `</div>`;
+  });
+  html += `<button class="abtn" style="margin-top:16px;width:100%;" onclick="examSubmitAnswers()">Submit for Grading →</button>`;
+  box.innerHTML = html;
+  box.scrollTop = 0;
+}
+
+async function examSubmitAnswers() {
+  const qData = window._examQData || [];
+  const submitBtn = document.querySelector('#exam-interactive-content > button.abtn');
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span class="dots"><span>·</span><span>·</span><span>·</span></span> Grading...'; }
+
+  const graded = [];
+  const freeText = [];
+
+  qData.forEach(q => {
+    if (q.options.length) {
+      const sel = document.querySelector(`input[name="eiq-r-${q.num}"]:checked`);
+      const userAns = sel ? sel.value : '';
+      const correctLetter = (q.ansRaw.match(/^([A-Za-z])\)/) || [])[1];
+      const userLetter = (userAns.match(/^([A-Za-z])\)/) || [])[1];
+      const correct = correctLetter && userLetter
+        ? correctLetter.toUpperCase() === userLetter.toUpperCase()
+        : userAns.trim().toLowerCase() === q.ansRaw.trim().toLowerCase();
+      graded.push({ q, userAns, correct, feedback: q.ansRaw });
+    } else {
+      const el = document.getElementById(`eia-${q.num}`);
+      freeText.push({ q, userAns: el ? el.value.trim() : '' });
+    }
+  });
+
+  if (freeText.length) {
+    try {
+      const items = freeText.map((f, idx) => `${idx+1}. Question: "${f.q.text}"\nExpected/marking guidance: "${f.q.ansRaw}"\nStudent's answer: "${f.userAns || '(left blank)'}"`).join('\n\n');
+      const prompt = `You are grading a student's exam answers. For each numbered item below, judge whether the student's answer is correct — be reasonably lenient, accept synonyms, minor spelling variation, and answers that capture the key idea even if worded differently. Give a short one-sentence explanation of the correct answer, written directly to the student.\n\n${items}\n\nRespond ONLY with valid JSON, one entry per item in the same order: {"results":[{"correct":true|false,"feedback":"..."}]}`;
+      const raw = await gemini(prompt);
+      const parsed = JSON.parse(raw.replace(/^```(?:json)?|```$/gm,'').trim());
+      const results = Array.isArray(parsed.results) ? parsed.results : [];
+      freeText.forEach((f, idx) => {
+        const r = results[idx];
+        graded.push({ q: f.q, userAns: f.userAns, correct: r ? !!r.correct : null, feedback: (r && r.feedback) ? r.feedback : f.q.ansRaw });
+      });
+    } catch (e) {
+      // Grading call failed — mark these ungraded rather than silently wrong, so the student isn't misled
+      freeText.forEach(f => graded.push({ q: f.q, userAns: f.userAns, correct: null, feedback: f.q.ansRaw }));
+    }
+  }
+
+  graded.sort((a, b) => a.q.num - b.q.num);
+  renderExamReview(graded);
+}
+
+function renderExamReview(graded) {
+  window._examGraded = graded;
+  const totalMarks = graded.reduce((s, g) => s + g.q.marks, 0);
+  const earnedMarks = graded.reduce((s, g) => s + (g.correct ? g.q.marks : 0), 0);
+  const pct = totalMarks ? Math.round((earnedMarks / totalMarks) * 100) : 0;
+  const numCorrect = graded.filter(g => g.correct === true).length;
+  const numUngraded = graded.filter(g => g.correct === null).length;
+
+  let html = `<div class="ep-header">
+    <div class="ep-school">✦ VEDA EXAMINATION BOARD ✦</div>
+    <div class="ep-title">Results</div>
+  </div>
+  <div class="ep-score-card">
+    <div class="ep-score-big">${pct}%</div>
+    <div class="ep-score-sub">${earnedMarks} / ${totalMarks} marks &middot; ${numCorrect}/${graded.length} correct${numUngraded ? ` &middot; ${numUngraded} could not be auto-graded` : ''}</div>
+  </div>`;
+
+  let curSection = '';
+  graded.forEach(g => {
+    if (g.q.section !== curSection) {
+      curSection = g.q.section;
+      html += `<div class="ep-section">${escapeHtml(curSection)}</div>`;
+    }
+    const icon = g.correct === true ? '✅' : g.correct === false ? '❌' : '❔';
+    const styledQ = escapeHtml(g.q.text).replace(/_{2,}/g, '<span class="ep-blank"></span>');
+    html += `<div class="ep-review-q">
+      <div class="ep-q"><span class="ep-q-num">${icon} Q${g.q.num}.</span>${styledQ}<span class="ep-marks">[${g.q.marks} mark${g.q.marks===1?'':'s'}]</span></div>
+      <div class="ep-review-ans">Your answer: ${g.userAns ? escapeHtml(g.userAns) : '<em>(left blank)</em>'}</div>
+      ${g.correct !== true ? `<button class="ep-why-btn" onclick="examToggleWhy(${g.q.num})">💡 Why am I wrong?</button><div class="ep-why-body" id="ep-why-${g.q.num}" style="display:none;">${escapeHtml(g.feedback)}</div>` : ''}
+    </div>`;
+  });
+
+  html += `<button class="abtn sec" style="margin-top:16px;width:100%;" onclick="examStartInteractive()">↺ Retry</button>`;
+
+  const box = document.getElementById('exam-interactive-content');
+  box.innerHTML = html;
+  box.scrollTop = 0;
+
+  if (graded.length) awardGems(Math.max(1, Math.round(numCorrect / graded.length * 10)), 'Exam paper graded! 📝');
+  if (typeof trackStat === 'function') trackStat('exams');
+}
+
+function examToggleWhy(num) {
+  const el = document.getElementById('ep-why-' + num);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// ── Exam toolbar overflow menu (Print / Toggle Answers / Save to Vault / New Paper) ──
+function toggleExamMoreMenu(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('exam-more-wrap')?.classList.toggle('open');
+}
+function closeExamMoreMenu() {
+  document.getElementById('exam-more-wrap')?.classList.remove('open');
+}
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('exam-more-wrap');
+  if (wrap && wrap.classList.contains('open') && !wrap.contains(e.target)) wrap.classList.remove('open');
+});
 
 // ── POMODORO TIMER ──
 let pomInt = null, pomRunning = false, pomMode = 'focus', pomSessionsDone = 0;
