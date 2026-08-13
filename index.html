@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=16">
+<link rel="stylesheet" href="styles.css?v=17">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -1055,47 +1055,57 @@ onAuthStateChanged(_auth, async user => {
         </div>
         <div class="tsub"><span class="prm">›</span>Ask any question and get a step-by-step answer</div>
 
-        <!-- Subject chips -->
-        <div class="trow" id="hw-subject-row">
-          <button class="chip" onclick="setTopic(this,'Maths')" data-i18n="hw_chip_maths">Maths</button>
-          <button class="chip" onclick="setTopic(this,'Science')" data-i18n="hw_chip_science">Science</button>
-          <button class="chip" onclick="setTopic(this,'History')" data-i18n="hw_chip_history">History</button>
-          <button class="chip" onclick="setTopic(this,'English')" data-i18n="hw_chip_english">English</button>
-          <button class="chip" onclick="setTopic(this,'Biology')" data-i18n="hw_chip_biology">Biology</button>
-          <button class="chip" onclick="setTopic(this,'Physics')" data-i18n="hw_chip_physics">Physics</button>
-          <button class="chip" onclick="setTopic(this,'Chemistry')" data-i18n="hw_chip_chemistry">Chemistry</button>
-        </div>
-
-        <!-- Response mode selector -->
-        <div style="margin-bottom:10px;" id="hw-mode-wrap">
-          <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;" data-i18n="hw_mode_label">Response style</div>
-          <div class="trow" style="margin-bottom:0;gap:6px;flex-wrap:wrap;">
-            <button class="hw-mode-chip on" onclick="setHwMode(this,'stepbystep')" data-i18n="hw_mode_stepbystep">🪜 Step-by-step</button>
-            <button class="hw-mode-chip" onclick="setHwMode(this,'check')" data-i18n="hw_mode_check">✅ Check my answer</button>
-            <button class="hw-mode-chip" onclick="setHwMode(this,'examtechnique')" data-i18n="hw_mode_examtechnique">🎯 Exam technique</button>
-            <button class="hw-mode-chip" onclick="setHwMode(this,'eli5')" data-i18n="hw_mode_eli5">🧒 ELI5</button>
-            <button class="hw-mode-chip" onclick="setHwMode(this,'quickanswer')" data-i18n="hw_mode_quickanswer">⚡ Quick answer</button>
-            <button class="hw-mode-chip" onclick="setHwMode(this,'whyiswrong')" data-i18n="hw_mode_whyiswrong">🔍 Why am I wrong?</button>
+        <!-- Compact controls: subject, response style, quick starters — each a custom dropdown -->
+        <div class="hw-controls-row">
+          <div class="vdd-wrap" id="hw-subject-wrap">
+            <button class="vdd-trigger" onclick="toggleVdd(event,'hw-subject-wrap')" aria-haspopup="true">
+              <span id="hw-subject-trigger-label" data-i18n="hw_chip_any">Any subject</span><span class="vdd-chev">▾</span>
+            </button>
+            <div class="vdd-menu" id="hw-subject-menu">
+              <button class="vdd-opt on" data-v="" onclick="pickHwSubject(this,'')"><span class="vdd-opt-label" data-i18n="hw_chip_any">Any subject</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt" data-v="Maths" onclick="pickHwSubject(this,'Maths')"><span class="vdd-opt-label" data-i18n="hw_chip_maths">Maths</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt" data-v="Science" onclick="pickHwSubject(this,'Science')"><span class="vdd-opt-label" data-i18n="hw_chip_science">Science</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt" data-v="History" onclick="pickHwSubject(this,'History')"><span class="vdd-opt-label" data-i18n="hw_chip_history">History</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt" data-v="English" onclick="pickHwSubject(this,'English')"><span class="vdd-opt-label" data-i18n="hw_chip_english">English</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt" data-v="Biology" onclick="pickHwSubject(this,'Biology')"><span class="vdd-opt-label" data-i18n="hw_chip_biology">Biology</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt" data-v="Physics" onclick="pickHwSubject(this,'Physics')"><span class="vdd-opt-label" data-i18n="hw_chip_physics">Physics</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt" data-v="Chemistry" onclick="pickHwSubject(this,'Chemistry')"><span class="vdd-opt-label" data-i18n="hw_chip_chemistry">Chemistry</span><span class="vdd-check">✓</span></button>
+            </div>
           </div>
-        </div>
 
-        <!-- Prompt starters -->
-        <div style="margin-bottom:10px;" id="hw-starters-wrap">
-          <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;" data-i18n="hw_starters_label">Quick starters</div>
-          <div class="trow" style="margin-bottom:0;gap:6px;flex-wrap:wrap;">
-            <button class="hw-starter" onclick="hwStarter('Explain this concept to me: ')" data-i18n="hw_starter_explain">💬 Explain this...</button>
-            <button class="hw-starter" onclick="hwStarter('Check my working: ')" data-i18n="hw_starter_checkworking">📝 Check my working</button>
-            <button class="hw-starter" onclick="hwStarter('Why is this wrong: ')" data-i18n="hw_starter_whywrong">❌ Why is this wrong?</button>
-            <button class="hw-starter" onclick="hwStarter('How do I start this question: ')" data-i18n="hw_starter_howstart">🤔 How do I start?</button>
-            <button class="hw-starter" onclick="hwStarter('Give me a similar example for: ')" data-i18n="hw_starter_similar">🔁 Similar example</button>
-            <button class="hw-starter" onclick="hwStarter('What formula do I need for: ')" data-i18n="hw_starter_formula">🧮 What formula?</button>
-            <button class="hw-starter" onclick="hwStarter('Summarise this topic for me: ')" data-i18n="hw_starter_summarise">✨ Summarise topic</button>
-            <button class="hw-starter" onclick="hwStarter('What are the key words I need to use for: ')" data-i18n="hw_starter_keywords">🔑 Key words</button>
+          <div class="vdd-wrap" id="hw-mode-wrap">
+            <button class="vdd-trigger" onclick="toggleVdd(event,'hw-mode-wrap')" aria-haspopup="true">
+              <span id="hw-mode-trigger-label" data-i18n="hw_mode_stepbystep">🪜 Step-by-step</span><span class="vdd-chev">▾</span>
+            </button>
+            <div class="vdd-menu" id="hw-mode-menu">
+              <button class="vdd-opt on hw-mode-chip" data-v="stepbystep" onclick="pickHwMode(this,'stepbystep')"><span class="vdd-opt-label" data-i18n="hw_mode_stepbystep">🪜 Step-by-step</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt hw-mode-chip" data-v="check" onclick="pickHwMode(this,'check')"><span class="vdd-opt-label" data-i18n="hw_mode_check">✅ Check my answer</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt hw-mode-chip" data-v="examtechnique" onclick="pickHwMode(this,'examtechnique')"><span class="vdd-opt-label" data-i18n="hw_mode_examtechnique">🎯 Exam technique</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt hw-mode-chip" data-v="eli5" onclick="pickHwMode(this,'eli5')"><span class="vdd-opt-label" data-i18n="hw_mode_eli5">🧒 ELI5</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt hw-mode-chip" data-v="quickanswer" onclick="pickHwMode(this,'quickanswer')"><span class="vdd-opt-label" data-i18n="hw_mode_quickanswer">⚡ Quick answer</span><span class="vdd-check">✓</span></button>
+              <button class="vdd-opt hw-mode-chip" data-v="whyiswrong" onclick="pickHwMode(this,'whyiswrong')"><span class="vdd-opt-label" data-i18n="hw_mode_whyiswrong">🔍 Why am I wrong?</span><span class="vdd-check">✓</span></button>
+            </div>
+          </div>
+
+          <div class="vdd-wrap" id="hw-starters-wrap">
+            <button class="vdd-trigger" onclick="toggleVdd(event,'hw-starters-wrap')" aria-haspopup="true">
+              <span data-i18n="hw_starters_trigger">✨ Quick starters</span><span class="vdd-chev">▾</span>
+            </button>
+            <div class="vdd-menu" id="hw-starters-menu">
+              <button class="vdd-opt" onclick="pickHwStarter('Explain this concept to me: ')"><span class="vdd-opt-label" data-i18n="hw_starter_explain">💬 Explain this...</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('Check my working: ')"><span class="vdd-opt-label" data-i18n="hw_starter_checkworking">📝 Check my working</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('Why is this wrong: ')"><span class="vdd-opt-label" data-i18n="hw_starter_whywrong">❌ Why is this wrong?</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('How do I start this question: ')"><span class="vdd-opt-label" data-i18n="hw_starter_howstart">🤔 How do I start?</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('Give me a similar example for: ')"><span class="vdd-opt-label" data-i18n="hw_starter_similar">🔁 Similar example</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('What formula do I need for: ')"><span class="vdd-opt-label" data-i18n="hw_starter_formula">🧮 What formula?</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('Summarise this topic for me: ')"><span class="vdd-opt-label" data-i18n="hw_starter_summarise">✨ Summarise topic</span></button>
+              <button class="vdd-opt" onclick="pickHwStarter('What are the key words I need to use for: ')"><span class="vdd-opt-label" data-i18n="hw_starter_keywords">🔑 Key words</span></button>
+            </div>
           </div>
         </div>
 
         <div class="chatwin" id="hw-win">
-          <div class="bubble bot" id="hw-intro-bubble">Hey! Ask me anything 🎓 <span class="hw-intro-hint">Pick a <strong>response style</strong> above, use a <strong>quick starter</strong>, or </span>just type your question.<br><span style="font-size:.8em;opacity:.7;">You can also 📷 upload a photo of your question!</span></div>
+          <div class="bubble bot" id="hw-intro-bubble">Hey! Ask me anything 🎓 <span class="hw-intro-hint">Pick a <strong>response style</strong> above, use a <strong>quick starter</strong>, or </span>just type your question.<br><span style="font-size:.8em;opacity:.7;">You can also 📎 attach a photo, PDF, or text file!</span></div>
         </div>
 
         <!-- Attached-file preview strip -->
@@ -1478,25 +1488,25 @@ onAuthStateChanged(_auth, async user => {
         <div class="study-mode-bar">
           <div class="study-mode-select-wrap" id="study-mode-wrap">
             <button class="study-mode-trigger" onclick="toggleStudyModeMenu(event)" aria-haspopup="true" aria-expanded="false">
-              <span id="study-mode-trigger-label">🃏 Flashcards</span>
+              <span id="study-mode-trigger-label" data-i18n="study_mode_flashcards">🃏 Flashcards</span>
               <span class="study-mode-select-chev">▾</span>
             </button>
             <div class="study-mode-menu" id="study-mode-menu">
-              <div class="study-mode-menu-group-label">Quick Review</div>
-              <button class="study-mode-opt on" data-mode="flashcards" onclick="pickStudyMode('flashcards','🃏 Flashcards')"><span class="smo-ic">🃏</span>Flashcards<span class="smo-check">✓</span></button>
-              <button class="study-mode-opt" data-mode="quiz" onclick="pickStudyMode('quiz','❓ Quiz Mode')"><span class="smo-ic">❓</span>Quiz Mode<span class="smo-check">✓</span></button>
-              <button class="study-mode-opt" data-mode="cloze" onclick="pickStudyMode('cloze','🔲 Cloze')"><span class="smo-ic">🔲</span>Cloze<span class="smo-check">✓</span></button>
-              <div class="study-mode-menu-group-label">Exam Prep</div>
-              <button class="study-mode-opt" data-mode="practice" onclick="pickStudyMode('practice','📝 Practice Qs')"><span class="smo-ic">📝</span>Practice Qs<span class="smo-check">✓</span></button>
-              <button class="study-mode-opt" data-mode="markscheme" onclick="pickStudyMode('markscheme','✅ Mark Scheme')"><span class="smo-ic">✅</span>Mark Scheme<span class="smo-check">✓</span></button>
-              <button class="study-mode-opt" data-mode="predicted" onclick="pickStudyMode('predicted','🔮 Predicted Qs')"><span class="smo-ic">🔮</span>Predicted Qs<span class="smo-check">✓</span></button>
-              <div class="study-mode-menu-group-label">Reference</div>
-              <button class="study-mode-opt" data-mode="formula" onclick="pickStudyMode('formula','🧮 Formula Sheet')"><span class="smo-ic">🧮</span>Formula Sheet<span class="smo-check">✓</span></button>
-              <button class="study-mode-opt" data-mode="cornell" onclick="pickStudyMode('cornell','📓 Cornell Notes')"><span class="smo-ic">📓</span>Cornell Notes<span class="smo-check">✓</span></button>
-              <button class="study-mode-opt" data-mode="mnemonics" onclick="pickStudyMode('mnemonics','🎵 Mnemonics')"><span class="smo-ic">🎵</span>Mnemonics<span class="smo-check">✓</span></button>
-              <div class="study-mode-menu-group-label">Deeper Understanding</div>
-              <button class="study-mode-opt" data-mode="mistakes" onclick="pickStudyMode('mistakes','⚠️ Mistakes')"><span class="smo-ic">⚠️</span>Mistakes<span class="smo-check">✓</span></button>
-              <button class="study-mode-opt" data-mode="comparison" onclick="pickStudyMode('comparison','⚖️ Comparison')"><span class="smo-ic">⚖️</span>Comparison<span class="smo-check">✓</span></button>
+              <div class="study-mode-menu-group-label" data-i18n="study_grp_quickreview">Quick Review</div>
+              <button class="study-mode-opt on" data-mode="flashcards" onclick="pickStudyMode(this,'flashcards')"><span class="vdd-opt-label" data-i18n="study_mode_flashcards">🃏 Flashcards</span><span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="quiz" onclick="pickStudyMode(this,'quiz')"><span class="vdd-opt-label" data-i18n="study_mode_quiz">❓ Quiz Mode</span><span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="cloze" onclick="pickStudyMode(this,'cloze')"><span class="vdd-opt-label" data-i18n="study_mode_cloze">🔲 Cloze</span><span class="smo-check">✓</span></button>
+              <div class="study-mode-menu-group-label" data-i18n="study_grp_examprep">Exam Prep</div>
+              <button class="study-mode-opt" data-mode="practice" onclick="pickStudyMode(this,'practice')"><span class="vdd-opt-label" data-i18n="study_mode_practice">📝 Practice Qs</span><span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="markscheme" onclick="pickStudyMode(this,'markscheme')"><span class="vdd-opt-label" data-i18n="study_mode_markscheme">✅ Mark Scheme</span><span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="predicted" onclick="pickStudyMode(this,'predicted')"><span class="vdd-opt-label" data-i18n="study_mode_predicted">🔮 Predicted Qs</span><span class="smo-check">✓</span></button>
+              <div class="study-mode-menu-group-label" data-i18n="study_grp_reference">Reference</div>
+              <button class="study-mode-opt" data-mode="formula" onclick="pickStudyMode(this,'formula')"><span class="vdd-opt-label" data-i18n="study_mode_formula">🧮 Formula Sheet</span><span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="cornell" onclick="pickStudyMode(this,'cornell')"><span class="vdd-opt-label" data-i18n="study_mode_cornell">📓 Cornell Notes</span><span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="mnemonics" onclick="pickStudyMode(this,'mnemonics')"><span class="vdd-opt-label" data-i18n="study_mode_mnemonics">🎵 Mnemonics</span><span class="smo-check">✓</span></button>
+              <div class="study-mode-menu-group-label" data-i18n="study_grp_deeper">Deeper Understanding</div>
+              <button class="study-mode-opt" data-mode="mistakes" onclick="pickStudyMode(this,'mistakes')"><span class="vdd-opt-label" data-i18n="study_mode_mistakes">⚠️ Mistakes</span><span class="smo-check">✓</span></button>
+              <button class="study-mode-opt" data-mode="comparison" onclick="pickStudyMode(this,'comparison')"><span class="vdd-opt-label" data-i18n="study_mode_comparison">⚖️ Comparison</span><span class="smo-check">✓</span></button>
             </div>
           </div>
           <div class="study-count-wrap">
@@ -4396,7 +4406,7 @@ const LANGS = {
     set_your_name_ph: 'Your name...',
     // Homework tab
     hw_chip_maths: 'Maths', hw_chip_science: 'Science', hw_chip_history: 'History', hw_chip_english: 'English',
-    hw_chip_biology: 'Biology', hw_chip_physics: 'Physics', hw_chip_chemistry: 'Chemistry',
+    hw_chip_biology: 'Biology', hw_chip_physics: 'Physics', hw_chip_chemistry: 'Chemistry', hw_chip_any: 'Any subject', hw_starters_trigger: '✨ Quick starters',
     hw_mode_label: 'Response style',
     hw_mode_stepbystep: '🪜 Step-by-step', hw_mode_check: '✅ Check my answer', hw_mode_examtechnique: '🎯 Exam technique',
     hw_mode_eli5: '🧒 ELI5', hw_mode_quickanswer: '⚡ Quick answer', hw_mode_whyiswrong: '🔍 Why am I wrong?',
@@ -4412,7 +4422,7 @@ const LANGS = {
     hw_ph_eli5: 'What do you want explained simply?', hw_ph_quickanswer: 'Ask your question...',
     hw_ph_whyiswrong: 'Paste your working or answer here...',
     hw_err_nokey_html: '🔑 You\'ll need a free Gemini API key to ask Veda questions. <a href="#" onclick="goToApiKeySetup();return false;" style="color:var(--accent2);text-decoration:underline;">Add your key now →</a> — it only takes a minute, no credit card needed.',
-    hw_intro_html: 'Hey! Ask me anything 🎓 <span class="hw-intro-hint">Pick a <strong>response style</strong> above, use a <strong>quick starter</strong>, or </span>just type your question.<br><span style="font-size:.8em;opacity:.7;">You can also 📷 upload a photo of your question!</span>',
+    hw_intro_html: 'Hey! Ask me anything 🎓 <span class="hw-intro-hint">Pick a <strong>response style</strong> above, use a <strong>quick starter</strong>, or </span>just type your question.<br><span style="font-size:.8em;opacity:.7;">You can also 📎 attach a photo, PDF, or text file!</span>',
     // Shared
     btn_save_to_vault: '🗂️ Save to Vault', btn_copy: '📋 Copy', btn_copied: '✓ Copied!',
     err_prefix: 'Error: ', err_connection_prefix: '⚠️ Couldn\'t reach the AI just now (', err_connection_suffix: '). Try again in a moment.',
@@ -4427,6 +4437,7 @@ const LANGS = {
     study_mode_markscheme: '✅ Mark Scheme', study_mode_cloze: '🔲 Cloze', study_mode_formula: '🧮 Formula Sheet',
     study_mode_cornell: '📓 Cornell Notes', study_mode_mnemonics: '🎵 Mnemonics', study_mode_predicted: '🔮 Predicted Qs',
     study_mode_mistakes: '⚠️ Mistakes', study_mode_comparison: '⚖️ Comparison',
+    study_grp_quickreview: 'Quick Review', study_grp_examprep: 'Exam Prep', study_grp_reference: 'Reference', study_grp_deeper: 'Deeper Understanding',
     study_count_label: 'Count', study_img_hint: 'Image attached — flashcards will be generated from it',
     study_empty_title: 'Nothing generated yet',
     study_empty_sub: 'Type a topic above and hit <strong>Generate</strong> — <span id="study-empty-mode"></span> will show up right here.',
@@ -5023,7 +5034,7 @@ const LANGS = {
     set_your_name_ph: 'Tu nombre...',
     // Homework tab
     hw_chip_maths: 'Matemáticas', hw_chip_science: 'Ciencias', hw_chip_history: 'Historia', hw_chip_english: 'Inglés',
-    hw_chip_biology: 'Biología', hw_chip_physics: 'Física', hw_chip_chemistry: 'Química',
+    hw_chip_biology: 'Biología', hw_chip_physics: 'Física', hw_chip_chemistry: 'Química', hw_chip_any: 'Cualquier materia', hw_starters_trigger: '✨ Inicios rápidos',
     hw_mode_label: 'Estilo de respuesta',
     hw_mode_stepbystep: '🪜 Paso a paso', hw_mode_check: '✅ Revisar mi respuesta', hw_mode_examtechnique: '🎯 Técnica de examen',
     hw_mode_eli5: '🧒 Explícamelo fácil', hw_mode_quickanswer: '⚡ Respuesta rápida', hw_mode_whyiswrong: '🔍 ¿Por qué está mal?',
@@ -5039,7 +5050,7 @@ const LANGS = {
     hw_ph_eli5: '¿Qué quieres que te expliquen de forma sencilla?', hw_ph_quickanswer: 'Haz tu pregunta...',
     hw_ph_whyiswrong: 'Pega tu procedimiento o respuesta aquí...',
     hw_err_nokey_html: '🔑 Necesitas una clave API de Gemini gratis para preguntarle a Veda. <a href="#" onclick="goToApiKeySetup();return false;" style="color:var(--accent2);text-decoration:underline;">Añade tu clave ahora →</a> — solo toma un minuto, sin tarjeta de crédito.',
-    hw_intro_html: '¡Hola! Pregúntame lo que sea 🎓 <span class="hw-intro-hint">Elige un <strong>estilo de respuesta</strong> arriba, usa un <strong>inicio rápido</strong>, o </span>simplemente escribe tu pregunta.<br><span style="font-size:.8em;opacity:.7;">¡También puedes 📷 subir una foto de tu pregunta!</span>',
+    hw_intro_html: '¡Hola! Pregúntame lo que sea 🎓 <span class="hw-intro-hint">Elige un <strong>estilo de respuesta</strong> arriba, usa un <strong>inicio rápido</strong>, o </span>simplemente escribe tu pregunta.<br><span style="font-size:.8em;opacity:.7;">¡También puedes 📎 adjuntar una foto, PDF o archivo de texto!</span>',
     // Shared
     btn_save_to_vault: '🗂️ Guardar en el Baúl', btn_copy: '📋 Copiar', btn_copied: '✓ ¡Copiado!',
     err_prefix: 'Error: ', err_connection_prefix: '⚠️ No se pudo conectar con la IA (', err_connection_suffix: '). Inténtalo de nuevo en un momento.',
@@ -5054,6 +5065,7 @@ const LANGS = {
     study_mode_markscheme: '✅ Esquema de Calificación', study_mode_cloze: '🔲 Texto con Huecos', study_mode_formula: '🧮 Hoja de Fórmulas',
     study_mode_cornell: '📓 Notas Cornell', study_mode_mnemonics: '🎵 Mnemotecnias', study_mode_predicted: '🔮 Preguntas Previstas',
     study_mode_mistakes: '⚠️ Errores Comunes', study_mode_comparison: '⚖️ Comparación',
+    study_grp_quickreview: 'Repaso Rápido', study_grp_examprep: 'Preparación de Examen', study_grp_reference: 'Referencia', study_grp_deeper: 'Comprensión Profunda',
     study_count_label: 'Cantidad', study_img_hint: 'Imagen adjunta — se generarán tarjetas a partir de ella',
     study_empty_title: 'Nada generado todavía',
     study_empty_sub: 'Escribe un tema arriba y pulsa <strong>Generar</strong> — <span id="study-empty-mode"></span> aparecerá aquí.',
@@ -5574,7 +5586,7 @@ const LANGS = {
     set_your_name_ph: 'Nama anda...',
     // Homework tab
     hw_chip_maths: 'Matematik', hw_chip_science: 'Sains', hw_chip_history: 'Sejarah', hw_chip_english: 'Bahasa Inggeris',
-    hw_chip_biology: 'Biologi', hw_chip_physics: 'Fizik', hw_chip_chemistry: 'Kimia',
+    hw_chip_biology: 'Biologi', hw_chip_physics: 'Fizik', hw_chip_chemistry: 'Kimia', hw_chip_any: 'Sebarang subjek', hw_starters_trigger: '✨ Mula pantas',
     hw_mode_label: 'Gaya jawapan',
     hw_mode_stepbystep: '🪜 Langkah demi langkah', hw_mode_check: '✅ Semak jawapan saya', hw_mode_examtechnique: '🎯 Teknik peperiksaan',
     hw_mode_eli5: '🧒 Terangkan mudah', hw_mode_quickanswer: '⚡ Jawapan pantas', hw_mode_whyiswrong: '🔍 Kenapa saya salah?',
@@ -5590,7 +5602,7 @@ const LANGS = {
     hw_ph_eli5: 'Apa yang anda mahu diterangkan secara mudah?', hw_ph_quickanswer: 'Tanya soalan anda...',
     hw_ph_whyiswrong: 'Tampal kerja atau jawapan anda di sini...',
     hw_err_nokey_html: '🔑 Anda perlukan kunci API Gemini percuma untuk bertanya kepada Veda. <a href="#" onclick="goToApiKeySetup();return false;" style="color:var(--accent2);text-decoration:underline;">Tambah kunci anda sekarang →</a> — hanya mengambil masa seminit, tiada kad kredit diperlukan.',
-    hw_intro_html: 'Hai! Tanya saya apa sahaja 🎓 <span class="hw-intro-hint">Pilih <strong>gaya jawapan</strong> di atas, guna <strong>permulaan pantas</strong>, atau </span>taip sahaja soalan anda.<br><span style="font-size:.8em;opacity:.7;">Anda juga boleh 📷 muat naik gambar soalan anda!</span>',
+    hw_intro_html: 'Hai! Tanya saya apa sahaja 🎓 <span class="hw-intro-hint">Pilih <strong>gaya jawapan</strong> di atas, guna <strong>permulaan pantas</strong>, atau </span>taip sahaja soalan anda.<br><span style="font-size:.8em;opacity:.7;">Anda juga boleh 📎 lampirkan foto, PDF, atau fail teks!</span>',
     // Shared
     btn_save_to_vault: '🗂️ Simpan ke Vault', btn_copy: '📋 Salin', btn_copied: '✓ Disalin!',
     err_prefix: 'Ralat: ', err_connection_prefix: '⚠️ Tidak dapat menghubungi AI sekarang (', err_connection_suffix: '). Cuba lagi sebentar lagi.',
@@ -5605,6 +5617,7 @@ const LANGS = {
     study_mode_markscheme: '✅ Skema Markah', study_mode_cloze: '🔲 Isi Tempat Kosong', study_mode_formula: '🧮 Helaian Formula',
     study_mode_cornell: '📓 Nota Cornell', study_mode_mnemonics: '🎵 Mnemonik', study_mode_predicted: '🔮 Soalan Ramalan',
     study_mode_mistakes: '⚠️ Kesilapan Lazim', study_mode_comparison: '⚖️ Perbandingan',
+    study_grp_quickreview: 'Semakan Pantas', study_grp_examprep: 'Persediaan Peperiksaan', study_grp_reference: 'Rujukan', study_grp_deeper: 'Pemahaman Mendalam',
     study_count_label: 'Bilangan', study_img_hint: 'Imej dilampirkan — kad imbas akan dijana daripadanya',
     study_empty_title: 'Belum ada yang dijana',
     study_empty_sub: 'Taip topik di atas dan tekan <strong>Jana</strong> — <span id="study-empty-mode"></span> akan muncul di sini.',
@@ -6125,7 +6138,7 @@ const LANGS = {
     set_your_name_ph: '你的名字……',
     // Homework tab
     hw_chip_maths: '数学', hw_chip_science: '科学', hw_chip_history: '历史', hw_chip_english: '英语',
-    hw_chip_biology: '生物', hw_chip_physics: '物理', hw_chip_chemistry: '化学',
+    hw_chip_biology: '生物', hw_chip_physics: '物理', hw_chip_chemistry: '化学', hw_chip_any: '任意科目', hw_starters_trigger: '✨ 快速开始',
     hw_mode_label: '回答风格',
     hw_mode_stepbystep: '🪜 逐步讲解', hw_mode_check: '✅ 检查我的答案', hw_mode_examtechnique: '🎯 应试技巧',
     hw_mode_eli5: '🧒 简单解释', hw_mode_quickanswer: '⚡ 快速回答', hw_mode_whyiswrong: '🔍 我错在哪？',
@@ -6141,7 +6154,7 @@ const LANGS = {
     hw_ph_eli5: '你想要简单解释什么？', hw_ph_quickanswer: '提出你的问题...',
     hw_ph_whyiswrong: '在此粘贴你的过程或答案...',
     hw_err_nokey_html: '🔑 你需要一个免费的 Gemini API 密钥才能向 Veda 提问。<a href="#" onclick="goToApiKeySetup();return false;" style="color:var(--accent2);text-decoration:underline;">立即添加密钥 →</a> — 只需一分钟，无需信用卡。',
-    hw_intro_html: '嗨！尽管问我 🎓 <span class="hw-intro-hint">选择上方的<strong>回答风格</strong>，用<strong>快捷开头</strong>，或</span>直接输入你的问题。<br><span style="font-size:.8em;opacity:.7;">你也可以 📷 上传问题的照片！</span>',
+    hw_intro_html: '嗨！尽管问我 🎓 <span class="hw-intro-hint">选择上方的<strong>回答风格</strong>，用<strong>快捷开头</strong>，或</span>直接输入你的问题。<br><span style="font-size:.8em;opacity:.7;">你也可以 📎 附上照片、PDF 或文本文件！</span>',
     // Shared
     btn_save_to_vault: '🗂️ 保存到收藏库', btn_copy: '📋 复制', btn_copied: '✓ 已复制！',
     err_prefix: '错误：', err_connection_prefix: '⚠️ 暂时无法连接AI（', err_connection_suffix: '）。请稍后再试。',
@@ -6156,6 +6169,7 @@ const LANGS = {
     study_mode_markscheme: '✅ 评分标准', study_mode_cloze: '🔲 填空', study_mode_formula: '🧮 公式表',
     study_mode_cornell: '📓 康奈尔笔记', study_mode_mnemonics: '🎵 记忆技巧', study_mode_predicted: '🔮 预测题',
     study_mode_mistakes: '⚠️ 常见错误', study_mode_comparison: '⚖️ 对比',
+    study_grp_quickreview: '快速复习', study_grp_examprep: '考试准备', study_grp_reference: '参考资料', study_grp_deeper: '深入理解',
     study_count_label: '数量', study_img_hint: '已附加图片 — 将据此生成闪卡',
     study_empty_title: '尚未生成任何内容',
     study_empty_sub: '在上方输入主题，点击<strong>生成</strong> — <span id="study-empty-mode"></span>会显示在这里。',
@@ -6676,7 +6690,7 @@ const LANGS = {
     set_your_name_ph: 'あなたの名前...',
     // Homework tab
     hw_chip_maths: '数学', hw_chip_science: '理科', hw_chip_history: '歴史', hw_chip_english: '英語',
-    hw_chip_biology: '生物', hw_chip_physics: '物理', hw_chip_chemistry: '化学',
+    hw_chip_biology: '生物', hw_chip_physics: '物理', hw_chip_chemistry: '化学', hw_chip_any: '任意の科目', hw_starters_trigger: '✨ クイックスターター',
     hw_mode_label: '回答スタイル',
     hw_mode_stepbystep: '🪜 ステップ解説', hw_mode_check: '✅ 答えをチェック', hw_mode_examtechnique: '🎯 試験テクニック',
     hw_mode_eli5: '🧒 やさしく説明', hw_mode_quickanswer: '⚡ クイック回答', hw_mode_whyiswrong: '🔍 どこが間違い？',
@@ -6692,7 +6706,7 @@ const LANGS = {
     hw_ph_eli5: '何をやさしく説明してほしいですか？', hw_ph_quickanswer: '質問を入力してください...',
     hw_ph_whyiswrong: 'あなたの途中式や答えをここに貼り付けてください...',
     hw_err_nokey_html: '🔑 Vedaに質問するには無料のGemini APIキーが必要です。<a href="#" onclick="goToApiKeySetup();return false;" style="color:var(--accent2);text-decoration:underline;">今すぐキーを追加 →</a> — 1分で完了、クレジットカード不要です。',
-    hw_intro_html: 'こんにちは！何でも聞いてください 🎓 <span class="hw-intro-hint">上の<strong>回答スタイル</strong>を選ぶか、<strong>クイックスターター</strong>を使うか、</span>そのまま質問を入力してください。<br><span style="font-size:.8em;opacity:.7;">📷 質問の写真をアップロードすることもできます！</span>',
+    hw_intro_html: 'こんにちは！何でも聞いてください 🎓 <span class="hw-intro-hint">上の<strong>回答スタイル</strong>を選ぶか、<strong>クイックスターター</strong>を使うか、</span>そのまま質問を入力してください。<br><span style="font-size:.8em;opacity:.7;">📎 写真、PDF、テキストファイルを添付することもできます！</span>',
     // Shared
     btn_save_to_vault: '🗂️ 保管庫に保存', btn_copy: '📋 コピー', btn_copied: '✓ コピーしました！',
     err_prefix: 'エラー：', err_connection_prefix: '⚠️ AIに接続できませんでした（', err_connection_suffix: '）。しばらくしてからもう一度お試しください。',
@@ -6707,6 +6721,7 @@ const LANGS = {
     study_mode_markscheme: '✅ 採点基準', study_mode_cloze: '🔲 穴埋め', study_mode_formula: '🧮 公式シート',
     study_mode_cornell: '📓 コーネルノート', study_mode_mnemonics: '🎵 語呂合わせ', study_mode_predicted: '🔮 予想問題',
     study_mode_mistakes: '⚠️ よくある間違い', study_mode_comparison: '⚖️ 比較',
+    study_grp_quickreview: 'クイックレビュー', study_grp_examprep: '試験対策', study_grp_reference: 'リファレンス', study_grp_deeper: '深い理解',
     study_count_label: '枚数', study_img_hint: '画像を添付済み — これをもとにフラッシュカードを生成します',
     study_empty_title: 'まだ何も生成されていません',
     study_empty_sub: '上でトピックを入力して<strong>生成</strong>を押すと、ここに<span id="study-empty-mode"></span>が表示されます。',
@@ -7339,11 +7354,28 @@ renderNav();
 // ── TOPIC CHIPS ──
 let topic = '';
 const HW_TOPIC_KEYS = {Maths:'hw_chip_maths',Science:'hw_chip_science',History:'hw_chip_history',English:'hw_chip_english',Biology:'hw_chip_biology',Physics:'hw_chip_physics',Chemistry:'hw_chip_chemistry'};
-function setTopic(el, subj) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-  el.classList.add('on'); topic = subj;
+// ── Shared custom dropdown open/close ("vdd") — generic across every .vdd-wrap on the page ──
+function toggleVdd(e, wrapId) {
+  e.stopPropagation();
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  const willOpen = !wrap.classList.contains('open');
+  document.querySelectorAll('.vdd-wrap.open').forEach(w => { if (w.id !== wrapId) w.classList.remove('open'); });
+  wrap.classList.toggle('open', willOpen);
+}
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('.vdd-wrap.open').forEach(w => { if (!w.contains(e.target)) w.classList.remove('open'); });
+});
+
+function pickHwSubject(el, subj) {
+  topic = subj;
+  const trigger = document.getElementById('hw-subject-trigger-label');
+  const label = el.querySelector('.vdd-opt-label');
+  if (trigger && label) trigger.textContent = label.textContent;
+  document.querySelectorAll('#hw-subject-menu .vdd-opt').forEach(b => b.classList.toggle('on', b.dataset.v === subj));
   const hwIn = document.getElementById('hw-in');
-  if (hwIn) hwIn.placeholder = t('hw_ph_topic').replace('{topic}', t(HW_TOPIC_KEYS[subj] || subj));
+  if (hwIn) hwIn.placeholder = subj ? t('hw_ph_topic').replace('{topic}', t(HW_TOPIC_KEYS[subj] || subj)) : t('hw_placeholder');
+  document.getElementById('hw-subject-wrap')?.classList.remove('open');
 }
 
 // ── GEMINI API ──
@@ -7860,10 +7892,12 @@ function addBub(text, who) {
 }
 
 let hwMode = 'stepbystep';
-function setHwMode(el, mode) {
-  document.querySelectorAll('.hw-mode-chip').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
+function pickHwMode(el, mode) {
   hwMode = mode;
+  const trigger = document.getElementById('hw-mode-trigger-label');
+  const label = el.querySelector('.vdd-opt-label');
+  if (trigger && label) trigger.textContent = label.textContent;
+  document.querySelectorAll('#hw-mode-menu .vdd-opt').forEach(b => b.classList.toggle('on', b.dataset.v === mode));
   const placeholders = {
     stepbystep:   t('hw_placeholder'),
     check:        t('hw_ph_check'),
@@ -7874,6 +7908,7 @@ function setHwMode(el, mode) {
   };
   const inp = document.getElementById('hw-in');
   if (inp) inp.placeholder = placeholders[mode] || t('hw_placeholder');
+  document.getElementById('hw-mode-wrap')?.classList.remove('open');
 }
 function hwStarter(prefix) {
   const inp = document.getElementById('hw-in');
@@ -7881,6 +7916,10 @@ function hwStarter(prefix) {
   inp.value = prefix;
   inp.focus();
   inp.setSelectionRange(prefix.length, prefix.length);
+}
+function pickHwStarter(prefix) {
+  hwStarter(prefix);
+  document.getElementById('hw-starters-wrap')?.classList.remove('open');
 }
 
 // ── LEARNING MEMORY: lightweight Homework Helper topic log ──
@@ -8595,10 +8634,11 @@ document.addEventListener('click', (e) => {
   const wrap = document.getElementById('study-mode-wrap');
   if (wrap && wrap.classList.contains('open') && !wrap.contains(e.target)) closeStudyModeMenu();
 });
-function pickStudyMode(mode, label) {
+function pickStudyMode(el, mode) {
   sMode = mode;
   const trigger = document.getElementById('study-mode-trigger-label');
-  if (trigger) trigger.textContent = label;
+  const label = el.querySelector('.vdd-opt-label');
+  if (trigger && label) trigger.textContent = label.textContent;
   document.querySelectorAll('.study-mode-opt').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
   closeStudyModeMenu();
   updateStudyEmptyMode();
