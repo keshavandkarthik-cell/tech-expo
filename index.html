@@ -548,6 +548,19 @@ onAuthStateChanged(_auth, async user => {
       </div>
     </div>
 
+    <!-- ══ CHAT SESSIONS DRAWER (Homework Helper + Companion) ══ -->
+    <div id="chats-overlay" style="display:none;position:fixed;inset:0;z-index:930;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);" onclick="closeChatsDrawer()"></div>
+    <div id="chats-drawer" style="display:none;position:fixed;top:0;right:0;bottom:0;z-index:931;width:min(320px,88vw);background:var(--panel-col2);border-left:1px solid rgba(77,159,255,.2);box-shadow:-24px 0 60px rgba(0,0,0,.5);flex-direction:column;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(77,159,255,.12);flex-shrink:0;">
+        <div id="chats-drawer-title" style="font-family:var(--raj);font-size:.9rem;font-weight:700;color:var(--text);">Chats</div>
+        <button onclick="closeChatsDrawer()" style="background:rgba(255,255,255,.06);border:1px solid rgba(77,159,255,.15);border-radius:8px;padding:4px 10px;color:var(--silver);font-family:var(--exo);font-size:.72rem;cursor:pointer;">Done</button>
+      </div>
+      <div style="padding:12px 14px;flex-shrink:0;">
+        <button id="chats-new-btn" onclick="csHandleNewChat()" style="width:100%;background:linear-gradient(135deg,var(--accent),var(--teal));border:none;border-radius:10px;padding:10px;color:#fff;font-family:var(--exo);font-size:.8rem;font-weight:700;cursor:pointer;letter-spacing:.3px;">+ New Chat</button>
+      </div>
+      <div id="chats-list" style="flex:1;overflow-y:auto;padding:0 10px 12px;display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
+
     <!-- MOBILE FAB NAV -->
     <div id="mobile-fab-overlay" onclick="closeMobileFab()"></div>
     <div id="mobile-fab-list"></div>
@@ -1036,7 +1049,10 @@ onAuthStateChanged(_auth, async user => {
 
       <!-- HOMEWORK -->
       <div class="tab" id="tab-homework">
-        <div class="ttl"><span class="ivory-emoji">📚</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5C3 3.67 3.67 3 4.5 3H10v14H4.5A1.5 1.5 0 0 1 3 15.5v-11Z"/><path d="M17 4.5c0-.83-.67-1.5-1.5-1.5H10v14h5.5c.83 0 1.5-.67 1.5-1.5v-11Z"/></svg></span> Homework Helper</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div class="ttl"><span class="ivory-emoji">📚</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5C3 3.67 3.67 3 4.5 3H10v14H4.5A1.5 1.5 0 0 1 3 15.5v-11Z"/><path d="M17 4.5c0-.83-.67-1.5-1.5-1.5H10v14h5.5c.83 0 1.5-.67 1.5-1.5v-11Z"/></svg></span> Homework Helper</div>
+          <button onclick="openChatsDrawer('hw')" style="background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.25);border-radius:999px;padding:5px 14px;font-family:var(--exo);font-size:.72rem;color:var(--accent2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;flex-shrink:0;" title="Past chats"><span>💬</span><span id="hw-chat-title" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Chats</span></button>
+        </div>
         <div class="tsub"><span class="prm">›</span>Ask any question and get a step-by-step answer</div>
 
         <!-- Subject chips -->
@@ -1505,9 +1521,10 @@ onAuthStateChanged(_auth, async user => {
 
       <!-- COMPANION CHAT -->
       <div class="tab" id="tab-chat">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:8px;flex-wrap:wrap;">
           <div class="ttl">💬 Companion</div>
           <div style="display:flex;gap:6px;">
+            <button onclick="openChatsDrawer('comp')" style="background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.25);border-radius:999px;padding:5px 14px;font-family:var(--exo);font-size:.72rem;color:var(--accent2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;" title="Past chats"><span>💬</span><span id="comp-chat-title" style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Chats</span></button>
             <button onclick="clearCompChat()" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,102,128,.25);border-radius:999px;padding:5px 12px;font-family:var(--exo);font-size:.72rem;color:#ff8899;cursor:pointer;transition:all .15s;" title="Clear conversation history" data-i18n="chat_btn_clear">🗑️ Clear</button>
             <button onclick="openDebateMode()" style="background:linear-gradient(135deg,rgba(77,159,255,.1),rgba(0,212,170,.07));border:1px solid rgba(0,212,170,.3);border-radius:999px;padding:5px 14px;font-family:var(--exo);font-size:.72rem;color:var(--teal2);cursor:pointer;transition:all .15s;" title="Debate Me mode" data-i18n="chat_btn_debate">⚔️ Debate Me</button>
           </div>
@@ -7762,6 +7779,7 @@ function goToApiKeySetup() {
   }, 30);
 }
 const hwWin = document.getElementById('hw-win');
+let hwHistory = []; // messages for the *active* homework chat session — see csUpdateSession('hw', ...)
 function addBub(text, who) {
   const d = document.createElement('div');
   d.className = 'bubble ' + who;
@@ -7809,21 +7827,104 @@ function logHwTopic(subj, question) {
   } catch {}
 }
 
+// Renders one user turn (text and/or an attached image) into the chat window.
+// Shared by sendHw() (live) and hwLoadSession() (restoring a saved chat).
+function renderHwUserMsg(msg) {
+  if (msg.image) {
+    const d = document.createElement('div');
+    d.className = 'bubble user';
+    d.innerHTML = `<img src="data:${msg.image.mimeType};base64,${msg.image.base64}" style="max-width:180px;max-height:120px;border-radius:8px;display:block;margin-bottom:${msg.text?'8px':'0'};" alt="Image you sent">${msg.text ? `<span>${escapeHtml(msg.text)}</span>` : ''}`;
+    hwWin.appendChild(d);
+    hwWin.scrollTop = hwWin.scrollHeight;
+  } else {
+    addBub(escapeHtml(msg.text), 'user');
+  }
+}
+
+// Parses Veda's STEP/TIP-formatted answer into the styled step cards, and
+// appends a Save to Vault button. Shared by sendHw() (live) and
+// hwLoadSession() (restoring a saved chat) so both render identically.
+function renderHwBotAnswer(ans, question) {
+  const lines = ans.split('\n');
+  const wrapper = document.createElement('div');
+  wrapper.className = 'hw-answer-wrap';
+  hwWin.appendChild(wrapper);
+  let firstLine = true;
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    if (firstLine) {
+      const d = document.createElement('div'); d.className = 'hw-intro';
+      d.textContent = line; wrapper.appendChild(d); firstLine = false;
+    } else if (/^STEP \d+:/i.test(line)) {
+      const parts = line.match(/^(STEP \d+:)\s*(.*)/i);
+      const stepNum = parts[1]; const stepTitle = parts[2] || '';
+      const d = document.createElement('div'); d.className = 'hw-step';
+      d.innerHTML = `<div class="hw-step-header"><span class="hw-step-badge">${stepNum}</span><span class="hw-step-title">${stepTitle}</span></div><div class="hw-step-body"></div>`;
+      wrapper.appendChild(d);
+    } else if (line.startsWith('TIP:')) {
+      const d = document.createElement('div'); d.className = 'hw-tip';
+      d.innerHTML = `<div class="hw-tip-icon">💡</div><div class="hw-tip-content"><div class="hw-tip-label">Quick Tip</div><div class="hw-tip-body">${line.replace(/^TIP:/i,'').trim()}</div></div>`;
+      wrapper.appendChild(d);
+    } else {
+      const lastBody = wrapper.querySelector('.hw-step:last-of-type .hw-step-body');
+      if (lastBody) {
+        lastBody.textContent += (lastBody.textContent ? ' ' : '') + line;
+      } else {
+        const d = document.createElement('div'); d.className = 'hw-intro';
+        d.textContent = line; wrapper.appendChild(d);
+      }
+    }
+  }
+  const hwVaultBtn = document.createElement('button');
+  hwVaultBtn.className = 'abtn sec';
+  hwVaultBtn.style.cssText = 'font-size:.68rem;padding:6px 14px;margin-top:8px;';
+  hwVaultBtn.textContent = t('btn_save_to_vault');
+  hwVaultBtn.onclick = () => saveToVault((question || '').slice(0, 40) || 'Homework answer', ans, 'Homework');
+  wrapper.appendChild(hwVaultBtn);
+  return wrapper;
+}
+
+// Loads a saved homework chat (or the current active one, if id is omitted)
+// into hwHistory and re-renders the chat window from scratch.
+function hwLoadSession(id) {
+  const session = id ? csList('hw').find(s => s.id === id) : null;
+  const active = session || csGetActiveSession('hw');
+  csSetActiveId('hw', active.id);
+  hwHistory = active.messages || [];
+  hwWin.innerHTML = '';
+  if (!hwHistory.length) {
+    hwWin.innerHTML = `<div class="bubble bot" id="hw-intro-bubble">${t('hw_intro_html')}</div>`;
+  } else {
+    hwHistory.forEach(m => {
+      if (m.role === 'user') renderHwUserMsg(m);
+      else renderHwBotAnswer(m.text, null);
+    });
+  }
+  hwWin.scrollTop = hwWin.scrollHeight;
+  hwRefreshChatTitle();
+}
+function hwRefreshChatTitle() {
+  const el = document.getElementById('hw-chat-title');
+  if (!el) return;
+  const s = csGetActiveSession('hw');
+  el.textContent = s ? s.title : 'Chats';
+}
+function initHwChat() {
+  csGetActiveSession('hw'); // ensures at least one session exists
+  hwLoadSession();
+}
+
 async function sendHw() {
   const inp = document.getElementById('hw-in');
   const q = inp.value.trim();
   if (!q && !hwImageData) return;
   inp.value = '';
 
-  if (hwImageData) {
-    const d = document.createElement('div');
-    d.className = 'bubble user';
-    d.innerHTML = `<img src="data:${hwImageData.mimeType};base64,${hwImageData.base64}" style="max-width:180px;max-height:120px;border-radius:8px;display:block;margin-bottom:${q?'8px':'0'};" alt="Image you sent">${q ? `<span>${escapeHtml(q)}</span>` : ''}`;
-    hwWin.appendChild(d);
-    hwWin.scrollTop = hwWin.scrollHeight;
-  } else {
-    addBub(escapeHtml(q), 'user');
-  }
+  const userMsg = { role: 'user', text: q, image: hwImageData ? { ...hwImageData } : null };
+  renderHwUserMsg(userMsg);
+  hwHistory.push(userMsg);
+  csUpdateSession('hw', csGetActiveId('hw'), hwHistory);
+  hwRefreshChatTitle();
 
   const thinking = addBub(t('comp_thinking') + ' <span class="dots"><span>·</span><span>·</span><span>·</span></span>', 'bot thinking');
   const subj = topic ? `Subject: ${topic}. ` : '';
@@ -7943,42 +8044,9 @@ Student's working: ${question}`
     trackStat('questions');
     logHwTopic(topic, question);
     if (hwImageData) clearHwImage();
-    const lines = ans.split('\n');
-    const wrapper = document.createElement('div');
-    wrapper.className = 'hw-answer-wrap';
-    hwWin.appendChild(wrapper);
-    let firstLine = true;
-    for (const line of lines) {
-      if (!line.trim()) continue;
-      if (firstLine) {
-        const d = document.createElement('div'); d.className = 'hw-intro';
-        d.textContent = line; wrapper.appendChild(d); firstLine = false;
-      } else if (/^STEP \d+:/i.test(line)) {
-        const parts = line.match(/^(STEP \d+:)\s*(.*)/i);
-        const stepNum = parts[1]; const stepTitle = parts[2] || '';
-        const d = document.createElement('div'); d.className = 'hw-step';
-        d.innerHTML = `<div class="hw-step-header"><span class="hw-step-badge">${stepNum}</span><span class="hw-step-title">${stepTitle}</span></div><div class="hw-step-body"></div>`;
-        wrapper.appendChild(d);
-      } else if (line.startsWith('TIP:')) {
-        const d = document.createElement('div'); d.className = 'hw-tip';
-        d.innerHTML = `<div class="hw-tip-icon">💡</div><div class="hw-tip-content"><div class="hw-tip-label">Quick Tip</div><div class="hw-tip-body">${line.replace(/^TIP:/i,'').trim()}</div></div>`;
-        wrapper.appendChild(d);
-      } else {
-        const lastBody = wrapper.querySelector('.hw-step:last-of-type .hw-step-body');
-        if (lastBody) {
-          lastBody.textContent += (lastBody.textContent ? ' ' : '') + line;
-        } else {
-          const d = document.createElement('div'); d.className = 'hw-intro';
-          d.textContent = line; wrapper.appendChild(d);
-        }
-      }
-    }
-    const hwVaultBtn = document.createElement('button');
-    hwVaultBtn.className = 'abtn sec';
-    hwVaultBtn.style.cssText = 'font-size:.68rem;padding:6px 14px;margin-top:8px;';
-    hwVaultBtn.textContent = t('btn_save_to_vault');
-    hwVaultBtn.onclick = () => saveToVault(question.slice(0, 40) || 'Homework answer', ans, 'Homework');
-    wrapper.appendChild(hwVaultBtn);
+    renderHwBotAnswer(ans, question);
+    hwHistory.push({ role: 'bot', text: ans, mode: hwMode });
+    csUpdateSession('hw', csGetActiveId('hw'), hwHistory);
   } catch (e) {
     hwWin.removeChild(thinking);
     if (!API_KEY) {
@@ -11275,39 +11343,63 @@ function updateHomeStats() {
 function clearCompChat() {
   if (!confirm(t('chat_confirm_clear'))) return;
   compHistory = [];
-  localStorage.removeItem('studly_comp_history');
+  csUpdateSession('comp', csGetActiveId('comp'), compHistory);
   localStorage.removeItem('veda_comp_memory');
   const win = document.getElementById('comp-win');
   if (win) win.innerHTML = '<div class="bubble bot">' + t('comp_greeting') + '</div>';
   showToast(t('chat_cleared_toast'));
 }
 
+// One-time migration: the old build kept a single flat history under
+// studly_comp_history. The first time this runs after the multi-chat store
+// ships, that history becomes "Chat 1" so nobody loses what they'd written —
+// csKey('comp') existing at all is the signal migration already happened.
+function migrateCompHistoryOnce() {
+  if (localStorage.getItem(csKey('comp'))) return;
+  let old = [];
+  try { old = JSON.parse(localStorage.getItem('studly_comp_history') || '[]'); } catch {}
+  const session = { id: csNewId(), title: old.length ? 'Chat 1' : 'New Chat', messages: old, updatedAt: Date.now() };
+  csSaveList('comp', [session]);
+  csSetActiveId('comp', session.id);
+}
+
 function loadCompHistory() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('studly_comp_history') || '[]');
-    compHistory = saved.slice(-10); // last 10 exchanges
-    if (compHistory.length > 0 && compWin.children.length <= 1) {
-      // Show last few messages
-      const last3 = compHistory.slice(-4);
-      last3.forEach(m => {
-        const d = document.createElement('div');
-        d.className = 'bubble ' + (m.role === 'user' ? 'user' : 'bot');
-        d.textContent = m.parts[0].text;
-        d.style.opacity = '.6';
-        compWin.appendChild(d);
-      });
-      const divider = document.createElement('div');
-      divider.style.cssText = 'text-align:center;font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.5;padding:8px 0;';
-      divider.textContent = '— continuing from last time —';
-      compWin.appendChild(divider);
-      compWin.scrollTop = compWin.scrollHeight;
-    }
-  } catch { compHistory = []; }
+  migrateCompHistoryOnce();
+  compLoadSession();
+}
+
+// Loads a saved companion chat (or the current active one, if id is omitted)
+// into compHistory and re-renders the chat window from scratch.
+function compLoadSession(id) {
+  const session = id ? csList('comp').find(s => s.id === id) : null;
+  const active = session || csGetActiveSession('comp');
+  csSetActiveId('comp', active.id);
+  compHistory = active.messages || [];
+  compWin.innerHTML = '';
+  if (!compHistory.length) {
+    compWin.innerHTML = '<div class="bubble bot">' + t('comp_greeting') + '</div>';
+  } else {
+    compHistory.forEach(m => {
+      const d = document.createElement('div');
+      d.className = 'bubble ' + (m.role === 'user' ? 'user' : 'bot');
+      d.innerHTML = m.parts[0].text;
+      compWin.appendChild(d);
+    });
+  }
+  compWin.scrollTop = compWin.scrollHeight;
+  compRefreshChatTitle();
+}
+function compRefreshChatTitle() {
+  const el = document.getElementById('comp-chat-title');
+  if (!el) return;
+  const s = csGetActiveSession('comp');
+  el.textContent = s ? s.title : 'Chats';
 }
 
 function saveCompHistory() {
   try {
-    localStorage.setItem('studly_comp_history', JSON.stringify(compHistory.slice(-20)));
+    compHistory = compHistory.slice(-20);
+    csUpdateSession('comp', csGetActiveId('comp'), compHistory);
     // Auto-update memory summary every 6 exchanges
     if (compHistory.length > 0 && compHistory.length % 6 === 0) updateCompMemory();
   } catch {}
@@ -11568,6 +11660,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyWidgetVisibility();
   updateHomeStats();
   loadCompHistory();
+  initHwChat();
   initLibrary();
   // Load hi scores
   [{g:'bubble'},{g:'scramble'},{g:'math'},{g:'typing'},{g:'reaction'},{g:'snake'},{g:'flags'},{g:'sudoku'}].forEach(({g}) => {
@@ -11655,6 +11748,7 @@ function nwRestore(data) {
   // Refresh all UI panels
   if (window.updateHomeStats) updateHomeStats();
   if (window.loadCompHistory) loadCompHistory();
+  if (window.initHwChat) initHwChat();
   if (window.renderJournal) renderJournal();
   if (window.renderProfileTab) renderProfileTab();
   if (window.loadPersonalizePrefs) loadPersonalizePrefs();
@@ -13183,6 +13277,193 @@ document.addEventListener('keydown', e => {
   const tag = document.activeElement?.tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
   if (e.key === '?' && !overlayOpen) { e.preventDefault(); openManual(); }
+});
+
+// ══ CHAT SESSIONS (multi-chat history for Homework Helper + Companion) ══
+// Generic, feature-parameterised store — feature is 'hw' or 'comp'. Companion
+// keeps its existing Gemini {role, parts:[{text}]} message shape (respondComp
+// depends on it); Homework uses a simpler {role, text, mode, image} shape.
+// csExtractText() is the one place that knows the difference.
+function csKey(feature)        { return 'veda_chats_' + feature; }
+function csActiveKey(feature)  { return 'veda_chats_' + feature + '_active'; }
+function csNewId()             { return 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7); }
+
+function csList(feature) {
+  try { return JSON.parse(localStorage.getItem(csKey(feature)) || '[]'); } catch { return []; }
+}
+function csSaveList(feature, list) { localStorage.setItem(csKey(feature), JSON.stringify(list)); }
+function csGetActiveId(feature)    { return localStorage.getItem(csActiveKey(feature)); }
+function csSetActiveId(feature, id){ localStorage.setItem(csActiveKey(feature), id); }
+
+function csExtractText(feature, msg) {
+  if (!msg) return '';
+  return feature === 'comp' ? (msg.parts?.[0]?.text || '') : (msg.text || (msg.image ? 'Image question' : ''));
+}
+
+function csCreateSession(feature, messages) {
+  const list = csList(feature);
+  const session = { id: csNewId(), title: 'New Chat', messages: messages || [], updatedAt: Date.now() };
+  list.unshift(session);
+  csSaveList(feature, list);
+  csSetActiveId(feature, session.id);
+  return session;
+}
+
+// Returns the active session, creating one if none exists yet or the stored
+// active id no longer matches anything (e.g. it was deleted elsewhere).
+function csGetActiveSession(feature) {
+  const list = csList(feature);
+  const id = csGetActiveId(feature);
+  let session = list.find(s => s.id === id);
+  if (!session) session = list[0];
+  if (!session) session = csCreateSession(feature);
+  else csSetActiveId(feature, session.id);
+  return session;
+}
+
+function csUpdateSession(feature, id, messages) {
+  if (!id) return;
+  const list = csList(feature);
+  const s = list.find(c => c.id === id);
+  if (!s) return;
+  s.messages = messages;
+  s.updatedAt = Date.now();
+  if (s.title === 'New Chat' && messages.length) {
+    const firstUser = messages.find(m => (feature === 'comp' ? m.role === 'user' : m.role === 'user'));
+    const txt = csExtractText(feature, firstUser);
+    if (txt) s.title = txt.slice(0, 42) + (txt.length > 42 ? '…' : '');
+  }
+  csSaveList(feature, list);
+}
+
+function csRenameSession(feature, id, title) {
+  const list = csList(feature);
+  const s = list.find(c => c.id === id);
+  if (!s) return;
+  s.title = title.trim() || s.title;
+  csSaveList(feature, list);
+}
+
+// Deletes a session; if it was the active one, promotes the next chat (or
+// creates a fresh one if that was the last chat) and returns its id so the
+// caller can load it into view.
+function csDeleteSession(feature, id) {
+  const list = csList(feature).filter(c => c.id !== id);
+  csSaveList(feature, list);
+  const wasActive = csGetActiveId(feature) === id;
+  if (!wasActive) return null;
+  const next = list[0] || csCreateSession(feature);
+  csSetActiveId(feature, next.id);
+  return next.id;
+}
+
+// ── Drawer UI (shared overlay, repurposed per feature) ──
+let _csCurrentFeature = null;
+const CS_FEATURE_META = {
+  hw:   { label: 'Homework Chats' },
+  comp: { label: 'Companion Chats' },
+};
+
+function openChatsDrawer(feature) {
+  _csCurrentFeature = feature;
+  document.getElementById('chats-drawer-title').textContent = CS_FEATURE_META[feature]?.label || 'Chats';
+  document.getElementById('chats-overlay').style.display = 'block';
+  document.getElementById('chats-drawer').style.display = 'flex';
+  csRenderList();
+}
+function closeChatsDrawer() {
+  document.getElementById('chats-overlay').style.display = 'none';
+  document.getElementById('chats-drawer').style.display = 'none';
+}
+
+function csRenderList() {
+  const feature = _csCurrentFeature;
+  if (!feature) return;
+  const list = document.getElementById('chats-list');
+  const sessions = csList(feature).slice().sort((a, b) => b.updatedAt - a.updatedAt);
+  const activeId = csGetActiveId(feature);
+  if (!sessions.length) {
+    list.innerHTML = '<div style="text-align:center;padding:30px 10px;color:var(--silver);font-family:var(--exo);font-size:.75rem;opacity:.5;">No chats yet — start one!</div>';
+    return;
+  }
+  list.innerHTML = sessions.map(s => {
+    const count = s.messages.length;
+    const rel = csRelativeTime(s.updatedAt);
+    return `
+      <div class="cs-item ${s.id === activeId ? 'on' : ''}" id="cs-item-${s.id}" onclick="csHandleSwitch('${s.id}')">
+        <div class="cs-item-main">
+          <div class="cs-item-title">${escapeHtml(s.title)}</div>
+          <div class="cs-item-meta">${count} message${count === 1 ? '' : 's'} · ${rel}</div>
+        </div>
+        <div class="cs-item-actions">
+          <button class="cs-item-btn" onclick="event.stopPropagation();csHandleRename('${s.id}', this)" title="Rename" aria-label="Rename chat">✎</button>
+          <button class="cs-item-btn danger" onclick="event.stopPropagation();csHandleDelete('${s.id}')" title="Delete" aria-label="Delete chat">🗑</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function csRelativeTime(ts) {
+  const diff = Date.now() - ts;
+  const min = Math.floor(diff / 60000);
+  if (min < 1) return 'just now';
+  if (min < 60) return min + 'm ago';
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return hr + 'h ago';
+  const day = Math.floor(hr / 24);
+  if (day < 7) return day + 'd ago';
+  return new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
+function csHandleSwitch(id) {
+  const feature = _csCurrentFeature;
+  csSetActiveId(feature, id);
+  if (feature === 'hw') hwLoadSession(id);
+  else compLoadSession(id);
+  closeChatsDrawer();
+}
+
+function csHandleNewChat() {
+  const feature = _csCurrentFeature;
+  const session = csCreateSession(feature);
+  if (feature === 'hw') hwLoadSession(session.id);
+  else compLoadSession(session.id);
+  closeChatsDrawer();
+}
+
+function csHandleDelete(id) {
+  const feature = _csCurrentFeature;
+  if (!confirm('Delete this chat? This can\'t be undone.')) return;
+  const newActiveId = csDeleteSession(feature, id);
+  if (newActiveId) { // the deleted chat was the one on screen — load whichever replaced it
+    if (feature === 'hw') hwLoadSession(newActiveId);
+    else compLoadSession(newActiveId);
+  }
+  csRenderList();
+}
+
+function csHandleRename(id, btn) {
+  const feature = _csCurrentFeature;
+  const item = document.getElementById('cs-item-' + id);
+  const titleEl = item.querySelector('.cs-item-title');
+  const session = csList(feature).find(s => s.id === id);
+  const input = document.createElement('input');
+  input.className = 'cs-rename-in';
+  input.value = session ? session.title : '';
+  input.onclick = e => e.stopPropagation();
+  input.onkeydown = e => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') { csRenderList(); } };
+  input.onblur = () => {
+    csRenameSession(feature, id, input.value);
+    csRenderList();
+    if (feature === 'hw') hwRefreshChatTitle(); else compRefreshChatTitle();
+  };
+  titleEl.replaceWith(input);
+  input.focus();
+  input.select();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('chats-overlay')?.style.display === 'block') closeChatsDrawer();
 });
 
 function setSearchFilter(f, btn) {

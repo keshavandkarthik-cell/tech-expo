@@ -2241,6 +2241,38 @@ body.mobile-mode .dt-zone-label { display: none !important; }
   #manual-nav { width: 100% !important; border-right: none !important; border-bottom: 1px solid rgba(77,159,255,.1); max-height: 40%; }
 }
 
+/* ── CHAT SESSIONS DRAWER ── */
+#chats-list::-webkit-scrollbar { width: 4px; }
+#chats-list::-webkit-scrollbar-thumb { background: rgba(77,159,255,.25); border-radius: 2px; }
+.cs-item {
+  display: flex; align-items: center; gap: 8px; padding: 10px 10px;
+  border-radius: 10px; border: 1px solid transparent; cursor: pointer; transition: all .15s;
+}
+.cs-item:hover { background: rgba(77,159,255,.06); }
+.cs-item.on { background: rgba(77,159,255,.12); border-color: rgba(77,159,255,.3); }
+.cs-item-main { flex: 1; min-width: 0; }
+.cs-item-title { font-family: var(--exo); font-size: .78rem; color: var(--text2); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cs-item.on .cs-item-title { color: var(--accent2); }
+.cs-item-meta { font-family: var(--exo); font-size: .62rem; color: var(--silver); opacity: .55; margin-top: 2px; }
+.cs-item-actions { display: flex; gap: 3px; flex-shrink: 0; opacity: 0; transition: opacity .15s; }
+.cs-item:hover .cs-item-actions { opacity: 1; }
+.cs-item-btn {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 6px;
+  width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+  color: var(--silver); cursor: pointer; font-size: .68rem; transition: all .15s;
+}
+.cs-item-btn:hover { background: rgba(77,159,255,.15); color: var(--accent2); }
+.cs-item-btn.danger:hover { background: rgba(255,102,128,.15); color: #ff8899; }
+.cs-rename-in {
+  flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(77,159,255,.35); border-radius: 7px;
+  padding: 5px 8px; color: var(--text); font-family: var(--exo); font-size: .78rem; outline: none;
+}
+@media (max-width: 700px) {
+  #chats-drawer { width: 100vw !important; }
+  /* Actions only reveal on hover, which touch has no equivalent for — keep them visible instead */
+  .cs-item-actions { opacity: 1 !important; }
+}
+
 /* ── PLAYLIST MANAGER ── */
 #pl-manager { scrollbar-width: thin; scrollbar-color: rgba(77,159,255,.3) transparent; }
 #pl-manager::-webkit-scrollbar { width: 4px; }
