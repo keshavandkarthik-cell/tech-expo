@@ -453,6 +453,7 @@ onAuthStateChanged(_auth, async user => {
       <button onclick="openSearch()" id="hdr-search-btn" title="Search (Ctrl+K)" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:10px;padding:5px 14px;color:var(--silver);font-family:var(--exo);font-size:.72rem;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .18s;letter-spacing:.5px;">
         <span style="opacity:.7;">🔍</span><span>Search</span><span style="opacity:.35;font-size:.65rem;margin-left:2px;">Ctrl K</span>
       </button>
+      <button onclick="openManual()" id="hdr-manual-btn" title="User Manual (?)" aria-label="Open user manual" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:10px;width:30px;height:30px;color:var(--silver);font-family:var(--exo);font-size:.78rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;">?</button>
       <div class="hdr-status"><span class="pulse"></span>AI ONLINE</div>
       <div id="hdr-user" style="display: none; align-items: center; gap: 8px; cursor: pointer;" onclick="go('settings')" title="My Account">
         <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="Your profile picture">
@@ -524,6 +525,27 @@ onAuthStateChanged(_auth, async user => {
         <button id="ms-add-spotify" onclick="setMsTarget('spotify')" style="background:rgba(30,215,96,.1);border:1px solid rgba(30,215,96,.3);border-radius:999px;padding:3px 12px;font-family:var(--exo);font-size:.68rem;color:#1ed760;cursor:pointer;transition:all .15s;">🎵 Spotify</button>
       </div>
       <div id="msearch-results" style="max-height:400px;overflow-y:auto;padding:8px 0;"></div>
+    </div>
+
+    <!-- ══ USER MANUAL ══ -->
+    <div id="manual-overlay" style="display:none;position:fixed;inset:0;z-index:940;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);" onclick="closeManual()"></div>
+    <div id="manual-modal" role="dialog" aria-modal="true" aria-label="User manual" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:941;width:min(920px,94vw);height:min(680px,86vh);background:var(--panel-col2);border:1px solid rgba(77,159,255,.3);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(77,159,255,.06);overflow:hidden;flex-direction:column;">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(77,159,255,.12);flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+          <span style="font-size:1.15rem;">📖</span>
+          <div style="min-width:0;">
+            <div style="font-family:var(--raj);font-size:.98rem;font-weight:700;color:var(--text);">User Manual</div>
+            <div style="font-family:var(--exo);font-size:.66rem;color:var(--silver);opacity:.65;">Opens to whatever you're using right now — browse anything else on the left</div>
+          </div>
+        </div>
+        <kbd onclick="closeManual()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:2px 8px;font-family:var(--exo);font-size:.7rem;color:var(--silver);cursor:pointer;flex-shrink:0;">Esc</kbd>
+      </div>
+      <!-- Body: nav + content -->
+      <div style="display:flex;flex:1;min-height:0;">
+        <div id="manual-nav" style="width:230px;flex-shrink:0;overflow-y:auto;padding:12px;border-right:1px solid rgba(77,159,255,.1);"></div>
+        <div id="manual-body" style="flex:1;min-width:0;overflow-y:auto;padding:26px 30px;"></div>
+      </div>
     </div>
 
     <!-- MOBILE FAB NAV -->
@@ -12862,6 +12884,306 @@ function closeSearch() {
   document.getElementById('search-overlay').style.display = 'none';
   document.getElementById('search-modal').style.display = 'none';
 }
+
+// ══ USER MANUAL ══
+// `tab` maps each section to the .tab-<id> it documents, so openManual() can
+// jump straight to whichever page you're actually on when you open it.
+const MANUAL_SECTIONS = [
+  { id:'home', tab:'home', group:'Home & Account', icon:'🏠', label:'Home Dashboard', body: `
+    <div class="man-h1">🏠 Home Dashboard</div>
+    <div class="man-tag">Your daily starting point — a snapshot of what matters today, quick launchers for everything else, and widgets you control.</div>
+    <div class="man-h2">What's here</div>
+    <ul class="man-list">
+      <li><b>Homework Helper hero</b> — the fastest way into the AI homework tool, always front and centre.</li>
+      <li><b>Daily Brief</b> — a short personalised tip, refreshed with the ↻ refresh button.</li>
+      <li><b>Today / Focus / More</b> tabs — three switchable panels: Today (exams, daily challenge, quick tools), Focus (progress stats, focus timer, quick note), More (leaderboard, study music, and any extra widgets you've turned on).</li>
+    </ul>
+    <div class="man-h2">Customising it</div>
+    <ul class="man-list">
+      <li>Tap <b>Edit Widgets</b> (top right) to turn optional widgets on or off — Weather & Quote, Today's Tasks, Recent Notes, Next Session, Practice Papers, Recent Journal, Vault Snapshot, Companion Recap.</li>
+      <li>Inside Edit Widgets, tap <b>Move Widgets</b> to reorder anything within its tab using the ▲▼ arrows — the new order saves instantly.</li>
+    </ul>
+    <div class="man-tip">💡 Widgets you turn off aren't deleted — flip them back on any time and their data's still there.</div>
+  `},
+  { id:'homework', tab:'homework', group:'AI Study Tools', icon:'📚', label:'Homework Helper', body: `
+    <div class="man-h1">📚 Homework Helper</div>
+    <div class="man-tag">Ask any question, pick how you want the answer, get a real walkthrough — not just the final number.</div>
+    <div class="man-h2">How to ask</div>
+    <ul class="man-list">
+      <li>Tap a subject chip (or leave it blank) so Veda knows the context.</li>
+      <li>Pick a <b>Response Style</b>: Step-by-step, Check my answer, Exam technique, ELI5, Quick answer, or Why am I wrong? — each changes how the explanation is written, not just its length.</li>
+      <li>No idea where to start? Tap a <b>Quick Starter</b> chip — "Explain this...", "Check my working", "Why is this wrong?", "How do I start?", and more.</li>
+      <li>Type your question, or tap the camera icon 📷 to photograph a worksheet or textbook page instead of typing it out.</li>
+    </ul>
+    <div class="man-h2">Reading the answer</div>
+    <ul class="man-list">
+      <li>Answers are broken into real steps, not walls of text — scroll to see the reasoning, not just the result.</li>
+      <li>Ask a follow-up in the same box any time — Veda remembers the conversation.</li>
+    </ul>
+    <div class="man-note">⚠️ Needs a Gemini API key to actually generate anything — see <b>Settings & API Key</b> if you see a locked message.</div>
+  `},
+  { id:'library', tab:'library', group:'AI Study Tools', icon:'🗂️', label:'Topic Library', body: `
+    <div class="man-h1">🗂️ Topic Library</div>
+    <div class="man-tag">Browse pre-built explanations by subject and level, instead of typing a question from scratch.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Pick a <b>Level</b> — KS3, GCSE, A-Level, or University — then a subject, or leave it on All.</li>
+      <li>Tap any topic card (World War 1, The Cold War, etc.) to get an AI-generated explainer for it instantly.</li>
+      <li>Topics are grouped and tagged by subject so you can browse instead of searching.</li>
+    </ul>
+    <div class="man-tip">💡 Good for revision when you don't have a specific question yet — just want a refresher on a whole topic.</div>
+  `},
+  { id:'pastpapers', tab:'pastpapers', group:'AI Study Tools', icon:'📚', label:'Past Papers', body: `
+    <div class="man-h1">📚 Past Papers</div>
+    <div class="man-tag">A free library of real Cambridge IGCSE past papers, organised by subject and exam board.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Search by subject, or scroll the list — Mathematics, Sciences, Languages, Humanities, and more.</li>
+      <li>Each subject links out to established free archives (like savemyexams.com) rather than files hosted here — official exam papers are copyrighted, so Veda points you to legitimate sources instead of hosting copies.</li>
+      <li>No sign-in needed to browse.</li>
+    </ul>
+    <div class="man-tip">💡 Once you've done a paper, log your score in <b>Paper Tracker</b> so it shows up in your subject stats.</div>
+  `},
+  { id:'notes', tab:'notes', group:'AI Study Tools', icon:'📝', label:'Notes', body: `
+    <div class="man-h1">📝 Notes</div>
+    <div class="man-tag">Paste in messy text — a textbook page, a transcript, a lecture — and get it turned into something actually study-able.</div>
+    <div class="man-h2">What it can do</div>
+    <ul class="man-list">
+      <li><b>Summarise</b> — condenses long text into the key points.</li>
+      <li><b>Bullet Points</b> — same content, scannable format.</li>
+      <li><b>Mind Map</b> — a visual-style breakdown of how ideas connect.</li>
+      <li><b>Essay Plan</b> — structures an argument for an essay question.</li>
+      <li><b>Glossary</b> — pulls out key terms and defines them.</li>
+      <li><b>Simplify</b> — rewrites in plainer language.</li>
+      <li><b>Timeline</b> — orders events chronologically (history, processes, plots).</li>
+      <li><b>Upload</b> — attach a photo or file instead of pasting text.</li>
+    </ul>
+    <div class="man-tip">💡 Use <b>Clear</b> to wipe the input box, not just delete manually — it also resets the output panel.</div>
+  `},
+  { id:'study', tab:'study', group:'AI Study Tools', icon:'🧠', label:'Smart Study', body: `
+    <div class="man-h1">🧠 Smart Study</div>
+    <div class="man-tag">Turn any topic into flashcards, a quiz, or a whole revision toolkit — pick a mode, type a topic, hit Generate.</div>
+    <div class="man-h2">Modes</div>
+    <ul class="man-list">
+      <li><b>Flashcards</b>, <b>Quiz Mode</b>, <b>Practice Qs</b>, <b>Mark Scheme</b>, <b>Cloze</b> (fill-in-the-blank), <b>Formula Sheet</b>, <b>Cornell Notes</b>, <b>Mnemonics</b>, <b>Predicted Qs</b>, <b>Mistakes</b> (common errors to avoid), <b>Comparison</b> (compare two things side by side).</li>
+    </ul>
+    <div class="man-h2">Using it</div>
+    <ul class="man-list">
+      <li>Set the <b>Count</b> slider to control how many cards or questions you get back.</li>
+      <li>Type a topic — or tap the camera icon to generate from a photo of your notes or textbook — and hit Generate.</li>
+      <li>Flashcards flip with a click or the spacebar; arrow keys move between cards.</li>
+      <li><b>Export Flashcards</b> saves your set as a PDF once you've generated some.</li>
+    </ul>
+  `},
+  { id:'exam', tab:'exam', group:'AI Study Tools', icon:'📄', label:'Exam Papers', body: `
+    <div class="man-h1">📄 Exam Papers</div>
+    <div class="man-tag">Build a custom mock exam — pick the subject, question types, difficulty, and length yourself.</div>
+    <div class="man-h2">How to build one</div>
+    <ul class="man-list">
+      <li>Choose a <b>Subject</b> from the chips, or type your own subject or topic.</li>
+      <li>Tick which <b>Question Types</b> to include — Multiple Choice, True/False, Fill in the Blanks, Short Answer, Long/Essay, Structured, Matching.</li>
+      <li>Set <b>Difficulty</b> (Easy/Medium/Hard/Mixed), <b>Number of Questions</b>, and <b>Level</b> (Primary/Secondary/A-Levels/University).</li>
+      <li>Generate — you get a real mock paper built to that exact spec, not a generic quiz.</li>
+    </ul>
+    <div class="man-tip">💡 Mix difficulty levels if you want a paper that ramps up like a real exam does.</div>
+  `},
+  { id:'art', tab:'art', group:'AI Study Tools', icon:'🌌', label:'Muse', body: `
+    <div class="man-h1">🌌 Muse</div>
+    <div class="man-tag">Describe an idea in plain words — Muse writes the creative brief and paints it for you.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Pick a style: Surprise me, Photorealistic, Anime, Watercolour, 3D Render, Sketch, Minimalist, Diagram.</li>
+      <li>Type your idea in the box (e.g. "a lighthouse guiding ships through a storm") and hit Create.</li>
+      <li>Every image you make is saved automatically — find it later in <b>Vault</b>.</li>
+    </ul>
+    <div class="man-tip">💡 Diagram style is genuinely useful for revision — describe a process or a labelled structure and let Muse illustrate it.</div>
+  `},
+  { id:'chat', tab:'chat', group:'Wellbeing & Social', icon:'💬', label:'Companion', body: `
+    <div class="man-h1">💬 Companion</div>
+    <div class="man-tag">An AI you can actually talk to about stress, feelings, or study life — not just homework.</div>
+    <div class="man-h2">Talking to it</div>
+    <ul class="man-list">
+      <li>Tap a mood chip (Good, Stressed, Tired, Frustrated, Numb, Motivated) to check in, or just start typing.</li>
+      <li><b>Clear</b> wipes the conversation history if you want a fresh start.</li>
+      <li><b>Debate Me</b> — challenge Veda to argue a topic with you; it picks a random side and pushes back on purpose, to sharpen how you argue a point.</li>
+    </ul>
+    <div class="man-h2">Safety, honestly</div>
+    <div class="man-note">⚠️ If something you say suggests you might be in real danger or serious distress, Veda notifies a guardian — but it tells you first, and always shows real crisis resources in the chat. It's not spying quietly; it's a safety net, and you'll know when it triggers.</div>
+  `},
+  { id:'journal', tab:'journal', group:'Wellbeing & Social', icon:'📓', label:'Journal', body: `
+    <div class="man-h1">📓 Journal</div>
+    <div class="man-tag">Write freely — a private space for whatever's on your mind, saved locally on your device.</div>
+    <div class="man-h2">Using it</div>
+    <ul class="man-list">
+      <li>Give it a title (optional) and write — or tap <b>Record</b> to dictate a voice note instead of typing.</li>
+      <li>Filter past entries by All, Today, or This Week; search by keyword.</li>
+      <li><b>Export</b> saves your entries out of the app.</li>
+    </ul>
+    <div class="man-tip">💡 Entries are stored locally, not shown to anyone — write honestly.</div>
+  `},
+  { id:'leaderboard', tab:'leaderboard', group:'Wellbeing & Social', icon:'🏆', label:'Leaderboard', body: `
+    <div class="man-h1">🏆 Leaderboard</div>
+    <div class="man-tag">Compete with friends on gems, streaks, or games played — or just check where you rank.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Share your <b>Friend Code</b> so people can add you, or enter theirs with Add Friend.</li>
+      <li>Switch between Gems / Streak / Games as the ranking metric, and Friends / Global as the scope.</li>
+      <li>Toggle <b>Appear on global leaderboard</b> off any time — your profile stays private unless you turn it on.</li>
+    </ul>
+    <div class="man-note">⚠️ Needs Google sign-in — it's the one feature that ties your progress to an actual account instead of just this device.</div>
+  `},
+  { id:'forum', tab:'forum', group:'Wellbeing & Social', icon:'🌐', label:'Forum', body: `
+    <div class="man-h1">🌐 Forum</div>
+    <div class="man-tag">Ask questions, share tips, help other students — organised by subject.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Filter by subject chip (Maths, Physics, Chemistry, etc.) or browse All.</li>
+      <li>Tap <b>New Post</b> to ask something or share a tip.</li>
+      <li>Scroll the category row sideways if it's cut off — it's not all fixed width.</li>
+    </ul>
+    <div class="man-note">⚠️ Also needs Google sign-in to load and post.</div>
+  `},
+  { id:'todo', tab:'todo', group:'Organise', icon:'✅', label:'To-Do List', body: `
+    <div class="man-h1">✅ To-Do List</div>
+    <div class="man-tag">A straightforward task list that pays you a gem for finishing things.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Type a task and hit Enter (or Add) to save it.</li>
+      <li>Check it off to mark done — you earn 1 gem the first time each task is completed.</li>
+      <li>Clear completed tasks with the button once your list gets long.</li>
+    </ul>
+    <div class="man-tip">💡 Each task only pays out once, ever — unchecking and rechecking it won't earn a second gem.</div>
+  `},
+  { id:'planner', tab:'planner', group:'Organise', icon:'📅', label:'Study Planner', body: `
+    <div class="man-h1">📅 Study Planner</div>
+    <div class="man-tag">Build a real weekly timetable — colour-coded by subject, with recurring sessions.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Switch between Week, Day, and List views; Prev / Next / Today move through weeks.</li>
+      <li><b>Add Session</b> to schedule one manually, or <b>Import Timetable</b> to have Veda parse a photo or pasted text of your existing timetable into sessions automatically.</li>
+      <li><b>Print</b> gives you a physical copy; <b>Clear All</b> wipes everything (that's not undoable, so be sure).</li>
+    </ul>
+    <div class="man-tip">💡 Recurring sessions save you from re-adding the same class every week — set the repeat days once when you add it.</div>
+  `},
+  { id:'tracker', tab:'tracker', group:'Organise', icon:'📊', label:'Paper Tracker', body: `
+    <div class="man-h1">📊 Paper Tracker</div>
+    <div class="man-tag">Log every past paper you attempt and watch your scores add up per subject.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Fill in Subject, Year, Paper, and Score, add optional notes, and hit <b>Log Paper</b>.</li>
+      <li>Filter logged papers by All / Done / ≥80% / &lt;60%, or search by subject.</li>
+      <li>Each subject shows its own average and paper count, plus overall Done / Avg Score / Best Score / Subjects stats up top.</li>
+    </ul>
+    <div class="man-tip">💡 <b>Browse Public Past Papers Library</b> at the top links straight to Past Papers if you need something to log.</div>
+  `},
+  { id:'vault', tab:'vault', group:'Organise', icon:'🗂️', label:'Vault', body: `
+    <div class="man-h1">🗂️ Vault</div>
+    <div class="man-tag">Everything you've saved or created, in one place — notes, homework answers, and every Muse image.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Look for a "Save to Vault" button inside Homework, Smart Study, Notes, or Exam Papers to add something here.</li>
+      <li>Every image generated in Muse lands here automatically.</li>
+      <li>Search by title or content; download or delete items individually.</li>
+    </ul>
+  `},
+  { id:'games', tab:'games', group:'Organise', icon:'🎮', label:'Games', body: `
+    <div class="man-h1">🎮 Games</div>
+    <div class="man-tag">9 built-in games that turn revision into something less like revision.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Filter by category to find quiz-style games vs. reflex/arcade ones.</li>
+      <li>Each game shows a lock icon if it needs something (like an API key) to run.</li>
+      <li>Games award gems on completion, same as everything else.</li>
+    </ul>
+  `},
+  { id:'music', tab:'music', group:'Organise', icon:'🎵', label:'Study Music', body: `
+    <div class="man-h1">🎵 Study Music</div>
+    <div class="man-tag">Background music that keeps playing while you switch tabs, powered by Spotify.</div>
+    <div class="man-h2">How it works</div>
+    <ul class="man-list">
+      <li>Tap a playlist tab to start playback; <b>Manage</b> lets you add or remove playlists; <b>Expand</b> opens the full player with the track list.</li>
+      <li>Only hearing 30-second previews? Log into Spotify in this same browser — the embed uses your existing session automatically.</li>
+    </ul>
+    <div class="man-note">⚠️ This is Spotify's own embedded player — playback quality and previews depend on your Spotify login, not Veda.</div>
+  `},
+  { id:'settings', tab:'settings', group:'Home & Account', icon:'⚙️', label:'Settings & API Key', body: `
+    <div class="man-h1">⚙️ Settings & API Key</div>
+    <div class="man-tag">Your account, preferences, and the one setup step every AI feature depends on.</div>
+    <div class="man-h2">Account</div>
+    <ul class="man-list">
+      <li><b>Details</b> — display name and avatar.</li>
+      <li><b>Goal Set</b> — daily targets (questions, journal entries, flashcards, games).</li>
+      <li><b>Stats</b> — your usage numbers across the app.</li>
+      <li><b>Badge</b> — unlocked achievements.</li>
+    </ul>
+    <div class="man-h2">Preferences</div>
+    <ul class="man-list">
+      <li><b>Appearance</b> — switch between the default dark theme and alternates (Ivory, Hacker, Glass, Synthwave).</li>
+      <li><b>AI Settings</b> — response style defaults and language.</li>
+      <li><b>AI Key</b> — where you paste your own free Gemini API key.</li>
+    </ul>
+    <div class="man-h2">Why you need your own key</div>
+    <ul class="man-list">
+      <li>Veda runs on a <b>bring-your-own-key</b> model: every AI feature (Homework, Companion, Smart Study, Notes, Muse, Daily Challenge, and more) needs a free Gemini API key pasted in here to work.</li>
+      <li>This keeps the app free to run for everyone and puts you in control of your own usage — nothing routes through a shared account.</li>
+    </ul>
+    <div class="man-tip">💡 Hit a "locked" message anywhere in the app? Tap the link in that message and it'll jump you straight here.</div>
+  `},
+];
+
+function _manResolveActiveTab() {
+  const onTab = document.querySelector('.tab.on');
+  let id = onTab ? onTab.id.replace('tab-', '') : 'home';
+  if (id === 'profile') id = 'settings';
+  return id;
+}
+
+function openManual() {
+  const overlay = document.getElementById('manual-overlay');
+  const modal   = document.getElementById('manual-modal');
+  overlay.style.display = 'block';
+  modal.style.display   = 'flex';
+  renderManualNav();
+  const activeTab = _manResolveActiveTab();
+  const match = MANUAL_SECTIONS.find(s => s.tab === activeTab) || MANUAL_SECTIONS[0];
+  selectManualSection(match.id);
+}
+
+function closeManual() {
+  document.getElementById('manual-overlay').style.display = 'none';
+  document.getElementById('manual-modal').style.display   = 'none';
+}
+
+function renderManualNav() {
+  const nav = document.getElementById('manual-nav');
+  const groups = ['Home & Account', 'AI Study Tools', 'Wellbeing & Social', 'Organise'];
+  nav.innerHTML = groups.map(g => `
+    <div class="man-nav-group">${g}</div>
+    ${MANUAL_SECTIONS.filter(s => s.group === g).map(s => `
+      <button class="man-nav-item" id="man-nav-${s.id}" onclick="selectManualSection('${s.id}')">
+        <span class="mni-icon">${s.icon}</span><span>${s.label}</span>
+      </button>`).join('')}
+  `).join('');
+}
+
+function selectManualSection(id) {
+  const section = MANUAL_SECTIONS.find(s => s.id === id);
+  if (!section) return;
+  document.querySelectorAll('.man-nav-item').forEach(b => b.classList.remove('on'));
+  const btn = document.getElementById('man-nav-' + id);
+  if (btn) { btn.classList.add('on'); btn.scrollIntoView({ block: 'nearest' }); }
+  const body = document.getElementById('manual-body');
+  body.innerHTML = section.body;
+  body.scrollTop = 0;
+}
+
+document.addEventListener('keydown', e => {
+  const overlayOpen = document.getElementById('manual-overlay')?.style.display === 'block';
+  if (e.key === 'Escape' && overlayOpen) { closeManual(); return; }
+  const tag = document.activeElement?.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+  if (e.key === '?' && !overlayOpen) { e.preventDefault(); openManual(); }
+});
 
 function setSearchFilter(f, btn) {
   searchFilter = f;
