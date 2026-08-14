@@ -315,28 +315,50 @@ body.mobile-mode #sb { display: none !important; }
 body.mobile-mode .mobile-only { display: block; }
 body.mobile-mode .m-home-extras { display: flex; }
 body.mobile-mode #hdr { padding: 10px 14px; gap: 10px; }
-body.mobile-mode .hdr-right { gap: 8px; }
-body.mobile-mode #hdr-search-btn span,
+body.mobile-mode .hdr-right { gap: 6px; }
+body.mobile-mode #hdr-search-btn span:not(:first-child),
 body.mobile-mode #hdr-uname { display: none !important; }
-body.mobile-mode #hdr-search-btn { padding: 6px 9px; }
-body.mobile-mode #hdr-manual-btn { width: 26px; height: 26px; }
+body.mobile-mode #hdr-search-btn { padding: 7px 10px; }
+body.mobile-mode #hdr-manual-btn { width: 30px; height: 30px; }
+body.mobile-mode .hdr-status, body.mobile-mode .hdr-time { display: none !important; }
+body.mobile-mode .hdr-logo { font-size: .95rem; }
+body.mobile-mode #universal-gem-counter { padding: 5px 10px 5px 8px; }
 body.mobile-mode #content { padding-bottom: 90px; }
 body.mobile-mode .tab { padding: 16px 14px 90px; }
 body.mobile-mode .desktop-canvas { padding: 0; gap: 0; flex: none; overflow: visible; }
 body.mobile-mode #tab-home { overflow-y: auto !important; }
 body.mobile-mode .dt-zone-grid { grid-template-columns: 1fr 1fr; }
-body.mobile-mode .dt-top-zone,
 body.mobile-mode .dt-tabbar,
 body.mobile-mode .dt-tab-panel { display: none !important; }
-body.mobile-mode .m-mobile-tools { display: flex; }
+/* .dt-top-zone itself stays displayed on mobile so its child #daily-brief-widget (forced
+   visible below) can actually render — a child's display can never override a display:none
+   ancestor, which is why Daily Brief silently never showed on mobile before this fix. Only
+   the desktop hero inside it is hidden; the mobile-only hero-equivalent lives in the tool grid. */
+body.mobile-mode .dt-top-zone { display: block !important; margin-bottom: 12px; }
+body.mobile-mode .dt-hero { display: none !important; }
+body.mobile-mode .m-mobile-tools { display: grid; }
 body.mobile-mode .dt-widget { display: none !important; }
 body.mobile-mode #daily-brief-widget { display: block !important; }
-body.mobile-mode .mobile-tool-card { display: flex !important; grid-column: 1 / -1; }
+body.mobile-mode .mobile-tool-card { display: flex !important; }
 .mobile-tool-card { display: none; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; }
 .mtc-icon { font-size: 1.3rem; width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px; background: rgba(77,159,255,.08); display: flex; align-items: center; justify-content: center; }
 .mtc-info { flex: 1; min-width: 0; }
 .mtc-title { font-family: var(--raj); font-weight: 600; font-size: .88rem; color: var(--text); }
 .mtc-sub { font-family: var(--exo); font-size: .7rem; color: var(--silver); opacity: .8; margin-top: 1px; }
+
+/* Mobile home tool grid: 2-column app-launcher tiles instead of a stacked settings-style list */
+body.mobile-mode .m-mobile-tools {
+  grid-template-columns: 1fr 1fr; gap: 10px;
+}
+body.mobile-mode .mobile-tool-card {
+  flex-direction: column; align-items: flex-start; justify-content: space-between;
+  padding: 16px 14px; min-height: 108px; gap: 0;
+}
+body.mobile-mode .mtc-icon { width: 42px; height: 42px; font-size: 1.5rem; border-radius: 12px; margin-bottom: 10px; }
+body.mobile-mode .mtc-info { width: 100%; }
+body.mobile-mode .mtc-title { font-size: .85rem; line-height: 1.25; }
+body.mobile-mode .mtc-sub { font-size: .66rem; }
+body.mobile-mode .mtc-chev { display: none; }
 .mtc-chev { font-size: 1.1rem; color: var(--silver); opacity: .5; flex-shrink: 0; }
 
 /* Mobile home — extra sections (Progress, Exams, Focus Timer) below the tool grid */
