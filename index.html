@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=19">
+<link rel="stylesheet" href="styles.css?v=21">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -2847,6 +2847,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           Links out to free, well-established past-paper archives (savemyexams.com) rather than files hosted here — official exam board papers are copyrighted, so we point you to legitimate sources instead of hosting copies ourselves.
         </div>
 
+        <div id="pastpapers-cat-row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;"></div>
+
         <div id="pastpapers-list"></div>
       </div>
 
@@ -3919,24 +3921,84 @@ const PUBLIC_PAPERS_LIBRARY = [
   { subject:'Bahasa Malaysia', icon:'🇲🇾', boards:[] },
 ];
 
+// Groups PUBLIC_PAPERS_LIBRARY subjects for display — a lookup rather than a field on each
+// entry, so the existing data array doesn't need touching.
+const PAPERS_CATEGORIES = [
+  { label: 'Mathematics', subjects: ['Mathematics', 'Additional / Further Maths', 'Statistics'] },
+  { label: 'Sciences', subjects: ['Physics', 'Chemistry', 'Biology', 'Combined / Co-ordinated Science', 'Psychology', 'Environmental Management'] },
+  { label: 'Business & Computing', subjects: ['Computer Science', 'ICT', 'Accounting', 'Business', 'Economics'] },
+  { label: 'English', subjects: ['English Language', 'English Literature'] },
+  { label: 'Humanities & Social Sciences', subjects: ['History', 'Geography', 'Religious Studies', 'Sociology', 'Social Studies', 'Citizenship Studies'] },
+  { label: 'Creative & Technical', subjects: ['Design & Technology', 'Food & Nutrition', 'Art & Design', 'Drama', 'Music'] },
+  { label: 'Languages', subjects: ['French', 'German', 'Spanish', 'Chinese', 'Italian', 'Latin', 'Bahasa Malaysia'] },
+];
+
+// Colour-codes a board pill by exam board, purely from its name, so Cambridge vs Edexcel
+// (the two boards that make up nearly every entry) are visually distinct at a glance.
+function paperBoardClass(name) {
+  if (/cambridge|cie/i.test(name)) return 'pp-board-cie';
+  if (/edexcel/i.test(name)) return 'pp-board-edexcel';
+  return 'pp-board-other';
+}
+
+let ppCurrentCat = 'All';
+function renderPapersCatChips() {
+  const row = document.getElementById('pastpapers-cat-row');
+  if (!row) return;
+  const cats = ['All', ...PAPERS_CATEGORIES.map(c => c.label)];
+  row.innerHTML = cats.map(c =>
+    `<button class="pp-cat-chip${c === ppCurrentCat ? ' on' : ''}" onclick="pickPapersCat('${c.replace(/'/g,"\\'")}')">${escHtml(c)}</button>`
+  ).join('');
+}
+function pickPapersCat(cat) {
+  ppCurrentCat = cat;
+  const search = document.getElementById('pastpapers-search');
+  if (search) search.value = '';
+  renderPapersCatChips();
+  renderPapersLibrary('');
+}
+
 function renderPapersLibrary(filter) {
   const list = document.getElementById('pastpapers-list');
   if (!list) return;
   const q = (filter || '').trim().toLowerCase();
-  const rows = PUBLIC_PAPERS_LIBRARY.filter(p => !q || p.subject.toLowerCase().includes(q));
+  // A search query searches every subject regardless of the selected category tab; with no
+  // query, the category tab (default "All") decides what's shown — keeps the default view
+  // short instead of dumping all ~34 subjects into one long scroll.
+  const catSubjects = (!q && ppCurrentCat !== 'All')
+    ? new Set((PAPERS_CATEGORIES.find(c => c.label === ppCurrentCat) || { subjects: [] }).subjects)
+    : null;
+  const rows = PUBLIC_PAPERS_LIBRARY.filter(p => (!q || p.subject.toLowerCase().includes(q)) && (!catSubjects || catSubjects.has(p.subject)));
   if (!rows.length) {
     list.innerHTML = `<div style="text-align:center;padding:20px;font-family:var(--raj);color:var(--silver);font-size:.85rem;">${t('pastpapers_no_match')}<br><a href="https://www.google.com/search?q=${encodeURIComponent((filter||'')+' IGCSE past papers')}" target="_blank" rel="noopener" style="color:var(--accent2);">${t('pastpapers_link_search_for').replace('{q}', escHtml(filter||''))}</a></div>`;
     return;
   }
-  list.innerHTML = rows.map(p => {
+
+  const paperCard = (p) => {
     const boardLinks = (p.boards && p.boards.length)
-      ? p.boards.map(b => `<a href="${b.url}" target="_blank" rel="noopener" style="display:inline-block;padding:5px 10px;margin:3px 6px 3px 0;background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.3);border-radius:7px;text-decoration:none;color:var(--accent2);font-family:var(--exo);font-size:.68rem;font-weight:700;letter-spacing:.3px;" onmouseover="this.style.background='rgba(0,212,170,.16)'" onmouseout="this.style.background='rgba(0,212,170,.08)'">${escHtml(b.name)} →</a>`).join('')
-      : `<a href="https://www.google.com/search?q=${encodeURIComponent(p.subject+' IGCSE past papers')}" target="_blank" rel="noopener" style="display:inline-block;padding:5px 10px;margin:3px 0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:7px;text-decoration:none;color:var(--silver);font-family:var(--exo);font-size:.68rem;font-weight:700;">${t('pastpapers_link_google_generic')}</a>`;
-    return `<div style="padding:12px 14px;margin-bottom:8px;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.15);border-radius:10px;">
-      <div style="font-family:var(--raj);font-size:.9rem;color:var(--text);margin-bottom:6px;">${p.icon} ${escHtml(p.subject)}</div>
-      <div>${boardLinks}</div>
+      ? p.boards.map(b => `<a href="${b.url}" target="_blank" rel="noopener" class="pp-board ${paperBoardClass(b.name)}">${escHtml(b.name)} →</a>`).join('')
+      : `<a href="https://www.google.com/search?q=${encodeURIComponent(p.subject+' IGCSE past papers')}" target="_blank" rel="noopener" class="pp-board pp-board-other">${t('pastpapers_link_google_generic')}</a>`;
+    return `<div class="pp-card">
+      <div class="pp-card-head"><span class="pp-icon">${p.icon}</span><span class="pp-subject">${escHtml(p.subject)}</span></div>
+      <div class="pp-boards">${boardLinks}</div>
     </div>`;
-  }).join('');
+  };
+
+  // Group matched subjects by category, in category order; skip categories with no matches.
+  const bySubject = {}; rows.forEach(p => { bySubject[p.subject] = p; });
+  const used = new Set();
+  let html = '';
+  PAPERS_CATEGORIES.forEach(cat => {
+    const cards = cat.subjects.map(s => bySubject[s]).filter(Boolean);
+    if (!cards.length) return;
+    cards.forEach(p => used.add(p.subject));
+    html += `<div class="pp-cat-label">${escHtml(cat.label)}</div><div class="pp-grid">${cards.map(paperCard).join('')}</div>`;
+  });
+  // Safety net: any subject not covered by PAPERS_CATEGORIES still shows up, rather than
+  // silently disappearing if the data list and category map ever drift apart.
+  const leftover = rows.filter(p => !used.has(p.subject));
+  if (leftover.length) html += `<div class="pp-cat-label">Other</div><div class="pp-grid">${leftover.map(paperCard).join('')}</div>`;
+  list.innerHTML = html;
 }
 
 (function initTosCheckboxState() {
@@ -7123,7 +7185,7 @@ function go(name) {
   if (name === 'games') setTimeout(renderGameLocks, 0);
   if (name === 'art') setTimeout(renderArtGallery, 0);
   if (name === 'vault') setTimeout(renderVault, 0);
-  if (name === 'pastpapers') setTimeout(() => renderPapersLibrary(''), 0);
+  if (name === 'pastpapers') setTimeout(() => { renderPapersCatChips(); renderPapersLibrary(''); }, 0);
   if (name === 'todo') setTimeout(renderTodos, 0);
   if (name === 'tracker') setTimeout(initTracker, 0);
   if (name === 'planner') setTimeout(renderPlanner, 0);

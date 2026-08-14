@@ -886,6 +886,27 @@ body.mobile-mode .game-lock {
 .vdd-opt .vdd-check { margin-left:auto; opacity:0; color:var(--teal2); flex-shrink:0; }
 .vdd-opt.on .vdd-check { opacity:1; }
 
+/* Past Papers: categorised subject grid */
+.pp-cat-label { font-family:var(--orb); font-size:.5rem; color:var(--teal); letter-spacing:2px; text-transform:uppercase; margin:22px 0 10px; }
+.pp-cat-label:first-child { margin-top:0; }
+.pp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:10px; }
+.pp-card { background:var(--panel-col3); backdrop-filter:blur(16px); border:1px solid rgba(77,159,255,.12); border-radius:14px; padding:14px; transition:border-color .18s, transform .18s; }
+.pp-card:hover { border-color:rgba(77,159,255,.3); transform:translateY(-1px); }
+.pp-card-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.pp-icon { width:34px; height:34px; flex-shrink:0; border-radius:10px; background:rgba(77,159,255,.1); display:flex; align-items:center; justify-content:center; font-size:1.05rem; }
+.pp-subject { font-family:var(--raj); font-size:.86rem; font-weight:600; color:var(--text); }
+.pp-boards { display:flex; flex-wrap:wrap; gap:6px; }
+.pp-board { display:inline-block; padding:5px 10px; border-radius:7px; text-decoration:none; font-family:var(--exo); font-size:.66rem; font-weight:700; letter-spacing:.3px; transition:background .15s; }
+.pp-board-cie { background:rgba(77,159,255,.1); border:1px solid rgba(77,159,255,.3); color:var(--accent2); }
+.pp-board-cie:hover { background:rgba(77,159,255,.2); }
+.pp-board-edexcel { background:rgba(0,212,170,.08); border:1px solid rgba(0,212,170,.3); color:var(--teal2); }
+.pp-board-edexcel:hover { background:rgba(0,212,170,.16); }
+.pp-board-other { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.15); color:var(--silver); }
+.pp-board-other:hover { background:rgba(255,255,255,.1); }
+.pp-cat-chip { background:rgba(255,255,255,.04); border:1px solid rgba(77,159,255,.18); border-radius:999px; padding:6px 14px; font-family:var(--raj); font-size:.78rem; font-weight:600; color:var(--silver); cursor:pointer; transition:all .15s; }
+.pp-cat-chip:hover { background:rgba(77,159,255,.08); border-color:var(--accent); color:var(--accent2); }
+.pp-cat-chip.on { background:linear-gradient(135deg,rgba(77,159,255,.18),rgba(0,212,170,.1)); border-color:var(--accent); color:var(--accent2); }
+
 /* Homework Helper: compact subject / response-style / quick-starters row */
 .hw-controls-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
 .hw-controls-row .vdd-wrap { flex:1; min-width:150px; max-width:220px; }
