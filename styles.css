@@ -481,11 +481,12 @@ nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrol
 
 /* ── CONTENT ── */
 #content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-.tab { display: none; flex: 1; overflow-y: auto; padding: 28px 28px; flex-direction: column; animation: tIn .25s ease; }
+.tab { display: none; flex: 1; overflow-y: auto; padding: 28px 28px; flex-direction: column; animation: tIn .38s cubic-bezier(.16,1,.3,1); }
 .tab.on { display: flex; }
+@media (prefers-reduced-motion: reduce) { .tab { animation: none; } }
 
 @keyframes jrecPulse { 0%,100%{opacity:1} 50%{opacity:.25} }
-@keyframes tIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+@keyframes tIn { from{opacity:0;transform:translateY(14px) scale(.985)} to{opacity:1;transform:none} }
 ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(77,159,255,0.3); border-radius: 2px; }
 
 /* ── PANEL CARD ── */
