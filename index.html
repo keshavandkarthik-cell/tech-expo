@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=18">
+<link rel="stylesheet" href="styles.css?v=19">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -1006,18 +1006,15 @@ onAuthStateChanged(_auth, async user => {
         </div>
 
         <!-- MOBILE HOME EXTRAS: Progress, Exams, Focus Timer (real mobile content — was previously just a stub) -->
-        <div class="mobile-only m-home-extras" style="padding:4px 16px 16px;position:relative;z-index:2;flex-direction:column;gap:14px;">
+        <div class="mobile-only m-home-extras" style="padding:4px 16px 16px;position:relative;z-index:2;flex-direction:column;gap:10px;">
 
           <div class="m-home-card">
-            <div class="dt-wlabel"><span class="dt-wlabel-dot"></span>Your Progress</div>
             <div class="m-stat-strip">
               <div class="m-stat-chip"><div class="m-stat-chip-val" id="m-stat-q">0</div><div class="m-stat-chip-label">Questions</div></div>
               <div class="m-stat-chip"><div class="m-stat-chip-val" id="m-stat-g">0</div><div class="m-stat-chip-label">Games</div></div>
               <div class="m-stat-chip"><div class="m-stat-chip-val" id="m-stat-j">0</div><div class="m-stat-chip-label">Journal</div></div>
             </div>
-          </div>
-
-          <div class="m-home-card">
+            <div style="height:1px;background:rgba(77,159,255,.1);margin:12px 0 10px;"></div>
             <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
               <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:#fbbf24;"></span>Exams</span>
               <button onclick="openExamModal()" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);border-radius:999px;padding:2px 10px;font-family:var(--exo);font-size:.6rem;color:#fbbf24;cursor:pointer;">+ Add</button>
