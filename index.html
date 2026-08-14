@@ -3715,6 +3715,16 @@ function setAIModel(model) {
 // ── KEY POOL ──
 function getKeyPool() { try { return JSON.parse(localStorage.getItem('studly_key_pool') || '[]'); } catch { return []; } }
 function saveKeyPool(arr) { localStorage.setItem('studly_key_pool', JSON.stringify(arr)); }
+// True when an API error means the KEY itself is the problem (quota exhausted, revoked,
+// invalid) rather than the request — these are the failures worth retrying with a backup
+// key. Previously only 429 (quota) triggered a retry, so a revoked/invalid primary key
+// (400/403) would fail outright even with working backup keys sitting in the pool.
+function isKeyFailure(err) {
+  if (!err) return false;
+  if (err.status === 429 || err.status === 403) return true;
+  if (err.status === 400 && /api key not valid|api_key_invalid/i.test(err.message || '')) return true;
+  return false;
+}
 let _poolIdx = 0;
 function _nextPoolKey() {
   const pool = getKeyPool();
@@ -7493,24 +7503,49 @@ function updateTokenDisplay() {
 
 async function geminiImage(prompt) {
   if (!API_KEY) throw new Error('No API key set — go to Settings to add your free Gemini key.');
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${API_KEY}`;
   const body = JSON.stringify({
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: { responseModalities: ["TEXT", "IMAGE"] }
   });
-  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
-  const data = await res.json();
-  if (data.error) {
-    const err = new Error(data.error.message);
-    err.status = data.error.code;
-    throw err;
+
+  async function _callImgWithKey(key) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${key}`;
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+    const data = await res.json();
+    if (data.error) {
+      const err = new Error(data.error.message);
+      err.status = data.error.code;
+      throw err;
+    }
+    if (data.usageMetadata?.totalTokenCount) trackTokenUsage(data.usageMetadata.totalTokenCount);
+    const parts = data.candidates?.[0]?.content?.parts || [];
+    const imgPart = parts.find(p => p.inline_data || p.inlineData);
+    if (!imgPart) throw new Error('No image was returned — try rephrasing your prompt.');
+    const inline = imgPart.inline_data || imgPart.inlineData;
+    return { base64: inline.data, mimeType: inline.mime_type || inline.mimeType || 'image/png' };
   }
-  if (data.usageMetadata?.totalTokenCount) trackTokenUsage(data.usageMetadata.totalTokenCount);
-  const parts = data.candidates?.[0]?.content?.parts || [];
-  const imgPart = parts.find(p => p.inline_data || p.inlineData);
-  if (!imgPart) throw new Error('No image was returned — try rephrasing your prompt.');
-  const inline = imgPart.inline_data || imgPart.inlineData;
-  return { base64: inline.data, mimeType: inline.mime_type || inline.mimeType || 'image/png' };
+
+  try {
+    return await _callImgWithKey(API_KEY);
+  } catch (e) {
+    if (isKeyFailure(e)) {
+      const pool = getKeyPool();
+      if (pool.length) {
+        showToast('⚠️ Your key hit a problem — trying a backup key...');
+        for (let i = 0; i < pool.length; i++) {
+          const k = pool[_poolIdx % pool.length];
+          _poolIdx = (_poolIdx + 1) % pool.length;
+          try {
+            return await _callImgWithKey(k);
+          } catch (e2) {
+            if (!isKeyFailure(e2)) throw e2;
+          }
+        }
+        showToast('🚫 All your keys are having trouble right now — please wait a moment and try again');
+      }
+    }
+    throw e;
+  }
 }
 
 // ── VAULT (text artifacts) ──
@@ -7893,10 +7928,10 @@ async function gemini(prompt, imageData) {
   try {
     return await _callWithKey(API_KEY);
   } catch (e) {
-    if (e.status === 429) {
+    if (isKeyFailure(e)) {
       const pool = getKeyPool();
       if (pool.length) {
-        showToast('⚠️ Your key hit its free usage limit for now — trying a backup key...');
+        showToast('⚠️ Your key hit a problem — trying a backup key...');
         // try each pool key in order until one works
         for (let i = 0; i < pool.length; i++) {
           const k = pool[_poolIdx % pool.length];
@@ -7904,11 +7939,11 @@ async function gemini(prompt, imageData) {
           try {
             return await _callWithKey(k);
           } catch (e2) {
-            if (e2.status !== 429) throw e2; // non-rate-limit error, bubble it
+            if (!isKeyFailure(e2)) throw e2; // not a key-related error, bubble it
             // else try next key
           }
         }
-        showToast('🚫 All your keys have hit their free usage limit — please wait a moment and try again');
+        showToast('🚫 All your keys are having trouble right now — please wait a moment and try again');
       }
     }
     throw e;
