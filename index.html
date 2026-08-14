@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=23">
+<link rel="stylesheet" href="styles.css?v=25">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -2796,8 +2796,8 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
       <!-- ══ ART STUDIO TAB ══ -->
       <div class="tab" id="tab-art" style="padding:0;">
-        <div style="background:linear-gradient(120deg, rgba(236,72,153,.15), rgba(139,92,246,.15), rgba(251,146,60,.12));border-bottom:1px solid rgba(236,72,153,.2);padding:28px 28px 22px;margin-bottom:20px;">
-          <div style="font-family:var(--orb);font-size:1.3rem;font-weight:700;background:linear-gradient(120deg,#ec4899,#a855f7,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.5px;">🌌 Muse</div>
+        <div style="background:linear-gradient(120deg, color-mix(in srgb, var(--accent) 15%, transparent), color-mix(in srgb, var(--teal) 12%, transparent));border-bottom:1px solid color-mix(in srgb, var(--accent) 20%, transparent);padding:28px 28px 22px;margin-bottom:20px;">
+          <div style="font-family:var(--orb);font-size:1.3rem;font-weight:700;background:linear-gradient(120deg,var(--accent),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.5px;">🌌 Muse</div>
           <div style="font-family:var(--exo);font-size:.8rem;color:var(--silver);margin-top:6px;" data-i18n="art_desc">Describe an idea — Muse writes the full creative brief and paints it for you.</div>
         </div>
 
@@ -2815,9 +2815,9 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
           <div style="position:relative;margin-bottom:22px;">
             <input id="art-prompt" placeholder="A lighthouse guiding ships through a storm..." data-i18n-ph="art_prompt_ph" onkeydown="if(event.key==='Enter')genArt()"
-              style="width:100%;background:var(--panel-col2);border:1px solid rgba(236,72,153,.3);border-radius:16px;padding:16px 130px 16px 18px;color:var(--text);font-family:var(--raj);font-size:.95rem;outline:none;box-shadow:0 4px 24px rgba(139,92,246,.08);">
+              style="width:100%;background:var(--panel-col2);border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);border-radius:16px;padding:16px 130px 16px 18px;color:var(--text);font-family:var(--raj);font-size:.95rem;outline:none;box-shadow:0 4px 24px color-mix(in srgb, var(--accent) 8%, transparent);">
             <button onclick="genArt()" id="art-gen-btn" data-i18n="art_btn_create"
-              style="position:absolute;right:6px;top:6px;bottom:6px;background:linear-gradient(120deg,#ec4899,#a855f7);border:none;border-radius:11px;padding:0 20px;color:#fff;font-family:var(--exo);font-weight:700;font-size:.8rem;cursor:pointer;">Create</button>
+              style="position:absolute;right:6px;top:6px;bottom:6px;background:linear-gradient(120deg,var(--accent),var(--teal));border:none;border-radius:11px;padding:0 20px;color:#fff;font-family:var(--exo);font-weight:700;font-size:.8rem;cursor:pointer;">Create</button>
           </div>
 
           <div id="art-gallery" style="padding-bottom:20px;"></div>

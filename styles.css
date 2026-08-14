@@ -1611,13 +1611,14 @@ body.mobile-mode .ps-hub-title { font-size:.84rem; }
 .model-tier-btn.on { background: rgba(77,159,255,.08) !important; border-color: var(--accent) !important; }
 .model-tier-btn:hover { border-color: rgba(77,159,255,.4) !important; }
 .muse-chip {
-  background: rgba(236,72,153,.06); border: 1px solid rgba(236,72,153,.2);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
   border-radius: 999px; padding: 7px 16px; font-family: var(--exo); font-size: .78rem;
   color: var(--silver2); cursor: pointer; transition: all .15s; white-space: nowrap;
 }
 .muse-chip.on, .muse-chip:hover {
-  background: linear-gradient(120deg, rgba(236,72,153,.18), rgba(168,85,247,.15));
-  border-color: #ec4899; color: #f0abfc;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--teal) 15%, transparent));
+  border-color: var(--accent); color: var(--accent2);
 }
 .ps-key-instructions { margin-top:18px; display:flex; flex-direction:column; gap:8px; }
 .ps-key-step { display:flex; align-items:center; gap:10px; font-family:var(--exo); font-size:.78rem; color:var(--silver); }
