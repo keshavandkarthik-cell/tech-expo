@@ -1043,7 +1043,11 @@ body.mobile-mode .game-lock {
 }
 .lib-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--lib-color,var(--accent)); opacity:.7; }
 .lib-card:hover { border-color:rgba(77,159,255,.4); transform:translateY(-2px); box-shadow:0 8px 24px rgba(77,159,255,.1); }
-.lib-card-icon { font-size:1.6rem; }
+.lib-card-icon {
+  font-size:1.3rem; width:40px; height:40px; border-radius:11px;
+  background: color-mix(in srgb, var(--lib-color, var(--accent)) 16%, transparent);
+  display:flex; align-items:center; justify-content:center;
+}
 .lib-card-name { font-family:var(--orb); font-size:.55rem; color:var(--text); letter-spacing:1px; line-height:1.4; }
 .lib-card-sub { font-family:var(--exo); font-size:.68rem; color:var(--silver); line-height:1.4; }
 .lib-card-tag { font-family:var(--exo); font-size:.6rem; padding:2px 8px; border-radius:999px; border:1px solid; align-self:flex-start; }

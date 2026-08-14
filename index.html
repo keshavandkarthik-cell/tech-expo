@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=21">
+<link rel="stylesheet" href="styles.css?v=22">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -1140,6 +1140,8 @@ onAuthStateChanged(_auth, async user => {
 
         <!-- Subject filter -->
         <div class="lib-cats" id="lib-cats"><button class="lib-cat on" onclick="setLibCat(this,'All')">All</button><button class="lib-cat" onclick="setLibCat(this,'History')">History</button><button class="lib-cat" onclick="setLibCat(this,'Biology')">Biology</button><button class="lib-cat" onclick="setLibCat(this,'Chemistry')">Chemistry</button><button class="lib-cat" onclick="setLibCat(this,'Physics')">Physics</button><button class="lib-cat" onclick="setLibCat(this,'Maths')">Maths</button><button class="lib-cat" onclick="setLibCat(this,'English')">English</button><button class="lib-cat" onclick="setLibCat(this,'Geography')">Geography</button></div>
+
+        <input id="lib-search" type="text" placeholder="🔍 Search topics…" oninput="renderLibGrid(this.value)" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 14px;color:var(--text);font-family:var(--exo);font-size:.82rem;outline:none;margin-bottom:16px;">
 
         <!-- Topic grid -->
         <div class="lib-grid" id="lib-grid">
@@ -11867,12 +11869,19 @@ function setLibCat(el, cat) {
   el.classList.add('on');
   renderLibGrid();
 }
-function renderLibGrid() {
+function renderLibGrid(searchVal) {
   const grid = document.getElementById('lib-grid');
   if (!grid) return;
-  const filtered = libCat === 'All' ? LIB_TOPICS : LIB_TOPICS.filter(t => t.cat === libCat);
+  const searchIn = document.getElementById('lib-search');
+  const q = (searchVal !== undefined ? searchVal : (searchIn ? searchIn.value : '')).trim().toLowerCase();
+  let filtered = libCat === 'All' ? LIB_TOPICS : LIB_TOPICS.filter(t => t.cat === libCat);
+  if (q) filtered = filtered.filter(t => t.name.toLowerCase().includes(q) || t.sub.toLowerCase().includes(q));
   // store filtered BEFORE setting innerHTML so clicks on freshly rendered cards always have a valid lookup
   window._libFiltered = filtered;
+  if (!filtered.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;font-family:var(--raj);color:var(--silver);font-size:.85rem;">No topics match "${escHtml(searchVal !== undefined ? searchVal : (searchIn ? searchIn.value : ''))}"</div>`;
+    return;
+  }
   grid.innerHTML = filtered.map((t,i) => `
     <div class="lib-card" style="--lib-color:${t.color}" onclick="openLibTopic(${i})">
       <div class="lib-card-icon">${t.icon}</div>
