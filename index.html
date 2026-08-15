@@ -2803,9 +2803,22 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
         <div style="display:flex;gap:8px;align-items:center;margin:14px 0;">
           <input id="vault-search" type="text" data-i18n-ph="vault_search_ph" placeholder="🔍 Search saved files..." oninput="renderVault()" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 14px;color:var(--text);font-family:var(--exo);font-size:.82rem;outline:none;">
+          <button id="vault-bin-btn" onclick="openVaultBin()" title="Deleted items — kept for 3 days" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px 13px;color:var(--silver2);font-family:var(--exo);font-size:.78rem;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;" aria-label="Open bin">🗑 <span data-i18n="vault_bin_btn">Bin</span><span id="vault-bin-count" style="opacity:.6;"></span></button>
         </div>
 
         <div id="vault-list"></div>
+
+        <!-- Vault Bin overlay: deleted items are recoverable here for 3 days before permanent removal -->
+        <div id="vault-bin-overlay" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(4,6,16,.7);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:16px;">
+          <div style="background:rgba(8,12,26,.97);border:1px solid rgba(255,102,128,.2);border-radius:20px;padding:22px;width:min(420px,92vw);max-height:calc(100vh - 60px);overflow-y:auto;display:flex;flex-direction:column;gap:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="font-family:var(--raj);font-size:1.05rem;font-weight:700;color:var(--text);">🗑 <span data-i18n="vault_bin_title">Bin</span></div>
+              <button onclick="closeVaultBin()" style="background:rgba(255,255,255,.06);border:1px solid rgba(77,159,255,.15);border-radius:8px;padding:4px 12px;color:var(--silver);font-family:var(--exo);font-size:.72rem;cursor:pointer;" data-i18n="btn_close">Close</button>
+            </div>
+            <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.6;margin-bottom:14px;" data-i18n="vault_bin_sub">Deleted items are kept here for 3 days before being permanently removed.</div>
+            <div id="vault-bin-list"></div>
+          </div>
+        </div>
       </div>
 
       <!-- ══ PAST PAPERS TAB ══ -->
@@ -4601,6 +4614,9 @@ const LANGS = {
     vault_time_just_now: 'just now', vault_time_min_ago: '{n}m ago', vault_time_hr_ago: '{n}h ago', vault_time_day_ago: '{n}d ago',
     vault_toast_full: '⚠️ Vault storage full — delete an old file to make room',
     vault_toast_saved: '🗂️ Saved to Vault!', vault_toast_copied: '📋 Copied!',
+    vault_bin_btn: 'Bin', vault_bin_title: 'Bin', vault_bin_sub: 'Deleted items are kept here for 3 days before being permanently removed.',
+    vault_bin_empty: 'Bin is empty', vault_bin_days_left: 'days left', btn_close: 'Close',
+    vault_toast_moved_to_bin: '🗑️ Moved to Bin — recoverable for 3 days', vault_toast_restored: '↺ Restored', vault_toast_deleted_forever: '🗑️ Deleted forever',
   },
   es: {
     nav_home: 'Inicio', nav_homework: 'Tareas', nav_library: 'Biblioteca',
@@ -4747,6 +4763,9 @@ const LANGS = {
     vault_time_just_now: 'justo ahora', vault_time_min_ago: 'hace {n}m', vault_time_hr_ago: 'hace {n}h', vault_time_day_ago: 'hace {n}d',
     vault_toast_full: '⚠️ Vault lleno — elimina un archivo antiguo para hacer espacio',
     vault_toast_saved: '🗂️ ¡Guardado en Vault!', vault_toast_copied: '📋 ¡Copiado!',
+    vault_bin_btn: 'Papelera', vault_bin_title: 'Papelera', vault_bin_sub: 'Los elementos eliminados se guardan aquí durante 3 días antes de eliminarse para siempre.',
+    vault_bin_empty: 'La papelera está vacía', vault_bin_days_left: 'días restantes', btn_close: 'Cerrar',
+    vault_toast_moved_to_bin: '🗑️ Movido a la papelera — recuperable durante 3 días', vault_toast_restored: '↺ Restaurado', vault_toast_deleted_forever: '🗑️ Eliminado para siempre',
     toast_lang: '🌐 Idioma: Español',
   
     // ── Added: games/music/leaderboard/forum/art/settings i18n pass ──
@@ -5304,6 +5323,9 @@ const LANGS = {
     vault_time_just_now: 'baru sahaja', vault_time_min_ago: '{n}m lalu', vault_time_hr_ago: '{n}j lalu', vault_time_day_ago: '{n}h lalu',
     vault_toast_full: '⚠️ Vault penuh — padam fail lama untuk lapangkan ruang',
     vault_toast_saved: '🗂️ Disimpan ke Vault!', vault_toast_copied: '📋 Disalin!',
+    vault_bin_btn: 'Tong Sampah', vault_bin_title: 'Tong Sampah', vault_bin_sub: 'Item yang dipadam disimpan di sini selama 3 hari sebelum dipadam selama-lamanya.',
+    vault_bin_empty: 'Tong sampah kosong', vault_bin_days_left: 'hari lagi', btn_close: 'Tutup',
+    vault_toast_moved_to_bin: '🗑️ Dialih ke Tong Sampah — boleh dipulihkan selama 3 hari', vault_toast_restored: '↺ Dipulihkan', vault_toast_deleted_forever: '🗑️ Dipadam selama-lamanya',
     toast_lang: '🌐 Bahasa: Melayu',
   
     // ── Added: games/music/leaderboard/forum/art/settings i18n pass ──
@@ -5861,6 +5883,9 @@ const LANGS = {
     vault_time_just_now: '刚刚', vault_time_min_ago: '{n}分钟前', vault_time_hr_ago: '{n}小时前', vault_time_day_ago: '{n}天前',
     vault_toast_full: '⚠️ Vault 存储已满 — 删除旧文件以腾出空间',
     vault_toast_saved: '🗂️ 已保存到 Vault！', vault_toast_copied: '📋 已复制！',
+    vault_bin_btn: '回收站', vault_bin_title: '回收站', vault_bin_sub: '已删除的项目会在此保留3天，之后将被永久删除。',
+    vault_bin_empty: '回收站是空的', vault_bin_days_left: '天后清空', btn_close: '关闭',
+    vault_toast_moved_to_bin: '🗑️ 已移至回收站 — 3天内可恢复', vault_toast_restored: '↺ 已恢复', vault_toast_deleted_forever: '🗑️ 已永久删除',
     toast_lang: '🌐 语言：中文',
   
     // ── Added: games/music/leaderboard/forum/art/settings i18n pass ──
@@ -6418,6 +6443,9 @@ const LANGS = {
     vault_time_just_now: 'たった今', vault_time_min_ago: '{n}分前', vault_time_hr_ago: '{n}時間前', vault_time_day_ago: '{n}日前',
     vault_toast_full: '⚠️ Vaultの容量がいっぱいです — 古いファイルを削除して空きを作ってください',
     vault_toast_saved: '🗂️ Vaultに保存しました！', vault_toast_copied: '📋 コピーしました！',
+    vault_bin_btn: 'ゴミ箱', vault_bin_title: 'ゴミ箱', vault_bin_sub: '削除したアイテムは3日間ここに保存された後、完全に削除されます。',
+    vault_bin_empty: 'ゴミ箱は空です', vault_bin_days_left: '日で完全削除', btn_close: '閉じる',
+    vault_toast_moved_to_bin: '🗑️ ゴミ箱に移動しました — 3日間は復元可能', vault_toast_restored: '↺ 復元しました', vault_toast_deleted_forever: '🗑️ 完全に削除しました',
     toast_lang: '🌐 言語：日本語',
   
     // ── Added: games/music/leaderboard/forum/art/settings i18n pass ──
@@ -7613,9 +7641,101 @@ function saveToVault(title, content, source) {
   return true;
 }
 
-function deleteVaultItem(id) {
-  saveVault(getVault().filter(i => i.id !== id));
+// ── VAULT BIN (soft delete: recoverable for 3 days, then auto-purged) ──
+const VAULT_BIN_DAYS = 3;
+function getVaultBin() {
+  try { return JSON.parse(localStorage.getItem('veda_vault_bin') || '[]'); } catch { return []; }
+}
+function saveVaultBin(items) {
+  try { localStorage.setItem('veda_vault_bin', JSON.stringify(items)); return true; }
+  catch { return false; }
+}
+// Filters out anything past the retention window and persists the trim — call before every read/render.
+function purgeExpiredVaultBinItems() {
+  const cutoff = Date.now() - VAULT_BIN_DAYS * 86400000;
+  const bin = getVaultBin();
+  const kept = bin.filter(i => new Date(i.deletedAt).getTime() > cutoff);
+  if (kept.length !== bin.length) saveVaultBin(kept);
+  return kept;
+}
+function vaultBinDaysLeft(deletedAt) {
+  const elapsed = Date.now() - new Date(deletedAt).getTime();
+  return Math.max(0, Math.ceil((VAULT_BIN_DAYS * 86400000 - elapsed) / 86400000));
+}
+function moveToVaultBin(item, type) {
+  const bin = getVaultBin();
+  bin.unshift({ ...item, _type: type, deletedAt: new Date().toISOString() });
+  // If the bin itself is full (quota), the item is still gone from the live list either way —
+  // nothing more we can do, so fail silently rather than blocking the delete the user asked for.
+  saveVaultBin(bin);
+}
+function restoreVaultBinItem(id) {
+  const bin = getVaultBin();
+  const item = bin.find(i => i.id === id);
+  if (!item) return;
+  saveVaultBin(bin.filter(i => i.id !== id));
+  const { _type, deletedAt, ...clean } = item;
+  if (_type === 'image') {
+    const gallery = getArtGallery();
+    gallery.unshift(clean);
+    if (gallery.length > ART_GALLERY_MAX) gallery.length = ART_GALLERY_MAX;
+    saveArtGallery(gallery);
+    renderArtGallery();
+  } else {
+    const items = getVault();
+    items.unshift(clean);
+    saveVault(items);
+  }
   renderVault();
+  renderVaultBin();
+  showToast(t('vault_toast_restored'));
+}
+function permanentlyDeleteVaultBinItem(id) {
+  saveVaultBin(getVaultBin().filter(i => i.id !== id));
+  renderVaultBin();
+  showToast(t('vault_toast_deleted_forever'));
+}
+function openVaultBin() {
+  const overlay = document.getElementById('vault-bin-overlay');
+  if (overlay) overlay.style.display = 'flex';
+  renderVaultBin();
+}
+function closeVaultBin() {
+  const overlay = document.getElementById('vault-bin-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+function renderVaultBin() {
+  const wrap = document.getElementById('vault-bin-list');
+  if (!wrap) return;
+  const items = purgeExpiredVaultBinItems();
+  const countEl = document.getElementById('vault-bin-count');
+  if (countEl) countEl.textContent = items.length ? ` (${items.length})` : '';
+  if (!items.length) {
+    wrap.innerHTML = `<div style="text-align:center;padding:40px 20px;opacity:.6;font-family:var(--exo);font-size:.8rem;color:var(--silver);">${t('vault_bin_empty')}</div>`;
+    return;
+  }
+  wrap.innerHTML = items.map(i => `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--panel-col3);border:1px solid var(--panel-border);border-radius:12px;margin-bottom:8px;">
+      ${i._type === 'image'
+        ? `<img src="${i.image}" style="width:36px;height:36px;flex-shrink:0;border-radius:8px;object-fit:cover;opacity:.7;" alt="">`
+        : `<div style="font-size:1.2rem;width:36px;height:36px;flex-shrink:0;border-radius:8px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;opacity:.7;">📄</div>`}
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--raj);font-size:.82rem;font-weight:600;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${vaultEsc(i.title || i.prompt || 'Untitled')}</div>
+        <div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);opacity:.6;margin-top:2px;">${vaultBinDaysLeft(i.deletedAt)} ${t('vault_bin_days_left')}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button title="Recover" onclick="restoreVaultBinItem(${i.id})" style="background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);border-radius:8px;padding:6px 9px;color:var(--teal2);cursor:pointer;font-size:.8rem;" aria-label="Recover item">↺</button>
+        <button title="Delete forever" onclick="permanentlyDeleteVaultBinItem(${i.id})" style="background:rgba(255,102,128,.08);border:1px solid rgba(255,102,128,.25);border-radius:8px;padding:6px 9px;color:#ff8899;cursor:pointer;font-size:.8rem;" aria-label="Delete forever">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function deleteVaultItem(id) {
+  const item = getVault().find(i => i.id === id);
+  saveVault(getVault().filter(i => i.id !== id));
+  if (item) moveToVaultBin(item, 'text');
+  renderVault();
+  showToast(t('vault_toast_moved_to_bin'));
 }
 
 function copyVaultItem(id) {
@@ -7666,6 +7786,12 @@ function renderVault() {
 
   const countLabel = document.getElementById('vault-count');
   if (countLabel) countLabel.textContent = `${textItems.length + imageItems.length} ${t('vault_lbl_total_assets')} · ${textItems.length} ${t('vault_lbl_files')} · ${imageItems.length} ${t('vault_lbl_images')}`;
+
+  const binCountEl = document.getElementById('vault-bin-count');
+  if (binCountEl) {
+    const binLen = purgeExpiredVaultBinItems().length;
+    binCountEl.textContent = binLen ? ` (${binLen})` : '';
+  }
 
   if (!items.length) {
     wrap.innerHTML = `
@@ -7779,9 +7905,11 @@ async function genArt() {
 }
 
 function deleteArtPiece(id) {
-  const gallery = getArtGallery().filter(a => a.id !== id);
-  saveArtGallery(gallery);
+  const piece = getArtGallery().find(a => a.id === id);
+  saveArtGallery(getArtGallery().filter(a => a.id !== id));
+  if (piece) moveToVaultBin(piece, 'image');
   renderArtGallery();
+  showToast(t('vault_toast_moved_to_bin'));
 }
 
 function downloadArtPiece(id) {
