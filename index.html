@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=43">
+<link rel="stylesheet" href="styles.css?v=44">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -2797,7 +2797,10 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
       <!-- ══ VAULT TAB ══ -->
       <div class="tab" id="tab-vault">
-        <div class="ttl">🗂️ Vault</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="ttl">🗂️ Vault</div>
+          <span class="beta-tag">BETA</span>
+        </div>
         <div class="tsub"><span class="prm">›</span>Everything you've saved or created — Homework, Study, Notes, and Muse — all in one place</div>
         <div id="vault-count" style="font-family:var(--exo);font-size:.7rem;color:var(--accent2);opacity:.8;margin-top:4px;" data-i18n="vault_count_default">0 total assets</div>
 
@@ -3566,7 +3569,10 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
       <!-- LEADERBOARD TAB -->
       <div class="tab" id="tab-leaderboard">
-          <div class="ttl" data-i18n="lb_title">🏆 Leaderboard</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="ttl" data-i18n="lb_title">🏆 Leaderboard</div>
+            <span class="beta-tag">BETA</span>
+          </div>
           <div class="tsub"><span class="prm">›</span><span data-i18n="lb_sub">Compete with friends — earn gems, keep streaks, top the board</span></div>
 
           <!-- Friend code + add friend row -->

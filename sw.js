@@ -1,6 +1,6 @@
 // Veda Service Worker — v2.2
-const CACHE_NAME      = 'veda-shell-v63';
-const RUNTIME_CACHE   = 'veda-runtime-v63';
+const CACHE_NAME      = 'veda-shell-v64';
+const RUNTIME_CACHE   = 'veda-runtime-v64';
 const OFFLINE_URL     = '/offline.html';
 // App shell — files to cache immediately on install
 const SHELL_ASSETS = [

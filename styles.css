@@ -533,6 +533,11 @@ nav { flex: 1; padding: 12px 8px; overflow-y: auto; scrollbar-width: thin; scrol
   margin-bottom: 4px;
 }
 .tsub { font-family: var(--exo); font-size: .82rem; color: var(--silver); margin-bottom: 18px; letter-spacing: .5px; }
+.beta-tag {
+  font-family: var(--orb); font-size: .55rem; letter-spacing: 1px; color: #000;
+  background: linear-gradient(135deg, var(--teal), var(--accent2));
+  padding: 2px 8px; border-radius: 999px; font-weight: 800; flex-shrink: 0; margin-bottom: 4px;
+}
 .prm { color: var(--teal); margin-right: 5px; }
 
 /* ── HOME ── */
