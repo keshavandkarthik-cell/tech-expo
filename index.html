@@ -1,6 +1,6 @@
 <html lang="en" style="--accent: #4d9fff; --accent2: #4d9fffcc; font-size: 17px;"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Veda — AI Study Companion</title>
 <meta name="description" content="Your AI-powered study companion — homework help, flashcards, games, planner and more. Personalised to you.">
 <meta name="theme-color" content="#4d9fff">
@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=25">
+<link rel="stylesheet" href="styles.css?v=39">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -564,7 +564,9 @@ onAuthStateChanged(_auth, async user => {
     <!-- MOBILE FAB NAV -->
     <div id="mobile-fab-overlay" onclick="closeMobileFab()"></div>
     <div id="mobile-fab-list"></div>
-    <button id="mobile-fab-btn" onclick="toggleMobileFab()" aria-label="Open quick actions menu">＋</button>
+    <div id="mobile-fab-wrap">
+      <button id="mobile-fab-btn" onclick="toggleMobileFab()" aria-label="Open quick actions menu">＋</button>
+    </div>
 
     <!-- SIDEBAR -->
     <aside id="sb">
@@ -632,7 +634,7 @@ onAuthStateChanged(_auth, async user => {
           <span id="m-greet-time" style="display:none;"></span><span id="m-greet-name" style="display:none;"></span>
           <div style="display:flex;gap:8px;">
             <div class="ps-pill streak" style="display:inline-flex;align-items:center;gap:5px;"><span class="ivory-emoji">🔥</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M10 17c-3 0-5-2-5-4.8 0-2 1.2-3 1.8-4.6.4 1 1 1.4 1.6 1.2-.3-2 .4-4.3 2.4-5.8-.3 1.6.2 2.8 1 3.6.9.9 2.2 2.2 2.2 4.6 0 3-2 5.8-4 5.8Z"/></svg></span> <span id="m-streak-val">0</span> <span data-i18n="home_streak">day streak</span></div>
-            <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(77,159,255,.1);border:1px solid rgba(77,159,255,.3);border-radius:999px;padding:5px 12px;font-family:var(--exo);font-size:.72rem;color:var(--accent2);"><span class="ivory-emoji">💎</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 8 7 3.5h6L16 8l-6 8.5L4 8Z"/><path d="M4 8h12M8.5 3.5 7 8l3 8.5M11.5 3.5 13 8l-3 8.5"/></svg></span> <span id="m-gems-val">0</span> <span data-i18n="home_gems">gems</span></div>
+            <span id="m-gems-val" style="display:none;"></span>
           </div>
         </div>
 
@@ -654,48 +656,9 @@ onAuthStateChanged(_auth, async user => {
             <!-- Daily Brief widget (compact banner) -->
             <div class="dt-widget dt-brief-compact" id="daily-brief-widget">
               <div class="dt-wlabel"><span class="dt-wlabel-dot"></span><span data-i18n="lbl_daily_brief">Daily Brief</span> <span id="daily-brief-date" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);font-weight:400;margin-left:6px;">Mon Jun 15 2026</span></div>
-              <div id="daily-brief-content" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.5;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Loading your personalised tip...</div>
+              <div id="daily-brief-content" onclick="this.classList.toggle('expanded')" style="font-family:var(--exo);font-size:.82rem;color:var(--text2);line-height:1.5;margin-top:4px;"><span style="font-size: 1.1rem;">✨</span> Loading your personalised tip...</div>
               <button onclick="refreshDailyBrief(true)" data-i18n="btn_refresh" style="margin-top:6px;background:none;border:none;color:var(--silver);font-family:var(--exo);font-size:.65rem;cursor:pointer;padding:0;opacity:.6;transition:opacity .15s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">↻ refresh</button>
             </div>
-          </div>
-
-          <div class="mobile-only m-mobile-tools" style="flex-direction:column;gap:10px;">
-          <div class="dt-widget mobile-tool-card" onclick="go('homework')">
-            <div class="mtc-icon"><span class="ivory-emoji">📚</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5C3 3.67 3.67 3 4.5 3H10v14H4.5A1.5 1.5 0 0 1 3 15.5v-11Z"/><path d="M17 4.5c0-.83-.67-1.5-1.5-1.5H10v14h5.5c.83 0 1.5-.67 1.5-1.5v-11Z"/></svg></span></div>
-            <div class="mtc-info"><div class="mtc-title" data-i18n="mtc_homework_title">Homework AI</div><div class="mtc-sub" data-i18n="mtc_homework_sub">Step-by-step answers</div></div>
-            <div class="mtc-chev">›</div>
-          </div>
-          <div class="dt-widget mobile-tool-card" onclick="go('study')">
-            <div class="mtc-icon"><span class="ivory-emoji">🧠</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3.5a2.5 2.5 0 0 0-2.5 2.5v.2A2.3 2.3 0 0 0 3 8.3v1.4a2.3 2.3 0 0 0 1.2 2 2.5 2.5 0 0 0 2.3 3.8H7V3.5Z"/><path d="M13 3.5a2.5 2.5 0 0 1 2.5 2.5v.2A2.3 2.3 0 0 1 17 8.3v1.4a2.3 2.3 0 0 1-1.2 2 2.5 2.5 0 0 1-2.3 3.8H13V3.5Z"/><path d="M7 3.5h6M7 16.5h6"/></svg></span></div>
-            <div class="mtc-info"><div class="mtc-title" data-i18n="mtc_study_title">Smart Study</div><div class="mtc-sub" data-i18n="mtc_study_sub">Flashcards & quizzes</div></div>
-            <div class="mtc-chev">›</div>
-          </div>
-          <div class="dt-widget mobile-tool-card" onclick="go('notes')">
-            <div class="mtc-icon"><span class="ivory-emoji">📝</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 16.5 4.5 13.5 13 5l2 2-8.5 8.5-2.5.5Z"/><path d="M11.5 6.5 13.5 8.5"/></svg></span></div>
-            <div class="mtc-info"><div class="mtc-title" data-i18n="mtc_notes_title">Smart Notes</div><div class="mtc-sub" data-i18n="mtc_notes_sub">Summarise anything</div></div>
-            <div class="mtc-chev">›</div>
-          </div>
-          <div class="dt-widget mobile-tool-card" onclick="go('chat')">
-            <div class="mtc-icon"><span class="ivory-emoji">💬</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h9A2.5 2.5 0 0 1 17 5.5v5A2.5 2.5 0 0 1 14.5 13H9l-4 3.5V13H5.5A2.5 2.5 0 0 1 3 10.5v-5Z"/></svg></span></div>
-            <div class="mtc-info"><div class="mtc-title" data-i18n="nav_chat">Companion</div><div class="mtc-sub" data-i18n="mtc_chat_sub">AI study buddy</div></div>
-            <div class="mtc-chev">›</div>
-          </div>
-          <div class="dt-widget mobile-tool-card" onclick="go('todo')">
-            <div class="mtc-icon"><span class="ivory-emoji">✅</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 8 14.5 16 5.5"/></svg></span></div>
-            <div class="mtc-info"><div class="mtc-title" data-i18n="nav_todo">To-Do List</div><div class="mtc-sub" data-i18n="mtc_todo_sub">Tasks & checklist</div></div>
-            <div class="mtc-chev">›</div>
-          </div>
-          <div class="dt-widget mobile-tool-card" onclick="go('journal')">
-            <div class="mtc-icon"><span class="ivory-emoji">📓</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5C3 3.67 3.67 3 4.5 3H10v14H4.5A1.5 1.5 0 0 1 3 15.5v-11Z"/><path d="M17 4.5c0-.83-.67-1.5-1.5-1.5H10v14h5.5c.83 0 1.5-.67 1.5-1.5v-11Z"/></svg></span></div>
-            <div class="mtc-info"><div class="mtc-title" data-i18n="nav_journal">Journal</div><div class="mtc-sub" data-i18n="mtc_journal_sub">Write & reflect</div></div>
-            <div class="mtc-chev">›</div>
-          </div>
-          <div class="dt-widget mobile-tool-card" onclick="go('games')">
-            <div class="mtc-icon">🎮</div>
-            <div class="mtc-info"><div class="mtc-title" data-i18n="nav_games">Games</div><div class="mtc-sub" data-i18n="mtc_games_sub">Play & earn gems</div></div>
-            <div class="mtc-chev">›</div>
-          </div>
-
           </div>
 
           <!-- TAB BAR -->
@@ -717,46 +680,6 @@ onAuthStateChanged(_auth, async user => {
             <div id="exam-empty-msg" data-i18n="exam_empty" style="font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.45; text-align: center; padding: 10px 0px; display: block;">No upcoming exams — add one!</div>
           </div>
 
-          <!-- Daily Challenge widget -->
-          <div class="dt-widget" id="daily-challenge-widget">
-            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
-              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span><span data-i18n="lbl_daily_challenge">Daily Challenge</span></span>
-              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: none;"></span>
-            </div>
-            <div id="dc-loading" style="font-family: var(--exo); font-size: 0.75rem; color: var(--silver); opacity: 0.6; text-align: center; padding: 14px 0px; display: none;"><span class="dots"><span>·</span><span>·</span><span>·</span></span> Checking...</div>
-            <div id="dc-question-wrap" style="display: none;">
-              <div id="dc-subject-tag" style="font-family:var(--exo);font-size:.65rem;color:var(--teal2);margin-bottom:6px;">📚 Biology</div>
-              <div id="dc-question" style="font-family:var(--raj);font-size:.85rem;color:var(--text);line-height:1.5;margin-bottom:8px;">Which organelle converts light energy into chemical energy during photosynthesis?</div>
-              <div style="background:rgba(0,212,170,.06);border-radius:6px;padding:3px 6px;margin-bottom:8px;overflow:hidden;">
-                <div id="dc-timer-bar" style="height: 3px; background: linear-gradient(90deg,var(--teal),var(--accent)); border-radius: 3px; width: 0%; transition: width 0.9s linear;"></div>
-                <div id="dc-timer-label" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.6;text-align:right;padding-top:2px;">Time's up!</div>
-              </div>
-              <div style="display:flex;gap:6px;">
-                <input id="dc-answer-in" type="text" placeholder="Your answer..." onkeydown="if(event.key==='Enter')submitDailyChallenge(false)" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 10px;color:var(--text);font-family:var(--exo);font-size:.78rem;outline:none;" disabled="">
-                <button onclick="showDCHint()" title="Show hint" style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 10px;color:var(--accent2);font-family:var(--exo);font-size:.72rem;cursor:pointer;" aria-label="Show hint">💡</button>
-                <button onclick="submitDailyChallenge(false)" style="background:linear-gradient(135deg,var(--teal),var(--accent));border:none;border-radius:8px;padding:6px 12px;color:#fff;font-family:var(--exo);font-size:.72rem;cursor:pointer;">Submit</button>
-              </div>
-              <div id="dc-hint-text" style="display:none;font-family:var(--exo);font-size:.68rem;color:var(--teal2);opacity:.8;margin-top:6px;padding:4px 8px;background:rgba(0,212,170,.06);border-radius:6px;"></div>
-            </div>
-            <div id="dc-result-wrap" style="display: none; text-align: center; padding: 8px 0px;">
-              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">❌</div>
-              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: ATP</div>
-              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
-              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 34m 45s</div>
-              <button onclick="go('games');(function(){var b=document.querySelector('[onclick*=\'quiz\']');if(b)filterGames(b,'quiz');})();setTimeout(()=&gt;tryStartGame('blitz',10),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
-            </div>
-            <div id="dc-no-key-msg" style="display: block; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.75; text-align: center; padding: 12px 0px;">🔑 <span id="dc-locked-text">Today's challenge is locked</span> — <a href="#" onclick="goToApiKeySetup();return false;" id="dc-locked-link" style="color:var(--accent2);text-decoration:underline;">add a free API key to unlock →</a></div>
-          </div>
-
-          <!-- To-Do Summary widget (extra) -->
-          <div class="dt-widget" id="widget-todo-summary" style="display:none;">
-            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
-              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span><span data-i18n="lbl_today_tasks">Today's Tasks</span></span>
-              <button onclick="go('todo')" data-i18n="btn_view_all" style="background:none;border:none;color:var(--accent2);font-family:var(--exo);font-size:.62rem;cursor:pointer;padding:0;">View all →</button>
-            </div>
-            <div id="wtodo-list" style="display:flex;flex-direction:column;gap:5px;margin-top:8px;max-height:140px;overflow-y:auto;"></div>
-            <div id="wtodo-empty" data-i18n="todo_empty" style="display:none;font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:12px 0;">✅ All done for today!</div>
-          </div>
 
           <!-- Next Session widget (extra) -->
           <div class="dt-widget" id="widget-next-session" style="display:none;">
@@ -1035,6 +958,47 @@ onAuthStateChanged(_auth, async user => {
                 <button onclick="pomReset()" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:9px 13px;color:var(--silver2);font-family:var(--exo);font-size:.65rem;cursor:pointer;" aria-label="Reset timer">↺</button>
               </div>
             </div>
+          </div>
+
+          <!-- Daily Challenge widget (relocated from the desktop-only Today panel so it's actually visible on mobile) -->
+          <div class="dt-widget" id="daily-challenge-widget">
+            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
+              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span><span data-i18n="lbl_daily_challenge">Daily Challenge</span></span>
+              <span id="dc-streak-badge" style="font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); display: none;"></span>
+            </div>
+            <div id="dc-loading" style="font-family: var(--exo); font-size: 0.75rem; color: var(--silver); opacity: 0.6; text-align: center; padding: 14px 0px; display: none;"><span class="dots"><span>·</span><span>·</span><span>·</span></span> Checking...</div>
+            <div id="dc-question-wrap" style="display: none;">
+              <div id="dc-subject-tag" style="font-family:var(--exo);font-size:.65rem;color:var(--teal2);margin-bottom:6px;">📚 Biology</div>
+              <div id="dc-question" style="font-family:var(--raj);font-size:.85rem;color:var(--text);line-height:1.5;margin-bottom:8px;">Which organelle converts light energy into chemical energy during photosynthesis?</div>
+              <div style="background:rgba(0,212,170,.06);border-radius:6px;padding:3px 6px;margin-bottom:8px;overflow:hidden;">
+                <div id="dc-timer-bar" style="height: 3px; background: linear-gradient(90deg,var(--teal),var(--accent)); border-radius: 3px; width: 0%; transition: width 0.9s linear;"></div>
+                <div id="dc-timer-label" style="font-family:var(--exo);font-size:.6rem;color:var(--silver);opacity:.6;text-align:right;padding-top:2px;">Time's up!</div>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <input id="dc-answer-in" type="text" placeholder="Your answer..." onkeydown="if(event.key==='Enter')submitDailyChallenge(false)" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 10px;color:var(--text);font-family:var(--exo);font-size:.78rem;outline:none;" disabled="">
+                <button onclick="showDCHint()" title="Show hint" style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.2);border-radius:8px;padding:6px 10px;color:var(--accent2);font-family:var(--exo);font-size:.72rem;cursor:pointer;" aria-label="Show hint">💡</button>
+                <button onclick="submitDailyChallenge(false)" style="background:linear-gradient(135deg,var(--teal),var(--accent));border:none;border-radius:8px;padding:6px 12px;color:#fff;font-family:var(--exo);font-size:.72rem;cursor:pointer;">Submit</button>
+              </div>
+              <div id="dc-hint-text" style="display:none;font-family:var(--exo);font-size:.68rem;color:var(--teal2);opacity:.8;margin-top:6px;padding:4px 8px;background:rgba(0,212,170,.06);border-radius:6px;"></div>
+            </div>
+            <div id="dc-result-wrap" style="display: none; text-align: center; padding: 8px 0px;">
+              <div id="dc-result-icon" style="font-size:1.6rem;margin-bottom:4px;">❌</div>
+              <div id="dc-result-msg" style="font-family:var(--raj);font-size:.82rem;color:var(--text);margin-bottom:4px;">Incorrect — Answer: ATP</div>
+              <div id="dc-explanation" style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.7;line-height:1.5;">Keep studying — you'll get it next time!</div>
+              <div id="dc-next-label" style="display: block; font-family: var(--exo); font-size: 0.62rem; color: var(--teal2); opacity: 0.7; margin-top: 8px;">Next challenge in 7h 34m 45s</div>
+              <button onclick="go('games');(function(){var b=document.querySelector('[onclick*=\'quiz\']');if(b)filterGames(b,'quiz');})();setTimeout(()=&gt;tryStartGame('blitz',10),80)" style="margin-top:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:7px 16px;color:#ff8c69;font-family:var(--exo);font-size:.72rem;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;" onmouseover="this.style.background='rgba(255,107,107,.18)'" onmouseout="this.style.background='rgba(255,107,107,.1)'">⚡ Try Harder →</button>
+            </div>
+            <div id="dc-no-key-msg" style="display: block; font-family: var(--exo); font-size: 0.72rem; color: var(--silver); opacity: 0.75; text-align: center; padding: 12px 0px;">🔑 <span id="dc-locked-text">Today's challenge is locked</span> — <a href="#" onclick="goToApiKeySetup();return false;" id="dc-locked-link" style="color:var(--accent2);text-decoration:underline;">add a free API key to unlock →</a></div>
+          </div>
+
+          <!-- To-Do Summary widget (extra, opt-in via Edit Widgets — relocated for the same reason) -->
+          <div class="dt-widget" id="widget-todo-summary" style="display:none;">
+            <div class="dt-wlabel" style="justify-content:space-between;align-items:center;">
+              <span style="display:flex;align-items:center;gap:6px;"><span class="dt-wlabel-dot" style="background:var(--teal);"></span><span data-i18n="lbl_today_tasks">Today's Tasks</span></span>
+              <button onclick="go('todo')" data-i18n="btn_view_all" style="background:none;border:none;color:var(--accent2);font-family:var(--exo);font-size:.62rem;cursor:pointer;padding:0;">View all →</button>
+            </div>
+            <div id="wtodo-list" style="display:flex;flex-direction:column;gap:5px;margin-top:8px;max-height:140px;overflow-y:auto;"></div>
+            <div id="wtodo-empty" data-i18n="todo_empty" style="display:none;font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.45;text-align:center;padding:12px 0;">✅ All done for today!</div>
           </div>
 
         </div>
@@ -1442,7 +1406,7 @@ onAuthStateChanged(_auth, async user => {
 
       <!-- NOTES -->
       <div class="tab" id="tab-notes">
-        <div class="ttl">📝 Smart Notes</div>
+        <div class="ttl">📝 Notes Maker</div>
         <div class="tsub"><span class="prm">›</span>Paste your text and get smart AI-powered notes</div>
         <div id="notes-img-preview" style="display:none;margin-bottom:10px;padding:8px 12px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:10px;align-items:center;gap:10px;">
           <img id="notes-img-thumb" style="height:48px;width:auto;border-radius:6px;object-fit:cover;display:none;" src="" alt="Attached image">
@@ -1452,13 +1416,20 @@ onAuthStateChanged(_auth, async user => {
         </div>
         <textarea class="nta" id="notes-in" placeholder="Paste your notes, textbook content, or anything you want to study..."></textarea>
         <div class="brow">
-          <button class="abtn" onclick="doNotes('summary')" style="background:#dc2626;" data-i18n="notes_btn_summarise">✨ Summarise</button>
-          <button class="abtn" onclick="doNotes('bullets')" style="background:#ea580c;" data-i18n="notes_btn_bullets">• Bullet Points</button>
-          <button class="abtn" onclick="doNotes('mindmap')" style="background:#ca8a04;" data-i18n="notes_btn_mindmap">🧠 Mind Map</button>
-          <button class="abtn" onclick="doNotes('essay')" style="background:#16a34a;" data-i18n="notes_btn_essay">📝 Essay Plan</button>
-          <button class="abtn" onclick="doNotes('glossary')" style="background:#2563eb;" data-i18n="notes_btn_glossary">🔤 Glossary</button>
-          <button class="abtn" onclick="doNotes('eli5')" style="background:#7c3aed;" data-i18n="notes_btn_simplify">🧒 Simplify</button>
-          <button class="abtn" onclick="doNotes('timeline')" style="background:#db2777;" data-i18n="notes_btn_timeline">📅 Timeline</button>
+          <div class="vdd-wrap" id="notes-action-wrap">
+            <button class="vdd-trigger" onclick="toggleVdd(event,'notes-action-wrap')" aria-haspopup="true">
+              <span id="notes-action-trigger-label" data-i18n="notes_action_trigger">✨ Choose an action</span><span class="vdd-chev">▾</span>
+            </button>
+            <div class="vdd-menu notes-act-menu" id="notes-action-menu">
+              <button class="vdd-opt" data-v="summary" onclick="pickNotesAction(this,'summary')"><span class="vdd-opt-label" data-i18n="notes_btn_summarise">✨ Summarise</span></button>
+              <button class="vdd-opt" data-v="bullets" onclick="pickNotesAction(this,'bullets')"><span class="vdd-opt-label" data-i18n="notes_btn_bullets">• Bullet Points</span></button>
+              <button class="vdd-opt" data-v="mindmap" onclick="pickNotesAction(this,'mindmap')"><span class="vdd-opt-label" data-i18n="notes_btn_mindmap">🧠 Mind Map</span></button>
+              <button class="vdd-opt" data-v="essay" onclick="pickNotesAction(this,'essay')"><span class="vdd-opt-label" data-i18n="notes_btn_essay">📝 Essay Plan</span></button>
+              <button class="vdd-opt" data-v="glossary" onclick="pickNotesAction(this,'glossary')"><span class="vdd-opt-label" data-i18n="notes_btn_glossary">🔤 Glossary</span></button>
+              <button class="vdd-opt" data-v="eli5" onclick="pickNotesAction(this,'eli5')"><span class="vdd-opt-label" data-i18n="notes_btn_simplify">🧒 Simplify</span></button>
+              <button class="vdd-opt" data-v="timeline" onclick="pickNotesAction(this,'timeline')"><span class="vdd-opt-label" data-i18n="notes_btn_timeline">📅 Timeline</span></button>
+            </div>
+          </div>
           <label class="abtn sec" style="cursor:pointer;" title="Attach a photo, PDF, or text/code file">
             <span data-i18n="notes_btn_upload">📎 Upload</span>
             <input type="file" id="notes-img-in" accept="image/*,application/pdf,.txt,.md,.html,.htm,.css,.js,.jsx,.ts,.tsx,.json,.csv,.tsv,.xml,.yml,.yaml,.py,.java,.c,.cpp,.h,.cs,.rb,.go,.rs,.php,.sql,.log,.svg" style="display:none;" onchange="handleNotesImage(this)">
@@ -4070,7 +4041,7 @@ const LANGS = {
     // Home
     home_streak: 'day streak',
     // Tab titles
-    ttl_homework: '📚 Homework Helper', ttl_notes: '📝 Smart Notes',
+    ttl_homework: '📚 Homework Helper', ttl_notes: '📝 Notes Maker',
     ttl_study: '🧠 Smart Study',
     ttl_chat: '💬 Companion', ttl_journal: '📓 Journal', ttl_games: '🎮 Games', ttl_exam: '📄 Exam Papers',
     // Subtitles
@@ -4120,8 +4091,8 @@ const LANGS = {
     lbl_daily_brief: 'Daily Brief', btn_refresh: '↻ refresh',
     mtc_homework_title: 'Homework AI', mtc_homework_sub: 'Step-by-step answers',
     mtc_study_title: 'Smart Study', mtc_study_sub: 'Flashcards & quizzes',
-    mtc_notes_title: 'Smart Notes', mtc_notes_sub: 'Summarise anything',
-    mtc_chat_sub: 'AI study buddy', mtc_todo_sub: 'Tasks & checklist', mtc_journal_sub: 'Write & reflect', mtc_games_sub: 'Play & earn gems',
+    mtc_notes_title: 'Notes Maker', mtc_notes_sub: 'Summarise anything',
+    mtc_chat_sub: 'AI study buddy', mtc_todo_sub: 'Tasks & checklist', mtc_journal_sub: 'Write & reflect', mtc_games_sub: 'Play & earn gems', mtc_exam_sub: 'Practice & get graded',
     tab_today: 'Today', tab_focus: 'Focus', tab_more: 'More',
     lbl_exams: 'Exams', btn_add_exam: '+ Add', exam_empty: 'No upcoming exams — add one!',
     lbl_daily_challenge: 'Daily Challenge', dc_locked_text: "Today's challenge is locked", dc_locked_link: 'add a free API key to unlock →',
@@ -4503,6 +4474,7 @@ const LANGS = {
     err_prefix: 'Error: ', err_connection_prefix: '⚠️ Couldn\'t reach the AI just now (', err_connection_suffix: '). Try again in a moment.',
     // Notes tab
     notes_img_hint: 'Image attached — text will be extracted from it',
+    notes_action_trigger: '✨ Choose an action',
     notes_btn_summarise: '✨ Summarise', notes_btn_bullets: '• Bullet Points', notes_btn_mindmap: '🧠 Mind Map',
     notes_btn_essay: '📝 Essay Plan', notes_btn_glossary: '🔤 Glossary', notes_btn_simplify: '🧒 Simplify',
     notes_btn_timeline: '📅 Timeline', notes_btn_upload: '📎 Upload', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Reset',
@@ -4641,7 +4613,7 @@ const LANGS = {
     sub_planner: '› Construye tu horario semanal — codifica materias por color',
     hdr_status: 'IA EN LÍNEA', hdr_sb_ver: '// SISTEMA DE ESTUDIO IA',
     home_streak: 'días seguidos',
-    ttl_homework: '📚 Ayuda con Tareas', ttl_notes: '📝 Notas Inteligentes',
+    ttl_homework: '📚 Ayuda con Tareas', ttl_notes: '📝 Creador de Notas',
     ttl_study: '🧠 Estudio Inteligente',
     ttl_chat: '💬 Compañero', ttl_journal: '📓 Diario', ttl_games: '🎮 Juegos', ttl_exam: '📄 Exámenes',
     sub_homework: '› Haz cualquier pregunta y obtén una respuesta paso a paso',
@@ -4676,8 +4648,8 @@ const LANGS = {
     lbl_daily_brief: 'Resumen Diario', btn_refresh: '↻ actualizar',
     mtc_homework_title: 'Tareas IA', mtc_homework_sub: 'Respuestas paso a paso',
     mtc_study_title: 'Estudio Inteligente', mtc_study_sub: 'Tarjetas y cuestionarios',
-    mtc_notes_title: 'Notas Inteligentes', mtc_notes_sub: 'Resume cualquier cosa',
-    mtc_chat_sub: 'Compañero de estudio IA', mtc_todo_sub: 'Tareas y lista de control', mtc_journal_sub: 'Escribe y reflexiona', mtc_games_sub: 'Juega y gana gemas',
+    mtc_notes_title: 'Creador de Notas', mtc_notes_sub: 'Resume cualquier cosa',
+    mtc_chat_sub: 'Compañero de estudio IA', mtc_todo_sub: 'Tareas y lista de control', mtc_journal_sub: 'Escribe y reflexiona', mtc_games_sub: 'Juega y gana gemas', mtc_exam_sub: 'Practica y recibe calificación',
     tab_today: 'Hoy', tab_focus: 'Enfoque', tab_more: 'Más',
     lbl_exams: 'Exámenes', btn_add_exam: '+ Añadir', exam_empty: '¡No hay exámenes próximos — añade uno!',
     lbl_daily_challenge: 'Reto Diario', dc_locked_text: 'El reto de hoy está bloqueado', dc_locked_link: 'añade una clave API gratis para desbloquear →',
@@ -5135,6 +5107,7 @@ const LANGS = {
     err_prefix: 'Error: ', err_connection_prefix: '⚠️ No se pudo conectar con la IA (', err_connection_suffix: '). Inténtalo de nuevo en un momento.',
     // Notes tab
     notes_img_hint: 'Imagen adjunta — se extraerá el texto de ella',
+    notes_action_trigger: '✨ Elige una acción',
     notes_btn_summarise: '✨ Resumir', notes_btn_bullets: '• Viñetas', notes_btn_mindmap: '🧠 Mapa Mental',
     notes_btn_essay: '📝 Plan de Ensayo', notes_btn_glossary: '🔤 Glosario', notes_btn_simplify: '🧒 Simplificar',
     notes_btn_timeline: '📅 Cronología', notes_btn_upload: '📎 Subir', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Reiniciar',
@@ -5197,7 +5170,7 @@ const LANGS = {
     sub_planner: '› Bina jadual mingguan anda — kod warna subjek',
     hdr_status: 'AI DALAM TALIAN', hdr_sb_ver: '// SISTEM KAJIAN AI',
     home_streak: 'hari berturut',
-    ttl_homework: '📚 Pembantu Kerja Rumah', ttl_notes: '📝 Nota Pintar',
+    ttl_homework: '📚 Pembantu Kerja Rumah', ttl_notes: '📝 Pembuat Nota',
     ttl_study: '🧠 Kajian Pintar',
     ttl_chat: '💬 Teman', ttl_journal: '📓 Jurnal', ttl_games: '🎮 Permainan', ttl_exam: '📄 Kertas Peperiksaan',
     sub_homework: '› Tanya apa sahaja dan dapatkan jawapan langkah demi langkah',
@@ -5232,8 +5205,8 @@ const LANGS = {
     lbl_daily_brief: 'Ringkasan Harian', btn_refresh: '↻ muat semula',
     mtc_homework_title: 'AI Kerja Rumah', mtc_homework_sub: 'Jawapan langkah demi langkah',
     mtc_study_title: 'Kajian Pintar', mtc_study_sub: 'Kad imbas & kuiz',
-    mtc_notes_title: 'Nota Pintar', mtc_notes_sub: 'Ringkaskan apa sahaja',
-    mtc_chat_sub: 'Rakan belajar AI', mtc_todo_sub: 'Tugasan & senarai semak', mtc_journal_sub: 'Tulis & renung', mtc_games_sub: 'Main & dapat gem',
+    mtc_notes_title: 'Pembuat Nota', mtc_notes_sub: 'Ringkaskan apa sahaja',
+    mtc_chat_sub: 'Rakan belajar AI', mtc_todo_sub: 'Tugasan & senarai semak', mtc_journal_sub: 'Tulis & renung', mtc_games_sub: 'Main & dapat gem', mtc_exam_sub: 'Berlatih & dapatkan gred',
     tab_today: 'Hari Ini', tab_focus: 'Fokus', tab_more: 'Lagi',
     lbl_exams: 'Peperiksaan', btn_add_exam: '+ Tambah', exam_empty: 'Tiada peperiksaan akan datang — tambah satu!',
     lbl_daily_challenge: 'Cabaran Harian', dc_locked_text: 'Cabaran hari ini dikunci', dc_locked_link: 'tambah kunci API percuma untuk buka kunci →',
@@ -5691,6 +5664,7 @@ const LANGS = {
     err_prefix: 'Ralat: ', err_connection_prefix: '⚠️ Tidak dapat menghubungi AI sekarang (', err_connection_suffix: '). Cuba lagi sebentar lagi.',
     // Notes tab
     notes_img_hint: 'Imej dilampirkan — teks akan diekstrak daripadanya',
+    notes_action_trigger: '✨ Pilih tindakan',
     notes_btn_summarise: '✨ Ringkaskan', notes_btn_bullets: '• Poin Utama', notes_btn_mindmap: '🧠 Peta Minda',
     notes_btn_essay: '📝 Rangka Esei', notes_btn_glossary: '🔤 Glosari', notes_btn_simplify: '🧒 Permudahkan',
     notes_btn_timeline: '📅 Garis Masa', notes_btn_upload: '📎 Muat Naik', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'Set Semula',
@@ -5753,7 +5727,7 @@ const LANGS = {
     sub_planner: '› 建立每周时间表 — 按科目颜色分类',
     hdr_status: 'AI 在线', hdr_sb_ver: '// AI 学习系统',
     home_streak: '天连续',
-    ttl_homework: '📚 作业助手', ttl_notes: '📝 智能笔记',
+    ttl_homework: '📚 作业助手', ttl_notes: '📝 笔记生成器',
     ttl_study: '🧠 智能学习',
     ttl_chat: '💬 学伴', ttl_journal: '📓 日记', ttl_games: '🎮 游戏', ttl_exam: '📄 试卷',
     sub_homework: '› 提问任何问题，获得逐步解答',
@@ -5788,8 +5762,8 @@ const LANGS = {
     lbl_daily_brief: '每日简报', btn_refresh: '↻ 刷新',
     mtc_homework_title: '作业AI', mtc_homework_sub: '分步解答',
     mtc_study_title: '智能学习', mtc_study_sub: '闪卡与测验',
-    mtc_notes_title: '智能笔记', mtc_notes_sub: '总结任何内容',
-    mtc_chat_sub: 'AI学习伙伴', mtc_todo_sub: '任务与清单', mtc_journal_sub: '写作与反思', mtc_games_sub: '游戏赚取宝石',
+    mtc_notes_title: '笔记生成器', mtc_notes_sub: '总结任何内容',
+    mtc_chat_sub: 'AI学习伙伴', mtc_todo_sub: '任务与清单', mtc_journal_sub: '写作与反思', mtc_games_sub: '游戏赚取宝石', mtc_exam_sub: '练习并获得评分',
     tab_today: '今日', tab_focus: '专注', tab_more: '更多',
     lbl_exams: '考试', btn_add_exam: '+ 添加', exam_empty: '暂无即将到来的考试——添加一个吧！',
     lbl_daily_challenge: '每日挑战', dc_locked_text: '今日挑战已锁定', dc_locked_link: '添加免费API密钥以解锁 →',
@@ -6247,6 +6221,7 @@ const LANGS = {
     err_prefix: '错误：', err_connection_prefix: '⚠️ 暂时无法连接AI（', err_connection_suffix: '）。请稍后再试。',
     // Notes tab
     notes_img_hint: '已附加图片 — 将从中提取文本',
+    notes_action_trigger: '✨ 选择操作',
     notes_btn_summarise: '✨ 总结', notes_btn_bullets: '• 要点列表', notes_btn_mindmap: '🧠 思维导图',
     notes_btn_essay: '📝 作文大纲', notes_btn_glossary: '🔤 术语表', notes_btn_simplify: '🧒 简化',
     notes_btn_timeline: '📅 时间线', notes_btn_upload: '📎 上传', notes_pdf_btn: '📄 PDF', notes_mm_reset: '重置',
@@ -6309,7 +6284,7 @@ const LANGS = {
     sub_planner: '› 週間時間割を作成 — 科目ごとに色分け',
     hdr_status: 'AI オンライン', hdr_sb_ver: '// AI 学習システム',
     home_streak: '日連続',
-    ttl_homework: '📚 宿題ヘルパー', ttl_notes: '📝 スマートノート',
+    ttl_homework: '📚 宿題ヘルパー', ttl_notes: '📝 ノートメーカー',
     ttl_study: '🧠 スマート学習',
     ttl_chat: '💬 仲間', ttl_journal: '📓 日記', ttl_games: '🎮 ゲーム', ttl_exam: '📄 試験問題',
     sub_homework: '› 何でも質問してステップごとの答えをもらおう',
@@ -6344,8 +6319,8 @@ const LANGS = {
     lbl_daily_brief: '今日のヒント', btn_refresh: '↻ 更新',
     mtc_homework_title: '宿題AI', mtc_homework_sub: 'ステップ解答',
     mtc_study_title: 'スマート学習', mtc_study_sub: 'フラッシュカード＆クイズ',
-    mtc_notes_title: 'スマートノート', mtc_notes_sub: '何でも要約',
-    mtc_chat_sub: 'AI学習パートナー', mtc_todo_sub: 'タスク＆チェックリスト', mtc_journal_sub: '書いて振り返る', mtc_games_sub: '遊んでジェム獲得',
+    mtc_notes_title: 'ノートメーカー', mtc_notes_sub: '何でも要約',
+    mtc_chat_sub: 'AI学習パートナー', mtc_todo_sub: 'タスク＆チェックリスト', mtc_journal_sub: '書いて振り返る', mtc_games_sub: '遊んでジェム獲得', mtc_exam_sub: '練習して採点してもらう',
     tab_today: '今日', tab_focus: 'フォーカス', tab_more: 'その他',
     lbl_exams: '試験', btn_add_exam: '+ 追加', exam_empty: '予定されている試験はありません — 追加しましょう！',
     lbl_daily_challenge: '今日のチャレンジ', dc_locked_text: '今日のチャレンジはロックされています', dc_locked_link: '無料APIキーを追加してロック解除 →',
@@ -6803,6 +6778,7 @@ const LANGS = {
     err_prefix: 'エラー：', err_connection_prefix: '⚠️ AIに接続できませんでした（', err_connection_suffix: '）。しばらくしてからもう一度お試しください。',
     // Notes tab
     notes_img_hint: '画像を添付済み — テキストが抽出されます',
+    notes_action_trigger: '✨ アクションを選択',
     notes_btn_summarise: '✨ 要約', notes_btn_bullets: '• 箇条書き', notes_btn_mindmap: '🧠 マインドマップ',
     notes_btn_essay: '📝 エッセイ構成', notes_btn_glossary: '🔤 用語集', notes_btn_simplify: '🧒 簡単に',
     notes_btn_timeline: '📅 年表', notes_btn_upload: '📎 アップロード', notes_pdf_btn: '📄 PDF', notes_mm_reset: 'リセット',
@@ -7316,8 +7292,9 @@ function dtSwitchTab(name, btn) {
 function renderMobileFab() {
   const list = document.getElementById('mobile-fab-list');
   if (!list) return;
+  const onHome = document.getElementById('tab-home')?.classList.contains('on');
   const items = [
-    { id:'home', icon:'🏠', label:'Home' },
+    ...(onHome ? [] : [{ id:'home', icon:'🏠', label:'Home' }]),
     ...getVisibleNavTabs(),
     { id:'settings', icon:'⚙️', label:'Settings' },
   ];
@@ -7467,6 +7444,14 @@ function pickHwSubject(el, subj) {
   const hwIn = document.getElementById('hw-in');
   if (hwIn) hwIn.placeholder = subj ? t('hw_ph_topic').replace('{topic}', t(HW_TOPIC_KEYS[subj] || subj)) : t('hw_placeholder');
   document.getElementById('hw-subject-wrap')?.classList.remove('open');
+}
+
+function pickNotesAction(el, mode) {
+  const trigger = document.getElementById('notes-action-trigger-label');
+  const label = el.querySelector('.vdd-opt-label');
+  if (trigger && label) trigger.textContent = label.textContent;
+  document.getElementById('notes-action-wrap')?.classList.remove('open');
+  doNotes(mode);
 }
 
 // ── GEMINI API ──
@@ -8431,7 +8416,7 @@ Notes:\n\n${notesText}`
     notesVaultBtn.style.cssText = 'font-size:.68rem;padding:6px 14px;margin-top:10px;';
     notesVaultBtn.textContent = t('btn_save_to_vault');
     const noteTitle = document.getElementById('notes-in')?.value.trim().slice(0,40) || mode;
-    notesVaultBtn.onclick = () => saveToVault(`${mode}_${noteTitle}`, ans, 'Smart Notes');
+    notesVaultBtn.onclick = () => saveToVault(`${mode}_${noteTitle}`, ans, 'Notes Maker');
     out.parentElement.insertBefore(notesVaultBtn, out.nextSibling);
   } catch (e) { out.textContent = t('err_prefix') + e.message; }
 }
@@ -11416,16 +11401,51 @@ const QUOTES = [
   { q:"Education is the most powerful weapon you can use to change the world.", a:"Nelson Mandela" },
   { q:"Hard work beats talent when talent doesn't work hard.", a:"Tim Notke" },
 ];
+async function loadDailyQuote() {
+  const qEl = document.getElementById('ww-quote');
+  const aEl = document.getElementById('ww-author');
+  if (!qEl || !aEl) return;
+
+  const today = new Date().toDateString();
+  const stored = localStorage.getItem('studly_daily_quote');
+  const cached = stored ? JSON.parse(stored) : null;
+  if (cached && cached.date === today) {
+    qEl.textContent = `"${cached.q}"`;
+    aEl.textContent = `— ${cached.a}`;
+    return;
+  }
+
+  // Static fallback, rotated by day-of-year so it doesn't repeat within a month
+  const dayIndex = Math.floor(Date.now() / 86400000) % QUOTES.length;
+  let quote = QUOTES[dayIndex];
+
+  if (API_KEY) {
+    try {
+      const prompt = `Give one short, original motivational quote suitable for a student (max 20 words), plus its real attributed author.
+Reply with EXACTLY this format, nothing else, no markdown:
+QUOTE: <the quote text>
+AUTHOR: <author name>`;
+      const text = await gemini(prompt);
+      const qMatch = text.match(/QUOTE:\s*(.+)/i);
+      const aMatch = text.match(/AUTHOR:\s*(.+)/i);
+      if (qMatch && aMatch) {
+        quote = { q: qMatch[1].trim().replace(/^["']|["']$/g, ''), a: aMatch[1].trim() };
+      }
+    } catch {
+      // keep static fallback
+    }
+  }
+
+  localStorage.setItem('studly_daily_quote', JSON.stringify({ date: today, ...quote }));
+  qEl.textContent = `"${quote.q}"`;
+  aEl.textContent = `— ${quote.a}`;
+}
+
 async function loadWeatherWidget() {
   const el = document.getElementById('widget-weather');
   if (!el || el.dataset.loaded) return;
   el.dataset.loaded = '1';
-  // Quote (rotate daily)
-  const q = QUOTES[new Date().getDate() % QUOTES.length];
-  const qEl = document.getElementById('ww-quote');
-  const aEl = document.getElementById('ww-author');
-  if (qEl) qEl.textContent = `"${q.q}"`;
-  if (aEl) aEl.textContent = `— ${q.a}`;
+  loadDailyQuote();
   // Weather via open-meteo (no key needed)
   try {
     navigator.geolocation.getCurrentPosition(async pos => {
@@ -13991,7 +14011,7 @@ function runSearch(q) {
     const pages = [
       { id:'home',     icon:'🏠', title:'Home',         hint:'Dashboard & daily brief' },
       { id:'homework', icon:'📚', title:'Homework Help', hint:'Ask any question' },
-      { id:'notes',    icon:'📝', title:'Smart Notes',  hint:'Summarise & process notes' },
+      { id:'notes',    icon:'📝', title:'Notes Maker',  hint:'Summarise & process notes' },
       { id:'study',    icon:'🧠', title:'Study / Flashcards', hint:'Generate flashcards & quizzes' },
       { id:'chat',     icon:'💬', title:'Companion',    hint:'Talk to Veda' },
       { id:'journal',  icon:'📓', title:'Journal',      hint:'Your journal entries' },
