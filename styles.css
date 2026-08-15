@@ -2237,10 +2237,10 @@ body.theme-glass .m-home-card,
 body.theme-glass .pp-card,
 body.theme-glass .nout,
 body.theme-glass .abtn.sec {
-  backdrop-filter: blur(30px) saturate(160%);
-  -webkit-backdrop-filter: blur(30px) saturate(160%);
-  border-color: rgba(255,255,255,.16);
-  box-shadow: 0 8px 32px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.07);
+  backdrop-filter: blur(34px) saturate(170%);
+  -webkit-backdrop-filter: blur(34px) saturate(170%);
+  border: 1px solid rgba(255,255,255,.22);
+  box-shadow: 0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.12);
 }
 /* Branded pills (streak/gems) keep their own hue but were sitting at ~10% background opacity —
    near-invisible backing for light-coloured text against a bright, busy theme. Darken the
