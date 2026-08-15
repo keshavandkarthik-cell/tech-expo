@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=39">
+<link rel="stylesheet" href="styles.css?v=40">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -10181,6 +10181,7 @@ function renderProfilePanel() {
   if (el('acct-tagline')) el('acct-tagline').textContent = `${t('set_level_word')} ${lvl} ${title}`;
   if (el('acct-gems')) el('acct-gems').textContent = a.gems || 0;
   if (el('ugc-gems')) el('ugc-gems').textContent = a.gems || 0;
+  if (el('universal-gem-counter')) el('universal-gem-counter').classList.toggle('gem-counter-empty', !a.gems);
   if (el('acct-streak')) el('acct-streak').textContent = a.streak || 0;
   if (el('dt-gems-big')) el('dt-gems-big').textContent = a.gems || 0;
   if (el('dt-streak-big')) el('dt-streak-big').textContent = (a.streak || 0) + ' days';
@@ -11658,6 +11659,7 @@ function updateHomeStats() {
   if (dtStreak) dtStreak.textContent = (a.streak || 0) + ' days';
   const ugcGems = document.getElementById('ugc-gems');
   if (ugcGems) ugcGems.textContent = a.gems || 0;
+  document.getElementById('universal-gem-counter')?.classList.toggle('gem-counter-empty', !a.gems);
   const mGems = document.getElementById('m-gems-val');
   const mStreak = document.getElementById('m-streak-val');
   if (mGems) mGems.textContent = a.gems || 0;
