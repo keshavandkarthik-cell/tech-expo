@@ -2227,6 +2227,36 @@ body.anim-bg { background-size: 200% 200% !important; animation: ambientShift 20
 .dt-zone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-auto-flow: dense; gap: 12px; align-items: start; }
 @media(max-width:700px){ .dt-zone-grid, .dt-tab-panel { grid-template-columns: 1fr 1fr; } .dt-widget-wide { grid-column: span 2 !important; } }
 .dt-widget { background: var(--panel-col3); backdrop-filter: blur(16px); border: 1px solid rgba(77,159,255,.12); border-radius: 16px; padding: 14px 16px; position: relative; transition: border .2s, transform .18s, box-shadow .18s; box-shadow: 0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px rgba(0,0,0,.16); }
+/* Aesthetic/Wallpaper themes (body.theme-glass, set in applyBg): real glassmorphism instead of
+   flat opaque panels — stronger blur so busy/bright backgrounds still read as blended glass, and
+   a black-based panel tint (set via --panel-col* in applyBg) keeps text legible no matter how
+   vivid the theme's own colours are. Vibes themes are untouched. */
+body.theme-glass .panel,
+body.theme-glass .dt-widget,
+body.theme-glass .m-home-card,
+body.theme-glass .pp-card,
+body.theme-glass .nout,
+body.theme-glass .abtn.sec {
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+  border-color: rgba(255,255,255,.16);
+  box-shadow: 0 8px 32px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.07);
+}
+/* Branded pills (streak/gems) keep their own hue but were sitting at ~10% background opacity —
+   near-invisible backing for light-coloured text against a bright, busy theme. Darken the
+   backing and blur it without touching their accent colour. */
+body.theme-glass .ps-pill {
+  background: rgba(8,10,18,.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+body.theme-glass .dt-topbar,
+body.theme-glass .dt-taskbar,
+body.theme-glass #hdr,
+body.theme-glass #sb {
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+}
 .dt-widget::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(77,159,255,.25), transparent); }
 .dt-widget::after { content: ''; position: absolute; top: -40%; left: -10%; width: 60%; height: 100%; background: radial-gradient(circle, rgba(77,159,255,.055), transparent 70%); pointer-events: none; }
 .dt-widget.clickable { cursor: pointer; }

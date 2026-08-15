@@ -126,7 +126,7 @@ onAuthStateChanged(_auth, async user => {
 </script>
 <!-- duplicate Firebase block removed -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=44">
+<link rel="stylesheet" href="styles.css?v=46">
 </head>
 <body>
 <!-- VEDA NOTIFICATION BAR -->
@@ -9334,20 +9334,27 @@ function applyBg(t) {
   else if (t.img) { document.body.style.background = `linear-gradient(${t.b1||'rgba(0,0,0,.4)'},${t.b2||'rgba(0,0,0,.7)'}),url(${t.img})`; document.body.style.backgroundSize = 'cover'; document.body.style.backgroundPosition = 'center'; }
   else document.body.style.background = `linear-gradient(135deg,${t.b1} 0%,${t.b2} 100%)`;
 
-  // Tint sidebar, header, and panels with the theme colour (skip for wallpapers - rgba b1 values)
-  if (t.b1 && t.b1.startsWith('#')) {
+  // Vibes (t.an and t.img both absent) already blend well with their own tinted, fairly opaque
+  // panels — leave that untouched. Aesthetic (t.an) and Wallpapers (t.img) sit on far busier/
+  // brighter backgrounds, where those same tinted-and-mostly-opaque panels just look like flat
+  // ugly boxes and their own hue fights the vivid background instead of blending with it. Those
+  // get true glassmorphism instead: a black-based (not theme-hue-based) translucent tint, which
+  // both blends with any background colour and keeps light text readable regardless of what's
+  // behind it, plus a stronger blur applied via body.theme-glass in CSS.
+  const isVibes = !t.an && !t.img;
+  document.body.classList.toggle('theme-glass', !isVibes);
+  if (isVibes && t.b1 && t.b1.startsWith('#')) {
     document.documentElement.style.setProperty('--chrome-bg',   t.b1 + 'e6');
     document.documentElement.style.setProperty('--chrome-bg2',  t.b1 + 'cc');
     document.documentElement.style.setProperty('--panel-col',   t.b1 + '99');
     document.documentElement.style.setProperty('--panel-col2',  t.b1 + 'ee');
     document.documentElement.style.setProperty('--panel-col3',  t.b1 + 'cc');
-  } else if (t.img) {
-    // Wallpaper: use semi-transparent dark panels so content stays readable
-    document.documentElement.style.setProperty('--chrome-bg',   'rgba(10,10,14,0.82)');
-    document.documentElement.style.setProperty('--chrome-bg2',  'rgba(10,10,14,0.70)');
-    document.documentElement.style.setProperty('--panel-col',   'rgba(10,10,14,0.60)');
-    document.documentElement.style.setProperty('--panel-col2',  'rgba(10,10,14,0.80)');
-    document.documentElement.style.setProperty('--panel-col3',  'rgba(10,10,14,0.70)');
+  } else if (!isVibes) {
+    document.documentElement.style.setProperty('--chrome-bg',   'rgba(8,10,18,0.62)');
+    document.documentElement.style.setProperty('--chrome-bg2',  'rgba(8,10,18,0.5)');
+    document.documentElement.style.setProperty('--panel-col',   'rgba(8,10,18,0.32)');
+    document.documentElement.style.setProperty('--panel-col2',  'rgba(8,10,18,0.5)');
+    document.documentElement.style.setProperty('--panel-col3',  'rgba(8,10,18,0.4)');
   }
 }
 
