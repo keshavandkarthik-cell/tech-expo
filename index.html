@@ -9350,11 +9350,15 @@ function applyBg(t) {
     document.documentElement.style.setProperty('--panel-col2',  t.b1 + 'ee');
     document.documentElement.style.setProperty('--panel-col3',  t.b1 + 'cc');
   } else if (!isVibes) {
-    document.documentElement.style.setProperty('--chrome-bg',   'rgba(8,10,18,0.62)');
-    document.documentElement.style.setProperty('--chrome-bg2',  'rgba(8,10,18,0.5)');
-    document.documentElement.style.setProperty('--panel-col',   'rgba(8,10,18,0.32)');
-    document.documentElement.style.setProperty('--panel-col2',  'rgba(8,10,18,0.5)');
-    document.documentElement.style.setProperty('--panel-col3',  'rgba(8,10,18,0.4)');
+    // These need to stay dark enough for --silver/--text2 (calibrated for a near-black backdrop)
+    // to read clearly no matter how light the theme's own gradient is — several Aesthetic themes
+    // (Candy Floss, Kawaii Pink, Lofi Chill) are pastel/light, where the previous lighter tint
+    // wasn't dark enough underneath the blur and text got genuinely hard to read.
+    document.documentElement.style.setProperty('--chrome-bg',   'rgba(6,7,14,0.8)');
+    document.documentElement.style.setProperty('--chrome-bg2',  'rgba(6,7,14,0.72)');
+    document.documentElement.style.setProperty('--panel-col',   'rgba(6,7,14,0.62)');
+    document.documentElement.style.setProperty('--panel-col2',  'rgba(6,7,14,0.75)');
+    document.documentElement.style.setProperty('--panel-col3',  'rgba(6,7,14,0.68)');
   }
 }
 
