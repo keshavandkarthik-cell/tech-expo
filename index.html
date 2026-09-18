@@ -7324,21 +7324,46 @@ function dtSwitchTab(name, btn) {
   document.querySelectorAll('.dt-tab-btn').forEach(b => b.classList.toggle('on', b === btn));
 }
 
+const MFAB_GROUPS = [
+  { name:'Work',  ids:['homework','notes','library','pastpapers','exam'] },
+  { name:'Think', ids:['study','chat','art'] },
+  { name:'Track', ids:['todo','planner','tracker','journal'] },
+  { name:'Play',  ids:['games','leaderboard','forum'] },
+  { name:'System', ids:['vault','settings'] },
+];
+
 function renderMobileFab() {
   const list = document.getElementById('mobile-fab-list');
   if (!list) return;
   const onHome = document.getElementById('tab-home')?.classList.contains('on');
-  const items = [
-    ...(onHome ? [] : [{ id:'home', icon:'🏠', label:'Home' }]),
-    ...getVisibleNavTabs(),
-    { id:'settings', icon:'⚙️', label:'Settings' },
-  ];
-  list.innerHTML = items.map((it, i) =>
-    `<div class="mfab-item" style="animation-delay:${i*0.02}s" onclick="closeMobileFab();go('${it.id}')">
-      <div class="mfab-icon">${it.icon}</div>
-      <div class="mfab-label">${it.label}</div>
-    </div>`
-  ).join('');
+  const byId = {};
+  getVisibleNavTabs().forEach(t => { byId[t.id] = t; });
+  byId.settings = { id:'settings', icon:'⚙️', label:'Settings' };
+  const homeItem = onHome ? null : { id:'home', icon:'🏠', label:'Home' };
+
+  let i = 0;
+  let html = '';
+  if (homeItem) {
+    html += `<div class="mfab-home-row" style="animation-delay:${i*0.02}s" onclick="closeMobileFab();go('${homeItem.id}')">
+      <div class="mfab-icon">${homeItem.icon}</div>
+      <div class="mfab-label">${homeItem.label}</div>
+    </div>`;
+    i++;
+  }
+  MFAB_GROUPS.forEach(group => {
+    const groupItems = group.ids.map(id => byId[id]).filter(Boolean);
+    if (!groupItems.length) return;
+    html += `<div class="mfab-section-header" style="animation-delay:${i*0.02}s">${group.name}</div>`;
+    html += `<div class="mfab-section">` + groupItems.map(it => {
+      const el = `<div class="mfab-item" style="animation-delay:${i*0.02}s" onclick="closeMobileFab();go('${it.id}')">
+        <div class="mfab-icon">${it.icon}</div>
+        <div class="mfab-label">${it.label}</div>
+      </div>`;
+      i++;
+      return el;
+    }).join('') + `</div>`;
+  });
+  list.innerHTML = html;
 }
 
 function toggleMobileFab() {
