@@ -2089,6 +2089,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
                 </div>
                 <div class="shop-grid" id="shop-grid"></div>
               </div>
+              <input type="file" id="custom-wallpaper-in" accept="image/*" style="display:none" onchange="handleCustomWallpaper(this)">
               <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
             </div>
           </div>
@@ -8193,30 +8194,60 @@ function renderHwBotAnswer(ans, question) {
   const wrapper = document.createElement('div');
   wrapper.className = 'hw-answer-wrap';
   hwWin.appendChild(wrapper);
-  let firstLine = true;
-  for (const line of lines) {
-    if (!line.trim()) continue;
-    if (firstLine) {
-      const d = document.createElement('div'); d.className = 'hw-intro';
-      d.textContent = line; wrapper.appendChild(d); firstLine = false;
-    } else if (/^STEP \d+:/i.test(line)) {
-      const parts = line.match(/^(STEP \d+:)\s*(.*)/i);
-      const stepNum = parts[1]; const stepTitle = parts[2] || '';
+  // Section-aware parser. Every response mode emits ALLCAPS headers
+  // ("STEP 1:", "TIP:", "WHAT YOU GOT RIGHT:", "THE SIMPLE VERSION:", …);
+  // group each header with the prose that follows it into one card, so
+  // non-step modes read as cleanly as step-by-step. Plain lines flow into
+  // whichever block is currently open (step body, section body, tip body,
+  // or a running intro paragraph) instead of each becoming its own bubble.
+  const HEAD_RE = /^([A-Z][A-Z0-9 '’\/&()\-]{1,44}):\s*(.*)$/;
+  let introEl = null;   // running intro <div.hw-intro>, or null between paragraphs
+  let curBody = null;   // element that trailing plain lines append into
+  let started = false;  // have we seen a STEP / TIP / section header yet
+  const appendTo = (el, text, sep) => { el.textContent += (el.textContent ? (sep || ' ') : '') + text; };
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) { if (!started) introEl = null; continue; }
+
+    const stepM = line.match(/^(STEP\s+\d+)\s*:\s*(.*)$/i);
+    if (stepM) {
+      started = true; introEl = null;
       const d = document.createElement('div'); d.className = 'hw-step';
-      d.innerHTML = `<div class="hw-step-header"><span class="hw-step-badge">${escapeHtml(stepNum)}</span><span class="hw-step-title">${escapeHtml(stepTitle)}</span></div><div class="hw-step-body"></div>`;
+      d.innerHTML = `<div class="hw-step-header"><span class="hw-step-badge">${escapeHtml(stepM[1].replace(/\s+/g, ' '))}</span><span class="hw-step-title">${escapeHtml(stepM[2] || '')}</span></div><div class="hw-step-body"></div>`;
       wrapper.appendChild(d);
-    } else if (line.startsWith('TIP:')) {
+      curBody = d.querySelector('.hw-step-body');
+      continue;
+    }
+
+    if (/^TIP\s*:/i.test(line)) {
+      started = true; introEl = null;
       const d = document.createElement('div'); d.className = 'hw-tip';
-      d.innerHTML = `<div class="hw-tip-icon">💡</div><div class="hw-tip-content"><div class="hw-tip-label">Quick Tip</div><div class="hw-tip-body">${escapeHtml(line.replace(/^TIP:/i,'').trim())}</div></div>`;
+      d.innerHTML = `<div class="hw-tip-icon">💡</div><div class="hw-tip-content"><div class="hw-tip-label">Quick Tip</div><div class="hw-tip-body"></div></div>`;
       wrapper.appendChild(d);
+      curBody = d.querySelector('.hw-tip-body');
+      appendTo(curBody, line.replace(/^TIP\s*:/i, '').trim());
+      continue;
+    }
+
+    const headM = line.match(HEAD_RE);
+    if (headM) {
+      started = true; introEl = null;
+      const d = document.createElement('div'); d.className = 'hw-section';
+      d.innerHTML = `<div class="hw-section-head"></div><div class="hw-section-body"></div>`;
+      d.querySelector('.hw-section-head').textContent = headM[1].trim();
+      curBody = d.querySelector('.hw-section-body');
+      if (headM[2]) appendTo(curBody, headM[2].trim());
+      wrapper.appendChild(d);
+      continue;
+    }
+
+    // plain prose line
+    if (curBody) {
+      appendTo(curBody, line, curBody.classList.contains('hw-section-body') ? '\n' : ' ');
     } else {
-      const lastBody = wrapper.querySelector('.hw-step:last-of-type .hw-step-body');
-      if (lastBody) {
-        lastBody.textContent += (lastBody.textContent ? ' ' : '') + line;
-      } else {
-        const d = document.createElement('div'); d.className = 'hw-intro';
-        d.textContent = line; wrapper.appendChild(d);
-      }
+      if (!introEl) { introEl = document.createElement('div'); introEl.className = 'hw-intro'; wrapper.appendChild(introEl); }
+      appendTo(introEl, line);
     }
   }
   const hwVaultBtn = document.createElement('button');
@@ -9297,6 +9328,7 @@ function renderThemes() {
     ce.appendChild(b);
   });
   const ge = document.getElementById('tgrid'); ge.innerHTML = '';
+  if (curCat === 'wallpapers') ge.appendChild(buildCustomWallpaperTile());
   (TD[curCat] || []).forEach(t => {
     const tile = document.createElement('div');
     tile.className = 'ttile' + (t.an ? ' anim-tile' : '');
@@ -9310,6 +9342,86 @@ function renderThemes() {
     tile.addEventListener('click', () => { locked = t; applyBg(t); localStorage.setItem('studly_theme', JSON.stringify(t)); });
     ge.appendChild(tile);
   });
+}
+
+// ── CUSTOM WALLPAPER ──
+// Kept device-local (not in NW_SYNC_KEYS) deliberately — a compressed photo is
+// still tens to hundreds of KB, and syncing that on every settings sync would
+// bloat the cloud payload for a per-device preference. Re-upload on a new device.
+const CUSTOM_WP_KEY = 'veda_custom_wallpaper';
+function getCustomWallpaper() { try { return localStorage.getItem(CUSTOM_WP_KEY) || null; } catch { return null; } }
+function pickCustomWallpaper() { document.getElementById('custom-wallpaper-in').click(); }
+
+function buildCustomWallpaperTile() {
+  const custom = getCustomWallpaper();
+  const tile = document.createElement('div');
+  tile.className = 'ttile ttile-custom';
+  if (custom) {
+    tile.style.background = `linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.7)),url(${custom})`;
+    tile.style.backgroundSize = 'cover'; tile.style.backgroundPosition = 'center';
+    const nm = document.createElement('div'); nm.className = 'tname'; nm.style.color = '#fff'; nm.textContent = 'My Wallpaper';
+    const replaceBtn = document.createElement('button'); replaceBtn.className = 'ttile-action'; replaceBtn.style.right = '30px'; replaceBtn.title = 'Replace photo'; replaceBtn.textContent = '↻';
+    replaceBtn.onclick = (e) => { e.stopPropagation(); pickCustomWallpaper(); };
+    const removeBtn = document.createElement('button'); removeBtn.className = 'ttile-action'; removeBtn.style.right = '6px'; removeBtn.title = 'Remove'; removeBtn.textContent = '✕';
+    removeBtn.onclick = (e) => { e.stopPropagation(); removeCustomWallpaper(); };
+    tile.append(nm, replaceBtn, removeBtn);
+    tile.addEventListener('click', () => {
+      const t = { n: 'My Wallpaper', img: custom, a: '#ffffff', b1: 'rgba(0,0,0,.45)', b2: 'rgba(0,0,0,.7)', custom: true };
+      locked = t; applyBg(t); localStorage.setItem('studly_theme', JSON.stringify(t));
+    });
+  } else {
+    tile.classList.add('ttile-empty');
+    const nm = document.createElement('div'); nm.className = 'tname'; nm.textContent = '+ Add Custom';
+    tile.appendChild(nm);
+    tile.addEventListener('click', pickCustomWallpaper);
+  }
+  return tile;
+}
+
+function handleCustomWallpaper(input) {
+  const file = input.files[0];
+  input.value = ''; // allow re-picking the same file later
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { showToast('⚠️ Please choose an image file'); return; }
+  if (file.size > 20 * 1024 * 1024) { showToast('⚠️ That image is too large — try one under 20MB'); return; }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      // Downscale + re-encode as JPEG so a multi-MB phone photo doesn't blow
+      // past localStorage's ~5-10MB quota (shared with every other key).
+      const maxDim = 1600;
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) { const scale = maxDim / Math.max(w, h); w = Math.round(w * scale); h = Math.round(h * scale); }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let dataUrl;
+      try { dataUrl = canvas.toDataURL('image/jpeg', 0.78); }
+      catch (err) { showToast('⚠️ Could not process that image'); return; }
+      try { localStorage.setItem(CUSTOM_WP_KEY, dataUrl); }
+      catch (err) { showToast('⚠️ Image too large to save — try a smaller photo'); return; }
+      const t = { n: 'My Wallpaper', img: dataUrl, a: '#ffffff', b1: 'rgba(0,0,0,.45)', b2: 'rgba(0,0,0,.7)', custom: true };
+      locked = t; applyBg(t);
+      localStorage.setItem('studly_theme', JSON.stringify(t));
+      if (curCat === 'wallpapers') renderThemes();
+      showToast('🖼️ Custom wallpaper set!');
+    };
+    img.onerror = () => showToast('⚠️ Could not read that image');
+    img.src = e.target.result;
+  };
+  reader.onerror = () => showToast('⚠️ Could not read that file');
+  reader.readAsDataURL(file);
+}
+
+function removeCustomWallpaper() {
+  localStorage.removeItem(CUSTOM_WP_KEY);
+  const fallback = TD.vibes[0];
+  locked = fallback; applyBg(fallback);
+  localStorage.setItem('studly_theme', JSON.stringify(fallback));
+  renderThemes();
+  showToast('Wallpaper removed');
 }
 
 function applyBg(t) {
@@ -10052,6 +10164,7 @@ function resetTheme() {
   confirm2('Reset Theme', 'This will clear your saved theme and return to the default.', () => {
     localStorage.removeItem('studly_theme');
     localStorage.removeItem('studly_cat');
+    localStorage.removeItem(CUSTOM_WP_KEY);
     locked = null; prevBg = null;
     document.body.style.background = '';
     document.body.classList.remove('anim-bg');
@@ -11174,7 +11287,7 @@ function obRenderPreview() {
   if (p.learnStyle) parts.push(p.learnStyle.split('—')[0].trim());
   if (p.language)   parts.push(p.language);
   const el = document.getElementById('ob-profile-preview');
-  if (el) el.innerHTML = parts.map(x => `<span style="color:var(--accent2)">${x}</span>`).join(' · ');
+  if (el) el.innerHTML = parts.map(x => `<span style="color:var(--accent2)">${escapeHtml(x)}</span>`).join(' · ');
 }
 
 function obSaveProfile() {
@@ -12207,8 +12320,19 @@ const NW_HI_KEYS = ['bubble','scramble','math','typing','reaction','snake','sudo
 function nwSnapshot() {
   const data = { _updated: new Date().toISOString() };
   NW_SYNC_KEYS.forEach(k => {
-    const v = localStorage.getItem(k);
-    if (v !== null) data[k] = v;
+    let v = localStorage.getItem(k);
+    if (v === null) return;
+    // A custom wallpaper embeds a compressed photo as a data URL in studly_theme —
+    // strip it before syncing so one device's wallpaper doesn't bloat every
+    // device's cloud payload. The "you have a custom wallpaper" preference still
+    // syncs; the photo itself stays device-local and must be re-uploaded elsewhere.
+    if (k === 'studly_theme') {
+      try {
+        const t = JSON.parse(v);
+        if (t && t.custom) v = JSON.stringify({ n: t.n, custom: true, a: t.a, b1: t.b1, b2: t.b2 });
+      } catch (e) {}
+    }
+    data[k] = v;
   });
   NW_HI_KEYS.forEach(g => {
     const v = localStorage.getItem('hi_'+g);
@@ -12229,7 +12353,10 @@ function nwRestore(data) {
   // Re-apply theme
   try {
     const t = JSON.parse(data['studly_theme'] || 'null');
-    if (t && window.applyBg) { applyBg(t); window.locked = t; }
+    // A synced custom-wallpaper entry has no `img` (stripped before upload, see
+    // nwSnapshot) — nothing to re-apply on this device, so leave its background as-is.
+    if (t && t.custom && !t.img) { /* skip */ }
+    else if (t && window.applyBg) { applyBg(t); window.locked = t; }
   } catch(e) {}
 
   // Re-apply accent colour

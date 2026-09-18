@@ -96,6 +96,12 @@ function saveExam() {
   const date    = document.getElementById('exam-modal-date').value;
   const notes   = document.getElementById('exam-modal-notes').value.trim();
   if (!date) { showToast('⚠️ Pick a date'); return; }
+  // Reject past dates — renderExamCountdown() prunes anything older than
+  // yesterday and rewrites storage, so a past exam would silently vanish
+  // right after the "Exam added!" toast.
+  const picked = new Date(date + 'T00:00:00');
+  const today  = new Date(); today.setHours(0,0,0,0);
+  if (isNaN(picked) || picked < today) { showToast('⚠️ Pick a date in the future'); return; }
   const exams = getExams();
   exams.push({ id: Date.now().toString(), subject, date, notes });
   exams.sort((a,b) => a.date.localeCompare(b.date));
@@ -136,8 +142,8 @@ function renderExamCountdown() {
         <div style="font-size:.45rem;letter-spacing:1px;color:var(--silver);font-weight:400;">${ex.date}</div>
       </div>
       <div style="flex:1;min-width:0;">
-        <div style="font-family:var(--raj);font-size:.8rem;color:var(--text);font-weight:600;">${ex.subject}</div>
-        ${ex.notes ? `<div style="font-family:var(--exo);font-size:.62rem;color:var(--silver);opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${ex.notes}</div>` : ''}
+        <div style="font-family:var(--raj);font-size:.8rem;color:var(--text);font-weight:600;">${escHtml(ex.subject)}</div>
+        ${ex.notes ? `<div style="font-family:var(--exo);font-size:.62rem;color:var(--silver);opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(ex.notes)}</div>` : ''}
       </div>
       <button onclick="deleteExam('${ex.id}')" style="background:none;border:none;color:var(--silver);font-size:.8rem;cursor:pointer;opacity:.35;padding:0 2px;" title="Remove">✕</button>
     </div>`;

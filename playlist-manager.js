@@ -11,6 +11,9 @@
 // ── PLAYLIST MANAGER ──
 let musicSource = localStorage.getItem('studly_music_src') || 'spotify';
 
+// User-typed playlist names flow straight into innerHTML below — escape them.
+function plEsc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 // ── Spotify presets ──
 const PL_PRESETS = [
   { name:'Lo-fi',              id:'69AaAkdktFGnk9POmHENkT', type:'album',    cat:'Study' },
@@ -228,7 +231,7 @@ function renderPlTabs() {
     document.getElementById('music-empty').style.display = 'none';
     container.innerHTML = list.map(pl => `
       <button class="music-pl-btn ${pl.id===lastId?'on':''}" data-plid="${pl.id}"
-        onclick="playPlaylist(${JSON.stringify(pl).replace(/"/g,'&quot;')})" title="${pl.name}">${pl.name}</button>`).join('');
+        onclick="playPlaylist(${JSON.stringify(pl).replace(/"/g,'&quot;')})" title="${plEsc(pl.name)}">${plEsc(pl.name)}</button>`).join('');
     const toLoad = list.find(p => p.id===lastId) || list[0];
     const frame = document.getElementById('spotify-frame');
     if (toLoad && frame && (frame.src==='about:blank'||!frame.src)) {
@@ -248,7 +251,7 @@ function renderPlSavedList() {
   el.innerHTML = list.map(pl => `
     <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid rgba(77,159,255,.12);border-radius:10px;padding:9px 12px;">
       <div style="font-size:.95rem;flex-shrink:0;">${pl.type==='album'?'💿':pl.type==='track'?'🎵':'🎶'}</div>
-      <div style="flex:1;min-width:0;"><div style="font-family:var(--raj);font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${pl.name}</div><div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);opacity:.6;text-transform:capitalize;">${pl.type}</div></div>
+      <div style="flex:1;min-width:0;"><div style="font-family:var(--raj);font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${plEsc(pl.name)}</div><div style="font-family:var(--exo);font-size:.65rem;color:var(--silver);opacity:.6;text-transform:capitalize;">${plEsc(pl.type)}</div></div>
       <button onclick="playPlaylist(${JSON.stringify(pl).replace(/"/g,'&quot;')});closePlaylistManager()" title="Play" style="${btnStyle('#4d9fff')}">▶</button>
       <button onclick="renamePlaylist('${pl.id}')" title="Rename" style="${btnStyle('var(--silver)')}">✎</button>
       <button onclick="deletePlaylist('${pl.id}')" title="Remove" style="${btnStyle('#ff6680')}">✕</button>

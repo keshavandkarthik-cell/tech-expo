@@ -259,13 +259,14 @@ html[data-theme="ivory"] .dt-hero-badge {
 .key-note { font-size: .72rem; color: var(--silver); margin-top: 12px; text-align: center; opacity: .7; }
 
 /* ── APP ── */
-#app { display: none; height: 100vh; flex-direction: column; }
+#app { display: none; height: 100vh; height: 100dvh; flex-direction: column; }
 
 /* ── HEADER ── */
 #hdr {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px;
-  height: 56px;
+  padding-top: env(safe-area-inset-top);
+  height: calc(56px + env(safe-area-inset-top));
   background: var(--chrome-bg);
   border-bottom: 1px solid rgba(77,159,255,0.15);
   flex-shrink: 0;
@@ -323,7 +324,7 @@ body.mobile-mode .mobile-only { display: block; }
    picker/reorder system it drove no longer applies here (desktop keeps it). */
 body.mobile-mode #edit-widgets-btn { display: none !important; }
 body.mobile-mode .m-home-extras { display: flex; }
-body.mobile-mode #hdr { padding: 10px 14px; gap: 10px; }
+body.mobile-mode #hdr { padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top)); height: calc(56px + env(safe-area-inset-top)); gap: 10px; }
 body.mobile-mode .hdr-right { gap: 6px; }
 body.mobile-mode #hdr-search-btn span:not(:first-child),
 body.mobile-mode #hdr-uname { display: none !important; }
@@ -332,8 +333,8 @@ body.mobile-mode #hdr-manual-btn { width: 30px; height: 30px; }
 body.mobile-mode .hdr-status, body.mobile-mode .hdr-time { display: none !important; }
 body.mobile-mode .hdr-logo { font-size: .95rem; }
 body.mobile-mode #universal-gem-counter { padding: 5px 10px 5px 8px; }
-body.mobile-mode #content { padding-bottom: 90px; }
-body.mobile-mode .tab { padding: 16px 14px 90px; }
+body.mobile-mode #content { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+body.mobile-mode .tab { padding: 16px 14px calc(90px + env(safe-area-inset-bottom)); }
 body.mobile-mode .desktop-canvas { padding: 0; gap: 0; flex: none; overflow: visible; }
 body.mobile-mode #tab-home { overflow-y: auto !important; }
 body.mobile-mode .dt-zone-grid { grid-template-columns: 1fr 1fr; }
@@ -410,9 +411,9 @@ body.mobile-mode #mobile-fab-wrap { display: block; }
 #mobile-fab-overlay.open { display: block; }
 
 #mobile-fab-list {
-  display: none; position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%);
+  display: none; position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom)); transform: translateX(-50%);
   z-index: 490; grid-template-columns: repeat(3, 1fr); gap: 7px 8px;
-  max-height: calc(100vh - 145px); overflow-y: auto; padding: 4px 4px 0;
+  max-height: calc(100dvh - 145px - env(safe-area-inset-bottom)); overflow-y: auto; padding: 4px 4px 0;
   width: min(330px, 92vw);
 }
 #mobile-fab-list.open { display: grid; }
@@ -1020,6 +1021,17 @@ body.mobile-mode .game-lock {
 .tname { font-family: var(--orb); font-size: clamp(.38rem,.5vw,.52rem); letter-spacing: .5px; position: relative; z-index: 1; text-shadow: 0 1px 4px #000; line-height: 1.5; }
 @keyframes ambientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 .anim-tile { background-size: 200% 200% !important; animation: ambientShift 20s ease infinite !important; }
+.ttile-custom.ttile-empty { align-items: center; justify-content: center; background: rgba(255,255,255,.03) !important; border: 1.5px dashed rgba(255,255,255,.25) !important; }
+.ttile-custom.ttile-empty:hover { border-color: var(--accent) !important; }
+.ttile-custom.ttile-empty .tname { font-size: clamp(.42rem,.55vw,.56rem); color: var(--silver); text-shadow: none; }
+.ttile-action {
+  position: absolute; top: 6px; z-index: 2;
+  width: 20px; height: 20px; border-radius: 50%; border: none;
+  background: rgba(0,0,0,.55); color: #fff; font-size: .6rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background .15s;
+}
+.ttile-action:hover { background: rgba(0,0,0,.8); }
 
 
 /* ── JOURNAL ── */
@@ -1981,6 +1993,25 @@ body.mobile-mode .ps-hub-title { font-size:.84rem; }
 .hw-tip-content { flex: 1; }
 .hw-tip-label { font-family: var(--orb); font-size: .38rem; color: var(--teal); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 3px; }
 .hw-tip-body { font-family: var(--exo); font-size: .85rem; color: var(--teal2); line-height: 1.55; }
+.hw-section {
+  background: var(--panel-col); border: 1px solid rgba(77,159,255,.12);
+  border-radius: 14px; padding: 13px 16px 14px 20px;
+  position: relative; overflow: hidden;
+}
+.hw-section::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background: linear-gradient(180deg, var(--accent), var(--teal));
+  border-radius:3px 0 0 3px;
+}
+.hw-section-head {
+  font-family: var(--raj); font-size: .82rem; font-weight: 700;
+  color: var(--accent2); letter-spacing: .3px; margin-bottom: 6px;
+}
+.hw-section-body {
+  font-family: var(--exo); font-size: .85rem; color: var(--text2);
+  line-height: 1.7; white-space: pre-line;
+}
+.hw-section-body:empty { display: none; }
 
 /* ── GEM SHOP ── */
 .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }

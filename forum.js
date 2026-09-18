@@ -178,7 +178,7 @@ window.loadForumFeed = async function loadForumFeed() {
         card.innerHTML = `
           <span class="forum-post-type ${p.type}">${p.type === 'question' ? '❓ Question' : '💡 Tip'}</span>
           <div class="forum-post-title">${escHtml(p.title)}${p.edited ? ' <span style="font-size:.65rem;opacity:.5;font-weight:400;">(edited)</span>' : ''}</div>
-          ${p.image ? `<img src="${p.image}" style="max-height:140px;border-radius:8px;margin:6px 0;display:block;">` : ''}
+          ${safeImg(p.image) ? `<img src="${safeImg(p.image)}" style="max-height:140px;border-radius:8px;margin:6px 0;display:block;">` : ''}
           <div class="forum-post-meta">
             <span>👤 ${escHtml(p.author)}</span>
             <span>📚 ${escHtml(p.subject)}</span>
@@ -301,7 +301,7 @@ window.openForumThread = async function(postId, post) {
       <span class="forum-post-type ${post.type}">${post.type === 'question' ? '❓ Question' : '💡 Tip'}</span>
       <div class="forum-post-title" style="font-size:1rem;">${escHtml(post.title)}${post.edited ? ' <span style="font-size:.65rem;opacity:.5;font-weight:400;">(edited)</span>' : ''}</div>
       <div style="font-family:var(--exo);font-size:.8rem;color:var(--text);line-height:1.7;margin:10px 0;">${escHtml(post.body)}</div>
-      ${post.image ? `<img src="${post.image}" style="max-width:100%;border-radius:10px;margin-bottom:10px;display:block;">` : ''}
+      ${safeImg(post.image) ? `<img src="${safeImg(post.image)}" style="max-width:100%;border-radius:10px;margin-bottom:10px;display:block;">` : ''}
       <div class="forum-post-meta">
         <span>👤 ${escHtml(post.author)}</span>
         <span>${timeAgo(post.createdAt?.toDate ? post.createdAt.toDate() : new Date())}</span>
@@ -407,6 +407,9 @@ window.flagReply = async function(postId, replyId) {
 
 // ── Helpers ──
 function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// Only trust inline base64 image data — a hand-crafted Firestore write could
+// otherwise stuff `" onerror="…` into the src attribute and run for everyone.
+function safeImg(src) { return (typeof src === 'string' && /^data:image\/(png|jpe?g|gif|webp);base64,[A-Za-z0-9+/=]+$/.test(src)) ? src : ''; }
 function timeAgo(d) {
   if (!d) return '';
   const s = Math.floor((Date.now() - d) / 1000);

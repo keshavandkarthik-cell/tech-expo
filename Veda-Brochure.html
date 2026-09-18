@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Veda Brochure</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#0a0f1e;
+    --navy2:#111a30;
+    --accent:#4d9fff;
+    --teal:#00d4aa;
+    --silver:#8fa3c4;
+    --text:#e8eefc;
+    --ink:#0a0f1e;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+    background:#3a3a3a;
+    color:var(--text);
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  .sheet{
+    width:297mm;
+    height:210mm;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    background:var(--navy);
+    margin:12px auto;
+    overflow:hidden;
+  }
+
+  .panel{
+    padding:14mm 11mm;
+    display:flex;
+    flex-direction:column;
+    border-right:1px dashed rgba(143,163,196,.28);
+    position:relative;
+    background:
+      radial-gradient(120% 60% at 100% 0%, rgba(77,159,255,.10), transparent 60%),
+      linear-gradient(180deg, var(--navy), var(--navy2));
+  }
+  .panel:last-child{border-right:none;}
+
+  .eyebrow{
+    font-family:'DM Mono',monospace;
+    font-size:8pt;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+  h1.logo{
+    font-family:'Syne',sans-serif;
+    font-weight:800;
+    font-size:34pt;
+    letter-spacing:-1px;
+    line-height:1;
+    background:linear-gradient(100deg,var(--text),var(--accent));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  h2{
+    font-family:'Syne',sans-serif;
+    font-weight:700;
+    font-size:14pt;
+    color:var(--text);
+    margin-bottom:8px;
+    letter-spacing:-.3px;
+  }
+  h3{
+    font-family:'Syne',sans-serif;
+    font-weight:700;
+    font-size:9.5pt;
+    color:var(--teal);
+    margin:11px 0 3px;
+  }
+  p{font-size:8.6pt;line-height:1.5;color:var(--silver);}
+  p.lead{font-size:9.5pt;color:var(--text);line-height:1.55;}
+
+  ul{list-style:none;margin:4px 0;}
+  li{
+    font-size:8.4pt;
+    line-height:1.45;
+    color:var(--silver);
+    padding-left:13px;
+    position:relative;
+    margin-bottom:4px;
+  }
+  li::before{
+    content:"▸";
+    position:absolute;left:0;top:0;
+    color:var(--accent);
+    font-size:7pt;
+  }
+  li b{color:var(--text);font-weight:600;}
+
+  .spacer{flex:1;}
+
+  .divider{height:1px;background:linear-gradient(90deg,var(--accent),transparent);margin:10px 0;}
+
+  .badge{
+    display:inline-block;
+    font-family:'DM Mono',monospace;
+    font-size:7pt;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--teal);
+    border:1px solid rgba(0,212,170,.4);
+    border-radius:4px;
+    padding:3px 7px;
+    margin-top:6px;
+    width:max-content;
+  }
+
+  .foot{
+    font-family:'DM Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:1px;
+    color:var(--silver);
+    border-top:1px solid rgba(143,163,196,.2);
+    padding-top:8px;
+    margin-top:8px;
+  }
+  .foot b{color:var(--accent);}
+
+  .cover-mark{
+    font-family:'DM Mono',monospace;
+    font-size:7.5pt;
+    letter-spacing:2px;
+    color:var(--silver);
+  }
+  .cta{
+    font-family:'Syne',sans-serif;
+    font-weight:700;
+    font-size:10pt;
+    color:var(--navy);
+    background:linear-gradient(100deg,var(--accent),var(--teal));
+    border-radius:8px;
+    padding:9px 12px;
+    text-align:center;
+    letter-spacing:.3px;
+  }
+  .qbox{
+    border:1px solid rgba(77,159,255,.3);
+    border-radius:10px;
+    padding:12px;
+    background:rgba(77,159,255,.06);
+    margin-top:8px;
+  }
+
+  .print-hint{
+    max-width:297mm;margin:16px auto;padding:10px 16px;
+    font-family:'DM Mono',monospace;font-size:11px;color:#ccc;
+    background:#222;border-radius:6px;
+  }
+
+  @media print{
+    body{background:#fff;}
+    .print-hint{display:none;}
+    .sheet{margin:0;page-break-after:always;}
+    @page{size:A4 landscape;margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="print-hint">Print / Save as PDF → A4, Landscape, margins “None”, enable “Background graphics”. Page 1 = outside, Page 2 = inside. Fold in thirds (right panel folds in first).</div>
+
+<!-- ══════════ SHEET 1 — OUTSIDE ══════════ -->
+<div class="sheet">
+
+  <!-- Back panel -->
+  <div class="panel">
+    <div class="eyebrow">// Study Companion</div>
+    <h2>Everything, in one place</h2>
+    <p>Veda pulls the whole job of studying — asking, revising, planning, tracking, and staying well — into a single calm workspace.</p>
+    <div class="divider"></div>
+    <h3>Private by default</h3>
+    <p>Journals and notes stay on your device. The global leaderboard is off until you switch it on. No ads, no selling data.</p>
+    <h3>Free to run</h3>
+    <p>Every AI feature uses your own free Google Gemini key, so there is no shared bill and no usage cap set by us.</p>
+    <div class="spacer"></div>
+    <div class="foot">Open it now — nothing to install<br><b>veda-net.com</b></div>
+  </div>
+
+  <!-- Front cover -->
+  <div class="panel" style="justify-content:space-between;background:radial-gradient(140% 80% at 50% 0%, rgba(77,159,255,.18), transparent 60%), linear-gradient(180deg,var(--navy),var(--navy2));">
+    <div class="cover-mark">v · e · d · a</div>
+    <div>
+      <h1 class="logo">Veda</h1>
+      <p class="lead" style="margin-top:12px;">Your AI-powered<br>study companion.</p>
+      <div class="badge">Homework · Revision · Wellbeing</div>
+    </div>
+    <div class="cover-mark">veda-net.com &nbsp;/&nbsp; works offline</div>
+  </div>
+
+  <!-- Inside flap -->
+  <div class="panel">
+    <div class="eyebrow">// Why students stay</div>
+    <h2>Built to feel<br>rewarding</h2>
+    <p>Finish a task, nail the daily question, play a round — you earn gems. Gems unlock <b>Titles</b>: tiered status you build over a term.</p>
+    <h3>Daily Challenge</h3>
+    <p>One AI question a day. It gets harder as your gem count climbs, and a streak counter keeps you honest.</p>
+    <h3>Leaderboard</h3>
+    <p>Compare gems, streaks or games played with friends by friend-code — or check where you land globally.</p>
+    <div class="spacer"></div>
+    <div class="cta">Paste a free Gemini key &nbsp;→&nbsp; everything unlocks</div>
+  </div>
+
+</div>
+
+<!-- ══════════ SHEET 2 — INSIDE ══════════ -->
+<div class="sheet">
+
+  <!-- Panel 1 — AI study tools -->
+  <div class="panel">
+    <div class="eyebrow">// AI study tools</div>
+    <h2>Ask, revise, generate</h2>
+    <p class="lead">The core is the <b>Homework Helper</b> — ask anything or photograph a worksheet, then choose how the answer is written: step-by-step, check-my-working, exam technique, ELI5, or “why am I wrong?”</p>
+    <ul>
+      <li><b>Smart Study</b> — flashcards, quizzes, mark schemes, Cornell notes, mnemonics, predicted questions</li>
+      <li><b>Notes</b> — paste messy text, get a summary, mind map, essay plan, glossary or timeline</li>
+      <li><b>Exam Papers</b> — a custom mock built to your subject, question types and difficulty</li>
+      <li><b>Topic Library</b> — ready-made explainers by level, KS3 to university</li>
+      <li><b>Muse</b> — turn a description into an image; diagram style is built for revision</li>
+    </ul>
+    <div class="foot">All AI features share one setup step: your Gemini key in Settings.</div>
+  </div>
+
+  <!-- Panel 2 — Wellbeing & social -->
+  <div class="panel">
+    <div class="eyebrow">// Wellbeing &amp; social</div>
+    <h2>Study life, not just study</h2>
+    <div class="qbox">
+      <h3 style="margin-top:0;">Companion</h3>
+      <p>An AI to talk to about stress, tiredness or feeling numb. If a message signals real distress, Veda alerts a guardian — <b>tells you first</b>, and always shows crisis resources. A safety net, not surveillance.</p>
+    </div>
+    <h3>Journal</h3>
+    <p>A private space, saved on your device. Type it or dictate a voice note. Export any time.</p>
+    <h3>Forum</h3>
+    <p>Ask, answer and share tips with other students, sorted by subject.</p>
+    <div class="spacer"></div>
+    <div class="badge">Companion · Journal · Forum · Leaderboard</div>
+  </div>
+
+  <!-- Panel 3 — Organise & motivate -->
+  <div class="panel">
+    <div class="eyebrow">// Organise &amp; keep going</div>
+    <h2>Plan it, track it</h2>
+    <ul>
+      <li><b>Study Planner</b> — a colour-coded weekly timetable; photograph your existing one and Veda imports it</li>
+      <li><b>Paper Tracker</b> — log every past paper and watch your average build per subject</li>
+      <li><b>To-Do List</b> — a plain task list that pays a gem per task done</li>
+      <li><b>Vault</b> — everything you save or create, with a 3-day recycle bin</li>
+      <li><b>Games</b> — nine built-in, revision that doesn’t feel like it</li>
+      <li><b>Study Music</b> — Spotify playlists that keep playing across tabs</li>
+    </ul>
+    <div class="divider"></div>
+    <h3>Make it yours</h3>
+    <p>A customisable home dashboard and five themes — dark, Ivory, Hacker, Glass, Synthwave.</p>
+    <div class="spacer"></div>
+    <div class="cta">veda-net.com</div>
+  </div>
+
+</div>
+
+</body>
+</html>

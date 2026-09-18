@@ -12,6 +12,10 @@
 let lbTab   = 'gems';    // gems | streak | games
 let lbScope = 'friends'; // friends | global
 
+// ── HTML escaping — lbName / lbTitle come from other users' Firestore docs
+//    on the global board, so they must never hit innerHTML raw.
+function lbEsc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 // ── Generate or retrieve a persistent friend code ──
 function lbGetMyCode() {
   let code = localStorage.getItem('veda_friend_code');
@@ -100,7 +104,7 @@ async function lbAddFriend() {
     lbSaveFriends(friends);
     const friendName = friendDoc.data().lbName || 'Scholar';
     status.style.color = 'var(--teal2)';
-    status.textContent = `✅ Added ${friendName}!`;
+    status.textContent = `✅ Added ${friendName}!`; // textContent — safe
     if (inp) inp.value = '';
     setTimeout(() => { if (status) status.textContent = ''; }, 3000);
     lbRender();
@@ -154,9 +158,10 @@ function lbVal(userData) {
   return 0;
 }
 function lbValLabel(userData) {
-  if (lbTab === 'gems')   return (userData.lbGems   || 0) + ' 💎';
-  if (lbTab === 'streak') return (userData.lbStreak  || 0) + ' 🔥';
-  if (lbTab === 'games')  return (userData.lbGames   || 0) + ' pts';
+  const n = k => Math.max(0, Math.round(Number(userData[k])) || 0); // coerce — Firestore values are user-controlled
+  if (lbTab === 'gems')   return n('lbGems')   + ' 💎';
+  if (lbTab === 'streak') return n('lbStreak') + ' 🔥';
+  if (lbTab === 'games')  return n('lbGames')  + ' pts';
   return '0';
 }
 
@@ -221,14 +226,14 @@ async function lbRender() {
     const isMe = entry.uid === myUid;
     const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
     const rankIcon  = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
-    const name = entry.data.lbName   || 'Scholar';
-    const avatar = entry.data.lbAvatar || '🎓';
+    const name = lbEsc(entry.data.lbName || 'Scholar');
+    const avatar = lbEsc(entry.data.lbAvatar || '🎓');
     const val  = lbValLabel(entry.data);
     const meTag = isMe ? ' <span style="font-family:var(--exo);font-size:.62rem;color:var(--teal2);letter-spacing:1px;">YOU</span>' : '';
     // Title gets its own line under the name — cramming it onto the name row
     // alongside the YOU tag pushed YOU past the name's ellipsis on mobile.
-    const titleTag = entry.data.lbTitle ? `<span class="lb-title-tag">${entry.data.lbTitleEmoji || ''} ${entry.data.lbTitle}</span>` : '';
-    const subLine = titleTag || (isMe ? 'Your score' : (entry.data.lbCode || ''));
+    const titleTag = entry.data.lbTitle ? `<span class="lb-title-tag">${lbEsc(entry.data.lbTitleEmoji || '')} ${lbEsc(entry.data.lbTitle)}</span>` : '';
+    const subLine = titleTag || (isMe ? 'Your score' : lbEsc(entry.data.lbCode || ''));
     return `<div class="lb-row ${isMe?'lb-me':''}">
       <div class="lb-rank ${rankClass}">${rankIcon}</div>
       <div class="lb-avatar">${avatar}</div>
@@ -268,7 +273,7 @@ function lbRefreshHomeWidget(entries, myUid) {
 
   list.innerHTML = top3.map((entry, i) => {
     const icon = ['🥇','🥈','🥉'][i] || (i+1);
-    const name  = entry.data.lbName || 'Scholar';
+    const name  = lbEsc(entry.data.lbName || 'Scholar');
     const isMe  = entry.uid === myUid;
     const val   = lbValLabel(entry.data);
     return `<div class="lb-mini-row">

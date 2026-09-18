@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Veda — Hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     EDIT HERE — colours, fonts, sizes
+     ============================================================ */
+  :root{
+    --navy-1:#1c2942;      /* bg top-left  */
+    --navy-2:#141f37;      /* bg mid       */
+    --navy-3:#0c1526;      /* bg bottom    */
+    --gold:#E7B857;        /* doodles, tagline, button, nav, logo */
+    --gold-2:#F1CE83;      /* button gradient highlight */
+    --teal:#74D8C6;        /* card icons + outlines + glow */
+    --ink:#EEF3FA;         /* script wordmark */
+    --card-fill:rgba(19,30,50,.55);
+    --card-line:rgba(122,224,206,.72);
+    --muted:#93A6BE;       /* card body text */
+    --script-size:132px;
+    --tagline-size:30px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#0a1120;overflow:hidden;font-family:"Poppins",system-ui,sans-serif}
+  #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+
+  /* fixed design canvas — scaled to fit the viewport */
+  #stage{
+    width:1120px;height:620px;position:relative;transform-origin:center;
+    border-radius:18px;overflow:hidden;
+    background:
+      radial-gradient(120% 80% at 30% 20%, rgba(38,74,110,.35), transparent 60%),
+      radial-gradient(90% 70% at 60% 115%, rgba(20,60,58,.30), transparent 60%),
+      linear-gradient(150deg, var(--navy-1) 0%, var(--navy-2) 45%, var(--navy-3) 100%);
+    box-shadow:0 40px 120px rgba(0,0,0,.55);
+  }
+  /* paper-ish grain */
+  #stage::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- doodle layer ---------- */
+  #doodles{position:absolute;inset:0;pointer-events:none}
+  #doodles svg{position:absolute;inset:0;width:100%;height:100%}
+
+  /* ---------- top bar ---------- */
+  .topbar{position:absolute;top:24px;left:40px;right:40px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+  .brand{display:flex;align-items:center;gap:10px;color:var(--gold)}
+  .brand .bi{width:26px;height:26px}
+  .brand .bi svg{width:100%;height:100%}
+  .brand span{font-weight:400;font-size:16px;letter-spacing:.2px;color:#C9D4E2}
+  .nav{display:flex;align-items:center;gap:26px;color:var(--gold)}
+  .nav a{position:relative;width:22px;height:22px;display:block;color:var(--gold);opacity:.9}
+  .nav a svg{width:100%;height:100%}
+  .nav a.on::after{content:"";position:absolute;left:-3px;right:-3px;bottom:-9px;height:2px;background:var(--gold);border-radius:2px}
+
+  /* ---------- centre ---------- */
+  .centre{position:absolute;left:0;right:0;top:120px;text-align:center;z-index:4}
+  .script{
+    font-family:"Parisienne",cursive;font-size:var(--script-size);line-height:1;color:var(--ink);
+    text-shadow:0 2px 30px rgba(150,190,230,.25);
+  }
+  .tagline{
+    margin-top:6px;font-weight:400;font-size:var(--tagline-size);letter-spacing:.5px;color:var(--gold);
+  }
+  .cta{
+    margin-top:30px;display:inline-flex;align-items:center;gap:12px;
+    padding:13px 30px;border-radius:999px;border:0;cursor:pointer;
+    font-family:"Poppins",sans-serif;font-weight:500;font-size:16px;color:#1a2438;
+    background:linear-gradient(180deg,var(--gold-2),var(--gold));
+    box-shadow:0 10px 30px rgba(231,184,87,.35), inset 0 1px 0 rgba(255,255,255,.4);
+  }
+  .cta svg{width:18px;height:18px}
+
+  /* ---------- floating cards (chamfered top-right, like the target) ---------- */
+  .card{ position:absolute;width:184px;height:210px;z-index:3;
+    filter:drop-shadow(4px 6px 0 rgba(30,47,74,.85)) drop-shadow(0 14px 22px rgba(0,0,0,.35)); }
+  .card .shape{position:absolute;inset:0;z-index:0}
+  .card .shape svg{width:100%;height:100%;overflow:visible;display:block}
+  .card .body{position:absolute;inset:0;padding:22px 18px 16px;z-index:1;display:flex;flex-direction:column}
+  .card .dots{position:absolute;top:16px;right:20px;color:#8298b0;letter-spacing:2px;font-size:14px}
+  .card .badge{
+    position:absolute;top:-13px;left:16px;width:28px;height:28px;border-radius:50%;
+    background:#12203a;border:1.5px solid var(--card-line);display:flex;align-items:center;justify-content:center;
+    color:var(--teal);box-shadow:0 0 10px rgba(116,216,198,.35);z-index:2
+  }
+  .card .badge svg{width:14px;height:14px}
+  .card .glyph{width:36px;height:36px;color:var(--teal);margin:4px 0 14px;filter:drop-shadow(0 0 9px rgba(116,216,198,.6))}
+  .card .glyph svg{width:100%;height:100%}
+  .card h3{font-weight:600;font-size:14.5px;color:#EAF1F8;margin-bottom:5px}
+  .card p{font-weight:300;font-size:11px;line-height:1.5;color:var(--muted)}
+  .card .bar{margin-top:auto;height:3px;width:78px;border-radius:3px;background:linear-gradient(90deg,var(--teal),rgba(116,216,198,.05))}
+
+  #c1{left:58px; top:150px; transform:rotate(-4deg)}
+  #c2{left:876px;top:140px; transform:rotate(4deg)}
+  #c3{left:126px;top:382px; transform:rotate(3deg)}
+  #c4{left:836px;top:392px; transform:rotate(-3deg)}
+
+  /* ---------- scroll hint ---------- */
+  .scroll{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:20px;height:32px;border:2px solid #8fa2ba;border-radius:12px;opacity:.6;z-index:4}
+  .scroll::after{content:"";position:absolute;left:50%;top:6px;width:3px;height:6px;border-radius:2px;background:#8fa2ba;transform:translateX(-50%);animation:sd 1.6s ease-in-out infinite}
+  @keyframes sd{0%,100%{opacity:.3;transform:translate(-50%,0)}50%{opacity:1;transform:translate(-50%,6px)}}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage">
+
+  <svg width="0" height="0" style="position:absolute"><defs>
+    <linearGradient id="cardFill" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#213655" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0f1d34" stop-opacity="0.74"/>
+    </linearGradient>
+    <filter id="cardGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4.5" flood-color="#66E6D0" flood-opacity="0.55"/>
+    </filter>
+  </defs></svg>
+
+  <!-- ================= DOODLE LAYER (edit paths freely) ================= -->
+  <div id="doodles"><svg viewBox="0 0 1120 620" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <g opacity=".85">
+      <!-- 4-point sparkles -->
+      <g id="spk">
+        <path d="M0 -9 C1 -3 3 -1 9 0 C3 1 1 3 0 9 C-1 3 -3 1 -9 0 C-3 -1 -1 -3 0 -9Z"/>
+      </g>
+      <use href="#spk" x="360" y="112" transform="translate(360,112) scale(1.1)"/>
+      <use href="#spk" transform="translate(300,300) scale(.7)"/>
+      <use href="#spk" transform="translate(486,150) scale(.5)"/>
+      <use href="#spk" transform="translate(690,150) scale(.8)"/>
+      <use href="#spk" transform="translate(792,300) scale(.55)"/>
+      <use href="#spk" transform="translate(250,470) scale(.7)"/>
+      <use href="#spk" transform="translate(560,486) scale(.6)"/>
+      <use href="#spk" transform="translate(470,540) scale(.5)"/>
+      <use href="#spk" transform="translate(880,470) scale(.6)"/>
+      <use href="#spk" transform="translate(360,300) scale(.4)"/>
+
+      <!-- outline 5-point stars -->
+      <path d="M792 78 l7 15 16 2 -12 11 3 16 -14 -8 -14 8 3 -16 -12 -11 16 -2Z"/>
+      <path d="M980 150 l5 10 11 1 -8 8 2 11 -10 -5 -10 5 2 -11 -8 -8 11 -1Z"/>
+      <path d="M150 250 l5 10 11 1 -8 8 2 11 -10 -5 -10 5 2 -11 -8 -8 11 -1Z"/>
+
+      <!-- saturn planets -->
+      <g transform="translate(210,110)"><circle r="13"/><ellipse rx="24" ry="7" transform="rotate(-20)"/></g>
+      <g transform="translate(320,380)"><circle r="10"/><ellipse rx="19" ry="6" transform="rotate(18)"/></g>
+      <g transform="translate(300,395) rotate(0)"></g>
+
+      <!-- galaxy spiral (small, top-left) -->
+      <path transform="translate(180,150)" d="M0 0 C 10 -14 30 -14 38 2 C 46 20 28 40 6 40 C -22 40 -40 16 -40 -12 C -40 -46 -8 -70 30 -70"/>
+      <ellipse cx="180" cy="150" rx="4" ry="4"/>
+
+      <!-- big faint galaxy, bottom centre -->
+      <g opacity=".28" transform="translate(560,610)">
+        <path d="M-150 -6 C-120 -70 -30 -104 70 -84 C 150 -68 186 -14 150 34"/>
+        <path d="M-96 18 C-70 -30 6 -58 84 -44 C 132 -35 152 2 132 36"/>
+        <path d="M-46 30 C -34 6 6 -12 44 -6"/>
+        <circle cx="0" cy="6" r="3" fill="var(--gold)" stroke="none"/>
+      </g>
+
+      <!-- comet arcs -->
+      <path d="M120 470 C 150 452 170 452 196 470"/>
+      <path d="M60 150 C 92 132 112 134 132 156"/>
+      <path d="M980 470 C 1006 452 1028 454 1046 474"/>
+
+      <!-- paper airplane -->
+      <g transform="translate(1000,120) rotate(12)"><path d="M0 0 L34 -12 L20 22 L14 8 Z"/><path d="M0 0 L14 8"/></g>
+
+      <!-- small orbits / rings -->
+      <ellipse cx="640" cy="120" rx="26" ry="10" transform="rotate(20 640 120)"/>
+      <ellipse cx="470" cy="420" rx="18" ry="7" transform="rotate(-15 470 420)"/>
+
+      <!-- compass, bottom right -->
+      <g transform="translate(1000,510)"><circle r="20"/><path d="M-7 7 L0 -12 L7 7 L0 2 Z" fill="var(--gold)" stroke="none"/></g>
+
+      <!-- scattered dots -->
+      <g fill="var(--gold)" stroke="none" opacity=".8">
+        <circle cx="430" cy="120" r="2"/><circle cx="520" cy="470" r="2"/><circle cx="760" cy="110" r="2.5"/>
+        <circle cx="300" cy="200" r="2"/><circle cx="860" cy="360" r="2"/><circle cx="250" cy="360" r="2"/>
+        <circle cx="900" cy="200" r="2"/><circle cx="620" cy="500" r="2"/>
+      </g>
+    </g>
+
+    <!-- brain doodle (teal-ish), upper right of centre -->
+    <g transform="translate(726,132) scale(1.2)" stroke="#8FE0D2" opacity=".7">
+      <path d="M-18 4 C-24 -2 -22 -14 -12 -16 C-10 -24 4 -24 8 -16 C 18 -18 26 -8 20 2 C 26 8 22 20 12 20 C 8 28 -8 28 -12 20 C -22 20 -24 10 -18 4Z"/>
+      <path d="M-4 -14 C -6 -4 -6 6 -2 18"/>
+      <path d="M-12 -6 C -6 -4 -4 0 -8 6"/>
+      <path d="M4 -12 C 2 -2 6 6 2 14"/>
+    </g>
+  </svg></div>
+
+  <!-- ================= TOP BAR ================= -->
+  <div class="topbar">
+    <div class="brand"><span class="bi"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-book-open"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5v16" />  <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></span><span>veda-net.com</span></div>
+    <nav class="nav">
+      <a class="on" href="#"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-house"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />  <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></a>
+      <a href="#"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-star"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg></a>
+      <a href="#"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-book-open"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5v16" />  <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></a>
+      <a href="#"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-circle-user"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <circle cx="12" cy="10" r="3" />  <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" /></svg></a>
+    </nav>
+  </div>
+
+  <!-- ================= CENTRE ================= -->
+  <div class="centre">
+    <div class="script" contenteditable="false">Veda</div>
+    <div class="tagline">AI Study Companion</div>
+    <div><button class="cta">Start learning<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+  </div>
+
+  <!-- ================= CARDS ================= -->
+  
+  <div class="card" id="c1">
+    <div class="shape"><svg viewBox="0 0 184 210" preserveAspectRatio="none">
+      <path d="M16 1 H152 L183 32 V193 Q183 209 167 209 H16 Q1 209 1 193 V16 Q1 1 16 1 Z" fill="url(#cardFill)" stroke="var(--card-line)" stroke-width="1.6" filter="url(#cardGlow)"/>
+    </svg></div>
+    <span class="badge"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-sparkles"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />  <path d="M20 2v4" />  <path d="M22 4h-4" />  <circle cx="4" cy="20" r="2" /></svg></span>
+    <div class="body">
+      <span class="dots">···</span>
+      <div class="glyph"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-brain"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 18V5" />  <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" />  <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" />  <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" />  <path d="M18 18a4 4 0 0 0 2-7.464" />  <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" />  <path d="M6 18a4 4 0 0 1-2-7.464" />  <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></div>
+      <h3>Smart Explanations</h3>
+      <p>Understand concepts faster with AI.</p>
+      <div class="bar"></div>
+    </div>
+  </div>
+  
+  <div class="card" id="c2">
+    <div class="shape"><svg viewBox="0 0 184 210" preserveAspectRatio="none">
+      <path d="M16 1 H152 L183 32 V193 Q183 209 167 209 H16 Q1 209 1 193 V16 Q1 1 16 1 Z" fill="url(#cardFill)" stroke="var(--card-line)" stroke-width="1.6" filter="url(#cardGlow)"/>
+    </svg></div>
+    <span class="badge"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-book-open"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5v16" />  <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></span>
+    <div class="body">
+      <span class="dots">···</span>
+      <div class="glyph"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-graduation-cap"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />  <path d="M22 10v6" />  <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg></div>
+      <h3>Personalized Learning</h3>
+      <p>Study your way. We adapt for you.</p>
+      <div class="bar"></div>
+    </div>
+  </div>
+  
+  <div class="card" id="c3">
+    <div class="shape"><svg viewBox="0 0 184 210" preserveAspectRatio="none">
+      <path d="M16 1 H152 L183 32 V193 Q183 209 167 209 H16 Q1 209 1 193 V16 Q1 1 16 1 Z" fill="url(#cardFill)" stroke="var(--card-line)" stroke-width="1.6" filter="url(#cardGlow)"/>
+    </svg></div>
+    <span class="badge"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-check"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 6 9 17l-5-5" /></svg></span>
+    <div class="body">
+      <span class="dots">···</span>
+      <div class="glyph"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-chart-column"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M3 3v16a2 2 0 0 0 2 2h16" />  <path d="M18 17V9" />  <path d="M13 17V5" />  <path d="M8 17v-3" /></svg></div>
+      <h3>Track Progress</h3>
+      <p>See your growth. Stay motivated.</p>
+      <div class="bar"></div>
+    </div>
+  </div>
+  
+  <div class="card" id="c4">
+    <div class="shape"><svg viewBox="0 0 184 210" preserveAspectRatio="none">
+      <path d="M16 1 H152 L183 32 V193 Q183 209 167 209 H16 Q1 209 1 193 V16 Q1 1 16 1 Z" fill="url(#cardFill)" stroke="var(--card-line)" stroke-width="1.6" filter="url(#cardGlow)"/>
+    </svg></div>
+    <span class="badge"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-star"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg></span>
+    <div class="body">
+      <span class="dots">···</span>
+      <div class="glyph"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-message-circle"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg></div>
+      <h3>Ask Anything</h3>
+      <p>Get instant answers to any question.</p>
+      <div class="bar"></div>
+    </div>
+  </div>
+
+  <div class="scroll"></div>
+</div></div>
+
+<script>
+  const st = document.getElementById("stage");
+  const fit = () => { const s = Math.min(innerWidth/1120, innerHeight/620); st.style.transform = "scale("+s+")"; };
+  addEventListener("resize", fit); fit();
+</script>
+</body>
+</html>
