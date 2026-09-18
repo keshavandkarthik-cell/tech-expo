@@ -30,6 +30,17 @@
         .then(reg => console.log('[Veda SW] Registered:', reg.scope))
         .catch(err => console.warn('[Veda SW] Registration failed:', err));
     });
+    // A new SW version can finish installing + activating while this tab is still open,
+    // but without reloading, the open tab keeps running on assets (CSS especially, since
+    // sw.js caches it cache-first) fetched under the OLD SW's control — so a shipped fix
+    // can silently look "not applied" until the user manually force-quits and reopens.
+    // Reloading once when a new SW actually takes over closes that gap automatically.
+    let swRefreshed = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (swRefreshed) return;
+      swRefreshed = true;
+      window.location.reload();
+    });
   }
 </script>
 <!-- Firebase -->
