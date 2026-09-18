@@ -333,8 +333,8 @@ body.mobile-mode #hdr-manual-btn { width: 30px; height: 30px; }
 body.mobile-mode .hdr-status, body.mobile-mode .hdr-time { display: none !important; }
 body.mobile-mode .hdr-logo { font-size: .95rem; }
 body.mobile-mode #universal-gem-counter { padding: 5px 10px 5px 8px; }
-body.mobile-mode #content { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
-body.mobile-mode .tab { padding: 16px 14px calc(90px + env(safe-area-inset-bottom)); }
+body.mobile-mode #content { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+body.mobile-mode .tab { padding: 16px 14px calc(70px + env(safe-area-inset-bottom)); }
 body.mobile-mode .desktop-canvas { padding: 0; gap: 0; flex: none; overflow: visible; }
 body.mobile-mode #tab-home { overflow-y: auto !important; }
 body.mobile-mode .dt-zone-grid { grid-template-columns: 1fr 1fr; }
@@ -411,9 +411,9 @@ body.mobile-mode #mobile-fab-wrap { display: block; }
 #mobile-fab-overlay.open { display: block; }
 
 #mobile-fab-list {
-  display: none; position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  display: none; position: fixed; left: 50%; bottom: calc(64px + env(safe-area-inset-bottom)); transform: translateX(-50%);
   z-index: 490; grid-template-columns: repeat(3, 1fr); gap: 7px 8px;
-  max-height: calc(100dvh - 145px - env(safe-area-inset-bottom)); overflow-y: auto; padding: 4px 4px 0;
+  max-height: calc(100dvh - 125px - env(safe-area-inset-bottom)); overflow-y: auto; padding: 4px 4px 0;
   width: min(330px, 92vw);
 }
 #mobile-fab-list.open { display: grid; }
