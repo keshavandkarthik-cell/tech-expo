@@ -43,6 +43,56 @@
     });
   }
 </script>
+<!-- INSTALL-AS-PWA PROMPT ── reuses the existing #veda-notif-bar system (showNotif/
+     dismissNotif/handleNotifAction, defined in features.js) that already drives exam
+     and study-pack reminders. features.js loads later than this block but declares
+     these as plain global functions, so calling them here (after DOM/load) is safe. -->
+<script>
+  (function initInstallPrompt() {
+    const DISMISS_KEY = 'veda_install_dismissed_at';
+    const RENAG_DAYS = 14;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+    if (isStandalone) return;
+
+    const dismissedAt = parseInt(localStorage.getItem(DISMISS_KEY) || '0', 10);
+    const recentlyDismissed = dismissedAt && (Date.now() - dismissedAt) < RENAG_DAYS * 86400000;
+    if (recentlyDismissed) return;
+
+    const markDismissed = () => localStorage.setItem(DISMISS_KEY, String(Date.now()));
+
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // showNotif is defined in features.js; beforeinstallprompt can in theory fire before
+      // that script tag is reached, so bail quietly rather than throwing if it's not ready yet.
+      if (typeof showNotif !== 'function') return;
+      showNotif('📲 Install Veda as an app — quick access from your home screen, works offline.', 'Install', async () => {
+        markDismissed();
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+      });
+    });
+
+    window.addEventListener('appinstalled', () => {
+      dismissNotif();
+      markDismissed();
+    });
+
+    // iOS Safari never fires beforeinstallprompt — there's no programmatic install API,
+    // so this is a nudge toward the manual Share -> Add to Home Screen flow instead.
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent);
+    if (isIOS && isSafari) {
+      window.addEventListener('load', () => {
+        showNotif('📲 Install Veda: tap the Share icon, then "Add to Home Screen".', null, null);
+      });
+    }
+  })();
+</script>
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -4460,6 +4510,7 @@ const LANGS = {
     set_study_habit: 'Study habit',
     set_subjects: 'Subjects',
     set_tcat_aesthetic: '🎨 Aesthetic',
+    set_tcat_light: '☀️ Light',
     set_tcat_vibes: '✨ Vibes',
     set_tcat_wallpapers: '🖼️ Wallpapers',
     set_theme_ivory_tag: 'Dark · Sharp · Professional',
@@ -9322,16 +9373,31 @@ const TD = {
     {n:'Wallpaper 16', img:'image25.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
     {n:'Wallpaper 17', img:'image26.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
     {n:'Wallpaper 18', img:'image27.png', a:'#ffffff', b1:'rgba(0,0,0,.45)', b2:'rgba(0,0,0,.7)'},
+  ],
+
+  light:[
+    {n:'Soft Sky',      a:'#1e3a5f', b1:'#cfe3f5', b2:'#a8c8e0'},
+    {n:'Warm Sand',     a:'#6b4a1e', b1:'#e8dcc0', b2:'#d4c49a'},
+    {n:'Blush',         a:'#7a2e43', b1:'#e8ced8', b2:'#d9aec0'},
+    {n:'Mint Fresh',    a:'#1f4f3a', b1:'#c9e0d0', b2:'#a3c9ae'},
+    {n:'Lavender Mist', a:'#4a3266', b1:'#d8d0e8', b2:'#bcaed9'},
+    {n:'Soft Peach',    a:'#7a3f1e', b1:'#ecd3bb', b2:'#dcb28c'},
+    {n:'Cloud White',   a:'#334155', b1:'#dfe3e8', b2:'#c2c9d2'},
+    {n:'Rose Quartz',   a:'#6e2530', b1:'#e8cdd1', b2:'#d5a8ae'},
+    {n:'Seafoam',       a:'#1f4d4d', b1:'#c9e3e3', b2:'#a3c9c9'},
+    {n:'Buttercream',   a:'#5c4416', b1:'#ece0b0', b2:'#d9c778'},
+    {n:'Lilac Breeze',  a:'#4d3566', b1:'#ddd0e8', b2:'#c0a8d9'},
+    {n:'Powder Blue',   a:'#1e3a66', b1:'#c9d8ec', b2:'#a3bfdc'}
   ]
 };
-const CATS = ['vibes','aesthetic','wallpapers'];
+const CATS = ['vibes','aesthetic','wallpapers','light'];
 let curCat = localStorage.getItem('studly_cat') || 'vibes';
 if (!CATS.includes(curCat)) { curCat = 'vibes'; localStorage.setItem('studly_cat', 'vibes'); }
 let locked = null, prevBg = null;
 
 function renderThemes() {
   const ce = document.getElementById('tcats'); ce.innerHTML = '';
-  const CAT_LABELS = {vibes:t('set_tcat_vibes'),aesthetic:t('set_tcat_aesthetic'),wallpapers:t('set_tcat_wallpapers')};
+  const CAT_LABELS = {vibes:t('set_tcat_vibes'),aesthetic:t('set_tcat_aesthetic'),wallpapers:t('set_tcat_wallpapers'),light:t('set_tcat_light')};
   CATS.forEach(c => {
     const b = document.createElement('button'); b.className = 'tcat' + (c === curCat ? ' on' : '');
     b.textContent = CAT_LABELS[c] || (c.charAt(0).toUpperCase() + c.slice(1));
