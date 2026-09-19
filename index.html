@@ -9376,18 +9376,18 @@ const TD = {
   ],
 
   light:[
-    {n:'Soft Sky',      a:'#1e3a5f', b1:'#cfe3f5', b2:'#a8c8e0'},
-    {n:'Warm Sand',     a:'#6b4a1e', b1:'#e8dcc0', b2:'#d4c49a'},
-    {n:'Blush',         a:'#7a2e43', b1:'#e8ced8', b2:'#d9aec0'},
-    {n:'Mint Fresh',    a:'#1f4f3a', b1:'#c9e0d0', b2:'#a3c9ae'},
-    {n:'Lavender Mist', a:'#4a3266', b1:'#d8d0e8', b2:'#bcaed9'},
-    {n:'Soft Peach',    a:'#7a3f1e', b1:'#ecd3bb', b2:'#dcb28c'},
-    {n:'Cloud White',   a:'#334155', b1:'#dfe3e8', b2:'#c2c9d2'},
-    {n:'Rose Quartz',   a:'#6e2530', b1:'#e8cdd1', b2:'#d5a8ae'},
-    {n:'Seafoam',       a:'#1f4d4d', b1:'#c9e3e3', b2:'#a3c9c9'},
-    {n:'Buttercream',   a:'#5c4416', b1:'#ece0b0', b2:'#d9c778'},
-    {n:'Lilac Breeze',  a:'#4d3566', b1:'#ddd0e8', b2:'#c0a8d9'},
-    {n:'Powder Blue',   a:'#1e3a66', b1:'#c9d8ec', b2:'#a3bfdc'}
+    {n:'Soft Sky',      a:'#1e3a5f', b1:'#cfe3f5', b2:'#a8c8e0', light:true},
+    {n:'Warm Sand',     a:'#6b4a1e', b1:'#e8dcc0', b2:'#d4c49a', light:true},
+    {n:'Blush',         a:'#7a2e43', b1:'#f5e1e9', b2:'#eec2d8', light:true},
+    {n:'Mint Fresh',    a:'#1f4f3a', b1:'#c9e0d0', b2:'#a3c9ae', light:true},
+    {n:'Lavender Mist', a:'#4a3266', b1:'#d8d0e8', b2:'#bcaed9', light:true},
+    {n:'Soft Peach',    a:'#7a3f1e', b1:'#ecd3bb', b2:'#dcb28c', light:true},
+    {n:'Cloud White',   a:'#334155', b1:'#dfe3e8', b2:'#c2c9d2', light:true},
+    {n:'Rose Quartz',   a:'#6e2530', b1:'#f2dadf', b2:'#e5b6bd', light:true},
+    {n:'Seafoam',       a:'#1f4d4d', b1:'#c9e3e3', b2:'#a3c9c9', light:true},
+    {n:'Buttercream',   a:'#5c4416', b1:'#ece0b0', b2:'#d9c778', light:true},
+    {n:'Lilac Breeze',  a:'#4d3566', b1:'#ddd0e8', b2:'#c0a8d9', light:true},
+    {n:'Powder Blue',   a:'#1e3a66', b1:'#c9d8ec', b2:'#a3bfdc', light:true}
   ]
 };
 const CATS = ['vibes','aesthetic','wallpapers','light'];
@@ -9548,6 +9548,22 @@ function applyBg(t) {
     document.documentElement.style.setProperty('--panel-col',   'rgba(10,10,20,0.46)');
     document.documentElement.style.setProperty('--panel-col2',  'rgba(10,10,20,0.58)');
     document.documentElement.style.setProperty('--panel-col3',  'rgba(10,10,20,0.52)');
+  }
+
+  // The "Light" theme category (isVibes-shaped, but with light t.b1/t.b2 instead of the
+  // usual near-black Vibes tones) puts light panels behind body text — the app's default
+  // --text/--text2/--silver vars are tuned for light-on-near-black and go unreadable on
+  // that light backdrop, so swap the whole text palette to dark for these specifically.
+  if (t.light) {
+    document.documentElement.style.setProperty('--text',    '#14181f');
+    document.documentElement.style.setProperty('--text2',   '#3a4152');
+    document.documentElement.style.setProperty('--silver',  '#4b5468');
+    document.documentElement.style.setProperty('--silver2', '#2c3242');
+  } else {
+    document.documentElement.style.removeProperty('--text');
+    document.documentElement.style.removeProperty('--text2');
+    document.documentElement.style.removeProperty('--silver');
+    document.documentElement.style.removeProperty('--silver2');
   }
 }
 
