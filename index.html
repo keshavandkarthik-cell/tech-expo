@@ -2254,22 +2254,28 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             <!-- Curriculum -->
             <div class="ps-form-group">
               <div class="ps-form-label" data-i18n="set_curriculum">Curriculum</div>
-              <div class="aip-chip-row" id="aip-curriculum">
-                <div class="aip-chip" data-val="SPM">🇲🇾 SPM</div>
-                <div class="aip-chip" data-val="STPM">🇲🇾 STPM</div>
-                <div class="aip-chip" data-val="PT3">🇲🇾 PT3</div>
-                <div class="aip-chip on" data-val="Cambridge IGCSE">🌍 Cambridge IGCSE</div>
-                <div class="aip-chip" data-val="Edexcel IGCSE">🌍 Edexcel IGCSE</div>
-                <div class="aip-chip" data-val="Cambridge A-Level">🌍 Cambridge A-Level</div>
-                <div class="aip-chip" data-val="Edexcel A-Level">🌍 Edexcel A-Level</div>
-                <div class="aip-chip" data-val="IB">🌍 IB</div>
-                <div class="aip-chip" data-val="University">🎓 University</div>
-                <div class="aip-chip" data-val="Primary School">🎈 Primary School</div>
-                <div class="aip-chip" data-val="Other">Other</div>
+              <div class="aip-chip-row-wrap" id="aip-curriculum-wrap">
+                <div class="aip-chip-row collapsible" id="aip-curriculum">
+                  <div class="aip-chip" data-val="SPM">🇲🇾 SPM</div>
+                  <div class="aip-chip" data-val="STPM">🇲🇾 STPM</div>
+                  <div class="aip-chip" data-val="PT3">🇲🇾 PT3</div>
+                  <div class="aip-chip on" data-val="Cambridge IGCSE">🌍 Cambridge IGCSE</div>
+                  <div class="aip-chip" data-val="Edexcel IGCSE">🌍 Edexcel IGCSE</div>
+                  <div class="aip-chip" data-val="Cambridge A-Level">🌍 Cambridge A-Level</div>
+                  <div class="aip-chip" data-val="Edexcel A-Level">🌍 Edexcel A-Level</div>
+                  <div class="aip-chip" data-val="IB">🌍 IB</div>
+                  <div class="aip-chip" data-val="University">🎓 University</div>
+                  <div class="aip-chip" data-val="Primary School">🎈 Primary School</div>
+                  <div class="aip-chip" data-val="Other">Other</div>
+                </div>
+                <div class="aip-chip-row-fade"></div>
+                <button type="button" class="aip-show-more" onclick="toggleAipRow('aip-curriculum-wrap',this)">Show all ▾</button>
               </div>
             </div>
 
-            <!-- Year -->
+            <!-- Year — always JS-regenerated to a short list (SCHOOL_YEARS/UNI_YEARS,
+                 6-7 items) by aipSwapYears(), so it never needs the collapse treatment
+                 Curriculum does. This static markup is a placeholder overwritten on render. -->
             <div class="ps-form-group">
               <div class="ps-form-label" data-i18n="set_year_grade">Year / Grade</div>
               <div class="aip-chip-row" id="aip-year">
@@ -2279,17 +2285,6 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
                 <div class="aip-chip" data-val="Form 4">F4</div>
                 <div class="aip-chip" data-val="Form 5">F5</div>
                 <div class="aip-chip" data-val="Form 6">F6</div>
-                <div class="aip-chip" data-val="Year 1">Y1</div>
-                <div class="aip-chip" data-val="Year 2">Y2</div>
-                <div class="aip-chip" data-val="Year 3">Y3</div>
-                <div class="aip-chip" data-val="Year 4">Y4</div>
-                <div class="aip-chip" data-val="Postgraduate">Postgrad</div>
-                <div class="aip-chip" data-val="Primary Year 1">PY1</div>
-                <div class="aip-chip" data-val="Primary Year 2">PY2</div>
-                <div class="aip-chip" data-val="Primary Year 3">PY3</div>
-                <div class="aip-chip" data-val="Primary Year 4">PY4</div>
-                <div class="aip-chip" data-val="Primary Year 5">PY5</div>
-                <div class="aip-chip" data-val="Primary Year 6">PY6</div>
                 <div class="aip-chip" data-val="Other">Other</div>
               </div>
             </div>
@@ -10188,6 +10183,12 @@ function loadSettingsPage() {
   if (display) display.value = API_KEY ? API_KEY : '';
   renderApiKeyPanel();
   renderProfilePanel();
+  // AI Settings (aiprofile) is now the default-shown panel in #tab-settings,
+  // so it's no longer guaranteed to be reached via an explicit psGo('aiprofile')
+  // click — that used to be the only place renderAIProfilePanel() (which binds
+  // every chip's onclick) got called. Call it directly so the chips work on
+  // first load too, not just after manually clicking away and back.
+  renderAIProfilePanel();
 }
 
 
@@ -10670,6 +10671,13 @@ function renderWeekChart(stats) {
       <div class="ps-chart-day-label" style="color:${isToday?'var(--accent2)':'var(--silver)'}">${d}</div>
     </div>`;
   }).join('');
+}
+
+function toggleAipRow(wrapId, btn) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  const expanded = wrap.classList.toggle('expanded');
+  btn.textContent = expanded ? 'Show less ▴' : 'Show all ▾';
 }
 
 // ── AI PROFILE SETTINGS PANEL ──

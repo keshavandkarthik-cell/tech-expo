@@ -1922,7 +1922,16 @@ body.mobile-mode .ps-hub-title { font-size:.84rem; }
 .ob-label-sm { font-family: var(--exo); font-size: .68rem; color: var(--teal); letter-spacing: 1.5px; text-transform: uppercase; width: 100%; text-align: left; margin-bottom: 6px; }
 
 /* ── AI PROFILE SETTINGS ── */
-.aip-chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; margin-bottom: 4px; }
+/* Breathing room between each field — these used to stack with almost no
+   gap (only .aip-chip-row's own 6/4px), which read as one dense wall of
+   pills with no visual separation between unrelated fields. */
+#ps-aiprofile .ps-form-group + .ps-form-group { margin-top: 20px; }
+#ps-aiprofile .ps-form-grid + .ps-form-grid { margin-top: 20px; }
+#ps-aiprofile .ps-form-group .ps-form-label {
+  font-family: var(--exo); font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--silver); opacity: .85;
+}
+.aip-chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; margin-bottom: 4px; }
 .aip-chip {
   background: rgba(255,255,255,.035); border: 1px solid rgba(136,153,187,.22);
   border-radius: 999px; padding: 6px 13px;
@@ -1933,6 +1942,24 @@ body.mobile-mode .ps-hub-title { font-size:.84rem; }
 .aip-chip:hover { border-color: rgba(77,159,255,.5); color: var(--accent2); background: rgba(77,159,255,.06); transform: translateY(-1px); }
 .aip-chip.on { background: linear-gradient(135deg,rgba(77,159,255,.22),rgba(0,212,170,.12)); border-color: var(--accent); color: #fff; font-weight: 600; box-shadow: 0 0 0 1px rgba(77,159,255,.3), 0 3px 12px rgba(77,159,255,.25); }
 .aip-chip.aip-multi.on { background: linear-gradient(135deg,rgba(0,212,170,.2),rgba(77,159,255,.1)); border-color: var(--teal); color: #fff; box-shadow: 0 0 0 1px rgba(0,212,170,.3), 0 3px 12px rgba(0,212,170,.22); }
+
+/* Collapsible long chip rows (Curriculum, Year/Grade) — truncate to one row
+   with a fade + "Show all" toggle instead of dumping 10-17 pills at once. */
+.aip-chip-row-wrap { position: relative; }
+.aip-chip-row.collapsible { max-height: 34px; overflow: hidden; }
+.aip-chip-row-wrap.expanded .aip-chip-row.collapsible { max-height: none; }
+.aip-chip-row-wrap:not(.expanded) .aip-chip-row-fade {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 22px; height: 22px;
+  background: linear-gradient(rgba(10,14,26,0), var(--panel-col2, #0a0e1a));
+  pointer-events: none;
+}
+.aip-chip-row-wrap.expanded .aip-chip-row-fade { display: none; }
+.aip-show-more {
+  background: none; border: none; color: var(--accent2); font-family: var(--exo);
+  font-size: .68rem; letter-spacing: .5px; cursor: pointer; padding: 4px 0 0;
+  display: inline-flex; align-items: center; gap: 3px; opacity: .85;
+}
+.aip-show-more:hover { opacity: 1; text-decoration: underline; }
 
 /* ── HOME REDESIGN ── */
 .home-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
