@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <title>Veda — Foamboards</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Plus+Jakarta+Sans:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{ --ink:#FFFFFF; --mute:#D6EFE9; --green:#1FE9C4; --blue:#7DDBFF; --line:rgba(31,233,196,.95); }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -14,7 +14,7 @@
 
   .topbar{display:flex;align-items:center;gap:12mm}
   .topbar .mark{width:32mm;height:32mm;border-radius:50%}
-  .topbar span{font-family:"Syne",sans-serif;font-size:26pt;font-weight:600;letter-spacing:.5pt;color:var(--ink)}
+  .topbar span{font-family:"Arial Black",Arial,sans-serif;font-size:26pt;font-weight:600;letter-spacing:.5pt;color:var(--ink)}
 
   .mid{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16mm}
 
@@ -27,63 +27,65 @@
   /* ---- board 1 ---- */
   .hero{position:relative;text-align:center;z-index:1}
   .script{position:relative;z-index:1;font-family:"Parisienne",cursive;font-size:290pt;line-height:.82;color:var(--ink)}
-  .tagline{position:relative;z-index:1;font-family:"Syne",sans-serif;font-size:68pt;font-weight:600;color:var(--green);margin-top:6mm;letter-spacing:-.5pt}
-  .lede{position:relative;z-index:1;max-width:300mm;margin:11mm auto 0;font-size:28pt;font-weight:500;line-height:1.5;color:var(--mute)}
+  .tagline{position:relative;z-index:1;font-family:"Arial Black",Arial,sans-serif;font-size:68pt;font-weight:600;color:var(--green);margin-top:6mm;letter-spacing:-.5pt}
+  .lede{position:relative;z-index:1;max-width:320mm;margin:11mm auto 0;font-size:36pt;font-weight:500;line-height:1.5;color:var(--mute)}
 
   .tags{display:grid;grid-template-columns:repeat(4,1fr);gap:12mm}
   .tag,.stat{position:relative;isolation:isolate}
   .tag .shape,.stat .shape{position:absolute;inset:0;z-index:0}
   .tag .shape svg,.stat .shape svg{width:100%;height:100%;overflow:visible;display:block}
-  .tag .body{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7mm;padding:13mm 6mm}
+  .tag .body{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7mm;padding:13mm 6mm;text-align:center}
   .ti{width:30mm;height:30mm;color:var(--tc,var(--green));opacity:.88;filter:drop-shadow(0 0 2.5mm color-mix(in srgb, var(--tc,var(--green)) 40%, transparent))}
   .ti svg{width:100%;height:100%}
-  .tw{font-family:"Syne",sans-serif;font-size:22pt;font-weight:600;letter-spacing:.3pt;color:var(--ink);line-height:1.15}
+  .tw{font-family:"Arial Black",Arial,sans-serif;font-size:22pt;font-weight:600;letter-spacing:.3pt;color:var(--ink);line-height:1.15}
 
   .more{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:11mm}
-  .more-label{font-family:"DM Mono",monospace;font-size:18pt;font-weight:700;letter-spacing:3pt;color:var(--mute);text-align:center}
+  .more-label{font-family:"Outfit",sans-serif;font-size:18pt;font-weight:700;letter-spacing:3pt;color:var(--mute);text-align:center}
   .more-row{display:flex;flex-wrap:wrap;justify-content:center;gap:9mm;max-width:430mm}
-  .chip{font-family:"Syne",sans-serif;font-size:19pt;font-weight:600;color:var(--ink);padding:8mm 15mm;border-radius:60mm;border:2.2px solid var(--line);background:rgba(15,45,55,.5)}
+  .chip{font-family:"Arial Black",Arial,sans-serif;font-size:22pt;font-weight:600;color:var(--ink);padding:8mm 15mm;border-radius:60mm;border:2.2px solid var(--line);background:rgba(15,45,55,.5)}
   .more-row.small{gap:8mm;margin-top:2mm}
-  .more-row.small .chip{font-family:"DM Mono",monospace;font-size:19pt;letter-spacing:1pt;font-weight:700;padding:6mm 13mm;border-color:var(--blue);color:var(--mute);background:rgba(20,40,60,.45)}
+  .more-row.small .chip{font-family:"Outfit",sans-serif;font-size:20pt;letter-spacing:1pt;font-weight:700;padding:6mm 13mm;border-color:var(--blue);color:var(--mute);background:rgba(20,40,60,.45)}
 
   /* ---- mini constellation flourish (pure svg, no raster) ---- */
   .mini-doodle{display:block;margin:0 auto;width:130mm;height:20mm;overflow:visible}
 
   /* ---- board 2 ---- */
-  .b2head{position:relative;text-align:center;z-index:1}
-  .kicker{position:relative;z-index:1;font-family:"DM Mono",monospace;font-size:28pt;font-weight:700;letter-spacing:7pt;color:var(--green);margin-bottom:10mm}
-  .b2head h2{position:relative;z-index:1;font-family:"Syne",sans-serif;font-size:92pt;font-weight:600;line-height:1.04;letter-spacing:-1.5pt;color:var(--ink)}
+  .b2head{position:relative;text-align:center;z-index:1;margin-top:-18mm}
+  .kicker{position:relative;z-index:1;font-family:"Outfit",sans-serif;font-size:32pt;font-weight:700;letter-spacing:7pt;color:var(--green);margin-bottom:10mm}
+  .b2head h2{position:relative;z-index:1;font-family:"Arial Black",Arial,sans-serif;font-size:90pt;font-weight:600;line-height:1.04;letter-spacing:-1.5pt;color:var(--ink)}
 
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14mm}
   .stat .body{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18mm 14mm;text-align:center}
-  .sn{font-family:"Syne",sans-serif;font-size:70pt;font-weight:600;color:var(--green);line-height:1}
+  .sn{font-family:"Arial Black",Arial,sans-serif;font-size:70pt;font-weight:600;color:var(--green);line-height:1}
   .si{width:44mm;height:44mm;margin:0 auto;color:var(--green);filter:drop-shadow(0 0 5mm rgba(31,233,196,.7))}
   .si svg{width:100%;height:100%}
-  .sl{font-family:"DM Mono",monospace;font-size:19pt;letter-spacing:1.5pt;color:var(--ink);margin-top:7mm;font-weight:700}
-  .sd{font-size:19pt;font-weight:500;color:var(--mute);line-height:1.5;margin-top:7mm}
+  .sl{font-family:"Outfit",sans-serif;font-size:21pt;letter-spacing:1.5pt;color:var(--ink);margin-top:7mm;font-weight:700}
+  .sd{font-size:25pt;font-weight:500;color:var(--mute);line-height:1.5;margin-top:7mm}
 
   .built-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12mm}
-  .built-row .tag{height:60mm}
-  .built-row .ti{width:22mm;height:22mm}
-  .built-row .tw{font-size:19pt}
+  .built-row .tag{height:auto}
+  .built-row .body{gap:0}
+  .built-row .si{width:36mm;height:36mm;color:var(--tc);filter:drop-shadow(0 0 4mm color-mix(in srgb, var(--tc) 60%, transparent))}
 
-  .sdg-title{font-family:"DM Mono",monospace;font-size:19pt;font-weight:700;letter-spacing:2pt;color:var(--mute);text-align:center;margin-bottom:10mm}
+  .sdg-title{font-family:"Outfit",sans-serif;font-size:19pt;font-weight:700;letter-spacing:2pt;color:var(--mute);text-align:center;margin-bottom:10mm}
   .sdg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14mm}
   .sdgc{text-align:center}
   .sdgc img{width:68mm;height:68mm;border-radius:3mm;display:block;margin:0 auto 6mm}
-  .sdgc p{font-size:13.5pt;font-weight:500;line-height:1.45;color:var(--mute)}
+  .sdgc p{font-size:19pt;font-weight:500;line-height:1.45;color:var(--mute)}
 
   .quote{position:relative;z-index:1;max-width:400mm;margin:0 auto;text-align:center;padding:0 10mm}
-  .quote .qmark{font-family:"Syne",sans-serif;font-size:38pt;line-height:.4;color:var(--green);opacity:.6;display:block;margin-bottom:2mm}
-  .quote p{font-family:"Syne",sans-serif;font-size:27pt;font-weight:600;line-height:1.3;color:var(--ink);letter-spacing:-.3pt}
+  .quote .qmark{font-family:"Arial Black",Arial,sans-serif;font-size:38pt;line-height:.4;color:var(--green);opacity:.6;display:block}
+  .quote .qmark-open{margin-bottom:2mm}
+  .quote .qmark-close{margin-top:4mm}
+  .quote p{font-family:"Arial Black",Arial,sans-serif;font-size:27pt;font-weight:600;line-height:1.3;color:var(--ink);letter-spacing:-.3pt}
 
   /* ---- shared CTA ---- */
   .cta{display:flex;align-items:center;gap:18mm;padding:18mm 22mm;
     border:3.5px solid var(--blue);border-radius:14mm;
     background:linear-gradient(160deg,rgba(42,88,124,.6),rgba(14,56,74,.55))}
-  .cta .qr{width:88mm;height:88mm;border-radius:4mm;flex:none}
-  .cbig{font-family:"Syne",sans-serif;font-size:44pt;font-weight:600;color:var(--ink);letter-spacing:-.3pt;line-height:1.15}
-  .csmall{font-family:"DM Mono",monospace;font-size:20pt;font-weight:700;color:var(--green);margin-top:8mm;letter-spacing:1pt}
+  .cta .qr{width:104mm;height:104mm;border-radius:4mm;flex:none}
+  .cbig{font-family:"Arial Black",Arial,sans-serif;font-size:56pt;font-weight:600;color:var(--ink);letter-spacing:-.3pt;line-height:1.15}
+  .csmall{font-family:"Outfit",sans-serif;font-size:20pt;font-weight:700;color:var(--green);margin-top:8mm;letter-spacing:1pt}
 
   @media screen{ body{display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px} .board{box-shadow:0 30px 90px rgba(0,0,0,.6)} }
   @page{size:594mm 841mm;margin:0}
@@ -192,7 +194,7 @@
 
   <div class="mid">
     <div class="b2head">
-      <img class="doodle doodle-img" src="foamboard-doodle-shield.png" alt="">
+      <img class="doodle doodle-img" src="foamboard-doodle-brain.png" alt="">
       <div class="kicker">WHY VEDA</div>
       <h2>Built for students &mdash;<br>and built to matter.</h2>
     </div>
@@ -230,24 +232,25 @@
         
   <div class="tag" style="--tc:#7DDBFF"><div class="shape"><svg viewBox="0 0 200 200" preserveAspectRatio="none">
   <path d="M20 0 H180 Q200 0 200 20 V180 Q200 200 180 200 H20 Q0 200 0 180 V20 Q0 0 20 0 Z" fill="url(#cardGrad)" stroke="var(--line)" stroke-width="2.6"/></svg></div>
-    <div class="body"><span class="ti"><!-- @license lucide-static v1.46.0 - ISC --><svg  class="lucide lucide-cloud"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg></span><span class="tw">STATIC &amp; FREE</span></div>
+    <div class="body"><div class="si"><!-- @license lucide-static v1.46.0 - ISC --><svg  class="lucide lucide-cloud"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg></div><div class="sl">STATIC &amp; FREE</div><div class="sd">A single-page app on GitHub Pages, live at veda-net.com.</div></div>
   </div>
         
   <div class="tag" style="--tc:#1FE9C4"><div class="shape"><svg viewBox="0 0 200 200" preserveAspectRatio="none">
   <path d="M20 0 H180 Q200 0 200 20 V180 Q200 200 180 200 H20 Q0 200 0 180 V20 Q0 0 20 0 Z" fill="url(#cardGrad)" stroke="var(--line)" stroke-width="2.6"/></svg></div>
-    <div class="body"><span class="ti"><!-- @license lucide-static v1.46.0 - ISC --><svg  class="lucide lucide-code-xml"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m18 16 4-4-4-4" />  <path d="m6 8-4 4 4 4" />  <path d="m14.5 4-5 16" /></svg></span><span class="tw">FIREBASE BACKEND</span></div>
+    <div class="body"><div class="si"><!-- @license lucide-static v1.46.0 - ISC --><svg  class="lucide lucide-code-xml"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="m18 16 4-4-4-4" />  <path d="m6 8-4 4 4 4" />  <path d="m14.5 4-5 16" /></svg></div><div class="sl">FIREBASE BACKEND</div><div class="sd">Firestore powers the Forum and student data; one Cloud Function sends guardian-alert emails.</div></div>
   </div>
         
   <div class="tag" style="--tc:#7DDBFF"><div class="shape"><svg viewBox="0 0 200 200" preserveAspectRatio="none">
   <path d="M20 0 H180 Q200 0 200 20 V180 Q200 200 180 200 H20 Q0 200 0 180 V20 Q0 0 20 0 Z" fill="url(#cardGrad)" stroke="var(--line)" stroke-width="2.6"/></svg></div>
-    <div class="body"><span class="ti"><!-- @license lucide-static v1.46.0 - ISC --><svg  class="lucide lucide-key-round"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />  <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /></svg></span><span class="tw">BRING-YOUR-OWN-KEY AI</span></div>
+    <div class="body"><div class="si"><!-- @license lucide-static v1.46.0 - ISC --><svg  class="lucide lucide-key-round"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />  <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /></svg></div><div class="sl">BRING-YOUR-OWN-KEY AI</div><div class="sd">Students use their own free Gemini API key, stored locally &mdash; no shared cost, no sign-up wall.</div></div>
   </div>
       </div>
     </div>
 
     <div class="quote">
-      <span class="qmark">&ldquo;</span>
-      <p>No paywall. No sign-up wall. No subscription cost &mdash; just real study tools, free for any student, on any budget, anywhere.&rdquo;</p>
+      <span class="qmark qmark-open">&ldquo;</span>
+      <p>No paywall. No sign-up wall. No subscription cost &mdash; just real study tools, free for any student, on any budget, anywhere.</p>
+      <span class="qmark qmark-close">&rdquo;</span>
     </div>
 
     <div class="sdg">
