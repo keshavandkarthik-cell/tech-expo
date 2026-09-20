@@ -29,6 +29,12 @@
   .script{position:relative;z-index:1;font-family:"Parisienne",cursive;font-size:290pt;line-height:.82;color:var(--ink)}
   .tagline{position:relative;z-index:1;font-family:"Arial Black",Arial,sans-serif;font-size:68pt;font-weight:600;color:var(--green);margin-top:6mm;letter-spacing:-.5pt}
   .lede{position:relative;z-index:1;max-width:320mm;margin:11mm auto 0;font-size:36pt;font-weight:500;line-height:1.5;color:var(--mute)}
+  .lede-strip{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);justify-items:center;gap:20mm 14mm;margin-top:16mm;max-width:460mm;margin-left:auto;margin-right:auto}
+  .lede-item{display:flex;flex-direction:column;align-items:center;gap:6mm;width:100%}
+  .li-icon{width:42mm;height:42mm;border-radius:50%;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb, var(--tc) 14%, transparent);border:2px solid var(--tc);color:var(--tc);flex:none;filter:drop-shadow(0 0 3mm color-mix(in srgb, var(--tc) 55%, transparent))}
+  .li-icon svg{width:52%;height:52%}
+  .li-label{font-family:"Arial Black",Arial,sans-serif;font-size:19pt;font-weight:600;letter-spacing:.3pt;color:var(--ink);text-align:center;line-height:1.2}
+  .lede-tag{position:relative;z-index:1;font-family:"Plus Jakarta Sans",Arial,sans-serif;font-size:22pt;color:var(--mute);margin-top:12mm;opacity:.9;text-align:center}
 
   .tags{display:grid;grid-template-columns:repeat(4,1fr);gap:12mm}
   .tag,.stat{position:relative;isolation:isolate}
@@ -42,9 +48,9 @@
   .more{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:11mm}
   .more-label{font-family:"Outfit",sans-serif;font-size:18pt;font-weight:700;letter-spacing:3pt;color:var(--mute);text-align:center}
   .more-row{display:flex;flex-wrap:wrap;justify-content:center;gap:9mm;max-width:430mm}
-  .chip{font-family:"Arial Black",Arial,sans-serif;font-size:22pt;font-weight:600;color:var(--ink);padding:8mm 15mm;border-radius:60mm;border:2.2px solid var(--line);background:rgba(15,45,55,.5)}
+  .chip{font-family:"Arial Black",Arial,sans-serif;font-size:28pt;font-weight:600;color:var(--ink);padding:9mm 17mm;border-radius:60mm;border:2.2px solid var(--line);background:rgba(15,45,55,.5)}
   .more-row.small{gap:8mm;margin-top:2mm}
-  .more-row.small .chip{font-family:"Outfit",sans-serif;font-size:20pt;letter-spacing:1pt;font-weight:700;padding:6mm 13mm;border-color:var(--blue);color:var(--mute);background:rgba(20,40,60,.45)}
+  .more-row.small .chip{font-family:"Outfit",sans-serif;font-size:25pt;letter-spacing:1pt;font-weight:700;padding:7mm 15mm;border-color:var(--blue);color:var(--mute);background:rgba(20,40,60,.45)}
 
   /* ---- mini constellation flourish (pure svg, no raster) ---- */
   .mini-doodle{display:block;margin:0 auto;width:130mm;height:20mm;overflow:visible}
@@ -65,13 +71,13 @@
   .built-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12mm}
   .built-row .tag{height:auto}
   .built-row .body{gap:0}
-  .built-row .si{width:36mm;height:36mm;color:var(--tc);filter:drop-shadow(0 0 4mm color-mix(in srgb, var(--tc) 60%, transparent))}
+  .built-row .si{width:36mm;height:36mm;color:var(--green);filter:drop-shadow(0 0 4mm rgba(31,233,196,.6))}
 
-  .sdg-title{font-family:"Outfit",sans-serif;font-size:19pt;font-weight:700;letter-spacing:2pt;color:var(--mute);text-align:center;margin-bottom:10mm}
+  .sdg-title{font-family:"Outfit",sans-serif;font-size:24pt;font-weight:700;letter-spacing:2pt;color:var(--mute);text-align:center;margin-bottom:14mm}
   .sdg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14mm}
   .sdgc{text-align:center}
-  .sdgc img{width:68mm;height:68mm;border-radius:3mm;display:block;margin:0 auto 6mm}
-  .sdgc p{font-size:19pt;font-weight:500;line-height:1.45;color:var(--mute)}
+  .sdgc img{width:92mm;height:92mm;border-radius:4mm;display:block;margin:0 auto 8mm}
+  .sdgc p{font-size:22pt;font-weight:500;line-height:1.45;color:var(--mute)}
 
   .quote{position:relative;z-index:1;max-width:400mm;margin:0 auto;text-align:center;padding:0 10mm}
   .quote .qmark{font-family:"Arial Black",Arial,sans-serif;font-size:38pt;line-height:.4;color:var(--green);opacity:.6;display:block}
@@ -108,7 +114,7 @@
       <img class="doodle doodle-img doodle-img-v" src="foamboard-doodle-v.png" alt="">
       <div class="script">Veda</div>
       <div class="tagline">The AI-Powered Study Companion</div>
-      <div class="lede">Homework help, revision tools, planning, an AI companion, games and a student forum &mdash; every part of studying, in one place. Free, and nothing to install.</div>
+      <div class="lede-strip"><div class="lede-item" style="--tc:#4D9FFF"><span class="li-icon"><svg  class="lucide lucide-messages-square"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />  <path d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1" /></svg></span><span class="li-label">HOMEWORK HELP</span></div><div class="lede-item" style="--tc:#C084FC"><span class="li-icon"><svg  class="lucide lucide-book-open"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5v16" />  <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></span><span class="li-label">REVISION TOOLS</span></div><div class="lede-item" style="--tc:#FBBF24"><span class="li-icon"><svg  class="lucide lucide-calendar-days"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M8 2v3" />  <path d="M16 2v3" />  <rect x="3" y="3" width="18" height="18" rx="2" />  <path d="M3 9h18" />  <path d="M8 13h.01" />  <path d="M12 13h.01" />  <path d="M16 13h.01" />  <path d="M8 17h.01" />  <path d="M12 17h.01" />  <path d="M16 17h.01" /></svg></span><span class="li-label">PLANNING</span></div><div class="lede-item" style="--tc:#F472B6"><span class="li-icon"><svg  class="lucide lucide-heart-handshake"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762" /></svg></span><span class="li-label">AI COMPANION</span></div><div class="lede-item" style="--tc:#FB923C"><span class="li-icon"><svg  class="lucide lucide-gamepad-2"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <line x1="6" x2="10" y1="11" y2="11" />  <line x1="8" x2="8" y1="9" y2="13" />  <line x1="15" x2="15.01" y1="12" y2="12" />  <line x1="18" x2="18.01" y1="10" y2="10" />  <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" /></svg></span><span class="li-label">GAMES</span></div><div class="lede-item" style="--tc:#4D9FFF"><span class="li-icon"><svg  class="lucide lucide-users"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />  <path d="M16 3.128a4 4 0 0 1 0 7.744" />  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />  <circle cx="9" cy="7" r="4" /></svg></span><span class="li-label">STUDENT FORUM</span></div></div><div class="lede-tag">Every part of studying, in one place &mdash; free, and nothing to install.</div>
     </div>
 
     <div class="tags">
@@ -245,12 +251,6 @@
     <div class="body"><div class="si"><!-- @license lucide-static v1.46.0 - ISC --><svg  class="lucide lucide-key-round"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />  <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /></svg></div><div class="sl">BRING-YOUR-OWN-KEY AI</div><div class="sd">Students use their own free Gemini API key, stored locally &mdash; no shared cost, no sign-up wall.</div></div>
   </div>
       </div>
-    </div>
-
-    <div class="quote">
-      <span class="qmark qmark-open">&ldquo;</span>
-      <p>No paywall. No sign-up wall. No subscription cost &mdash; just real study tools, free for any student, on any budget, anywhere.</p>
-      <span class="qmark qmark-close">&rdquo;</span>
     </div>
 
     <div class="sdg">
