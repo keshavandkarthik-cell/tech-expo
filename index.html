@@ -515,14 +515,14 @@ onAuthStateChanged(_auth, async user => {
         <span style="opacity:.7;">🔍</span><span>Search</span><span style="opacity:.35;font-size:.65rem;margin-left:2px;">Ctrl K</span>
       </button>
       <button onclick="openManual()" id="hdr-manual-btn" title="User Manual (?)" aria-label="Open user manual" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:10px;width:30px;height:30px;color:var(--silver);font-family:var(--exo);font-size:.78rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;">?</button>
+      <button onclick="openThemesTab()" id="hdr-theme-btn" title="Themes &amp; Appearance" aria-label="Open Themes &amp; Appearance" style="background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);border-radius:10px;width:30px;height:30px;color:var(--silver);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+      </button>
       <div class="hdr-status"><span class="pulse"></span>AI ONLINE</div>
-      <div id="hdr-user" style="display: none; align-items: center; gap: 8px; cursor: pointer;" onclick="go('settings')" title="My Account">
-        <img id="hdr-avatar" src="" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="Your profile picture">
+      <div id="hdr-profile" style="display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="go('settings')" title="My Account">
+        <img id="hdr-avatar" src="" style="display:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="Your profile picture">
+        <div id="hdr-avatar-emoji" style="width:28px;height:28px;border-radius:50%;background:rgba(77,159,255,0.12);border:2px solid rgba(77,159,255,0.35);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;">🎓</div>
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Student</span>
-      </div>
-      <div id="hdr-guest" style="display:none;align-items:center;gap:8px;cursor:pointer;" onclick="go('settings')" title="Guest Mode — click to sign in">
-        <div style="width:28px;height:28px;border-radius:50%;background:rgba(77,159,255,0.15);border:2px solid rgba(77,159,255,0.3);display:flex;align-items:center;justify-content:center;font-size:.85rem;">👤</div>
-        <span style="font-family:var(--exo);font-size:.72rem;color:var(--silver);letter-spacing:.5px;">GUEST</span>
       </div>
       <div id="universal-gem-counter" onclick="go('profile')" title="Your gems — click to view profile" style="
       display: flex;
@@ -640,6 +640,7 @@ onAuthStateChanged(_auth, async user => {
         <button class="nb on" onclick="go('home')"><span class="ni"><span class="ivory-emoji">⊞</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3.5 9.5 10 3.5l6.5 6"/><path d="M5 8.5V16a1 1 0 0 0 1 1h3v-4.5h2V17h3a1 1 0 0 0 1-1V8.5"/></svg></span></span><span class="nl">Home</span></button>
         <!-- dynamic nav buttons injected by renderNav() -->
         <button class="nb" id="nb-music" onclick="go('music')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">🎵</span><span class="nl">Music</span></button>
+        <button class="nb" id="nb-themes" onclick="go('themes')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">🎨</span><span class="nl">Themes</span></button>
         <div id="nav-more-section" style="display:none;flex-direction:column;gap:2px;">
           <button class="nb nb-more-toggle" id="nav-more-btn" onclick="toggleNavMore()"><span class="ni">⋯</span><span class="nl" data-i18n="nav_more">More</span></button>
           <div id="nav-more-list" style="display:none;flex-direction:column;gap:2px;padding-left:8px;border-left:2px solid rgba(255,255,255,.06);margin-left:4px;"></div>
@@ -659,6 +660,93 @@ onAuthStateChanged(_auth, async user => {
 
     <!-- UNIVERSAL GEM COUNTER -->
     <div id="content">
+
+    <!-- THEMES TAB — full tab like any other, but no permanent sidebar entry;
+         reached only via the header's palette icon (toggleThemePanel -> go('themes')) -->
+    <div class="tab" id="tab-themes">
+      <div class="ttl">🎨 Themes &amp; Appearance</div>
+      <div class="tsub"><span class="prm">›</span>Pick your look — master theme, UI skin, background, and accent color</div>
+
+      <!-- MASTER THEME SWITCHER -->
+      <div class="ps-card" style="margin-top:14px;">
+        <div class="ps-card-label" data-i18n="set_master_theme">// MASTER THEME</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;max-width:520px;">
+          <div id="master-theme-veda" onclick="setMasterTheme('veda',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid var(--accent);background:linear-gradient(135deg,#0a0e1a,#0f1528);position:relative;overflow:hidden;transition:all .2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
+            <div style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:900;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:4px;">VEDA</div>
+            <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:#8899bb;letter-spacing:1px;" data-i18n="set_theme_veda_tag">Dark · Glowing · Futuristic</div>
+            <div id="veda-active-dot" style="position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
+          </div>
+          <div id="master-theme-ivory" onclick="setMasterTheme('ivory',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid rgba(176,125,74,0.3);background:linear-gradient(135deg,#1c1c1f,#232326);position:relative;overflow:hidden;transition:all .2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
+            <div style="font-family:'Helvetica Neue',sans-serif;font-size:.85rem;font-weight:700;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-bottom:4px;">IVORY</div>
+            <div style="font-family:'SF Mono','Courier New',monospace;font-size:.65rem;color:#6b7280;letter-spacing:1px;" data-i18n="set_theme_ivory_tag">Dark · Sharp · Professional</div>
+            <div id="ivory-active-dot" style="display:none;position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="veda-only-theme">
+        <div class="ps-card" id="veda-only-skin" style="margin-top:12px;">
+          <div class="ps-card-label" data-i18n="set_ui_skin">// UI SKIN</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px;max-width:640px;">
+            <div class="skin-card on" id="style-default" onclick="setUIStyle('default',this)">
+              <div class="skin-preview skin-prev-default"></div>
+              <div class="skin-label" data-i18n="set_skin_default">🖥️ Default</div>
+            </div>
+            <div class="skin-card" id="style-hacker" onclick="setUIStyle('hacker',this)">
+              <div class="skin-preview skin-prev-hacker"></div>
+              <div class="skin-label" data-i18n="set_skin_hacker">💻 Hacker</div>
+            </div>
+            <div class="skin-card" id="style-glass" onclick="setUIStyle('glass',this)">
+              <div class="skin-preview skin-prev-glass"></div>
+              <div class="skin-label" data-i18n="set_skin_glass">🔮 Frosted</div>
+            </div>
+            <div class="skin-card" id="style-synthwave" onclick="setUIStyle('synthwave',this)">
+              <div class="skin-preview skin-prev-synthwave"></div>
+              <div class="skin-label" data-i18n="set_skin_synthwave">🌆 Synthwave</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ps-card" id="theme-tile-card" style="margin-top:12px;">
+          <div class="ps-card-label" data-i18n="set_theme_label">// THEME</div>
+          <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
+            <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on" data-i18n="set_tcat_vibes">✨ Vibes</button><button class="tcat" data-i18n="set_tcat_aesthetic">🎨 Aesthetic</button><button class="tcat" data-i18n="set_tcat_wallpapers">🖼️ Wallpapers</button></div>
+            <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()" data-i18n="set_gem_shop">💎 Gem Shop</button>
+          </div>
+          <div id="shop-panel" style="display:none;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:2px;" data-i18n="set_gem_shop_label">// GEM SHOP</div>
+              <div style="font-family:var(--orb);font-size:.55rem;color:var(--teal2);">💎 <span id="shop-gems-display">0</span> <span data-i18n="home_gems">gems</span></div>
+            </div>
+            <div class="shop-grid" id="shop-grid"></div>
+          </div>
+          <input type="file" id="custom-wallpaper-in" accept="image/*" style="display:none" onchange="handleCustomWallpaper(this)">
+          <div class="tgrid" id="tgrid"></div>
+        </div>
+      </div>
+
+      <div class="ps-card" style="margin-top:12px;">
+        <div class="ps-card-label" data-i18n="set_accent_color">// ACCENT COLOR</div>
+        <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:16px;line-height:1.6;" data-i18n="set_accent_color_desc">Pick a color to use across buttons, highlights, and active states throughout Veda.</div>
+        <div class="color-row" style="flex-wrap:wrap;gap:12px;margin-top:4px;">
+          <div class="color-swatch on" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
+          <div class="color-swatch" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
+          <div class="color-swatch" style="background:#c084fc;" data-color="#c084fc" onclick="setAccent('#c084fc',this)"></div>
+          <div class="color-swatch" style="background:#f472b6;" data-color="#f472b6" onclick="setAccent('#f472b6',this)"></div>
+          <div class="color-swatch" style="background:#fb923c;" data-color="#fb923c" onclick="setAccent('#fb923c',this)"></div>
+          <div class="color-swatch" style="background:#34d399;" data-color="#34d399" onclick="setAccent('#34d399',this)"></div>
+          <div class="color-swatch" style="background:#fbbf24;" data-color="#fbbf24" onclick="setAccent('#fbbf24',this)"></div>
+          <div class="color-swatch" style="background:#ff6b6b;" data-color="#ff6b6b" onclick="setAccent('#ff6b6b',this)"></div>
+          <div class="color-custom-wrap" title="Custom color">
+            <div class="color-swatch" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);" onclick="document.getElementById('custom-color-in').click()"></div>
+            <input type="color" id="custom-color-in" style="position:absolute;opacity:0;width:1px;height:1px;" oninput="setAccent(this.value,null)">
+          </div>
+        </div>
+      </div>
+    </div>
+
 
       <!-- HOME — DESKTOP OS -->
       <div class="tab on" id="tab-home">
@@ -1689,9 +1777,10 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-subnav-group">
             <div class="ps-subnav-label" data-i18n="set_group_prefs">Preferences</div>
             <div class="ps-subnav">
-              <button class="ps-tab" onclick="psGo('appearance',this)">🎨 Appearance</button>
               <button class="ps-tab" onclick="psGo('aiprofile',this)">🤖 AI Settings</button>
               <button class="ps-tab" onclick="psGo('apikey',this)">🔑 AI Key</button>
+              <button class="ps-tab" onclick="psGo('layout',this)">📐 Layout</button>
+              <button class="ps-tab" onclick="psGo('language',this)">🌐 Language</button>
             </div>
           </div>
         </div>
@@ -2084,161 +2173,64 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           <div class="ps-badges-full" id="titles-grid"></div>
         </div>
 
-        <div class="ps-panel" id="ps-appearance">
-
-          <!-- Secondary nav -->
-          <div class="ap-subnav" id="ap-subnav">
-            <button class="ap-tab on" onclick="apGo('look',this)" data-i18n="set_ap_look">🎨 Look</button>
-            <button class="ap-tab" onclick="apGo('colors',this)" data-i18n="set_ap_colors">🌈 Colors</button>
-            <button class="ap-tab" onclick="apGo('layout',this)" data-i18n="set_ap_layout">📐 Layout</button>
-            <button class="ap-tab" onclick="apGo('language',this)" data-i18n="set_ap_language">🌐 Language</button>
-          </div>
-
-          <!-- LOOK: Skin + Theme -->
-          <div class="ap-panel on" id="ap-look">
-            <!-- MASTER THEME SWITCHER -->
-            <div class="ps-card" style="margin-bottom:12px;">
-              <div class="ps-card-label" data-i18n="set_master_theme">// MASTER THEME</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
-                <div id="master-theme-veda" onclick="setMasterTheme('veda',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid var(--accent);background:linear-gradient(135deg,#0a0e1a,#0f1528);position:relative;overflow:hidden;transition:all .2s;">
-                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
-                  <div style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:900;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:4px;">VEDA</div>
-                  <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:#8899bb;letter-spacing:1px;" data-i18n="set_theme_veda_tag">Dark · Glowing · Futuristic</div>
-                  <div id="veda-active-dot" style="position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
-                </div>
-                <div id="master-theme-ivory" onclick="setMasterTheme('ivory',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid rgba(176,125,74,0.3);background:linear-gradient(135deg,#1c1c1f,#232326);position:relative;overflow:hidden;transition:all .2s;">
-                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
-                  <div style="font-family:'Helvetica Neue',sans-serif;font-size:.85rem;font-weight:700;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-bottom:4px;">IVORY</div>
-                  <div style="font-family:'SF Mono','Courier New',monospace;font-size:.65rem;color:#6b7280;letter-spacing:1px;" data-i18n="set_theme_ivory_tag">Dark · Sharp · Professional</div>
-                  <div id="ivory-active-dot" style="display:none;position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="ps-card" id="veda-only-skin">
-              <div class="ps-card-label" data-i18n="set_ui_skin">// UI SKIN</div>
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
-                <div class="skin-card on" id="style-default" onclick="setUIStyle('default',this)">
-                  <div class="skin-preview skin-prev-default"></div>
-                  <div class="skin-label" data-i18n="set_skin_default">🖥️ Default</div>
-                </div>
-                <div class="skin-card" id="style-hacker" onclick="setUIStyle('hacker',this)">
-                  <div class="skin-preview skin-prev-hacker"></div>
-                  <div class="skin-label" data-i18n="set_skin_hacker">💻 Hacker</div>
-                </div>
-                <div class="skin-card" id="style-glass" onclick="setUIStyle('glass',this)">
-                  <div class="skin-preview skin-prev-glass"></div>
-                  <div class="skin-label" data-i18n="set_skin_glass">🔮 Frosted</div>
-                </div>
-                <div class="skin-card" id="style-synthwave" onclick="setUIStyle('synthwave',this)">
-                  <div class="skin-preview skin-prev-synthwave"></div>
-                  <div class="skin-label" data-i18n="set_skin_synthwave">🌆 Synthwave</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="ps-card" id="theme-tile-card" style="margin-top:12px;">
-              <div class="ps-card-label" data-i18n="set_theme_label">// THEME</div>
-              <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-                <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on" data-i18n="set_tcat_vibes">✨ Vibes</button><button class="tcat" data-i18n="set_tcat_aesthetic">🎨 Aesthetic</button><button class="tcat" data-i18n="set_tcat_wallpapers">🖼️ Wallpapers</button></div>
-                <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()" data-i18n="set_gem_shop">💎 Gem Shop</button>
-              </div>
-              <div id="shop-panel" style="display:none;margin-bottom:16px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                  <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:2px;" data-i18n="set_gem_shop_label">// GEM SHOP</div>
-                  <div style="font-family:var(--orb);font-size:.55rem;color:var(--teal2);">💎 <span id="shop-gems-display">0</span> <span data-i18n="home_gems">gems</span></div>
-                </div>
-                <div class="shop-grid" id="shop-grid"></div>
-              </div>
-              <input type="file" id="custom-wallpaper-in" accept="image/*" style="display:none" onchange="handleCustomWallpaper(this)">
-              <div class="tgrid" id="tgrid"><div class="ttile" style="background: linear-gradient(135deg, rgb(15, 15, 26), rgb(26, 26, 46));"><div class="tname" style="color: rgb(129, 140, 248);">Midnight Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(5, 12, 20), rgb(10, 24, 40));"><div class="tname" style="color: rgb(56, 189, 248);">Deep Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 13, 6), rgb(38, 21, 8));"><div class="tname" style="color: rgb(251, 146, 60);">Cozy Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 16, 10), rgb(12, 30, 16));"><div class="tname" style="color: rgb(74, 222, 128);">Flow State</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 28), rgb(30, 16, 48));"><div class="tname" style="color: rgb(192, 132, 252);">Dream Mode</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(4, 12, 16), rgb(8, 24, 32));"><div class="tname" style="color: rgb(103, 232, 249);">Calm Waters</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 14, 2), rgb(34, 22, 4));"><div class="tname" style="color: rgb(251, 191, 36);">Golden Hour</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(22, 8, 16), rgb(34, 13, 24));"><div class="tname" style="color: rgb(249, 168, 212);">Rose Study</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 14, 8), rgb(12, 24, 16));"><div class="tname" style="color: rgb(110, 231, 183);">Forest Desk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(10, 8, 20), rgb(20, 16, 30));"><div class="tname" style="color: rgb(167, 139, 250);">Night Owl</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(24, 10, 4), rgb(38, 18, 6));"><div class="tname" style="color: rgb(255, 107, 53);">Ember Glow</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 8, 14), rgb(12, 16, 24));"><div class="tname" style="color: rgb(186, 230, 253);">Arctic Mind</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(2, 13, 11), rgb(5, 22, 20));"><div class="tname" style="color: rgb(0, 255, 212);">Neon Focus</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(14, 16, 20), rgb(22, 26, 32));"><div class="tname" style="color: rgb(226, 232, 240);">Ink &amp; Paper</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 14, 0), rgb(30, 22, 0));"><div class="tname" style="color: rgb(253, 224, 71);">Solar Flare</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(20, 8, 20), rgb(32, 14, 32));"><div class="tname" style="color: rgb(232, 121, 249);">Violet Dusk</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(6, 12, 20), rgb(12, 20, 32));"><div class="tname" style="color: rgb(96, 165, 250);">Steel Blue</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(8, 14, 8), rgb(16, 26, 14));"><div class="tname" style="color: rgb(134, 239, 172);">Matcha</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(18, 8, 8), rgb(30, 14, 14));"><div class="tname" style="color: rgb(252, 165, 165);">Ruby Night</div></div><div class="ttile" style="background: linear-gradient(135deg, rgb(3, 14, 12), rgb(6, 24, 20));"><div class="tname" style="color: rgb(45, 212, 191);">Ocean Deep</div></div></div>
+        <div class="ps-panel" id="ps-layout">
+          <div class="ps-card">
+            <div class="ps-card-label">// FONT SIZE</div>
+            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Controls base text size across the entire app.</div>
+            <div class="pers-row">
+              <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
+              <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
+              <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
+              <button class="pers-btn" id="fs-huge" onclick="setFontSize('huge',this)">Giant</button>
             </div>
           </div>
-
-          <!-- COLORS: Accent -->
-          <div class="ap-panel" id="ap-colors">
-            <div class="ps-card">
-              <div class="ps-card-label" data-i18n="set_accent_color">// ACCENT COLOR</div>
-              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:16px;line-height:1.6;" data-i18n="set_accent_color_desc">Pick a color to use across buttons, highlights, and active states throughout Veda.</div>
-              <div class="color-row" style="flex-wrap:wrap;gap:12px;margin-top:4px;">
-                <div class="color-swatch on" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
-                <div class="color-swatch" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
-                <div class="color-swatch" style="background:#c084fc;" data-color="#c084fc" onclick="setAccent('#c084fc',this)"></div>
-                <div class="color-swatch" style="background:#f472b6;" data-color="#f472b6" onclick="setAccent('#f472b6',this)"></div>
-                <div class="color-swatch" style="background:#fb923c;" data-color="#fb923c" onclick="setAccent('#fb923c',this)"></div>
-                <div class="color-swatch" style="background:#34d399;" data-color="#34d399" onclick="setAccent('#34d399',this)"></div>
-                <div class="color-swatch" style="background:#fbbf24;" data-color="#fbbf24" onclick="setAccent('#fbbf24',this)"></div>
-                <div class="color-swatch" style="background:#ff6b6b;" data-color="#ff6b6b" onclick="setAccent('#ff6b6b',this)"></div>
-                <div class="color-custom-wrap" title="Custom color">
-                  <div class="color-swatch" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);" onclick="document.getElementById('custom-color-in').click()"></div>
-                  <input type="color" id="custom-color-in" style="position:absolute;opacity:0;width:1px;height:1px;" oninput="setAccent(this.value,null)">
-                </div>
-              </div>
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label">// SIDEBAR</div>
+            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Control when the left sidebar is visible.</div>
+            <div class="pers-row">
+              <button class="pers-btn" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
+              <button class="pers-btn on" id="sb-open" onclick="setSbPref('open',this)">Open</button>
+              <button class="pers-btn" id="sb-closed" onclick="setSbPref('closed',this)">Closed</button>
             </div>
           </div>
-
-          <!-- LAYOUT: Font + Sidebar -->
-          <div class="ap-panel" id="ap-layout">
-            <div class="ps-card">
-              <div class="ps-card-label">// FONT SIZE</div>
-              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Controls base text size across the entire app.</div>
-              <div class="pers-row">
-                <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
-                <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
-                <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
-                <button class="pers-btn" id="fs-huge" onclick="setFontSize('huge',this)">Giant</button>
-              </div>
-            </div>
-            <div class="ps-card" style="margin-top:12px;">
-              <div class="ps-card-label">// SIDEBAR</div>
-              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Control when the left sidebar is visible.</div>
-              <div class="pers-row">
-                <button class="pers-btn" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
-                <button class="pers-btn on" id="sb-open" onclick="setSbPref('open',this)">Open</button>
-                <button class="pers-btn" id="sb-closed" onclick="setSbPref('closed',this)">Closed</button>
-              </div>
-            </div>
-            <div class="ps-card" style="margin-top:12px;">
-              <div class="ps-card-label">// ABOUT</div>
-              <div class="ps-about">
-                <div class="ps-about-logo">VEDA</div>
-                <div class="ps-about-ver">Version 3.0 · ज्ञानं परमं ध्येयम्</div>
-                <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
-              </div>
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label">// ABOUT</div>
+            <div class="ps-about">
+              <div class="ps-about-logo">VEDA</div>
+              <div class="ps-about-ver">Version 3.0 · ज्ञानं परमं ध्येयम्</div>
+              <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
             </div>
           </div>
+        </div>
 
-          <!-- LANGUAGE -->
-          <div class="ap-panel" id="ap-language">
-            <div class="ps-card">
-              <div class="ps-card-label" data-i18n="lang_section">// LANGUAGE</div>
-              <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:14px;line-height:1.6;">Choose the language for Veda's interface.</div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:4px;" id="lang-pill-grid">
-                <div class="lang-pill on" id="lang-en" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span></div>
-                <div class="lang-pill" id="lang-es" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></div>
-                <div class="lang-pill" id="lang-ms" onclick="setLang('ms',this)"><span class="lang-flag">🇲🇾</span><span class="lang-name">Bahasa Melayu</span></div>
-                <div class="lang-pill" id="lang-zh" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></div>
-                <div class="lang-pill" id="lang-ja" onclick="setLang('ja',this)"><span class="lang-flag">🇯🇵</span><span class="lang-name">日本語</span></div>
-              </div>
+        <div class="ps-panel" id="ps-language">
+          <div class="ps-card">
+            <div class="ps-card-label" data-i18n="lang_section">// LANGUAGE</div>
+            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:14px;line-height:1.6;">Choose the language for Veda's interface.</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:4px;" id="lang-pill-grid">
+              <div class="lang-pill on" id="lang-en" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span></div>
+              <div class="lang-pill" id="lang-es" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></div>
+              <div class="lang-pill" id="lang-ms" onclick="setLang('ms',this)"><span class="lang-flag">🇲🇾</span><span class="lang-name">Bahasa Melayu</span></div>
+              <div class="lang-pill" id="lang-zh" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></div>
+              <div class="lang-pill" id="lang-ja" onclick="setLang('ja',this)"><span class="lang-flag">🇯🇵</span><span class="lang-name">日本語</span></div>
+            </div>
 
-              <!-- More languages (AI-translated, beta) -->
-              <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(77,159,255,.1);">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-                  <span style="font-family:var(--exo);font-size:.75rem;color:var(--text);">🌐 More languages</span>
-                  <span style="font-family:var(--orb);font-size:.55rem;letter-spacing:1px;color:#000;background:linear-gradient(135deg,var(--teal),var(--accent2));padding:2px 8px;border-radius:999px;font-weight:800;">BETA</span>
-                </div>
-                <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.75;margin-bottom:10px;line-height:1.5;">
-                  Type any language — Veda's AI translates the whole interface on the spot and remembers it for next time.
-                </div>
-                <div class="set-row">
-                  <input class="set-input" id="custom-lang-in" type="text" placeholder="e.g. Hindi, Korean, Tamil, German..." onkeydown="if(event.key==='Enter')translateCustomLang()">
-                  <button class="set-btn accent" id="custom-lang-btn" onclick="translateCustomLang()">Translate</button>
-                </div>
-                <div id="custom-lang-pills" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px;"></div>
+            <!-- More languages (AI-translated, beta) -->
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(77,159,255,.1);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                <span style="font-family:var(--exo);font-size:.75rem;color:var(--text);">🌐 More languages</span>
+                <span style="font-family:var(--orb);font-size:.55rem;letter-spacing:1px;color:#000;background:linear-gradient(135deg,var(--teal),var(--accent2));padding:2px 8px;border-radius:999px;font-weight:800;">BETA</span>
               </div>
+              <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.75;margin-bottom:10px;line-height:1.5;">
+                Type any language — Veda's AI translates the whole interface on the spot and remembers it for next time.
+              </div>
+              <div class="set-row">
+                <input class="set-input" id="custom-lang-in" type="text" placeholder="e.g. Hindi, Korean, Tamil, German..." onkeydown="if(event.key==='Enter')translateCustomLang()">
+                <button class="set-btn accent" id="custom-lang-btn" onclick="translateCustomLang()">Translate</button>
+              </div>
+              <div id="custom-lang-pills" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px;"></div>
             </div>
           </div>
-
         </div>
 
         <div class="ps-panel" id="ps-aiprofile">
@@ -3795,6 +3787,7 @@ function saveKey() {
   setTimeout(() => {
     document.getElementById('splash').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
+    renderHdrProfile();
   }, 400);
 }
 function continueAsGuest() {
@@ -3805,9 +3798,7 @@ function continueAsGuest() {
   setTimeout(() => {
     sp.style.display = 'none';
     document.getElementById('app').style.display = 'flex';
-    // show guest badge in header
-    const guestEl = document.getElementById('hdr-guest');
-    if (guestEl) guestEl.style.display = 'flex';
+    renderHdrProfile();
     showToast('👤 Guest mode — your data stays on this device');
   }, 400);
 }
@@ -4089,8 +4080,6 @@ if (!API_KEY && localStorage.getItem('veda_guest') === '1') {
   window._isGuest = true;
   document.getElementById('splash').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
-  const guestEl = document.getElementById('hdr-guest');
-  if (guestEl) guestEl.style.display = 'flex';
 }
 
 // ── I18N — declare before boot IIFE so there's no TDZ error ──
@@ -6997,13 +6986,13 @@ function applyLang() {
     if (moodKeys[i]) chip.textContent = t(moodKeys[i]);
   });
   // Settings sub-nav — now one merged tab with 8 buttons across two groups
-  // (Account: profile/goals/stats/badges/titles, Preferences: appearance/aiprofile/apikey),
+  // (Account: profile/goals/stats/badges/titles, Preferences: aiprofile/apikey/layout/language),
   // in the same order they appear in the DOM. `null` = no i18n key for that
   // button (Titles is English-only, like this session's other additions) —
   // keeps the positional index aligned for every button after it.
   const settingsTabMap = [
     {key:'set_profile'},{key:'set_goals'},{key:'set_stats'},{key:'set_badges'},null,
-    {key:'set_appearance'},{key:'set_aiprofile'},{key:'set_apikey'}
+    {key:'set_aiprofile'},{key:'set_apikey'},{key:'set_ap_layout'},{key:'set_ap_language'}
   ];
   const settingsTab = document.getElementById('tab-settings');
   if (settingsTab) settingsTab.querySelectorAll('.ps-tab').forEach((tab, i) => { if (settingsTabMap[i]) tab.textContent = t(settingsTabMap[i].key); });
@@ -7257,15 +7246,17 @@ function go(name) {
   if (name === 'settings') { loadSettingsPage(); }
   if (name === 'home') setTimeout(updateHomeStats, 0);
   if (name === 'music') setTimeout(initMusicTab, 0);
-  // Hide music nav again when navigating away from it
-  if (name !== 'music') {
-    const nb = document.getElementById('nb-music');
+  // Hide music/themes nav again when navigating away from them — both are
+  // reveal-on-demand sidebar entries, not permanent nav items.
+  [['music','nb-music'], ['themes','nb-themes']].forEach(([tabName, btnId]) => {
+    if (name === tabName) return;
+    const nb = document.getElementById(btnId);
     if (nb && nb.style.display !== 'none') {
       nb.style.opacity = '0';
       nb.style.transform = 'translateX(-12px)';
       setTimeout(() => { nb.style.display = 'none'; nb.style.transition = ''; }, 320);
     }
-  }
+  });
   if (name === 'library') setTimeout(initLibrary, 0);
   if (name === 'games') setTimeout(renderGameLocks, 0);
   if (name === 'art') setTimeout(renderArtGallery, 0);
@@ -7414,6 +7405,7 @@ function closeMobileFab() {
   document.getElementById('mobile-fab-overlay').classList.remove('open');
   document.getElementById('mobile-fab-btn').classList.remove('open');
 }
+
 
 function updateMobileGreeting() {
   const timeEl = document.getElementById('m-greet-time');
@@ -10345,6 +10337,48 @@ function badgeDesc(b) { return t(b.descKey); }
 function getAcct() {
   try { return JSON.parse(localStorage.getItem('studly_account') || '{}'); } catch { return {}; }
 }
+// ── HEADER PROFILE (avatar + name, click -> Settings) ──
+// Unifies what used to be two separate elements (#hdr-user for Google sign-in,
+// #hdr-guest for guest mode) that left API-key-only launches — most students,
+// per the BYOK/no-sign-up-wall design — with no profile affordance in the
+// header at all. This renders for every auth state, always visible.
+function renderHdrProfile() {
+  const avImg   = document.getElementById('hdr-avatar');
+  const avEmoji = document.getElementById('hdr-avatar-emoji');
+  const uname   = document.getElementById('hdr-uname');
+  if (!avImg || !avEmoji || !uname) return;
+  const user = window._fbUser;
+  if (user && user.photoURL) {
+    avImg.src = user.photoURL;
+    avImg.style.display = 'block';
+    avEmoji.style.display = 'none';
+    uname.textContent = user.displayName?.split(' ')[0] || 'Student';
+    return;
+  }
+  avImg.style.display = 'none';
+  avEmoji.style.display = 'flex';
+  const a = getAcct();
+  avEmoji.textContent = a.avatar || '🎓';
+  uname.textContent = window._isGuest ? 'Guest' : (a.name || 'Student');
+}
+
+// ── THEMES TAB — reveals its sidebar entry with the same slide-in used for
+// Music (openMusicPlayer in playlist-manager.js), since it's not a permanent
+// nav item; go() hides it again once you navigate away.
+function openThemesTab() {
+  const btn = document.getElementById('nb-themes');
+  if (btn) {
+    btn.style.display = 'flex';
+    btn.style.opacity = '0';
+    btn.style.transform = 'translateX(-12px)';
+    btn.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(.34,1.4,.64,1)';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      btn.style.opacity = '1';
+      btn.style.transform = 'translateX(0)';
+    }));
+  }
+  setTimeout(() => go('themes'), 200);
+}
 function saveAcct(d) {
   // gemsTotal is a high-water mark, not a running total — bumping it here
   // (the one choke point every gem award/spend already passes through)
@@ -10566,6 +10600,7 @@ function saveProfileInline() {
   saveAcct(a);
   renderProfilePanel();
   updateHomeStats();
+  renderHdrProfile();
   showToast(t('set_toast_profile_saved'));
 }
 
@@ -12361,6 +12396,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (s) locked = s;
   renderThemes();
   checkOnboarding();
+  renderHdrProfile();
   go('home');
   applyWidgetVisibility();
   updateHomeStats();
@@ -12510,19 +12546,12 @@ window.nwCloudSave = async function() {
 
 // ── Update header + settings panel based on auth state ──
 window.nwCloudUI = function(user) {
-  const hdrUser   = document.getElementById('hdr-user');
-  const hdrAv     = document.getElementById('hdr-avatar');
-  const hdrUname  = document.getElementById('hdr-uname');
   const signedIn  = document.getElementById('fb-card-in');
   const signedOut = document.getElementById('fb-card-out');
 
   if (user) {
-    const guestEl = document.getElementById('hdr-guest');
-    if (guestEl) guestEl.style.display = 'none';
     window._isGuest = false;
-    if (hdrUser)  hdrUser.style.display  = 'flex';
-    if (hdrAv && user.photoURL) hdrAv.src = user.photoURL;
-    if (hdrUname) hdrUname.textContent   = user.displayName?.split(' ')[0] || 'Student';
+    renderHdrProfile();
     if (signedIn)  signedIn.style.display  = 'block';
     if (signedOut) signedOut.style.display = 'none';
     const av  = document.getElementById('fb-av');
@@ -12537,7 +12566,7 @@ window.nwCloudUI = function(user) {
     if (gNote) gNote.style.display = 'none';
     loadGuardianEmail();
   } else {
-    if (hdrUser)   hdrUser.style.display   = 'none';
+    renderHdrProfile();
     if (signedIn)  signedIn.style.display  = 'none';
     if (signedOut) signedOut.style.display = 'block';
     const gForm = document.getElementById('ps-guardian-form');
