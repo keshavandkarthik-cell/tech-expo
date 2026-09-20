@@ -519,12 +519,12 @@ onAuthStateChanged(_auth, async user => {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
       </button>
       <div class="hdr-status"><span class="pulse"></span>AI ONLINE</div>
-      <div id="hdr-profile" style="display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="go('settings')" title="My Account">
+      <div id="hdr-profile" style="display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="openAccountTab()" title="My Account">
         <img id="hdr-avatar" src="" style="display:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;" alt="Your profile picture">
         <div id="hdr-avatar-emoji" style="width:28px;height:28px;border-radius:50%;background:rgba(77,159,255,0.12);border:2px solid rgba(77,159,255,0.35);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;">🎓</div>
         <span id="hdr-uname" style="font-family:var(--exo);font-size:.72rem;color:var(--accent2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Student</span>
       </div>
-      <div id="universal-gem-counter" onclick="go('profile')" title="Your gems — click to view profile" style="
+      <div id="universal-gem-counter" onclick="openAccountTab()" title="Your gems — click to view profile" style="
       display: flex;
       align-items: center;
       gap: 6px;
@@ -641,6 +641,7 @@ onAuthStateChanged(_auth, async user => {
         <!-- dynamic nav buttons injected by renderNav() -->
         <button class="nb" id="nb-music" onclick="go('music')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">🎵</span><span class="nl">Music</span></button>
         <button class="nb" id="nb-themes" onclick="go('themes')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">🎨</span><span class="nl">Themes</span></button>
+        <button class="nb" id="nb-account" onclick="go('account')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">👤</span><span class="nl">Account</span></button>
         <div id="nav-more-section" style="display:none;flex-direction:column;gap:2px;">
           <button class="nb nb-more-toggle" id="nav-more-btn" onclick="toggleNavMore()"><span class="ni">⋯</span><span class="nl" data-i18n="nav_more">More</span></button>
           <div id="nav-more-list" style="display:none;flex-direction:column;gap:2px;padding-left:8px;border-left:2px solid rgba(255,255,255,.06);margin-left:4px;"></div>
@@ -660,6 +661,415 @@ onAuthStateChanged(_auth, async user => {
 
     <!-- UNIVERSAL GEM COUNTER -->
     <div id="content">
+
+    <!-- ACCOUNT TAB — full tab, reached only via the header avatar (openAccountTab),
+         same reveal-on-demand sidebar pattern as Themes and Music. -->
+    <div class="tab" id="tab-account">
+      <div class="ttl">👤 Account</div>
+      <div class="tsub"><span class="prm">›</span>Your profile, goals, stats, badges and titles</div>
+
+      <div class="ps-subnav-groups" style="margin-top:14px;">
+        <div class="ps-subnav-group">
+          <div class="ps-subnav">
+            <button class="ps-tab on" onclick="psGo('profile',this)">👤 Details</button>
+            <button class="ps-tab" onclick="psGo('goals',this)">🎯 Goals</button>
+            <button class="ps-tab" onclick="psGo('stats',this)">📊 Stats</button>
+            <button class="ps-tab" onclick="psGo('badges',this)">🏅 Badges</button>
+            <button class="ps-tab" onclick="psGo('titles',this)">🏷️ Titles</button>
+          </div>
+        </div>
+      </div>
+
+        <div class="ps-panel on" id="ps-profile">
+          <div class="ps-hero">
+            <div class="ps-avatar-wrap">
+              <div class="ps-avatar" id="acct-avatar">🎓</div>
+              <div class="ps-avatar-ring"></div>
+            </div>
+            <div class="ps-hero-right">
+              <div class="ps-name" id="acct-name">Student</div>
+              <div class="ps-tagline" id="acct-tagline">Level 7 Legend</div>
+              <div class="ps-badges-row">
+                <div class="ps-pill gem">💎 <span id="acct-gems">330</span> Gems</div>
+                <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit form inline -->
+          <div class="ps-card" style="margin-top:16px;">
+            <div class="ps-card-label" data-i18n="set_edit_profile">// EDIT PROFILE</div>
+            <div class="ps-form-grid">
+              <div class="ps-form-group">
+                <div class="ps-form-label" data-i18n="set_display_name">Display Name</div>
+                <input class="ps-input" id="ps-name-in" placeholder="Your name..." data-i18n-ph="set_your_name_ph" maxlength="20">
+              </div>
+              <div class="ps-form-group">
+                <div class="ps-form-label" data-i18n="set_avatar_emoji">Avatar Emoji</div>
+                <input class="ps-input" id="ps-avatar-in" placeholder="🎓" maxlength="4" style="font-size:1.4rem;text-align:center;letter-spacing:2px;">
+              </div>
+            </div>
+            <div class="ps-avatar-picker">
+              <div class="ps-form-label" style="margin-bottom:8px;" data-i18n="set_quick_pick">Quick Pick</div>
+              <div class="ps-avatar-opts">
+                <span onclick="pickAvatar(this,'🎓')">🎓</span><span onclick="pickAvatar(this,'📚')">📚</span>
+                <span onclick="pickAvatar(this,'🧠')">🧠</span><span onclick="pickAvatar(this,'⚡')">⚡</span>
+                <span onclick="pickAvatar(this,'🌟')">🌟</span><span onclick="pickAvatar(this,'🔥')">🔥</span>
+                <span onclick="pickAvatar(this,'💎')">💎</span><span onclick="pickAvatar(this,'🦋')">🦋</span>
+                <span onclick="pickAvatar(this,'🚀')">🚀</span><span onclick="pickAvatar(this,'🎵')">🎵</span>
+                <span onclick="pickAvatar(this,'🌙')">🌙</span><span onclick="pickAvatar(this,'☀️')">☀️</span>
+              </div>
+            </div>
+            <button class="ps-save-btn" onclick="saveProfileInline()" data-i18n="set_save_profile">Save Profile</button>
+          </div>
+
+          <!-- Level progress -->
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label" data-i18n="set_level_progress">// LEVEL PROGRESS</div>
+            <div class="ps-level-row">
+              <div class="ps-level-num" id="ps-level">7</div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                  <span class="ps-form-label" id="ps-level-title">Legend</span>
+                  <span class="ps-form-label"><span id="ps-gems-cur">30</span> / <span id="ps-gems-next">50</span> <span data-i18n="home_gems">gems</span></span>
+                </div>
+                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 60%;"></div></div>
+                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label" data-i18n="set_max_level">🏆 Max Level!</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger zone moved to Settings → API tab -->
+        </div>
+
+        <div class="ps-panel" id="ps-goals">
+          <div class="ps-card">
+            <div class="ps-card-label" data-i18n="set_daily_goals">// DAILY STUDY GOALS</div>
+            <div class="ps-form-label" style="margin-bottom:16px;" data-i18n="set_daily_goals_sub">Set targets — progress tracked automatically each day</div>
+            <div class="ps-goals-list">
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">📚</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name" data-i18n="set_goal_questions">Questions to ask</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-q" style="background:var(--accent)"></div></div>
+                  <div class="ps-form-label" id="goal-label-q" style="margin-top:4px;">0 / 5 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('questions',-1)" aria-label="Decrease questions goal">−</button>
+                  <span class="ps-goal-val" id="goal-val-questions">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('questions',1)" aria-label="Increase questions goal">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">📓</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name" data-i18n="set_goal_journal">Journal entries</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-journal" style="background: rgb(192, 132, 252); width: 0%;"></div></div>
+                  <div class="ps-form-label" id="goal-label-journal" style="margin-top:4px;">0 / 1 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('journal',-1)" aria-label="Decrease journal goal">−</button>
+                  <span class="ps-goal-val" id="goal-val-journal">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('journal',1)" aria-label="Increase journal goal">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">🃏</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name" data-i18n="set_goal_flashcards">Flashcard sets</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-flashcards" style="background: var(--teal); width: 0%;"></div></div>
+                  <div class="ps-form-label" id="goal-label-flashcards" style="margin-top:4px;">0 / 1 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',-1)" aria-label="Decrease flashcards goal">−</button>
+                  <span class="ps-goal-val" id="goal-val-flashcards">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',1)" aria-label="Increase flashcards goal">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">🎮</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name" data-i18n="set_goal_games">Games to play</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-games" style="background: rgb(251, 146, 60); width: 100%;"></div></div>
+                  <div class="ps-form-label" id="goal-label-games" style="margin-top:4px;">14 / 1 today ✅</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('games',-1)" aria-label="Decrease games goal">−</button>
+                  <span class="ps-goal-val" id="goal-val-games">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('games',1)" aria-label="Increase games goal">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label" data-i18n="set_todays_summary">// TODAY'S SUMMARY</div>
+            <div id="ps-goals-summary" class="ps-goals-summary"><div class="ps-goal-summary-item">
+        <div class="ps-goal-summary-icon">📚</div>
+        <div class="ps-goal-summary-text">
+          <strong style="color:var(--teal2)">✅ Done!</strong>
+          Questions
+        </div>
+      </div><div class="ps-goal-summary-item">
+        <div class="ps-goal-summary-icon">📓</div>
+        <div class="ps-goal-summary-text">
+          <strong style="color:var(--text)">0/1</strong>
+          Journal
+        </div>
+      </div><div class="ps-goal-summary-item">
+        <div class="ps-goal-summary-icon">🃏</div>
+        <div class="ps-goal-summary-text">
+          <strong style="color:var(--text)">0/1</strong>
+          Flashcards
+        </div>
+      </div><div class="ps-goal-summary-item">
+        <div class="ps-goal-summary-icon">🎮</div>
+        <div class="ps-goal-summary-text">
+          <strong style="color:var(--teal2)">✅ Done!</strong>
+          Games
+        </div>
+      </div></div>
+          </div>
+        </div>
+
+        <div class="ps-panel" id="ps-stats">
+          <div class="ps-stats-grid" id="ps-stats-grid">
+            <div class="ps-stat-card"><div class="ps-stat-icon">📚</div><div class="ps-stat-val" id="pss-questions">97</div><div class="ps-stat-lbl" data-i18n="set_stat_questions">Questions Asked</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">📝</div><div class="ps-stat-val" id="pss-notes">59</div><div class="ps-stat-lbl" data-i18n="set_stat_notes">Notes Summarised</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🃏</div><div class="ps-stat-val" id="pss-flashcards">55</div><div class="ps-stat-lbl" data-i18n="set_stat_flashcards">Flashcard Sets</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🎮</div><div class="ps-stat-val" id="pss-games">80</div><div class="ps-stat-lbl" data-i18n="set_stat_games">Games Played</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">📓</div><div class="ps-stat-val" id="pss-journal">12</div><div class="ps-stat-lbl" data-i18n="set_stat_journal">Journal Entries</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🔥</div><div class="ps-stat-val" id="pss-streak">31</div><div class="ps-stat-lbl" data-i18n="set_stat_streak">Day Streak</div></div>
+          </div>
+
+          <!-- Activity chart -->
+          <div class="ps-card" style="margin-top:16px;">
+            <div class="ps-card-label" data-i18n="set_activity_week">// ACTIVITY THIS WEEK</div>
+            <div class="ps-chart" id="ps-chart"><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Mon</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Tue</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Wed</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:36px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Thu</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:24px;background:var(--accent);opacity:1"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:1"></div>
+        <div class="ps-bar" style="height:70px;background:#fb923c;opacity:1"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--accent2)">Fri</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Sat</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Sun</div>
+    </div></div>
+            <div class="ps-chart-legend">
+              <span><span class="ps-dot" style="background:var(--accent)"></span><span data-i18n="set_stat_questions_short">Questions</span></span>
+              <span><span class="ps-dot" style="background:var(--teal)"></span><span data-i18n="set_chart_journal">Journal</span></span>
+              <span><span class="ps-dot" style="background:#c084fc"></span><span data-i18n="set_chart_games">Games</span></span>
+            </div>
+          </div>
+
+          <!-- High scores -->
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label" data-i18n="set_hiscores">// GAME HIGH SCORES</div>
+            <div class="ps-hiscore-list" id="ps-hiscores"><div class="ps-hiscore-row"><span class="ps-hiscore-name">🫧 Bubble Pop</span><span class="ps-hiscore-val">73</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🔤 Word Scramble</span><span class="ps-hiscore-val">18</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">➗ Maths Blitz</span><span class="ps-hiscore-val">34</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">⌨️ Typing Speed</span><span class="ps-hiscore-val">87 WPM</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">⚡ Reaction Time</span><span class="ps-hiscore-val">214 ms</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🐍 Snake</span><span class="ps-hiscore-val">420</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🌍 Flag Quiz</span><span class="ps-hiscore-val">22</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🔢 Sudoku</span><span class="ps-hiscore-val">950</span></div></div>
+          </div>
+        </div>
+
+        <div class="ps-panel" id="ps-badges">
+          <div class="ps-badges-header">
+            <div>
+              <div class="ps-card-label" data-i18n="set_achievements">// ACHIEVEMENTS</div>
+              <div class="ps-form-label" id="ps-badges-count" style="margin-top:4px;">22 of 23 unlocked</div>
+            </div>
+          </div>
+          <div class="ps-badges-full" id="badges-grid">
+    <div class="badge-item earned" title="Asked your first homework question">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🎓</div>
+      <div class="badge-name">First Question</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Asked your first homework question</div>
+    </div>
+    <div class="badge-item earned" title="Used Veda 3 days in a row">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🔥</div>
+      <div class="badge-name">3-Day Streak</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Veda 3 days in a row</div>
+    </div>
+    <div class="badge-item earned" title="7-day study streak">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">💪</div>
+      <div class="badge-name">Week Warrior</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">7-day study streak</div>
+    </div>
+    <div class="badge-item earned" title="14-day study streak">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🏅</div>
+      <div class="badge-name">Fortnight Focus</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">14-day study streak</div>
+    </div>
+    <div class="badge-item earned" title="30-day study streak">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">👑</div>
+      <div class="badge-name">Monthly Master</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">30-day study streak</div>
+    </div>
+    <div class="badge-item earned" title="Earned 100 gems">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">💎</div>
+      <div class="badge-name">Gem Collector</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 100 gems</div>
+    </div>
+    <div class="badge-item earned" title="Earned 500 gems">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">💎💎</div>
+      <div class="badge-name">Gem Hoarder</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 500 gems</div>
+    </div>
+    <div class="badge-item earned" title="Earned 1000 gems total">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🏆</div>
+      <div class="badge-name">Gem Legend</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 1000 gems total</div>
+    </div>
+    <div class="badge-item earned" title="Played 5 games">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🎮</div>
+      <div class="badge-name">Gamer</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Played 5 games</div>
+    </div>
+    <div class="badge-item earned" title="Played 20 games">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🕹️</div>
+      <div class="badge-name">Arcade Addict</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Played 20 games</div>
+    </div>
+    <div class="badge-item earned" title="Wrote 5 journal entries">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">📓</div>
+      <div class="badge-name">Journaler</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Wrote 5 journal entries</div>
+    </div>
+    <div class="badge-item locked" title="Wrote 20 journal entries">
+      
+      <div class="badge-emoji">✍️</div>
+      <div class="badge-name">Diarist</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Wrote 20 journal entries</div>
+    </div>
+    <div class="badge-item earned" title="Used Notes 10 times">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">📝</div>
+      <div class="badge-name">Note Taker</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Notes 10 times</div>
+    </div>
+    <div class="badge-item earned" title="Used Notes 50 times">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">📚</div>
+      <div class="badge-name">Note Ninja</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Notes 50 times</div>
+    </div>
+    <div class="badge-item earned" title="Generated 10 flashcard sets">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🃏</div>
+      <div class="badge-name">Flash Master</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 10 flashcard sets</div>
+    </div>
+    <div class="badge-item earned" title="Generated 50 flashcard sets">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">⚡</div>
+      <div class="badge-name">Card Shark</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 50 flashcard sets</div>
+    </div>
+    <div class="badge-item earned" title="Completed 5 Pomodoro focus sessions">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🍅</div>
+      <div class="badge-name">Pomodoro Pro</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 5 Pomodoro focus sessions</div>
+    </div>
+    <div class="badge-item earned" title="Completed 20 Pomodoro sessions">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">⏱️</div>
+      <div class="badge-name">Time Lord</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 20 Pomodoro sessions</div>
+    </div>
+    <div class="badge-item earned" title="Generated your first exam paper">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">📄</div>
+      <div class="badge-name">Paper Setter</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated your first exam paper</div>
+    </div>
+    <div class="badge-item earned" title="Generated 10 exam papers">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🏫</div>
+      <div class="badge-name">Exam Factory</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 10 exam papers</div>
+    </div>
+    <div class="badge-item earned" title="Completed 10 to-do tasks">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">✅</div>
+      <div class="badge-name">Task Crusher</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 10 to-do tasks</div>
+    </div>
+    <div class="badge-item earned" title="Asked 50 homework questions">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🔬</div>
+      <div class="badge-name">Curious Mind</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Asked 50 homework questions</div>
+    </div>
+    <div class="badge-item earned" title="Visited every section of Veda">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🌟</div>
+      <div class="badge-name">Explorer</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Visited every section of Veda</div>
+    </div></div>
+        </div>
+
+        <div class="ps-panel" id="ps-titles">
+          <div class="ps-badges-header">
+            <div>
+              <div class="ps-card-label">// TITLES</div>
+              <div class="ps-form-label" id="ps-titles-count" style="margin-top:4px;">0 of 10 unlocked</div>
+            </div>
+          </div>
+          <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.75;margin:2px 0 14px;line-height:1.5;">Earned from lifetime gems — spending gems on games or the shop never locks a title back up. Tap any unlocked title to display it next to your name on the leaderboard.</div>
+          <div class="ps-badges-full" id="titles-grid"></div>
+        </div>
+
+    </div>
+
 
     <!-- THEMES TAB — full tab like any other, but no permanent sidebar entry;
          reached only via the header's palette icon (toggleThemePanel -> go('themes')) -->
@@ -891,7 +1301,7 @@ onAuthStateChanged(_auth, async user => {
               </div>
             </div>
             <div style="height:1px;background:rgba(77,159,255,.1);margin:14px 0 12px;"></div>
-            <div class="dt-reward clickable" onclick="go('profile')">
+            <div class="dt-reward clickable" onclick="openAccountTab()">
               <div class="dt-reward-row">
                 <div class="dt-reward-icon">💎</div>
                 <div><div class="dt-reward-val" id="dt-gems-big">329</div><div class="dt-reward-label" data-i18n="reward_gems">Gems earned</div></div>
@@ -1765,412 +2175,13 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         <!-- UNIFIED SUB-NAV -->
         <div class="ps-subnav-groups">
           <div class="ps-subnav-group">
-            <div class="ps-subnav-label" data-i18n="set_group_account">Account</div>
             <div class="ps-subnav">
-              <button class="ps-tab on" onclick="psGo('profile',this)">👤 Details</button>
-              <button class="ps-tab" onclick="psGo('goals',this)">🎯 Goals</button>
-              <button class="ps-tab" onclick="psGo('stats',this)">📊 Stats</button>
-              <button class="ps-tab" onclick="psGo('badges',this)">🏅 Badges</button>
-              <button class="ps-tab" onclick="psGo('titles',this)">🏷️ Titles</button>
-            </div>
-          </div>
-          <div class="ps-subnav-group">
-            <div class="ps-subnav-label" data-i18n="set_group_prefs">Preferences</div>
-            <div class="ps-subnav">
-              <button class="ps-tab" onclick="psGo('aiprofile',this)">🤖 AI Settings</button>
+              <button class="ps-tab on" onclick="psGo('aiprofile',this)">🤖 AI Settings</button>
               <button class="ps-tab" onclick="psGo('apikey',this)">🔑 AI Key</button>
               <button class="ps-tab" onclick="psGo('layout',this)">📐 Layout</button>
               <button class="ps-tab" onclick="psGo('language',this)">🌐 Language</button>
             </div>
           </div>
-        </div>
-
-        <div class="ps-panel on" id="ps-profile">
-          <div class="ps-hero">
-            <div class="ps-avatar-wrap">
-              <div class="ps-avatar" id="acct-avatar">🎓</div>
-              <div class="ps-avatar-ring"></div>
-            </div>
-            <div class="ps-hero-right">
-              <div class="ps-name" id="acct-name">Student</div>
-              <div class="ps-tagline" id="acct-tagline">Level 7 Legend</div>
-              <div class="ps-badges-row">
-                <div class="ps-pill gem">💎 <span id="acct-gems">330</span> Gems</div>
-                <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Edit form inline -->
-          <div class="ps-card" style="margin-top:16px;">
-            <div class="ps-card-label" data-i18n="set_edit_profile">// EDIT PROFILE</div>
-            <div class="ps-form-grid">
-              <div class="ps-form-group">
-                <div class="ps-form-label" data-i18n="set_display_name">Display Name</div>
-                <input class="ps-input" id="ps-name-in" placeholder="Your name..." data-i18n-ph="set_your_name_ph" maxlength="20">
-              </div>
-              <div class="ps-form-group">
-                <div class="ps-form-label" data-i18n="set_avatar_emoji">Avatar Emoji</div>
-                <input class="ps-input" id="ps-avatar-in" placeholder="🎓" maxlength="4" style="font-size:1.4rem;text-align:center;letter-spacing:2px;">
-              </div>
-            </div>
-            <div class="ps-avatar-picker">
-              <div class="ps-form-label" style="margin-bottom:8px;" data-i18n="set_quick_pick">Quick Pick</div>
-              <div class="ps-avatar-opts">
-                <span onclick="pickAvatar(this,'🎓')">🎓</span><span onclick="pickAvatar(this,'📚')">📚</span>
-                <span onclick="pickAvatar(this,'🧠')">🧠</span><span onclick="pickAvatar(this,'⚡')">⚡</span>
-                <span onclick="pickAvatar(this,'🌟')">🌟</span><span onclick="pickAvatar(this,'🔥')">🔥</span>
-                <span onclick="pickAvatar(this,'💎')">💎</span><span onclick="pickAvatar(this,'🦋')">🦋</span>
-                <span onclick="pickAvatar(this,'🚀')">🚀</span><span onclick="pickAvatar(this,'🎵')">🎵</span>
-                <span onclick="pickAvatar(this,'🌙')">🌙</span><span onclick="pickAvatar(this,'☀️')">☀️</span>
-              </div>
-            </div>
-            <button class="ps-save-btn" onclick="saveProfileInline()" data-i18n="set_save_profile">Save Profile</button>
-          </div>
-
-          <!-- Level progress -->
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label" data-i18n="set_level_progress">// LEVEL PROGRESS</div>
-            <div class="ps-level-row">
-              <div class="ps-level-num" id="ps-level">7</div>
-              <div style="flex:1;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <span class="ps-form-label" id="ps-level-title">Legend</span>
-                  <span class="ps-form-label"><span id="ps-gems-cur">30</span> / <span id="ps-gems-next">50</span> <span data-i18n="home_gems">gems</span></span>
-                </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 60%;"></div></div>
-                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label" data-i18n="set_max_level">🏆 Max Level!</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Danger zone moved to Settings → API tab -->
-        </div>
-
-        <div class="ps-panel" id="ps-goals">
-          <div class="ps-card">
-            <div class="ps-card-label" data-i18n="set_daily_goals">// DAILY STUDY GOALS</div>
-            <div class="ps-form-label" style="margin-bottom:16px;" data-i18n="set_daily_goals_sub">Set targets — progress tracked automatically each day</div>
-            <div class="ps-goals-list">
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">📚</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name" data-i18n="set_goal_questions">Questions to ask</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-q" style="background:var(--accent)"></div></div>
-                  <div class="ps-form-label" id="goal-label-q" style="margin-top:4px;">0 / 5 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('questions',-1)" aria-label="Decrease questions goal">−</button>
-                  <span class="ps-goal-val" id="goal-val-questions">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('questions',1)" aria-label="Increase questions goal">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">📓</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name" data-i18n="set_goal_journal">Journal entries</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-journal" style="background: rgb(192, 132, 252); width: 0%;"></div></div>
-                  <div class="ps-form-label" id="goal-label-journal" style="margin-top:4px;">0 / 1 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('journal',-1)" aria-label="Decrease journal goal">−</button>
-                  <span class="ps-goal-val" id="goal-val-journal">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('journal',1)" aria-label="Increase journal goal">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">🃏</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name" data-i18n="set_goal_flashcards">Flashcard sets</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-flashcards" style="background: var(--teal); width: 0%;"></div></div>
-                  <div class="ps-form-label" id="goal-label-flashcards" style="margin-top:4px;">0 / 1 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',-1)" aria-label="Decrease flashcards goal">−</button>
-                  <span class="ps-goal-val" id="goal-val-flashcards">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',1)" aria-label="Increase flashcards goal">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">🎮</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name" data-i18n="set_goal_games">Games to play</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-games" style="background: rgb(251, 146, 60); width: 100%;"></div></div>
-                  <div class="ps-form-label" id="goal-label-games" style="margin-top:4px;">14 / 1 today ✅</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('games',-1)" aria-label="Decrease games goal">−</button>
-                  <span class="ps-goal-val" id="goal-val-games">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('games',1)" aria-label="Increase games goal">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label" data-i18n="set_todays_summary">// TODAY'S SUMMARY</div>
-            <div id="ps-goals-summary" class="ps-goals-summary"><div class="ps-goal-summary-item">
-        <div class="ps-goal-summary-icon">📚</div>
-        <div class="ps-goal-summary-text">
-          <strong style="color:var(--teal2)">✅ Done!</strong>
-          Questions
-        </div>
-      </div><div class="ps-goal-summary-item">
-        <div class="ps-goal-summary-icon">📓</div>
-        <div class="ps-goal-summary-text">
-          <strong style="color:var(--text)">0/1</strong>
-          Journal
-        </div>
-      </div><div class="ps-goal-summary-item">
-        <div class="ps-goal-summary-icon">🃏</div>
-        <div class="ps-goal-summary-text">
-          <strong style="color:var(--text)">0/1</strong>
-          Flashcards
-        </div>
-      </div><div class="ps-goal-summary-item">
-        <div class="ps-goal-summary-icon">🎮</div>
-        <div class="ps-goal-summary-text">
-          <strong style="color:var(--teal2)">✅ Done!</strong>
-          Games
-        </div>
-      </div></div>
-          </div>
-        </div>
-
-        <div class="ps-panel" id="ps-stats">
-          <div class="ps-stats-grid" id="ps-stats-grid">
-            <div class="ps-stat-card"><div class="ps-stat-icon">📚</div><div class="ps-stat-val" id="pss-questions">97</div><div class="ps-stat-lbl" data-i18n="set_stat_questions">Questions Asked</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">📝</div><div class="ps-stat-val" id="pss-notes">59</div><div class="ps-stat-lbl" data-i18n="set_stat_notes">Notes Summarised</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🃏</div><div class="ps-stat-val" id="pss-flashcards">55</div><div class="ps-stat-lbl" data-i18n="set_stat_flashcards">Flashcard Sets</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🎮</div><div class="ps-stat-val" id="pss-games">80</div><div class="ps-stat-lbl" data-i18n="set_stat_games">Games Played</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">📓</div><div class="ps-stat-val" id="pss-journal">12</div><div class="ps-stat-lbl" data-i18n="set_stat_journal">Journal Entries</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🔥</div><div class="ps-stat-val" id="pss-streak">31</div><div class="ps-stat-lbl" data-i18n="set_stat_streak">Day Streak</div></div>
-          </div>
-
-          <!-- Activity chart -->
-          <div class="ps-card" style="margin-top:16px;">
-            <div class="ps-card-label" data-i18n="set_activity_week">// ACTIVITY THIS WEEK</div>
-            <div class="ps-chart" id="ps-chart"><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Mon</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Tue</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Wed</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:36px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Thu</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:24px;background:var(--accent);opacity:1"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:1"></div>
-        <div class="ps-bar" style="height:70px;background:#fb923c;opacity:1"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--accent2)">Fri</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Sat</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Sun</div>
-    </div></div>
-            <div class="ps-chart-legend">
-              <span><span class="ps-dot" style="background:var(--accent)"></span><span data-i18n="set_stat_questions_short">Questions</span></span>
-              <span><span class="ps-dot" style="background:var(--teal)"></span><span data-i18n="set_chart_journal">Journal</span></span>
-              <span><span class="ps-dot" style="background:#c084fc"></span><span data-i18n="set_chart_games">Games</span></span>
-            </div>
-          </div>
-
-          <!-- High scores -->
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label" data-i18n="set_hiscores">// GAME HIGH SCORES</div>
-            <div class="ps-hiscore-list" id="ps-hiscores"><div class="ps-hiscore-row"><span class="ps-hiscore-name">🫧 Bubble Pop</span><span class="ps-hiscore-val">73</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🔤 Word Scramble</span><span class="ps-hiscore-val">18</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">➗ Maths Blitz</span><span class="ps-hiscore-val">34</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">⌨️ Typing Speed</span><span class="ps-hiscore-val">87 WPM</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">⚡ Reaction Time</span><span class="ps-hiscore-val">214 ms</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🐍 Snake</span><span class="ps-hiscore-val">420</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🌍 Flag Quiz</span><span class="ps-hiscore-val">22</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🔢 Sudoku</span><span class="ps-hiscore-val">950</span></div></div>
-          </div>
-        </div>
-
-        <div class="ps-panel" id="ps-badges">
-          <div class="ps-badges-header">
-            <div>
-              <div class="ps-card-label" data-i18n="set_achievements">// ACHIEVEMENTS</div>
-              <div class="ps-form-label" id="ps-badges-count" style="margin-top:4px;">22 of 23 unlocked</div>
-            </div>
-          </div>
-          <div class="ps-badges-full" id="badges-grid">
-    <div class="badge-item earned" title="Asked your first homework question">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🎓</div>
-      <div class="badge-name">First Question</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Asked your first homework question</div>
-    </div>
-    <div class="badge-item earned" title="Used Veda 3 days in a row">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🔥</div>
-      <div class="badge-name">3-Day Streak</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Veda 3 days in a row</div>
-    </div>
-    <div class="badge-item earned" title="7-day study streak">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">💪</div>
-      <div class="badge-name">Week Warrior</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">7-day study streak</div>
-    </div>
-    <div class="badge-item earned" title="14-day study streak">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🏅</div>
-      <div class="badge-name">Fortnight Focus</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">14-day study streak</div>
-    </div>
-    <div class="badge-item earned" title="30-day study streak">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">👑</div>
-      <div class="badge-name">Monthly Master</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">30-day study streak</div>
-    </div>
-    <div class="badge-item earned" title="Earned 100 gems">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">💎</div>
-      <div class="badge-name">Gem Collector</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 100 gems</div>
-    </div>
-    <div class="badge-item earned" title="Earned 500 gems">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">💎💎</div>
-      <div class="badge-name">Gem Hoarder</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 500 gems</div>
-    </div>
-    <div class="badge-item earned" title="Earned 1000 gems total">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🏆</div>
-      <div class="badge-name">Gem Legend</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 1000 gems total</div>
-    </div>
-    <div class="badge-item earned" title="Played 5 games">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🎮</div>
-      <div class="badge-name">Gamer</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Played 5 games</div>
-    </div>
-    <div class="badge-item earned" title="Played 20 games">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🕹️</div>
-      <div class="badge-name">Arcade Addict</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Played 20 games</div>
-    </div>
-    <div class="badge-item earned" title="Wrote 5 journal entries">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">📓</div>
-      <div class="badge-name">Journaler</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Wrote 5 journal entries</div>
-    </div>
-    <div class="badge-item locked" title="Wrote 20 journal entries">
-      
-      <div class="badge-emoji">✍️</div>
-      <div class="badge-name">Diarist</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Wrote 20 journal entries</div>
-    </div>
-    <div class="badge-item earned" title="Used Notes 10 times">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">📝</div>
-      <div class="badge-name">Note Taker</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Notes 10 times</div>
-    </div>
-    <div class="badge-item earned" title="Used Notes 50 times">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">📚</div>
-      <div class="badge-name">Note Ninja</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Notes 50 times</div>
-    </div>
-    <div class="badge-item earned" title="Generated 10 flashcard sets">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🃏</div>
-      <div class="badge-name">Flash Master</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 10 flashcard sets</div>
-    </div>
-    <div class="badge-item earned" title="Generated 50 flashcard sets">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">⚡</div>
-      <div class="badge-name">Card Shark</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 50 flashcard sets</div>
-    </div>
-    <div class="badge-item earned" title="Completed 5 Pomodoro focus sessions">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🍅</div>
-      <div class="badge-name">Pomodoro Pro</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 5 Pomodoro focus sessions</div>
-    </div>
-    <div class="badge-item earned" title="Completed 20 Pomodoro sessions">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">⏱️</div>
-      <div class="badge-name">Time Lord</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 20 Pomodoro sessions</div>
-    </div>
-    <div class="badge-item earned" title="Generated your first exam paper">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">📄</div>
-      <div class="badge-name">Paper Setter</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated your first exam paper</div>
-    </div>
-    <div class="badge-item earned" title="Generated 10 exam papers">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🏫</div>
-      <div class="badge-name">Exam Factory</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 10 exam papers</div>
-    </div>
-    <div class="badge-item earned" title="Completed 10 to-do tasks">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">✅</div>
-      <div class="badge-name">Task Crusher</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 10 to-do tasks</div>
-    </div>
-    <div class="badge-item earned" title="Asked 50 homework questions">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🔬</div>
-      <div class="badge-name">Curious Mind</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Asked 50 homework questions</div>
-    </div>
-    <div class="badge-item earned" title="Visited every section of Veda">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🌟</div>
-      <div class="badge-name">Explorer</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Visited every section of Veda</div>
-    </div></div>
-        </div>
-
-        <div class="ps-panel" id="ps-titles">
-          <div class="ps-badges-header">
-            <div>
-              <div class="ps-card-label">// TITLES</div>
-              <div class="ps-form-label" id="ps-titles-count" style="margin-top:4px;">0 of 10 unlocked</div>
-            </div>
-          </div>
-          <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.75;margin:2px 0 14px;line-height:1.5;">Earned from lifetime gems — spending gems on games or the shop never locks a title back up. Tap any unlocked title to display it next to your name on the leaderboard.</div>
-          <div class="ps-badges-full" id="titles-grid"></div>
         </div>
 
         <div class="ps-panel" id="ps-layout">
@@ -2233,7 +2244,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
           </div>
         </div>
 
-        <div class="ps-panel" id="ps-aiprofile">
+        <div class="ps-panel on" id="ps-aiprofile">
           <div class="ps-card">
             <div class="ps-card-label" data-i18n="set_ai_profile_label">// AI STUDENT PROFILE</div>
             <div class="ps-form-label" style="margin-bottom:16px;line-height:1.7;" data-i18n="set_ai_profile_desc">
@@ -6985,13 +6996,17 @@ function applyLang() {
   document.querySelectorAll('.mood-chip').forEach((chip, i) => {
     if (moodKeys[i]) chip.textContent = t(moodKeys[i]);
   });
-  // Settings sub-nav — now one merged tab with 8 buttons across two groups
-  // (Account: profile/goals/stats/badges/titles, Preferences: aiprofile/apikey/layout/language),
-  // in the same order they appear in the DOM. `null` = no i18n key for that
-  // button (Titles is English-only, like this session's other additions) —
-  // keeps the positional index aligned for every button after it.
+  // Account and Settings sub-navs — these .ps-tab buttons have no data-i18n
+  // attribute of their own, so they're relabeled by DOM position within their
+  // own tab instead. `null` = no i18n key for that button (Titles is
+  // English-only, like this session's other additions) — keeps the
+  // positional index aligned for every button after it.
+  const accountTabMap = [
+    {key:'set_profile'},{key:'set_goals'},{key:'set_stats'},{key:'set_badges'},null
+  ];
+  const accountTab = document.getElementById('tab-account');
+  if (accountTab) accountTab.querySelectorAll('.ps-tab').forEach((tab, i) => { if (accountTabMap[i]) tab.textContent = t(accountTabMap[i].key); });
   const settingsTabMap = [
-    {key:'set_profile'},{key:'set_goals'},{key:'set_stats'},{key:'set_badges'},null,
     {key:'set_aiprofile'},{key:'set_apikey'},{key:'set_ap_layout'},{key:'set_ap_language'}
   ];
   const settingsTab = document.getElementById('tab-settings');
@@ -7222,33 +7237,24 @@ if (!sbOpen) {
 
 // ── TABS ──
 function go(name) {
-  // 'account' and 'profile' both live inside the unified Settings tab now (Settings and
-  // Profile used to be two separate tabs — merged into one Account/Preferences hub).
-  if (name === 'account') { name = 'profile'; }
-  if (name === 'profile') {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
-    document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
-    const settingsTab = document.getElementById('tab-settings');
-    if (settingsTab) settingsTab.classList.add('on');
-    document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'settings'")) b.classList.add('on'); });
-    setTimeout(() => {
-      const btn = settingsTab ? settingsTab.querySelector('.ps-tab[onclick*="\'profile\'"]') : null;
-      psGo('profile', btn);
-      renderGoalsPanel();
-    }, 0);
-    return;
-  }
+  // 'profile' is a legacy alias — Account used to live inside the Settings tab.
+  if (name === 'profile') { name = 'account'; }
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
   const tabEl = document.getElementById('tab-' + name);
   if (tabEl) tabEl.classList.add('on');
   document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'" + name + "'")) b.classList.add('on'); });
   if (name === 'settings') { loadSettingsPage(); }
+  if (name === 'account') {
+    const btn = tabEl ? tabEl.querySelector('.ps-tab[onclick*="\'profile\'"]') : null;
+    psGo('profile', btn);
+    renderGoalsPanel();
+  }
   if (name === 'home') setTimeout(updateHomeStats, 0);
   if (name === 'music') setTimeout(initMusicTab, 0);
-  // Hide music/themes nav again when navigating away from them — both are
-  // reveal-on-demand sidebar entries, not permanent nav items.
-  [['music','nb-music'], ['themes','nb-themes']].forEach(([tabName, btnId]) => {
+  // Hide music/themes/account nav again when navigating away from them — all
+  // three are reveal-on-demand sidebar entries, not permanent nav items.
+  [['music','nb-music'], ['themes','nb-themes'], ['account','nb-account']].forEach(([tabName, btnId]) => {
     if (name === tabName) return;
     const nb = document.getElementById(btnId);
     if (nb && nb.style.display !== 'none') {
@@ -10362,11 +10368,11 @@ function renderHdrProfile() {
   uname.textContent = window._isGuest ? 'Guest' : (a.name || 'Student');
 }
 
-// ── THEMES TAB — reveals its sidebar entry with the same slide-in used for
-// Music (openMusicPlayer in playlist-manager.js), since it's not a permanent
-// nav item; go() hides it again once you navigate away.
-function openThemesTab() {
-  const btn = document.getElementById('nb-themes');
+// ── REVEAL-ON-DEMAND TABS (Themes, Account — plus Music in playlist-manager.js) ──
+// These have no permanent sidebar entry; opening one slides its nav button in,
+// go() slides it back out again once you navigate away.
+function revealNavAndGo(btnId, tabName) {
+  const btn = document.getElementById(btnId);
   if (btn) {
     btn.style.display = 'flex';
     btn.style.opacity = '0';
@@ -10377,8 +10383,10 @@ function openThemesTab() {
       btn.style.transform = 'translateX(0)';
     }));
   }
-  setTimeout(() => go('themes'), 200);
+  setTimeout(() => go(tabName), 200);
 }
+function openThemesTab() { revealNavAndGo('nb-themes', 'themes'); }
+function openAccountTab() { revealNavAndGo('nb-account', 'account'); }
 function saveAcct(d) {
   // gemsTotal is a high-water mark, not a running total — bumping it here
   // (the one choke point every gem award/spend already passes through)
