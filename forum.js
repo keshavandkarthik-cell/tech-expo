@@ -39,7 +39,7 @@ function censorText(text) {
 }
 
 // ── State ──
-let _db = null, _forumCat = 'All', _forumType = 'question', _currentPostId = null, _unsubFeed = null;
+let _db = null, _forumCat = 'All', _forumType = 'question', _currentPostId = null, _unsubFeed = null, _unsubThread = null;
 
 // ── Init Firebase lazily ──
 async function forumGetDB() {
@@ -287,6 +287,7 @@ window.submitForumPost = async function() {
 
 // ── Thread view ──
 window.openForumThread = async function(postId, post) {
+  if (_unsubThread) { _unsubThread(); _unsubThread = null; }
   _currentPostId = postId;
   window._currentThreadPost = post;
   const modal = document.getElementById('forum-thread-modal');
@@ -319,7 +320,7 @@ window.openForumThread = async function(postId, post) {
   // Load replies live
   try {
     const db = await forumGetDB();
-    db.collection('posts').doc(postId).collection('replies')
+    _unsubThread = db.collection('posts').doc(postId).collection('replies')
       .orderBy('createdAt', 'asc').limit(60)
       .onSnapshot(snap => {
         const list = document.getElementById('forum-replies-list');
@@ -350,6 +351,7 @@ window.openForumThread = async function(postId, post) {
 window.closeForumThread = function() {
   const modal = document.getElementById('forum-thread-modal');
   if (modal) modal.style.display = 'none';
+  if (_unsubThread) { _unsubThread(); _unsubThread = null; }
   _currentPostId = null;
 };
 

@@ -11195,23 +11195,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTokenDisplay();
   document.querySelectorAll('.model-tier-btn').forEach(b => b.classList.toggle('on', b.dataset.model === AI_MODEL));
 
-  // Desktop clock
-  function updateDtClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    const timeStr = h + ':' + m;
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const dateStr = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
-    const cb = document.getElementById('dt-clock-big');
-    const cd = document.getElementById('dt-clock-date');
-    if (cb) cb.textContent = timeStr;
-    if (cd) cd.textContent = dateStr;
-  }
-  updateDtClock();
-  setInterval(updateDtClock, 1000);
-
   // Restore quick note
   const qn = document.getElementById('dt-quicknote');
   if (qn) qn.value = localStorage.getItem('studly_quicknote') || '';
@@ -11220,7 +11203,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.renderAcctPage = function() { _origRenderAcct(); updateHomeStats(); };
 
   // Load hi scores
-  ['bubble','scramble','math','typing','reaction','snake','flags','sudoku'].forEach(g => {
+  ['bubble','scramble','math','typing','reaction','snake','flags','sudoku','hangman','tetris','brickbreaker','icytower','flappy','spaceinvaders','pong','asteroids','game2048','wordle','memorymatch','aimtrainer','simonmemory','numbertouch','capitals','elements','timeline','blitz'].forEach(g => {
     const el = document.getElementById('hi-'+g);
     const v = localStorage.getItem('hi_'+g) || 0;
     if (!el) return;
@@ -14759,7 +14742,7 @@ function appendDailyBriefMemoryTag(contentEl) {
 
 // ── FLAPPY BIRD ──
 function startFlappy(area) {
-  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="fl-score">0</span></div></div><button class="abtn sec" onclick="exitGame(flappyScore,'Flappy score','')">Quit</button></div><canvas id="fl-canvas" height="360" style="border-radius:10px;cursor:pointer;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">Tap / Space to flap</div>`;
+  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="fl-score">0</span></div></div><button class="abtn sec" onclick="flQuit()">Quit</button></div><canvas id="fl-canvas" height="360" style="border-radius:10px;cursor:pointer;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">Tap / Space to flap</div>`;
   const canvas = document.getElementById('fl-canvas');
   canvas.width = canvas.offsetWidth;
   const ctx = canvas.getContext('2d');
@@ -14769,6 +14752,7 @@ function startFlappy(area) {
   function flap(){bird.vy=-5.5;}
   canvas.addEventListener('click',flap);
   document.addEventListener('keydown',function fk(e){const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;if(e.code==='Space'){e.preventDefault();flap();}if(!running)document.removeEventListener('keydown',fk);});
+  window.flQuit=function(){running=false;document.removeEventListener('keydown',fk);exitGame(window.flappyScore,'Flappy score','');};
   function loop(){
     if(!document.getElementById('fl-canvas')){running=false;return;}
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -14794,7 +14778,7 @@ function startFlappy(area) {
 
 // ── SPACE INVADERS ──
 function startSpaceInvaders(area) {
-  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="si-score">0</span></div><div class="gscore">Lives: <span id="si-lives">3</span></div></div><button class="abtn sec" onclick="exitGame(siScore,'Space Invaders','')">Quit</button></div><canvas id="si-canvas" height="360" style="border-radius:10px;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">← → to move · Space to shoot</div>`;
+  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="si-score">0</span></div><div class="gscore">Lives: <span id="si-lives">3</span></div></div><button class="abtn sec" onclick="siQuit()">Quit</button></div><canvas id="si-canvas" height="360" style="border-radius:10px;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">← → to move · Space to shoot</div>`;
   const canvas=document.getElementById('si-canvas'); canvas.width=canvas.offsetWidth;
   const ctx=canvas.getContext('2d');
   let ship={x:canvas.width/2,y:canvas.height-30,w:24,h:16};
@@ -14803,14 +14787,17 @@ function startSpaceInvaders(area) {
   function makeAliens(){aliens=[];for(let r=0;r<4;r++)for(let c=0;c<9;c++)aliens.push({x:50+c*50,y:40+r*38,w:22,h:16,alive:true});}
   makeAliens();
   const keys={};
-  document.addEventListener('keydown',function sik(e){
+  function sik(e){
     const tag = document.activeElement?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
-    keys[e.code]=true;if(e.code==='Space'){e.preventDefault();bullets.push({x:ship.x,y:ship.y-10,vy:-7});}if(!running)document.removeEventListener('keydown',sik);});
-  document.addEventListener('keyup',e=>keys[e.code]=false);
+    keys[e.code]=true;if(e.code==='Space'){e.preventDefault();bullets.push({x:ship.x,y:ship.y-10,vy:-7});}if(!running)document.removeEventListener('keydown',sik);}
+  function siup(e){keys[e.code]=false;}
+  document.addEventListener('keydown',sik);
+  document.addEventListener('keyup',siup);
+  window.siQuit=function(){running=false;clearInterval(alienShoot);document.removeEventListener('keydown',sik);document.removeEventListener('keyup',siup);exitGame(score,'Space Invaders','');};
   let alienShoot=setInterval(()=>{const live=aliens.filter(a=>a.alive);if(live.length){const a=live[Math.floor(Math.random()*live.length)];alienBullets.push({x:a.x+11,y:a.y+16,vy:3.5});}},1200);
   function loop(){
-    if(!document.getElementById('si-canvas')){running=false;clearInterval(alienShoot);return;}
+    if(!document.getElementById('si-canvas')){running=false;clearInterval(alienShoot);document.removeEventListener('keydown',sik);document.removeEventListener('keyup',siup);return;}
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle='#0a1628';ctx.fillRect(0,0,canvas.width,canvas.height);
     if(keys['ArrowLeft'])ship.x=Math.max(20,ship.x-4);
@@ -14819,7 +14806,7 @@ function startSpaceInvaders(area) {
     ctx.fillStyle='#4d9fff';ctx.beginPath();ctx.moveTo(ship.x,ship.y-ship.h);ctx.lineTo(ship.x-ship.w,ship.y+ship.h/2);ctx.lineTo(ship.x+ship.w,ship.y+ship.h/2);ctx.fill();
     // bullets
     bullets=bullets.filter(b=>{b.y+=b.vy;ctx.fillStyle='#fbbf24';ctx.fillRect(b.x-2,b.y-8,4,10);return b.y>0;});
-    alienBullets=alienBullets.filter(b=>{b.y+=b.vy;ctx.fillStyle='#f87171';ctx.fillRect(b.x-2,b.y,4,10);if(Math.abs(b.x-ship.x)<22&&b.y>ship.y-16){lives--;const le=document.getElementById('si-lives');if(le)le.textContent=lives;if(lives<=0){running=false;clearInterval(alienShoot);exitGame(score,'Space Invaders','Game over!');return false;}return false;}return b.y<canvas.height;});
+    alienBullets=alienBullets.filter(b=>{b.y+=b.vy;ctx.fillStyle='#f87171';ctx.fillRect(b.x-2,b.y,4,10);if(Math.abs(b.x-ship.x)<22&&b.y>ship.y-16){lives--;const le=document.getElementById('si-lives');if(le)le.textContent=lives;if(lives<=0){running=false;clearInterval(alienShoot);document.removeEventListener('keydown',sik);document.removeEventListener('keyup',siup);exitGame(score,'Space Invaders','Game over!');return false;}return false;}return b.y<canvas.height;});
     // move aliens
     let hitWall=false;
     aliens.filter(a=>a.alive).forEach(a=>{a.x+=alienDir*alienSpeed;if(a.x<20||a.x>canvas.width-30)hitWall=true;});
@@ -14828,7 +14815,7 @@ function startSpaceInvaders(area) {
     aliens.forEach(a=>{if(!a.alive)return;ctx.fillStyle='#c084fc';ctx.fillRect(a.x,a.y,a.w,a.h);ctx.fillStyle='#0a1628';ctx.fillRect(a.x+5,a.y+4,4,4);ctx.fillRect(a.x+13,a.y+4,4,4);bullets.forEach(b=>{if(b.x>a.x&&b.x<a.x+a.w&&b.y>a.y&&b.y<a.y+a.h){a.alive=false;b.y=-999;score+=10;window.siScore=score;const se=document.getElementById('si-score');if(se)se.textContent=score;}});});
     alienSpeed=0.5+((36-aliens.filter(a=>a.alive).length)*0.04);
     if(!aliens.some(a=>a.alive)){makeAliens();alienSpeed=0.5;}
-    if(aliens.some(a=>a.alive&&a.y>canvas.height-50)){running=false;clearInterval(alienShoot);exitGame(score,'Space Invaders','They landed!');return;}
+    if(aliens.some(a=>a.alive&&a.y>canvas.height-50)){running=false;clearInterval(alienShoot);document.removeEventListener('keydown',sik);document.removeEventListener('keyup',siup);exitGame(score,'Space Invaders','They landed!');return;}
     requestAnimationFrame(loop);
   }
   loop();
@@ -14868,7 +14855,7 @@ function startPong(area) {
 
 // ── ASTEROIDS ──
 function startAsteroids(area) {
-  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="ast-score">0</span></div><div class="gscore">Lives: <span id="ast-lives">3</span></div></div><button class="abtn sec" onclick="exitGame(astScore,'Asteroids','')">Quit</button></div><canvas id="ast-canvas" height="360" style="border-radius:10px;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">← → Rotate · ↑ Thrust · Space Shoot</div>`;
+  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="ast-score">0</span></div><div class="gscore">Lives: <span id="ast-lives">3</span></div></div><button class="abtn sec" onclick="astQuit()">Quit</button></div><canvas id="ast-canvas" height="360" style="border-radius:10px;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">← → Rotate · ↑ Thrust · Space Shoot</div>`;
   const canvas=document.getElementById('ast-canvas'); canvas.width=canvas.offsetWidth;
   const ctx=canvas.getContext('2d'); const W=canvas.width,H=360;
   let ship={x:W/2,y:H/2,angle:0,vx:0,vy:0,inv:120},bullets=[],asteroids=[],score=0,lives=3,running=true;
@@ -14876,11 +14863,14 @@ function startAsteroids(area) {
   function spawnAst(x,y,r){asteroids.push({x:x||Math.random()*W,y:y||Math.random()*H,r:r||35,vx:(Math.random()-.5)*1.8,vy:(Math.random()-.5)*1.8,angle:Math.random()*Math.PI*2,va:(Math.random()-.5)*.04});}
   for(let i=0;i<5;i++)spawnAst();
   const keys={};
-  document.addEventListener('keydown',function ak(e){const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;keys[e.code]=true;if(e.code==='Space'){e.preventDefault();const a=ship.angle-Math.PI/2;bullets.push({x:ship.x,y:ship.y,vx:Math.cos(a)*9,vy:Math.sin(a)*9,life:50});}if(!running)document.removeEventListener('keydown',ak);});
-  document.addEventListener('keyup',e=>keys[e.code]=false);
+  function ak(e){const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;keys[e.code]=true;if(e.code==='Space'){e.preventDefault();const a=ship.angle-Math.PI/2;bullets.push({x:ship.x,y:ship.y,vx:Math.cos(a)*9,vy:Math.sin(a)*9,life:50});}if(!running)document.removeEventListener('keydown',ak);}
+  function astup(e){keys[e.code]=false;}
+  document.addEventListener('keydown',ak);
+  document.addEventListener('keyup',astup);
+  window.astQuit=function(){running=false;document.removeEventListener('keydown',ak);document.removeEventListener('keyup',astup);exitGame(score,'Asteroids','');};
   function wrap(v,max){return((v%max)+max)%max;}
   function loop(){
-    if(!document.getElementById('ast-canvas')){running=false;return;}
+    if(!document.getElementById('ast-canvas')){running=false;document.removeEventListener('keydown',ak);document.removeEventListener('keyup',astup);return;}
     ctx.fillStyle='rgba(10,22,40,0.85)';ctx.fillRect(0,0,W,H);
     if(keys['ArrowLeft'])ship.angle-=0.05;
     if(keys['ArrowRight'])ship.angle+=0.05;
@@ -14899,7 +14889,7 @@ function startAsteroids(area) {
     toAdd.forEach(a=>asteroids.push(a));
     if(asteroids.length===0)for(let i=0;i<5;i++)spawnAst();
     // ship collision
-    if(ship.inv===0&&asteroids.some(a=>Math.hypot(ship.x-a.x,ship.y-a.y)<a.r+12)){lives--;const le=document.getElementById('ast-lives');if(le)le.textContent=lives;ship.vx=0;ship.vy=0;ship.x=W/2;ship.y=H/2;ship.inv=120;if(lives<=0){running=false;exitGame(score,'Asteroids','Destroyed!');return;}}
+    if(ship.inv===0&&asteroids.some(a=>Math.hypot(ship.x-a.x,ship.y-a.y)<a.r+12)){lives--;const le=document.getElementById('ast-lives');if(le)le.textContent=lives;ship.vx=0;ship.vy=0;ship.x=W/2;ship.y=H/2;ship.inv=120;if(lives<=0){running=false;document.removeEventListener('keydown',ak);document.removeEventListener('keyup',astup);exitGame(score,'Asteroids','Destroyed!');return;}}
     requestAnimationFrame(loop);
   }
   loop();
@@ -14912,10 +14902,12 @@ function start2048(area) {
   addTile();addTile();
   function render(){const g=document.getElementById('g2048');if(!g)return;g.innerHTML='';const colors={'0':'rgba(255,255,255,.04)','2':'#1a3a6e','4':'#1e4578','8':'#00796b','16':'#00897b','32':'#fb923c','64':'#f97316','128':'#fbbf24','256':'#f59e0b','512':'#a78bfa','1024':'#8b5cf6','2048':'#ec4899'};grid.forEach(row=>row.forEach(v=>{const d=document.createElement('div');d.style.cssText=`height:70px;border-radius:10px;background:${colors[v]||'#c084fc'};display:flex;align-items:center;justify-content:center;font-family:var(--orb);font-size:${v>=1000?'1.1rem':v>=100?'1.3rem':'1.5rem'};font-weight:900;color:#fff;border:1px solid rgba(255,255,255,.08);`;d.textContent=v||'';g.appendChild(d);}));const se=document.getElementById('g2048-score');if(se)se.textContent=score;}
   function slide(row){let r=row.filter(v=>v);for(let i=0;i<r.length-1;i++)if(r[i]===r[i+1]){r[i]*=2;score+=r[i];r.splice(i+1,1);i++;}while(r.length<4)r.push(0);return r;}
-  function move(dir){let moved=false;let ng=grid.map(r=>[...r]);if(dir==='left')ng=ng.map(r=>{const s=slide(r);if(s.join()!==r.join())moved=true;return s;});else if(dir==='right')ng=ng.map(r=>{const s=slide([...r].reverse()).reverse();if(s.join()!==r.join())moved=true;return s;});else if(dir==='up'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]);const s=slide(col);s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}}else if(dir==='down'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]).reverse();const s=slide(col).reverse();s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}};if(moved){grid=ng;addTile();const se=document.getElementById('g2048-score');if(se)se.textContent=score;render();if(grid.some(r=>r.includes(2048))){exitGame(score,'2048','You reached 2048! 🎉');running=false;}}}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="g2048-score">0</span></div></div><button class="abtn sec" onclick="exitGame(${score},'2048','')">Quit</button></div><div id="g2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;background:rgba(255,255,255,.03);border-radius:14px;max-width:320px;margin:0 auto;"></div><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:8px;">Arrow keys to slide tiles</div>`;
+  function move(dir){let moved=false;let ng=grid.map(r=>[...r]);if(dir==='left')ng=ng.map(r=>{const s=slide(r);if(s.join()!==r.join())moved=true;return s;});else if(dir==='right')ng=ng.map(r=>{const s=slide([...r].reverse()).reverse();if(s.join()!==r.join())moved=true;return s;});else if(dir==='up'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]);const s=slide(col);s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}}else if(dir==='down'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]).reverse();const s=slide(col).reverse();s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}};if(moved){grid=ng;addTile();const se=document.getElementById('g2048-score');if(se)se.textContent=score;render();if(grid.some(r=>r.includes(2048))){running=false;document.removeEventListener('keydown',k2);exitGame(score,'2048','You reached 2048! 🎉');}}}
+  window.g2048Quit=function(){running=false;document.removeEventListener('keydown',k2);exitGame(score,'2048','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="g2048-score">0</span></div></div><button class="abtn sec" onclick="g2048Quit()">Quit</button></div><div id="g2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;background:rgba(255,255,255,.03);border-radius:14px;max-width:320px;margin:0 auto;"></div><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:8px;">Arrow keys to slide tiles</div>`;
   render();
-  document.addEventListener('keydown',function k2(e){if(!running){document.removeEventListener('keydown',k2);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;const m={'ArrowLeft':'left','ArrowRight':'right','ArrowUp':'up','ArrowDown':'down'};if(m[e.code]){e.preventDefault();move(m[e.code]);}});
+  function k2(e){if(!running){document.removeEventListener('keydown',k2);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;const m={'ArrowLeft':'left','ArrowRight':'right','ArrowUp':'up','ArrowDown':'down'};if(m[e.code]){e.preventDefault();move(m[e.code]);}}
+  document.addEventListener('keydown',k2);
   // swipe
   let tx=0,ty=0;
   const el=document.getElementById('g2048');
@@ -14930,10 +14922,12 @@ function startWordle(area) {
   let guesses=[],current='',row=0,done=false;
   function renderGrid(){const g=document.getElementById('wl-grid');if(!g)return;g.innerHTML='';for(let r=0;r<6;r++){const rd=document.createElement('div');rd.style.cssText='display:flex;gap:6px;margin-bottom:6px;justify-content:center;';for(let c=0;c<5;c++){const cd=document.createElement('div');let letter='',bg='rgba(255,255,255,.04)',border='rgba(255,255,255,.15)';if(r<guesses.length){letter=guesses[r][c]||'';const g2=guesses[r];const tc=target[c];if(letter===tc){bg='#00796b';border='#00796b';}else if(target.includes(letter)){bg='#92400e';border='#92400e';}else{bg='rgba(255,255,255,.1)';border='rgba(255,255,255,.2)';}}else if(r===row){letter=current[c]||'';if(letter)border='rgba(77,159,255,.6)';}cd.style.cssText=`width:48px;height:52px;border-radius:8px;background:${bg};border:2px solid ${border};display:flex;align-items:center;justify-content:center;font-family:var(--orb);font-size:1.3rem;font-weight:900;color:#fff;`;cd.textContent=letter;rd.appendChild(cd);}g.appendChild(rd);}}
   function renderKeys(){const k=document.getElementById('wl-keys');if(!k)return;const rows=[['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','⌫']];const used={};guesses.forEach(g=>{g.split('').forEach((l,i)=>{if(l===target[i])used[l]='#00796b';else if(target.includes(l)&&used[l]!=='#00796b')used[l]='#92400e';else if(!used[l])used[l]='rgba(255,255,255,.1)';});});k.innerHTML='';rows.forEach(row=>{const rd=document.createElement('div');rd.style.cssText='display:flex;gap:5px;justify-content:center;margin-bottom:5px;';row.forEach(key=>{const kd=document.createElement('button');kd.textContent=key;const bg=used[key]||'rgba(255,255,255,.08)';kd.style.cssText=`padding:8px ${key.length>1?'10px':'8px'};border-radius:7px;background:${bg};border:none;color:#fff;font-family:var(--orb);font-size:.75rem;cursor:pointer;`;kd.onclick=()=>handleKey(key);rd.appendChild(kd);});k.appendChild(rd);});}
-  function handleKey(k){if(done)return;if(k==='⌫'||k==='Backspace'){current=current.slice(0,-1);}else if(k==='ENTER'||k==='Enter'){if(current.length!==5)return;guesses.push(current);if(current===target){done=true;setTimeout(()=>exitGame(100+(6-row)*50,'Wordle','You got it! 🎉'),600);}else if(guesses.length>=6){done=true;setTimeout(()=>exitGame(10,'Wordle',`The word was ${target}`),600);}else{row++;}current='';}else if(/^[A-Za-z]$/.test(k)&&current.length<5){current+=k.toUpperCase();}renderGrid();renderKeys();}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Guess the 5-letter word!</div></div><button class="abtn sec" onclick="exitGame(0,'Wordle','')">Quit</button></div><div id="wl-grid" style="margin:10px 0;"></div><div id="wl-keys"></div>`;
+  function handleKey(k){if(done)return;if(k==='⌫'||k==='Backspace'){current=current.slice(0,-1);}else if(k==='ENTER'||k==='Enter'){if(current.length!==5)return;guesses.push(current);if(current===target){done=true;document.removeEventListener('keydown',wlk);setTimeout(()=>exitGame(100+(6-row)*50,'Wordle','You got it! 🎉'),600);}else if(guesses.length>=6){done=true;document.removeEventListener('keydown',wlk);setTimeout(()=>exitGame(10,'Wordle',`The word was ${target}`),600);}else{row++;}current='';}else if(/^[A-Za-z]$/.test(k)&&current.length<5){current+=k.toUpperCase();}renderGrid();renderKeys();}
+  window.wlQuit=function(){done=true;document.removeEventListener('keydown',wlk);exitGame(0,'Wordle','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Guess the 5-letter word!</div></div><button class="abtn sec" onclick="wlQuit()">Quit</button></div><div id="wl-grid" style="margin:10px 0;"></div><div id="wl-keys"></div>`;
   renderGrid();renderKeys();
-  document.addEventListener('keydown',function wlk(e){if(done){document.removeEventListener('keydown',wlk);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;handleKey(e.key);});
+  function wlk(e){if(done){document.removeEventListener('keydown',wlk);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;handleKey(e.key);}
+  document.addEventListener('keydown',wlk);
 }
 
 // ── MEMORY MATCH ──
@@ -14943,14 +14937,16 @@ function startMemoryMatch(area) {
   let flipped=[],score=0,moves=0,locked=false,startTime=Date.now();
   function render(){const g=document.getElementById('mm-grid');if(!g)return;g.innerHTML='';cards.forEach(c=>{const d=document.createElement('div');d.style.cssText=`height:64px;border-radius:10px;background:${c.flipped||c.matched?'rgba(77,159,255,.15)':'rgba(255,255,255,.05)'};border:2px solid ${c.matched?'#00d4aa':c.flipped?'rgba(77,159,255,.5)':'rgba(255,255,255,.1)'};display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:${c.matched||locked?'default':'pointer'};transition:all .2s;`;d.textContent=c.flipped||c.matched?c.emoji:'';if(!c.matched&&!locked)d.onclick=()=>flip(c.id);g.appendChild(d);});}
   function flip(id){if(locked)return;const c=cards[id];if(c.flipped||c.matched)return;c.flipped=true;flipped.push(id);render();if(flipped.length===2){moves++;locked=true;const[a,b]=flipped.map(i=>cards[i]);if(a.emoji===b.emoji){a.matched=b.matched=true;score+=10;flipped=[];locked=false;render();if(cards.every(c=>c.matched)){const t=Math.round((Date.now()-startTime)/1000);exitGame(score+Math.max(0,100-t),'Memory Match',`All matched in ${t}s!`);}}else{setTimeout(()=>{a.flipped=b.flipped=false;flipped=[];locked=false;render();},900);}}}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="mm-score">0</span></div></div><button class="abtn sec" onclick="exitGame(${score},'Memory Match','')">Quit</button></div><div id="mm-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;max-width:340px;margin:0 auto;"></div>`;
+  window.mmQuit=function(){exitGame(score,'Memory Match','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="mm-score">0</span></div></div><button class="abtn sec" onclick="mmQuit()">Quit</button></div><div id="mm-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;max-width:340px;margin:0 auto;"></div>`;
   render();
 }
 
 // ── AIM TRAINER ──
 function startAimTrainer(area) {
   let score=0,timeLeft=30,running=true;
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="at-score">0</span></div><div class="gscore">Time: <span id="at-time">30</span>s</div></div><button class="abtn sec" onclick="exitGame(${score},'Aim Trainer','')">Quit</button></div><div id="at-area" style="position:relative;height:320px;background:rgba(255,255,255,.02);border-radius:12px;overflow:hidden;cursor:crosshair;"></div>`;
+  window.atQuit=function(){clearInterval(gameTimer);running=false;exitGame(score,'Aim Trainer','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="at-score">0</span></div><div class="gscore">Time: <span id="at-time">30</span>s</div></div><button class="abtn sec" onclick="atQuit()">Quit</button></div><div id="at-area" style="position:relative;height:320px;background:rgba(255,255,255,.02);border-radius:12px;overflow:hidden;cursor:crosshair;"></div>`;
   const atArea=document.getElementById('at-area');
   let targets=[];
   function spawnTarget(){const size=20+Math.random()*25,x=size+Math.random()*(atArea.offsetWidth-size*2),y=size+Math.random()*(atArea.offsetHeight-size*2);const d=document.createElement('div');d.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:${size*2}px;height:${size*2}px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff6b9d,#c084fc);border:2px solid rgba(255,255,255,.3);cursor:crosshair;transform:translate(-50%,-50%);transition:transform .1s;box-shadow:0 0 12px rgba(192,132,252,.5);`;d.onclick=e=>{e.stopPropagation();score++;const se=document.getElementById('at-score');if(se)se.textContent=score;d.remove();targets=targets.filter(t=>t!==d);spawnTarget();};atArea.appendChild(d);targets.push(d);if(targets.length>6){const old=targets.shift();if(old.parentNode)old.remove();}}
@@ -14963,7 +14959,8 @@ function startSimonMemory(area) {
   const COLS=['#4d9fff','#00d4aa','#f87171','#fbbf24'];
   const NAMES=['Blue','Teal','Red','Yellow'];
   let sequence=[],step=0,score=0,phase='watch',locked=false;
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Level: <span id="sm-level">1</span></div></div><button class="abtn sec" onclick="exitGame(${score},'Simon Says','')">Quit</button></div><div id="sm-status" style="text-align:center;font-family:var(--exo);font-size:.8rem;color:var(--silver);margin:6px 0 12px;">Watch the sequence...</div><div id="sm-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:260px;margin:0 auto;padding:8px;"></div>`;
+  window.smQuit=function(){exitGame(score*10,'Simon Says','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Level: <span id="sm-level">1</span></div></div><button class="abtn sec" onclick="smQuit()">Quit</button></div><div id="sm-status" style="text-align:center;font-family:var(--exo);font-size:.8rem;color:var(--silver);margin:6px 0 12px;">Watch the sequence...</div><div id="sm-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:260px;margin:0 auto;padding:8px;"></div>`;
   function renderButtons(flash=-1){const g=document.getElementById('sm-grid');if(!g)return;g.innerHTML='';COLS.forEach((col,i)=>{const d=document.createElement('div');d.style.cssText=`height:100px;border-radius:14px;background:${i===flash?col:col+'44'};border:3px solid ${col};cursor:${phase==='input'&&!locked?'pointer':'default'};transition:background .1s;box-shadow:${i===flash?`0 0 24px ${col}`:'none'};`;if(phase==='input'&&!locked)d.onclick=()=>playerClick(i);g.appendChild(d);});}
   function playSequence(){phase='watch';locked=true;const st=document.getElementById('sm-status');if(st)st.textContent='Watch the sequence...';let i=0;const iv=setInterval(()=>{if(!document.getElementById('sm-grid')){clearInterval(iv);return;}renderButtons(sequence[i]);setTimeout(()=>renderButtons(-1),500);i++;if(i>=sequence.length){clearInterval(iv);setTimeout(()=>{phase='input';step=0;locked=false;const st2=document.getElementById('sm-status');if(st2)st2.textContent='Your turn! Repeat the sequence.';renderButtons();},700);}},900);}
   function playerClick(idx){if(phase!=='input'||locked)return;renderButtons(idx);setTimeout(()=>renderButtons(-1),200);if(idx===sequence[step]){step++;if(step===sequence.length){score++;const le=document.getElementById('sm-level');if(le)le.textContent=score+1;sequence.push(Math.floor(Math.random()*4));setTimeout(playSequence,600);}}else{exitGame(score*10,'Simon Says',`You reached level ${score+1}!`);}}
@@ -14985,8 +14982,9 @@ function startNumberTouch(area) {
 const CAPITALS_DATA=[['France','Paris'],['Japan','Tokyo'],['Brazil','Brasília'],['Australia','Canberra'],['Egypt','Cairo'],['Canada','Ottawa'],['India','New Delhi'],['Germany','Berlin'],['Argentina','Buenos Aires'],['Russia','Moscow'],['China','Beijing'],['South Korea','Seoul'],['Mexico','Mexico City'],['Italy','Rome'],['Spain','Madrid'],['South Africa','Pretoria'],['Nigeria','Abuja'],['Turkey','Ankara'],['Saudi Arabia','Riyadh'],['Thailand','Bangkok'],['Poland','Warsaw'],['Netherlands','Amsterdam'],['Sweden','Stockholm'],['Norway','Oslo'],['Greece','Athens'],['Portugal','Lisbon'],['Pakistan','Islamabad'],['Indonesia','Jakarta'],['Vietnam','Hanoi'],['Philippines','Manila']];
 function startCapitals(area) {
   let score=0,qIdx=0,questions=CAPITALS_DATA.sort(()=>Math.random()-.5);
+  window.capQuit=function(){exitGame(score,'Capital Cities','');};
   function showQ(){if(qIdx>=15){exitGame(score,'Capital Cities',`${score}/15 correct!`);return;}const[country,capital]=questions[qIdx];const wrongs=CAPITALS_DATA.filter(([c])=>c!==country).sort(()=>Math.random()-.5).slice(0,3).map(([,cap])=>cap);const opts=[capital,...wrongs].sort(()=>Math.random()-.5);const qa=document.getElementById('cap-qa');if(!qa)return;qa.innerHTML=`<div style="text-align:center;font-family:var(--orb);font-size:1.1rem;color:var(--text);margin-bottom:16px;">What is the capital of <span style="color:#4d9fff;">${country}</span>?</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">`;opts.forEach(opt=>{const b=document.createElement('button');b.style.cssText='padding:14px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);color:var(--text);font-family:var(--raj);font-size:.9rem;cursor:pointer;transition:all .2s;';b.textContent=opt;b.onclick=()=>{const correct=opt===capital;if(correct)score++;b.style.background=correct?'rgba(0,212,170,.3)':'rgba(248,113,113,.2)';b.style.borderColor=correct?'#00d4aa':'#f87171';qa.querySelectorAll('button').forEach(btn=>{btn.onclick=null;btn.style.cursor='default';if(btn.textContent===capital)btn.style.background='rgba(0,212,170,.3)';});const se=document.getElementById('cap-score');if(se)se.textContent=score;qIdx++;setTimeout(showQ,900);};qa.querySelector('div:last-child').appendChild(b);});}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="cap-score">0</span>/15</div></div><button class="abtn sec" onclick="exitGame(${score},'Capital Cities','')">Quit</button></div><div id="cap-qa" style="padding:8px;"></div>`;
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="cap-score">0</span>/15</div></div><button class="abtn sec" onclick="capQuit()">Quit</button></div><div id="cap-qa" style="padding:8px;"></div>`;
   showQ();
 }
 
@@ -14994,8 +14992,9 @@ function startCapitals(area) {
 const ELEMENTS_DATA=[['H','Hydrogen'],['He','Helium'],['Li','Lithium'],['C','Carbon'],['N','Nitrogen'],['O','Oxygen'],['F','Fluorine'],['Na','Sodium'],['Mg','Magnesium'],['Al','Aluminium'],['Si','Silicon'],['P','Phosphorus'],['S','Sulphur'],['Cl','Chlorine'],['K','Potassium'],['Ca','Calcium'],['Fe','Iron'],['Cu','Copper'],['Zn','Zinc'],['Br','Bromine'],['Ag','Silver'],['I','Iodine'],['Au','Gold'],['Hg','Mercury'],['Pb','Lead'],['W','Tungsten'],['U','Uranium'],['Cr','Chromium'],['Mn','Manganese'],['Ni','Nickel']];
 function startElements(area) {
   let score=0,qIdx=0,questions=ELEMENTS_DATA.sort(()=>Math.random()-.5),mode=Math.random()>.5;
+  window.elQuit=function(){exitGame(score,'Element Symbols','');};
   function showQ(){if(qIdx>=15){exitGame(score,'Element Symbols',`${score}/15 correct!`);return;}const[sym,name]=questions[qIdx];const isSymToName=mode;const prompt=isSymToName?`What element has the symbol <span style="color:#a78bfa;font-size:1.4rem;">${sym}</span>?`:`What is the symbol for <span style="color:#a78bfa;">${name}</span>?`;const answer=isSymToName?name:sym;const wrongs=ELEMENTS_DATA.filter(([s,n])=>isSymToName?n!==name:s!==sym).sort(()=>Math.random()-.5).slice(0,3).map(([s,n])=>isSymToName?n:s);const opts=[answer,...wrongs].sort(()=>Math.random()-.5);const qa=document.getElementById('el-qa');if(!qa)return;qa.innerHTML=`<div style="text-align:center;font-family:var(--raj);font-size:.95rem;color:var(--text);margin-bottom:16px;">${prompt}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">`;opts.forEach(opt=>{const b=document.createElement('button');b.style.cssText='padding:14px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(167,139,250,.2);color:var(--text);font-family:var(--raj);font-size:.9rem;cursor:pointer;';b.textContent=opt;b.onclick=()=>{const correct=opt===answer;if(correct)score++;b.style.background=correct?'rgba(0,212,170,.3)':'rgba(248,113,113,.2)';b.style.borderColor=correct?'#00d4aa':'#f87171';qa.querySelectorAll('button').forEach(btn=>{btn.onclick=null;btn.style.cursor='default';if(btn.textContent===answer)btn.style.background='rgba(0,212,170,.3)';});const se=document.getElementById('el-score');if(se)se.textContent=score;qIdx++;setTimeout(showQ,900);};qa.querySelector('div:last-child').appendChild(b);});}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="el-score">0</span>/15</div></div><button class="abtn sec" onclick="exitGame(${score},'Element Symbols','')">Quit</button></div><div id="el-qa" style="padding:8px;"></div>`;
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="el-score">0</span>/15</div></div><button class="abtn sec" onclick="elQuit()">Quit</button></div><div id="el-qa" style="padding:8px;"></div>`;
   showQ();
 }
 
@@ -15009,6 +15008,7 @@ const TIMELINE_SETS=[
 ];
 function startTimeline(area) {
   let score=0,round=0,selected=[];
+  window.tlQuit=function(){exitGame(score,'Timeline Quiz','');};
   const sets=TIMELINE_SETS.sort(()=>Math.random()-.5).slice(0,5);
   function showRound(){if(round>=5){exitGame(score,'Timeline Quiz',`${score}/5 rounds correct!`);return;}const events=[...sets[round]].sort(()=>Math.random()-.5);selected=[];renderRound(events);}
   function renderRound(events){const qa=document.getElementById('tl-qa');if(!qa)return;selected=[];qa.innerHTML=`<div style="font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:1px;margin-bottom:10px;">Drag or tap to order from EARLIEST to LATEST:</div><div id="tl-items" style="display:flex;flex-direction:column;gap:8px;"></div><button id="tl-submit" style="margin-top:14px;width:100%;padding:11px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--teal));border:none;color:#fff;font-family:var(--orb);font-size:.7rem;letter-spacing:2px;cursor:pointer;">CONFIRM ORDER</button>`;
@@ -15017,7 +15017,7 @@ function startTimeline(area) {
   function renderItems(){container.innerHTML='';order.forEach((ev,i)=>{const d=document.createElement('div');d.style.cssText='padding:10px 14px;border-radius:10px;background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.2);color:var(--text);font-family:var(--raj);font-size:.85rem;display:flex;align-items:center;gap:10px;cursor:grab;';d.innerHTML=`<span style="color:var(--silver);font-family:var(--exo);font-size:.7rem;">${i+1}.</span>${ev.e}`;d.draggable=true;d.dataset.idx=i;d.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',i));d.addEventListener('dragover',e=>e.preventDefault());d.addEventListener('drop',e=>{e.preventDefault();const from=parseInt(e.dataTransfer.getData('text/plain'));const to=i;const tmp=order[from];order[from]=order[to];order[to]=tmp;renderItems();});container.appendChild(d);});}
   renderItems();
   document.getElementById('tl-submit').onclick=()=>{const correct=order.every((ev,i)=>ev.y===([...events].sort((a,b)=>a.y-b.y)[i].y));if(correct)score++;const se=document.getElementById('tl-score');if(se)se.textContent=score;const sorted=[...events].sort((a,b)=>a.y-b.y);container.innerHTML='';sorted.forEach((ev,i)=>{const d=document.createElement('div');d.style.cssText=`padding:10px 14px;border-radius:10px;background:${order[i]&&order[i].e===ev.e?'rgba(0,212,170,.2)':'rgba(248,113,113,.15)'};border:1px solid ${order[i]&&order[i].e===ev.e?'#00d4aa':'#f87171'};color:var(--text);font-family:var(--raj);font-size:.82rem;`;d.textContent=`${ev.y} — ${ev.e}`;container.appendChild(d);});setTimeout(()=>{round++;showRound();},1400);};}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="tl-score">0</span>/5</div></div><button class="abtn sec" onclick="exitGame(${score},'Timeline Quiz','')">Quit</button></div><div id="tl-qa" style="padding:6px;"></div>`;
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="tl-score">0</span>/5</div></div><button class="abtn sec" onclick="tlQuit()">Quit</button></div><div id="tl-qa" style="padding:6px;"></div>`;
   showRound();
 }
 
