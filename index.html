@@ -1708,12 +1708,61 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="set-landing-desc" data-i18n="set_area_progress_desc">Stats, badges, and titles you've earned</div>
             </button>
           </div>
+
+          <div class="set-quiet-block" style="opacity:.6;max-width:1180px;">
+            <div class="ps-card">
+              <div class="ps-card-label">// ABOUT</div>
+              <div class="ps-about">
+                <div class="ps-about-logo">VEDA</div>
+                <div class="ps-about-motto">ज्ञानं परमं ध्येयम्</div>
+                <div class="ps-about-motto-en">Knowledge is the Supreme Goal</div>
+                <div class="ps-about-ver">Version 3.0</div>
+                <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- ══ AREA: ME ══ -->
         <div class="set-area" id="set-area-me">
           <button type="button" class="set-area-back" onclick="settingsGo(null)">‹ <span data-i18n="set_back_to_settings">Settings</span></button>
-        <div class="ps-panel on" id="ps-profile">
+        <div class="ps-panel on" id="ps-me">
+
+          <!-- HUB — one tile per section, matches the Account & Safety hub pattern. -->
+          <div id="ps-me-hub">
+            <div class="ps-hub-list">
+              <button class="ps-hub-tile" onclick="meHubOpen('profile')">
+                <div class="ps-hub-icon">👤</div>
+                <div class="ps-hub-info">
+                  <div class="ps-hub-title" data-i18n="set_hub_profile">Profile</div>
+                  <div class="ps-hub-status" data-i18n="set_hub_profile_status">Name, avatar, and level</div>
+                </div>
+                <div class="ps-hub-chev">›</div>
+              </button>
+              <button class="ps-hub-tile" onclick="meHubOpen('learning')">
+                <div class="ps-hub-icon">🎓</div>
+                <div class="ps-hub-info">
+                  <div class="ps-hub-title" data-i18n="set_hub_learning">Learning Profile</div>
+                  <div class="ps-hub-status" data-i18n="set_hub_learning_status">Curriculum, subjects, and how AI treats you</div>
+                </div>
+                <div class="ps-hub-chev">›</div>
+              </button>
+              <button class="ps-hub-tile" onclick="meHubOpen('goals')">
+                <div class="ps-hub-icon">🎯</div>
+                <div class="ps-hub-info">
+                  <div class="ps-hub-title" data-i18n="set_hub_goals">Daily Goals</div>
+                  <div class="ps-hub-status" data-i18n="set_hub_goals_status">Set your daily targets</div>
+                </div>
+                <div class="ps-hub-chev">›</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- DETAIL — one focused section at a time, reached via the hub above -->
+          <div id="ps-me-detail" style="display:none;">
+            <button class="ps-hub-back" onclick="meHubBack()" data-i18n="set_back">‹ Back</button>
+
+        <div class="ps-detail-section" id="ps-profile">
           <div class="set-identity-quiet">
             <div class="ps-hero">
               <div class="ps-avatar-wrap">
@@ -1778,7 +1827,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
           <!-- Danger zone moved to Account &amp; Safety area -->
         </div>
-        <div class="ps-panel on" id="ps-aiprofile">
+        <div class="ps-detail-section" id="ps-aiprofile">
           <div class="ps-card">
             <div class="ps-card-label" data-i18n="set_ai_profile_label">// AI STUDENT PROFILE</div>
             <div class="ps-form-label" style="margin-bottom:16px;line-height:1.7;" data-i18n="set_ai_profile_desc">
@@ -1937,7 +1986,7 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             <button class="set-btn accent" onclick="saveAIProfile()" style="width:100%;" data-i18n="set_save_ai_profile">✦ Save AI Profile</button>
           </div>
         </div>
-        <div class="ps-panel on" id="ps-goals">
+        <div class="ps-detail-section" id="ps-goals">
           <div class="ps-card">
             <div class="ps-card-label" data-i18n="set_daily_goals">// DAILY STUDY GOALS</div>
             <div class="ps-form-label" style="margin-bottom:16px;" data-i18n="set_daily_goals_sub">Set targets — progress tracked automatically each day</div>
@@ -2026,6 +2075,9 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
       </div></div>
           </div>
         </div>
+
+          </div><!-- /ps-me-detail -->
+        </div><!-- /ps-me -->
         </div><!-- /set-area-me -->
 
         <!-- ══ AREA: LOOK & FEEL ══ -->
@@ -2166,7 +2218,9 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               <div class="ps-card-label">// ABOUT</div>
               <div class="ps-about">
                 <div class="ps-about-logo">VEDA</div>
-                <div class="ps-about-ver">Version 3.0 · ज्ञानं परमं ध्येयम्</div>
+                <div class="ps-about-motto">ज्ञानं परमं ध्येयम्</div>
+                <div class="ps-about-motto-en">Knowledge is the Supreme Goal</div>
+                <div class="ps-about-ver">Version 3.0</div>
                 <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
               </div>
             </div>
@@ -4492,6 +4546,12 @@ const LANGS = {
     set_hub_gemini_key: 'Gemini AI Key',
     set_hub_google_account: 'Google Account',
     set_hub_guardian: 'Parental Safety Contact',
+    set_hub_profile: 'Profile',
+    set_hub_profile_status: 'Name, avatar, and level',
+    set_hub_learning: 'Learning Profile',
+    set_hub_learning_status: 'Curriculum, subjects, and how AI treats you',
+    set_hub_goals: 'Daily Goals',
+    set_hub_goals_status: 'Set your daily targets',
     set_key_active_full: 'AI key is active — AI features enabled',
     set_key_inactive_full: 'No AI key — AI features disabled',
     set_key_step1: 'Go to',
@@ -5145,6 +5205,12 @@ const LANGS = {
     set_hub_gemini_key: 'Clave de IA Gemini',
     set_hub_google_account: 'Cuenta de Google',
     set_hub_guardian: 'Contacto de Seguridad Parental',
+    set_hub_profile: 'Perfil',
+    set_hub_profile_status: 'Nombre, avatar y nivel',
+    set_hub_learning: 'Perfil de Aprendizaje',
+    set_hub_learning_status: 'Currículo, materias y cómo te trata la IA',
+    set_hub_goals: 'Metas Diarias',
+    set_hub_goals_status: 'Establece tus objetivos diarios',
     set_key_active_full: 'Clave de IA activa — funciones de IA habilitadas',
     set_key_inactive_full: 'Sin clave de IA — funciones de IA deshabilitadas',
     set_key_step1: 'Ve a',
@@ -5718,6 +5784,12 @@ const LANGS = {
     set_hub_gemini_key: 'Kunci AI Gemini',
     set_hub_google_account: 'Akaun Google',
     set_hub_guardian: 'Kenalan Keselamatan Ibu Bapa',
+    set_hub_profile: 'Profil',
+    set_hub_profile_status: 'Nama, avatar, dan tahap',
+    set_hub_learning: 'Profil Pembelajaran',
+    set_hub_learning_status: 'Kurikulum, subjek, dan cara AI melayan anda',
+    set_hub_goals: 'Matlamat Harian',
+    set_hub_goals_status: 'Tetapkan sasaran harian anda',
     set_key_active_full: 'Kunci AI aktif — ciri AI didayakan',
     set_key_inactive_full: 'Tiada kunci AI — ciri AI dinyahaktifkan',
     set_key_step1: 'Pergi ke',
@@ -6291,6 +6363,12 @@ const LANGS = {
     set_hub_gemini_key: 'Gemini AI密钥',
     set_hub_google_account: 'Google账户',
     set_hub_guardian: '家长安全联系人',
+    set_hub_profile: '个人资料',
+    set_hub_profile_status: '姓名、头像和等级',
+    set_hub_learning: '学习档案',
+    set_hub_learning_status: '课程、科目，以及 AI 如何对待你',
+    set_hub_goals: '每日目标',
+    set_hub_goals_status: '设置你的每日目标',
     set_key_active_full: 'AI密钥已激活——AI功能已启用',
     set_key_inactive_full: '无AI密钥——AI功能已禁用',
     set_key_step1: '前往',
@@ -6864,6 +6942,12 @@ const LANGS = {
     set_hub_gemini_key: 'Gemini AIキー',
     set_hub_google_account: 'Googleアカウント',
     set_hub_guardian: '保護者への安全連絡先',
+    set_hub_profile: 'プロフィール',
+    set_hub_profile_status: '名前、アバター、レベル',
+    set_hub_learning: '学習プロフィール',
+    set_hub_learning_status: 'カリキュラム、科目、AIの対応方法',
+    set_hub_goals: '毎日の目標',
+    set_hub_goals_status: '毎日の目標を設定',
     set_key_active_full: 'AIキーが有効です — AI機能が利用可能です',
     set_key_inactive_full: 'AIキーがありません — AI機能は無効です',
     set_key_step1: 'にアクセス',
@@ -10290,6 +10374,7 @@ function settingsGo(area) {
   if (!area) return;
   if (area === 'me') {
     renderGoalsPanel();
+    meHubBack();
   } else if (area === 'progress') {
     const tabEl = document.getElementById('tab-settings');
     const btn = tabEl ? tabEl.querySelector('#set-area-progress .ps-tab[onclick*="\'stats\'"]') : null;
@@ -11045,6 +11130,28 @@ function apiHubOpen(section) {
   if (target) target.classList.add('on');
   const panel = document.getElementById('ps-apikey');
   if (panel) panel.scrollTop = 0;
+}
+
+function meHubOpen(section) {
+  const hub = document.getElementById('ps-me-hub');
+  const detail = document.getElementById('ps-me-detail');
+  if (hub) hub.style.display = 'none';
+  if (detail) detail.style.display = 'flex';
+  document.querySelectorAll('#ps-me-detail .ps-detail-section').forEach(s => s.classList.remove('on'));
+  const idMap = { profile: 'ps-profile', learning: 'ps-aiprofile', goals: 'ps-goals' };
+  const target = document.getElementById(idMap[section] || section);
+  if (target) target.classList.add('on');
+  if (section === 'goals' && typeof renderGoalsPanel === 'function') renderGoalsPanel();
+  const panel = document.getElementById('ps-me');
+  if (panel) panel.scrollTop = 0;
+}
+
+function meHubBack() {
+  const hub = document.getElementById('ps-me-hub');
+  const detail = document.getElementById('ps-me-detail');
+  if (detail) detail.style.display = 'none';
+  if (hub) hub.style.display = 'block';
+  document.querySelectorAll('#ps-me-detail .ps-detail-section').forEach(s => s.classList.remove('on'));
 }
 
 function apiHubBack() {
