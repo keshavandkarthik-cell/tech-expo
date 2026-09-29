@@ -105,6 +105,12 @@
     font-family: var(--orb); font-weight: 700; font-size: 1.15rem; color: var(--accent2);
   }
   .name { font-family: var(--raj); font-weight: 600; font-size: 1.05rem; color: var(--text); }
+  .name.big { font-size: 1.55rem; font-weight: 800; }
+  .role {
+    font-family: var(--exo); font-size: .66rem; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--teal2); background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3);
+    border-radius: 999px; padding: 3px 12px; margin-top: -6px;
+  }
   .addr { font-family: var(--exo); font-size: .78rem; color: var(--silver); word-break: break-all; }
   .btn {
     margin-top: 4px;
@@ -117,6 +123,32 @@
     transition: transform .15s ease, box-shadow .15s ease;
   }
   .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(77,159,255,0.35); }
+  .whatsapp-card {
+    width: 100%; max-width: 980px;
+    background: linear-gradient(135deg, rgba(37,211,102,0.1), rgba(37,211,102,0.04));
+    border: 1px solid rgba(37,211,102,0.3);
+    border-radius: 16px;
+    padding: 22px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .whatsapp-left { display: flex; align-items: center; gap: 14px; }
+  .whatsapp-icon {
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(37,211,102,0.15); border: 1px solid rgba(37,211,102,0.4);
+    display: flex; align-items: center; justify-content: center; font-size: 1.35rem;
+  }
+  .whatsapp-title { font-family: var(--raj); font-weight: 600; font-size: 1rem; color: var(--text); }
+  .whatsapp-num { font-family: var(--exo); font-size: .78rem; color: var(--silver); margin-top: 2px; }
+  .btn-whatsapp {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #25D366; color: #04150c; text-decoration: none;
+    font-family: var(--orb); font-weight: 700; font-size: .68rem;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 12px 20px; border-radius: 10px;
+    transition: transform .15s ease, box-shadow .15s ease; flex-shrink: 0;
+  }
+  .btn-whatsapp:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(37,211,102,0.35); }
   footer {
     margin-top: 56px; font-family: var(--exo); font-size: .68rem; color: var(--silver);
     letter-spacing: 1px; opacity: .6;
@@ -134,20 +166,31 @@
   <h1>Get in touch</h1>
   <p class="sub">Reach any of us directly — every card opens a Gmail compose window addressed straight to that inbox.</p>
 
+  <div class="whatsapp-card">
+    <div class="whatsapp-left">
+      <div class="whatsapp-icon">💬</div>
+      <div>
+        <div class="whatsapp-title">Chat with us on WhatsApp</div>
+        <div class="whatsapp-num">+60 3-7972 8535</div>
+      </div>
+    </div>
+    <a class="btn-whatsapp" href="https://wa.me/60379728535" target="_blank" rel="noopener">Open WhatsApp →</a>
+  </div>
+
   <div class="grid" id="grid"></div>
 
   <footer>veda-net.com</footer>
 
 <script>
   const team = [
-    { name: 'Aruna',   email: 'aruna@veda-net.com' },
-    { name: 'Vikhyath', email: 'vikhyath@veda-net.com' },
-    { name: 'Sahas',   email: 'sahas@veda-net.com' },
-    { name: 'Shaun',   email: 'shaun@veda-net.com' },
-    { name: 'Keshav',  email: 'keshav@veda-net.com' },
-    { name: 'Aaradhya Swami', email: 'aaruswami12@gmail.com' },
-    { name: 'Avaneesh Angadi', email: 'avaneesh.angadi14367@gmail.com' },
-    { name: 'Manasvi Nalam', email: 'nalammanasvi@gmail.com' },
+    { name: 'Aruna',   email: 'aruna@veda-net.com', role: 'Co-Leader' },
+    { name: 'Vikhyath', email: 'vikhyath@veda-net.com', role: 'Interactive Experience Designer' },
+    { name: 'Sahas',   email: 'sahas@veda-net.com', role: 'Bug Tester' },
+    { name: 'Shaun',   email: 'shaun@veda-net.com', role: 'Poster Design Lead' },
+    { name: 'Keshav',  email: 'keshav@veda-net.com', big: true, role: 'Owner & Lead Developer' },
+    { name: 'Aaradhya Swami', email: 'aaruswami12@gmail.com', role: 'Poster Design Lead' },
+    { name: 'Avaneesh Angadi', email: 'avaneesh.angadi14367@gmail.com', role: 'Executive Producer' },
+    { name: 'Manasvi Nalam', email: 'nalammanasvi@gmail.com', role: 'Content & Script Lead' },
   ];
 
   const grid = document.getElementById('grid');
@@ -156,7 +199,8 @@
     return `
       <div class="card">
         <div class="avatar">${p.name[0]}</div>
-        <div class="name">${p.name}</div>
+        <div class="name${p.big ? ' big' : ''}">${p.name}</div>
+        ${p.role ? `<div class="role">${p.role}</div>` : ''}
         <div class="addr">${p.email}</div>
         <a class="btn" href="${gmailUrl}" target="_blank" rel="noopener">Email via Gmail →</a>
       </div>
