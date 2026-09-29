@@ -640,8 +640,10 @@ onAuthStateChanged(_auth, async user => {
         <button class="nb on" onclick="go('home')"><span class="ni"><span class="ivory-emoji">⊞</span><span class="ivory-icon-svg"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3.5 9.5 10 3.5l6.5 6"/><path d="M5 8.5V16a1 1 0 0 0 1 1h3v-4.5h2V17h3a1 1 0 0 0 1-1V8.5"/></svg></span></span><span class="nl">Home</span></button>
         <!-- dynamic nav buttons injected by renderNav() -->
         <button class="nb" id="nb-music" onclick="go('music')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">🎵</span><span class="nl">Music</span></button>
-        <button class="nb" id="nb-themes" onclick="go('themes')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">🎨</span><span class="nl">Themes</span></button>
-        <button class="nb" id="nb-account" onclick="go('account')" style="display:none;opacity:0;transform:translateX(-12px);"><span class="ni">👤</span><span class="nl">Account</span></button>
+        <!-- nb-themes / nb-account retired (2026-09 reorg) — Themes and Account are
+             now areas inside the single Settings destination, not their own
+             reveal-on-demand tabs. openThemesTab()/openAccountTab() below now route
+             into Settings instead. -->
         <div id="nav-more-section" style="display:none;flex-direction:column;gap:2px;">
           <button class="nb nb-more-toggle" id="nav-more-btn" onclick="toggleNavMore()"><span class="ni">⋯</span><span class="nl" data-i18n="nav_more">More</span></button>
           <div id="nav-more-list" style="display:none;flex-direction:column;gap:2px;padding-left:8px;border-left:2px solid rgba(255,255,255,.06);margin-left:4px;"></div>
@@ -662,500 +664,6 @@ onAuthStateChanged(_auth, async user => {
     <!-- UNIVERSAL GEM COUNTER -->
     <div id="content">
 
-    <!-- ACCOUNT TAB — full tab, reached only via the header avatar (openAccountTab),
-         same reveal-on-demand sidebar pattern as Themes and Music. -->
-    <div class="tab" id="tab-account">
-      <div class="ttl">👤 Account</div>
-      <div class="tsub"><span class="prm">›</span>Your profile, goals, stats, badges and titles</div>
-
-      <div class="ps-subnav-groups" style="margin-top:14px;">
-        <div class="ps-subnav-group">
-          <div class="ps-subnav">
-            <button class="ps-tab on" onclick="psGo('profile',this)">👤 Details</button>
-            <button class="ps-tab" onclick="psGo('goals',this)">🎯 Goals</button>
-            <button class="ps-tab" onclick="psGo('stats',this)">📊 Stats</button>
-            <button class="ps-tab" onclick="psGo('badges',this)">🏅 Badges</button>
-            <button class="ps-tab" onclick="psGo('titles',this)">🏷️ Titles</button>
-          </div>
-        </div>
-      </div>
-
-        <div class="ps-panel on" id="ps-profile">
-          <div class="ps-hero">
-            <div class="ps-avatar-wrap">
-              <div class="ps-avatar" id="acct-avatar">🎓</div>
-              <div class="ps-avatar-ring"></div>
-            </div>
-            <div class="ps-hero-right">
-              <div class="ps-name" id="acct-name">Student</div>
-              <div class="ps-tagline" id="acct-tagline">Level 7 Legend</div>
-              <div class="ps-badges-row">
-                <div class="ps-pill gem">💎 <span id="acct-gems">330</span> Gems</div>
-                <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Edit form inline -->
-          <div class="ps-card" style="margin-top:16px;">
-            <div class="ps-card-label" data-i18n="set_edit_profile">// EDIT PROFILE</div>
-            <div class="ps-form-grid">
-              <div class="ps-form-group">
-                <div class="ps-form-label" data-i18n="set_display_name">Display Name</div>
-                <input class="ps-input" id="ps-name-in" placeholder="Your name..." data-i18n-ph="set_your_name_ph" maxlength="20">
-              </div>
-              <div class="ps-form-group">
-                <div class="ps-form-label" data-i18n="set_avatar_emoji">Avatar Emoji</div>
-                <input class="ps-input" id="ps-avatar-in" placeholder="🎓" maxlength="4" style="font-size:1.4rem;text-align:center;letter-spacing:2px;">
-              </div>
-            </div>
-            <div class="ps-avatar-picker">
-              <div class="ps-form-label" style="margin-bottom:8px;" data-i18n="set_quick_pick">Quick Pick</div>
-              <div class="ps-avatar-opts">
-                <span onclick="pickAvatar(this,'🎓')">🎓</span><span onclick="pickAvatar(this,'📚')">📚</span>
-                <span onclick="pickAvatar(this,'🧠')">🧠</span><span onclick="pickAvatar(this,'⚡')">⚡</span>
-                <span onclick="pickAvatar(this,'🌟')">🌟</span><span onclick="pickAvatar(this,'🔥')">🔥</span>
-                <span onclick="pickAvatar(this,'💎')">💎</span><span onclick="pickAvatar(this,'🦋')">🦋</span>
-                <span onclick="pickAvatar(this,'🚀')">🚀</span><span onclick="pickAvatar(this,'🎵')">🎵</span>
-                <span onclick="pickAvatar(this,'🌙')">🌙</span><span onclick="pickAvatar(this,'☀️')">☀️</span>
-              </div>
-            </div>
-            <button class="ps-save-btn" onclick="saveProfileInline()" data-i18n="set_save_profile">Save Profile</button>
-          </div>
-
-          <!-- Level progress -->
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label" data-i18n="set_level_progress">// LEVEL PROGRESS</div>
-            <div class="ps-level-row">
-              <div class="ps-level-num" id="ps-level">7</div>
-              <div style="flex:1;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <span class="ps-form-label" id="ps-level-title">Legend</span>
-                  <span class="ps-form-label"><span id="ps-gems-cur">30</span> / <span id="ps-gems-next">50</span> <span data-i18n="home_gems">gems</span></span>
-                </div>
-                <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 60%;"></div></div>
-                <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label" data-i18n="set_max_level">🏆 Max Level!</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Danger zone moved to Settings → API tab -->
-        </div>
-
-        <div class="ps-panel" id="ps-goals">
-          <div class="ps-card">
-            <div class="ps-card-label" data-i18n="set_daily_goals">// DAILY STUDY GOALS</div>
-            <div class="ps-form-label" style="margin-bottom:16px;" data-i18n="set_daily_goals_sub">Set targets — progress tracked automatically each day</div>
-            <div class="ps-goals-list">
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">📚</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name" data-i18n="set_goal_questions">Questions to ask</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-q" style="background:var(--accent)"></div></div>
-                  <div class="ps-form-label" id="goal-label-q" style="margin-top:4px;">0 / 5 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('questions',-1)" aria-label="Decrease questions goal">−</button>
-                  <span class="ps-goal-val" id="goal-val-questions">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('questions',1)" aria-label="Increase questions goal">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">📓</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name" data-i18n="set_goal_journal">Journal entries</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-journal" style="background: rgb(192, 132, 252); width: 0%;"></div></div>
-                  <div class="ps-form-label" id="goal-label-journal" style="margin-top:4px;">0 / 1 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('journal',-1)" aria-label="Decrease journal goal">−</button>
-                  <span class="ps-goal-val" id="goal-val-journal">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('journal',1)" aria-label="Increase journal goal">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">🃏</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name" data-i18n="set_goal_flashcards">Flashcard sets</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-flashcards" style="background: var(--teal); width: 0%;"></div></div>
-                  <div class="ps-form-label" id="goal-label-flashcards" style="margin-top:4px;">0 / 1 today</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',-1)" aria-label="Decrease flashcards goal">−</button>
-                  <span class="ps-goal-val" id="goal-val-flashcards">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',1)" aria-label="Increase flashcards goal">+</button>
-                </div>
-              </div>
-              <div class="ps-goal-row">
-                <div class="ps-goal-icon">🎮</div>
-                <div class="ps-goal-info">
-                  <div class="ps-goal-name" data-i18n="set_goal_games">Games to play</div>
-                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-games" style="background: rgb(251, 146, 60); width: 100%;"></div></div>
-                  <div class="ps-form-label" id="goal-label-games" style="margin-top:4px;">14 / 1 today ✅</div>
-                </div>
-                <div class="ps-goal-ctrl">
-                  <button class="ps-goal-btn" onclick="adjustGoal('games',-1)" aria-label="Decrease games goal">−</button>
-                  <span class="ps-goal-val" id="goal-val-games">1</span>
-                  <button class="ps-goal-btn" onclick="adjustGoal('games',1)" aria-label="Increase games goal">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label" data-i18n="set_todays_summary">// TODAY'S SUMMARY</div>
-            <div id="ps-goals-summary" class="ps-goals-summary"><div class="ps-goal-summary-item">
-        <div class="ps-goal-summary-icon">📚</div>
-        <div class="ps-goal-summary-text">
-          <strong style="color:var(--teal2)">✅ Done!</strong>
-          Questions
-        </div>
-      </div><div class="ps-goal-summary-item">
-        <div class="ps-goal-summary-icon">📓</div>
-        <div class="ps-goal-summary-text">
-          <strong style="color:var(--text)">0/1</strong>
-          Journal
-        </div>
-      </div><div class="ps-goal-summary-item">
-        <div class="ps-goal-summary-icon">🃏</div>
-        <div class="ps-goal-summary-text">
-          <strong style="color:var(--text)">0/1</strong>
-          Flashcards
-        </div>
-      </div><div class="ps-goal-summary-item">
-        <div class="ps-goal-summary-icon">🎮</div>
-        <div class="ps-goal-summary-text">
-          <strong style="color:var(--teal2)">✅ Done!</strong>
-          Games
-        </div>
-      </div></div>
-          </div>
-        </div>
-
-        <div class="ps-panel" id="ps-stats">
-          <div class="ps-stats-grid" id="ps-stats-grid">
-            <div class="ps-stat-card"><div class="ps-stat-icon">📚</div><div class="ps-stat-val" id="pss-questions">97</div><div class="ps-stat-lbl" data-i18n="set_stat_questions">Questions Asked</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">📝</div><div class="ps-stat-val" id="pss-notes">59</div><div class="ps-stat-lbl" data-i18n="set_stat_notes">Notes Summarised</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🃏</div><div class="ps-stat-val" id="pss-flashcards">55</div><div class="ps-stat-lbl" data-i18n="set_stat_flashcards">Flashcard Sets</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🎮</div><div class="ps-stat-val" id="pss-games">80</div><div class="ps-stat-lbl" data-i18n="set_stat_games">Games Played</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">📓</div><div class="ps-stat-val" id="pss-journal">12</div><div class="ps-stat-lbl" data-i18n="set_stat_journal">Journal Entries</div></div>
-            <div class="ps-stat-card"><div class="ps-stat-icon">🔥</div><div class="ps-stat-val" id="pss-streak">31</div><div class="ps-stat-lbl" data-i18n="set_stat_streak">Day Streak</div></div>
-          </div>
-
-          <!-- Activity chart -->
-          <div class="ps-card" style="margin-top:16px;">
-            <div class="ps-card-label" data-i18n="set_activity_week">// ACTIVITY THIS WEEK</div>
-            <div class="ps-chart" id="ps-chart"><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Mon</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Tue</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Wed</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:36px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Thu</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:24px;background:var(--accent);opacity:1"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:1"></div>
-        <div class="ps-bar" style="height:70px;background:#fb923c;opacity:1"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--accent2)">Fri</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Sat</div>
-    </div><div class="ps-chart-day">
-      <div class="ps-bar-grp">
-        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
-        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
-      </div>
-      <div class="ps-chart-day-label" style="color:var(--silver)">Sun</div>
-    </div></div>
-            <div class="ps-chart-legend">
-              <span><span class="ps-dot" style="background:var(--accent)"></span><span data-i18n="set_stat_questions_short">Questions</span></span>
-              <span><span class="ps-dot" style="background:var(--teal)"></span><span data-i18n="set_chart_journal">Journal</span></span>
-              <span><span class="ps-dot" style="background:#c084fc"></span><span data-i18n="set_chart_games">Games</span></span>
-            </div>
-          </div>
-
-          <!-- High scores -->
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label" data-i18n="set_hiscores">// GAME HIGH SCORES</div>
-            <div class="ps-hiscore-list" id="ps-hiscores"><div class="ps-hiscore-row"><span class="ps-hiscore-name">🫧 Bubble Pop</span><span class="ps-hiscore-val">73</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🔤 Word Scramble</span><span class="ps-hiscore-val">18</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">➗ Maths Blitz</span><span class="ps-hiscore-val">34</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">⌨️ Typing Speed</span><span class="ps-hiscore-val">87 WPM</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">⚡ Reaction Time</span><span class="ps-hiscore-val">214 ms</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🐍 Snake</span><span class="ps-hiscore-val">420</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🌍 Flag Quiz</span><span class="ps-hiscore-val">22</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🔢 Sudoku</span><span class="ps-hiscore-val">950</span></div></div>
-          </div>
-        </div>
-
-        <div class="ps-panel" id="ps-badges">
-          <div class="ps-badges-header">
-            <div>
-              <div class="ps-card-label" data-i18n="set_achievements">// ACHIEVEMENTS</div>
-              <div class="ps-form-label" id="ps-badges-count" style="margin-top:4px;">22 of 23 unlocked</div>
-            </div>
-          </div>
-          <div class="ps-badges-full" id="badges-grid">
-    <div class="badge-item earned" title="Asked your first homework question">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🎓</div>
-      <div class="badge-name">First Question</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Asked your first homework question</div>
-    </div>
-    <div class="badge-item earned" title="Used Veda 3 days in a row">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🔥</div>
-      <div class="badge-name">3-Day Streak</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Veda 3 days in a row</div>
-    </div>
-    <div class="badge-item earned" title="7-day study streak">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">💪</div>
-      <div class="badge-name">Week Warrior</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">7-day study streak</div>
-    </div>
-    <div class="badge-item earned" title="14-day study streak">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🏅</div>
-      <div class="badge-name">Fortnight Focus</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">14-day study streak</div>
-    </div>
-    <div class="badge-item earned" title="30-day study streak">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">👑</div>
-      <div class="badge-name">Monthly Master</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">30-day study streak</div>
-    </div>
-    <div class="badge-item earned" title="Earned 100 gems">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">💎</div>
-      <div class="badge-name">Gem Collector</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 100 gems</div>
-    </div>
-    <div class="badge-item earned" title="Earned 500 gems">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">💎💎</div>
-      <div class="badge-name">Gem Hoarder</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 500 gems</div>
-    </div>
-    <div class="badge-item earned" title="Earned 1000 gems total">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🏆</div>
-      <div class="badge-name">Gem Legend</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 1000 gems total</div>
-    </div>
-    <div class="badge-item earned" title="Played 5 games">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🎮</div>
-      <div class="badge-name">Gamer</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Played 5 games</div>
-    </div>
-    <div class="badge-item earned" title="Played 20 games">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🕹️</div>
-      <div class="badge-name">Arcade Addict</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Played 20 games</div>
-    </div>
-    <div class="badge-item earned" title="Wrote 5 journal entries">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">📓</div>
-      <div class="badge-name">Journaler</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Wrote 5 journal entries</div>
-    </div>
-    <div class="badge-item locked" title="Wrote 20 journal entries">
-      
-      <div class="badge-emoji">✍️</div>
-      <div class="badge-name">Diarist</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Wrote 20 journal entries</div>
-    </div>
-    <div class="badge-item earned" title="Used Notes 10 times">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">📝</div>
-      <div class="badge-name">Note Taker</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Notes 10 times</div>
-    </div>
-    <div class="badge-item earned" title="Used Notes 50 times">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">📚</div>
-      <div class="badge-name">Note Ninja</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Notes 50 times</div>
-    </div>
-    <div class="badge-item earned" title="Generated 10 flashcard sets">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🃏</div>
-      <div class="badge-name">Flash Master</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 10 flashcard sets</div>
-    </div>
-    <div class="badge-item earned" title="Generated 50 flashcard sets">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">⚡</div>
-      <div class="badge-name">Card Shark</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 50 flashcard sets</div>
-    </div>
-    <div class="badge-item earned" title="Completed 5 Pomodoro focus sessions">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🍅</div>
-      <div class="badge-name">Pomodoro Pro</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 5 Pomodoro focus sessions</div>
-    </div>
-    <div class="badge-item earned" title="Completed 20 Pomodoro sessions">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">⏱️</div>
-      <div class="badge-name">Time Lord</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 20 Pomodoro sessions</div>
-    </div>
-    <div class="badge-item earned" title="Generated your first exam paper">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">📄</div>
-      <div class="badge-name">Paper Setter</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated your first exam paper</div>
-    </div>
-    <div class="badge-item earned" title="Generated 10 exam papers">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🏫</div>
-      <div class="badge-name">Exam Factory</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 10 exam papers</div>
-    </div>
-    <div class="badge-item earned" title="Completed 10 to-do tasks">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">✅</div>
-      <div class="badge-name">Task Crusher</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 10 to-do tasks</div>
-    </div>
-    <div class="badge-item earned" title="Asked 50 homework questions">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🔬</div>
-      <div class="badge-name">Curious Mind</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Asked 50 homework questions</div>
-    </div>
-    <div class="badge-item earned" title="Visited every section of Veda">
-      <div class="badge-earned-tick">✓</div>
-      <div class="badge-emoji">🌟</div>
-      <div class="badge-name">Explorer</div>
-      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Visited every section of Veda</div>
-    </div></div>
-        </div>
-
-        <div class="ps-panel" id="ps-titles">
-          <div class="ps-badges-header">
-            <div>
-              <div class="ps-card-label">// TITLES</div>
-              <div class="ps-form-label" id="ps-titles-count" style="margin-top:4px;">0 of 10 unlocked</div>
-            </div>
-          </div>
-          <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.75;margin:2px 0 14px;line-height:1.5;">Earned from lifetime gems — spending gems on games or the shop never locks a title back up. Tap any unlocked title to display it next to your name on the leaderboard.</div>
-          <div class="ps-badges-full" id="titles-grid"></div>
-        </div>
-
-    </div>
-
-
-    <!-- THEMES TAB — full tab like any other, but no permanent sidebar entry;
-         reached only via the header's palette icon (toggleThemePanel -> go('themes')) -->
-    <div class="tab" id="tab-themes">
-      <div class="ttl">🎨 Themes &amp; Appearance</div>
-      <div class="tsub"><span class="prm">›</span>Pick your look — master theme, UI skin, background, and accent color</div>
-
-      <!-- MASTER THEME SWITCHER -->
-      <div class="ps-card" style="margin-top:14px;">
-        <div class="ps-card-label" data-i18n="set_master_theme">// MASTER THEME</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;max-width:520px;">
-          <div id="master-theme-veda" onclick="setMasterTheme('veda',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid var(--accent);background:linear-gradient(135deg,#0a0e1a,#0f1528);position:relative;overflow:hidden;transition:all .2s;">
-            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
-            <div style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:900;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:4px;">VEDA</div>
-            <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:#8899bb;letter-spacing:1px;" data-i18n="set_theme_veda_tag">Dark · Glowing · Futuristic</div>
-            <div id="veda-active-dot" style="position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
-          </div>
-          <div id="master-theme-ivory" onclick="setMasterTheme('ivory',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid rgba(176,125,74,0.3);background:linear-gradient(135deg,#1c1c1f,#232326);position:relative;overflow:hidden;transition:all .2s;">
-            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
-            <div style="font-family:'Helvetica Neue',sans-serif;font-size:.85rem;font-weight:700;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-bottom:4px;">IVORY</div>
-            <div style="font-family:'SF Mono','Courier New',monospace;font-size:.65rem;color:#6b7280;letter-spacing:1px;" data-i18n="set_theme_ivory_tag">Dark · Sharp · Professional</div>
-            <div id="ivory-active-dot" style="display:none;position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
-          </div>
-        </div>
-      </div>
-
-      <div id="veda-only-theme">
-        <div class="ps-card" id="veda-only-skin" style="margin-top:12px;">
-          <div class="ps-card-label" data-i18n="set_ui_skin">// UI SKIN</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px;max-width:640px;">
-            <div class="skin-card on" id="style-default" onclick="setUIStyle('default',this)">
-              <div class="skin-preview skin-prev-default"></div>
-              <div class="skin-label" data-i18n="set_skin_default">🖥️ Default</div>
-            </div>
-            <div class="skin-card" id="style-hacker" onclick="setUIStyle('hacker',this)">
-              <div class="skin-preview skin-prev-hacker"></div>
-              <div class="skin-label" data-i18n="set_skin_hacker">💻 Hacker</div>
-            </div>
-            <div class="skin-card" id="style-glass" onclick="setUIStyle('glass',this)">
-              <div class="skin-preview skin-prev-glass"></div>
-              <div class="skin-label" data-i18n="set_skin_glass">🔮 Frosted</div>
-            </div>
-            <div class="skin-card" id="style-synthwave" onclick="setUIStyle('synthwave',this)">
-              <div class="skin-preview skin-prev-synthwave"></div>
-              <div class="skin-label" data-i18n="set_skin_synthwave">🌆 Synthwave</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="ps-card" id="theme-tile-card" style="margin-top:12px;">
-          <div class="ps-card-label" data-i18n="set_theme_label">// THEME</div>
-          <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
-            <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on" data-i18n="set_tcat_vibes">✨ Vibes</button><button class="tcat" data-i18n="set_tcat_aesthetic">🎨 Aesthetic</button><button class="tcat" data-i18n="set_tcat_wallpapers">🖼️ Wallpapers</button></div>
-            <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()" data-i18n="set_gem_shop">💎 Gem Shop</button>
-          </div>
-          <div id="shop-panel" style="display:none;margin-bottom:16px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-              <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:2px;" data-i18n="set_gem_shop_label">// GEM SHOP</div>
-              <div style="font-family:var(--orb);font-size:.55rem;color:var(--teal2);">💎 <span id="shop-gems-display">0</span> <span data-i18n="home_gems">gems</span></div>
-            </div>
-            <div class="shop-grid" id="shop-grid"></div>
-          </div>
-          <input type="file" id="custom-wallpaper-in" accept="image/*" style="display:none" onchange="handleCustomWallpaper(this)">
-          <div class="tgrid" id="tgrid"></div>
-        </div>
-      </div>
-
-      <div class="ps-card" style="margin-top:12px;">
-        <div class="ps-card-label" data-i18n="set_accent_color">// ACCENT COLOR</div>
-        <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:16px;line-height:1.6;" data-i18n="set_accent_color_desc">Pick a color to use across buttons, highlights, and active states throughout Veda.</div>
-        <div class="color-row" style="flex-wrap:wrap;gap:12px;margin-top:4px;">
-          <div class="color-swatch on" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
-          <div class="color-swatch" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
-          <div class="color-swatch" style="background:#c084fc;" data-color="#c084fc" onclick="setAccent('#c084fc',this)"></div>
-          <div class="color-swatch" style="background:#f472b6;" data-color="#f472b6" onclick="setAccent('#f472b6',this)"></div>
-          <div class="color-swatch" style="background:#fb923c;" data-color="#fb923c" onclick="setAccent('#fb923c',this)"></div>
-          <div class="color-swatch" style="background:#34d399;" data-color="#34d399" onclick="setAccent('#34d399',this)"></div>
-          <div class="color-swatch" style="background:#fbbf24;" data-color="#fbbf24" onclick="setAccent('#fbbf24',this)"></div>
-          <div class="color-swatch" style="background:#ff6b6b;" data-color="#ff6b6b" onclick="setAccent('#ff6b6b',this)"></div>
-          <div class="color-custom-wrap" title="Custom color">
-            <div class="color-swatch" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);" onclick="document.getElementById('custom-color-in').click()"></div>
-            <input type="color" id="custom-color-in" style="position:absolute;opacity:0;width:1px;height:1px;" oninput="setAccent(this.value,null)">
-          </div>
-        </div>
-      </div>
-    </div>
 
 
       <!-- HOME — DESKTOP OS -->
@@ -2168,83 +1676,158 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
         </div>
       </div>
 
-      <!-- THEMES -->
-      <!-- SETTINGS — unified Account + Preferences hub (merged from the former separate Settings/Profile tabs) -->
+      <!-- SETTINGS — unified hub: landing menu + Me / Look & Feel / Account & Safety / Progress.
+           Account and Themes used to be separate reveal-on-demand tabs; both are folded in here. -->
       <div class="tab" id="tab-settings">
 
-        <!-- UNIFIED SUB-NAV -->
-        <div class="ps-subnav-groups">
-          <div class="ps-subnav-group">
-            <div class="ps-subnav">
-              <button class="ps-tab on" onclick="psGo('aiprofile',this)">🤖 AI Settings</button>
-              <button class="ps-tab" onclick="psGo('apikey',this)">🔑 AI Key</button>
-              <button class="ps-tab" onclick="psGo('layout',this)">📐 Layout</button>
-              <button class="ps-tab" onclick="psGo('language',this)">🌐 Language</button>
+        <!-- LANDING MENU — the single entry point into Settings. Reorg (2026-09):
+             Account and Themes used to be separate top-level tabs (reveal-on-demand
+             sidebar buttons); they're folded in here as two of these four areas. -->
+        <div class="set-area on" id="set-landing">
+          <div class="ttl" data-i18n="ttl_settings">⚙️ Settings</div>
+          <div class="tsub"><span class="prm">›</span><span data-i18n="sub_settings">Everything about you and how Veda looks and works</span></div>
+          <div class="set-landing-grid">
+            <button type="button" class="set-landing-card" onclick="settingsGo('me')">
+              <div class="set-landing-icon">🧑‍🎓</div>
+              <div class="set-landing-title" data-i18n="set_area_me_title">Me</div>
+              <div class="set-landing-desc" data-i18n="set_area_me_desc">Your learning profile, goals, and daily targets</div>
+            </button>
+            <button type="button" class="set-landing-card" onclick="settingsGo('lookfeel')">
+              <div class="set-landing-icon">🎨</div>
+              <div class="set-landing-title" data-i18n="set_area_lookfeel_title">Look &amp; Feel</div>
+              <div class="set-landing-desc" data-i18n="set_area_lookfeel_desc">Themes, wallpapers, accent color, and display</div>
+            </button>
+            <button type="button" class="set-landing-card" onclick="settingsGo('account')">
+              <div class="set-landing-icon">🛡️</div>
+              <div class="set-landing-title" data-i18n="set_area_account_title">Account &amp; Safety</div>
+              <div class="set-landing-desc" data-i18n="set_area_account_desc">Google sign-in, AI key, guardian contact, and data</div>
+            </button>
+            <button type="button" class="set-landing-card" onclick="settingsGo('progress')">
+              <div class="set-landing-icon">📈</div>
+              <div class="set-landing-title" data-i18n="set_area_progress_title">Progress</div>
+              <div class="set-landing-desc" data-i18n="set_area_progress_desc">Stats, badges, and titles you've earned</div>
+            </button>
+          </div>
+
+          <div class="set-quiet-block" style="opacity:.6;max-width:1180px;">
+            <div class="ps-card">
+              <div class="ps-card-label">// ABOUT</div>
+              <div class="ps-about">
+                <div class="ps-about-logo">VEDA</div>
+                <div class="ps-about-motto">ज्ञानं परमं ध्येयम्</div>
+                <div class="ps-about-motto-en">Knowledge is the Supreme Goal</div>
+                <div class="ps-about-ver">Version 3.0</div>
+                <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="ps-panel" id="ps-layout">
-          <div class="ps-card">
-            <div class="ps-card-label">// FONT SIZE</div>
-            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Controls base text size across the entire app.</div>
-            <div class="pers-row">
-              <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
-              <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
-              <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
-              <button class="pers-btn" id="fs-huge" onclick="setFontSize('huge',this)">Giant</button>
+        <!-- ══ AREA: ME ══ -->
+        <div class="set-area" id="set-area-me">
+          <button type="button" class="set-area-back" onclick="settingsGo(null)">‹ <span data-i18n="set_back_to_settings">Settings</span></button>
+        <div class="ps-panel on" id="ps-me">
+
+          <!-- HUB — one tile per section, matches the Account & Safety hub pattern. -->
+          <div id="ps-me-hub">
+            <div class="ps-hub-list">
+              <button class="ps-hub-tile" onclick="meHubOpen('profile')">
+                <div class="ps-hub-icon">👤</div>
+                <div class="ps-hub-info">
+                  <div class="ps-hub-title" data-i18n="set_hub_profile">Profile</div>
+                  <div class="ps-hub-status" data-i18n="set_hub_profile_status">Name, avatar, and level</div>
+                </div>
+                <div class="ps-hub-chev">›</div>
+              </button>
+              <button class="ps-hub-tile" onclick="meHubOpen('learning')">
+                <div class="ps-hub-icon">🎓</div>
+                <div class="ps-hub-info">
+                  <div class="ps-hub-title" data-i18n="set_hub_learning">Learning Profile</div>
+                  <div class="ps-hub-status" data-i18n="set_hub_learning_status">Curriculum, subjects, and how AI treats you</div>
+                </div>
+                <div class="ps-hub-chev">›</div>
+              </button>
+              <button class="ps-hub-tile" onclick="meHubOpen('goals')">
+                <div class="ps-hub-icon">🎯</div>
+                <div class="ps-hub-info">
+                  <div class="ps-hub-title" data-i18n="set_hub_goals">Daily Goals</div>
+                  <div class="ps-hub-status" data-i18n="set_hub_goals_status">Set your daily targets</div>
+                </div>
+                <div class="ps-hub-chev">›</div>
+              </button>
             </div>
           </div>
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// SIDEBAR</div>
-            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Control when the left sidebar is visible.</div>
-            <div class="pers-row">
-              <button class="pers-btn" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
-              <button class="pers-btn on" id="sb-open" onclick="setSbPref('open',this)">Open</button>
-              <button class="pers-btn" id="sb-closed" onclick="setSbPref('closed',this)">Closed</button>
+
+          <!-- DETAIL — one focused section at a time, reached via the hub above -->
+          <div id="ps-me-detail" style="display:none;">
+            <button class="ps-hub-back" onclick="meHubBack()" data-i18n="set_back">‹ Back</button>
+
+        <div class="ps-detail-section" id="ps-profile">
+          <div class="set-identity-quiet">
+            <div class="ps-hero">
+              <div class="ps-avatar-wrap">
+                <div class="ps-avatar" id="acct-avatar">🎓</div>
+                <div class="ps-avatar-ring"></div>
+              </div>
+              <div class="ps-hero-right">
+                <div class="ps-name" id="acct-name">Student</div>
+                <div class="ps-tagline" id="acct-tagline">Level 7 Legend</div>
+                <div class="ps-badges-row">
+                  <div class="ps-pill gem">💎 <span id="acct-gems">330</span> Gems</div>
+                  <div class="ps-pill streak">🔥 <span id="acct-streak">1</span> day streak</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="ps-card" style="margin-top:12px;">
-            <div class="ps-card-label">// ABOUT</div>
-            <div class="ps-about">
-              <div class="ps-about-logo">VEDA</div>
-              <div class="ps-about-ver">Version 3.0 · ज्ञानं परमं ध्येयम्</div>
-              <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
+
+          <!-- Edit form inline -->
+          <div class="ps-card" style="margin-top:16px;">
+            <div class="ps-card-label" data-i18n="set_edit_profile">// EDIT PROFILE</div>
+            <div class="ps-form-grid">
+              <div class="ps-form-group">
+                <div class="ps-form-label" data-i18n="set_display_name">Display Name</div>
+                <input class="ps-input" id="ps-name-in" placeholder="Your name..." data-i18n-ph="set_your_name_ph" maxlength="20">
+              </div>
+              <div class="ps-form-group">
+                <div class="ps-form-label" data-i18n="set_avatar_emoji">Avatar Emoji</div>
+                <input class="ps-input" id="ps-avatar-in" placeholder="🎓" maxlength="4" style="font-size:1.4rem;text-align:center;letter-spacing:2px;">
+              </div>
+            </div>
+            <div class="ps-avatar-picker">
+              <div class="ps-form-label" style="margin-bottom:8px;" data-i18n="set_quick_pick">Quick Pick</div>
+              <div class="ps-avatar-opts">
+                <span onclick="pickAvatar(this,'🎓')">🎓</span><span onclick="pickAvatar(this,'📚')">📚</span>
+                <span onclick="pickAvatar(this,'🧠')">🧠</span><span onclick="pickAvatar(this,'⚡')">⚡</span>
+                <span onclick="pickAvatar(this,'🌟')">🌟</span><span onclick="pickAvatar(this,'🔥')">🔥</span>
+                <span onclick="pickAvatar(this,'💎')">💎</span><span onclick="pickAvatar(this,'🦋')">🦋</span>
+                <span onclick="pickAvatar(this,'🚀')">🚀</span><span onclick="pickAvatar(this,'🎵')">🎵</span>
+                <span onclick="pickAvatar(this,'🌙')">🌙</span><span onclick="pickAvatar(this,'☀️')">☀️</span>
+              </div>
+            </div>
+            <button class="ps-save-btn" onclick="saveProfileInline()" data-i18n="set_save_profile">Save Profile</button>
+          </div>
+
+          <!-- Level progress — read-only status readout, de-emphasized -->
+          <div class="set-identity-quiet">
+            <div class="ps-card" style="margin-top:12px;">
+              <div class="ps-card-label" data-i18n="set_level_progress">// LEVEL PROGRESS</div>
+              <div class="ps-level-row">
+                <div class="ps-level-num" id="ps-level">7</div>
+                <div style="flex:1;">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                    <span class="ps-form-label" id="ps-level-title">Legend</span>
+                    <span class="ps-form-label"><span id="ps-gems-cur">30</span> / <span id="ps-gems-next">50</span> <span data-i18n="home_gems">gems</span></span>
+                  </div>
+                  <div class="ps-prog-bar"><div class="ps-prog-fill" id="ps-level-bar" style="width: 60%;"></div></div>
+                  <div class="ps-form-label" style="margin-top:6px;" id="ps-next-level-label" data-i18n="set_max_level">🏆 Max Level!</div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Danger zone moved to Account &amp; Safety area -->
         </div>
-
-        <div class="ps-panel" id="ps-language">
-          <div class="ps-card">
-            <div class="ps-card-label" data-i18n="lang_section">// LANGUAGE</div>
-            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:14px;line-height:1.6;">Choose the language for Veda's interface.</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:4px;" id="lang-pill-grid">
-              <div class="lang-pill on" id="lang-en" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span></div>
-              <div class="lang-pill" id="lang-es" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></div>
-              <div class="lang-pill" id="lang-ms" onclick="setLang('ms',this)"><span class="lang-flag">🇲🇾</span><span class="lang-name">Bahasa Melayu</span></div>
-              <div class="lang-pill" id="lang-zh" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></div>
-              <div class="lang-pill" id="lang-ja" onclick="setLang('ja',this)"><span class="lang-flag">🇯🇵</span><span class="lang-name">日本語</span></div>
-            </div>
-
-            <!-- More languages (AI-translated, beta) -->
-            <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(77,159,255,.1);">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-                <span style="font-family:var(--exo);font-size:.75rem;color:var(--text);">🌐 More languages</span>
-                <span style="font-family:var(--orb);font-size:.55rem;letter-spacing:1px;color:#000;background:linear-gradient(135deg,var(--teal),var(--accent2));padding:2px 8px;border-radius:999px;font-weight:800;">BETA</span>
-              </div>
-              <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.75;margin-bottom:10px;line-height:1.5;">
-                Type any language — Veda's AI translates the whole interface on the spot and remembers it for next time.
-              </div>
-              <div class="set-row">
-                <input class="set-input" id="custom-lang-in" type="text" placeholder="e.g. Hindi, Korean, Tamil, German..." onkeydown="if(event.key==='Enter')translateCustomLang()">
-                <button class="set-btn accent" id="custom-lang-btn" onclick="translateCustomLang()">Translate</button>
-              </div>
-              <div id="custom-lang-pills" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px;"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="ps-panel on" id="ps-aiprofile">
+        <div class="ps-detail-section" id="ps-aiprofile">
           <div class="ps-card">
             <div class="ps-card-label" data-i18n="set_ai_profile_label">// AI STUDENT PROFILE</div>
             <div class="ps-form-label" style="margin-bottom:16px;line-height:1.7;" data-i18n="set_ai_profile_desc">
@@ -2311,72 +1894,91 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               </div>
             </div>
 
-            <div class="ps-form-grid">
-              <!-- Learning style -->
-              <div class="ps-form-group">
-                <div class="ps-form-label" data-i18n="set_explanation_style">Explanation style</div>
-                <div class="aip-chip-row" id="aip-style">
-                  <div class="aip-chip" data-val="Simple &amp; short — get to the point">⚡ Simple</div>
-                  <div class="aip-chip on" data-val="Detailed &amp; thorough — explain everything">📖 Detailed</div>
-                  <div class="aip-chip" data-val="Examples first — show me before explaining">💡 Examples first</div>
-                  <div class="aip-chip" data-val="Step-by-step — walk me through it">🪜 Step-by-step</div>
-                  <div class="aip-chip" data-val="Visual &amp; diagram-style descriptions">📊 Visual</div>
-                </div>
-              </div>
+            <!-- Personalize further — explanation style, struggle, habit, pressure,
+                 response language. These aren't used on every AI request the way
+                 curriculum/year/subjects are, so they're tucked behind a disclosure
+                 to keep the default view short. Collapsed state is display:none on
+                 the body only — the chip rows and their saved '.on' values stay in
+                 the DOM either way, so aipGetVal()/saveAIProfile() read them exactly
+                 as before whether this is open or closed. -->
+            <div class="set-disclosure" id="aip-personalize-disclosure">
+              <button type="button" class="set-disclosure-btn" onclick="toggleSetDisclosure('aip-personalize-disclosure')" data-i18n="set_personalize_further">
+                <span>🎛️ Personalize further</span><span class="set-disclosure-chev">▾</span>
+              </button>
+              <div class="set-disclosure-body">
+                <div class="set-disclosure-body-inner">
 
-              <!-- Struggle -->
-              <div class="ps-form-group">
-                <div class="ps-form-label" data-i18n="set_biggest_struggle">Biggest struggle</div>
-                <div class="aip-chip-row" id="aip-struggle">
-                  <div class="aip-chip" data-val="Understanding concepts">🤔 Understanding</div>
-                  <div class="aip-chip on" data-val="Memorising facts">🧠 Memorising</div>
-                  <div class="aip-chip" data-val="Exam technique &amp; answering style">📝 Exam technique</div>
-                  <div class="aip-chip" data-val="Staying motivated">💤 Motivation</div>
-                  <div class="aip-chip" data-val="Time management">⏱️ Time management</div>
-                </div>
-              </div>
-            </div>
+                  <div class="ps-form-grid">
+                    <!-- Learning style -->
+                    <div class="ps-form-group">
+                      <div class="ps-form-label" data-i18n="set_explanation_style">Explanation style</div>
+                      <div class="aip-chip-row" id="aip-style">
+                        <div class="aip-chip" data-val="Simple &amp; short — get to the point">⚡ Simple</div>
+                        <div class="aip-chip on" data-val="Detailed &amp; thorough — explain everything">📖 Detailed</div>
+                        <div class="aip-chip" data-val="Examples first — show me before explaining">💡 Examples first</div>
+                        <div class="aip-chip" data-val="Step-by-step — walk me through it">🪜 Step-by-step</div>
+                        <div class="aip-chip" data-val="Visual &amp; diagram-style descriptions">📊 Visual</div>
+                      </div>
+                    </div>
 
-            <div class="ps-form-grid">
-              <!-- Study habit -->
-              <div class="ps-form-group">
-                <div class="ps-form-label" data-i18n="set_study_habit">Study habit</div>
-                <div class="aip-chip-row" id="aip-habit">
-                  <div class="aip-chip" data-val="Last-minute crammer">🏃 Last-minute</div>
-                  <div class="aip-chip" data-val="Steady and consistent planner">📅 Consistent</div>
-                  <div class="aip-chip on" data-val="Inconsistent — good days and bad days">🎲 Inconsistent</div>
-                </div>
-              </div>
+                    <!-- Struggle -->
+                    <div class="ps-form-group">
+                      <div class="ps-form-label" data-i18n="set_biggest_struggle">Biggest struggle</div>
+                      <div class="aip-chip-row" id="aip-struggle">
+                        <div class="aip-chip" data-val="Understanding concepts">🤔 Understanding</div>
+                        <div class="aip-chip on" data-val="Memorising facts">🧠 Memorising</div>
+                        <div class="aip-chip" data-val="Exam technique &amp; answering style">📝 Exam technique</div>
+                        <div class="aip-chip" data-val="Staying motivated">💤 Motivation</div>
+                        <div class="aip-chip" data-val="Time management">⏱️ Time management</div>
+                      </div>
+                    </div>
+                  </div>
 
-              <!-- Pressure -->
-              <div class="ps-form-group">
-                <div class="ps-form-label" data-i18n="set_pressure_level">Current pressure level</div>
-                <div class="aip-chip-row" id="aip-pressure">
-                  <div class="aip-chip" data-val="Low — just keeping up">😌 Low</div>
-                  <div class="aip-chip on" data-val="Moderate — exams coming soon">😐 Moderate</div>
-                  <div class="aip-chip" data-val="High — major exams very soon">😰 High</div>
-                </div>
-              </div>
-            </div>
+                  <div class="ps-form-grid">
+                    <!-- Study habit -->
+                    <div class="ps-form-group">
+                      <div class="ps-form-label" data-i18n="set_study_habit">Study habit</div>
+                      <div class="aip-chip-row" id="aip-habit">
+                        <div class="aip-chip" data-val="Last-minute crammer">🏃 Last-minute</div>
+                        <div class="aip-chip" data-val="Steady and consistent planner">📅 Consistent</div>
+                        <div class="aip-chip on" data-val="Inconsistent — good days and bad days">🎲 Inconsistent</div>
+                      </div>
+                    </div>
 
-            <!-- Language -->
-            <div class="ps-form-group">
-              <div class="ps-form-label" data-i18n="set_response_language">Response language</div>
-              <div class="aip-chip-row" id="aip-language">
-                <div class="aip-chip on" data-val="English">🇬🇧 English</div>
-                <div class="aip-chip" data-val="Bahasa Malaysia">🇲🇾 Bahasa Malaysia</div>
-                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Mandarin">🇨🇳 Mandarin</div>
-                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Tamil">🇮🇳 Tamil</div>
-                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Japanese">🇯🇵 Japanese</div>
-                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Korean">🇰🇷 Korean</div>
-                <div class="aip-chip" data-lang-extra style="display:none;" data-val="Spanish">🇪🇸 Spanish</div>
-                <div class="aip-chip" data-lang-extra style="display:none;" data-val="French">🇫🇷 French</div>
-                <div class="aip-chip aip-more-btn" onclick="toggleLangMore(this)" data-i18n="set_more_word" data-state="closed">More ▾</div>
+                    <!-- Pressure -->
+                    <div class="ps-form-group">
+                      <div class="ps-form-label" data-i18n="set_pressure_level">Current pressure level</div>
+                      <div class="aip-chip-row" id="aip-pressure">
+                        <div class="aip-chip" data-val="Low — just keeping up">😌 Low</div>
+                        <div class="aip-chip on" data-val="Moderate — exams coming soon">😐 Moderate</div>
+                        <div class="aip-chip" data-val="High — major exams very soon">😰 High</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Language (AI response language — kept here deliberately, separate
+                       from the interface language control in Look & Feel) -->
+                  <div class="ps-form-group">
+                    <div class="ps-form-label" data-i18n="set_response_language">Response language</div>
+                    <div class="aip-chip-row" id="aip-language">
+                      <div class="aip-chip on" data-val="English">🇬🇧 English</div>
+                      <div class="aip-chip" data-val="Bahasa Malaysia">🇲🇾 Bahasa Malaysia</div>
+                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Mandarin">🇨🇳 Mandarin</div>
+                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Tamil">🇮🇳 Tamil</div>
+                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Japanese">🇯🇵 Japanese</div>
+                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Korean">🇰🇷 Korean</div>
+                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Spanish">🇪🇸 Spanish</div>
+                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="French">🇫🇷 French</div>
+                      <div class="aip-chip aip-more-btn" onclick="toggleLangMore(this)" data-i18n="set_more_word" data-state="closed">More ▾</div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
 
             <!-- Preview -->
-            <div id="aip-preview" style="background: rgba(0, 212, 170, 0.06); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: 10px; padding: 12px 14px; margin-top: 4px; margin-bottom: 14px; display: block;">
+            <div id="aip-preview" style="background: rgba(0, 212, 170, 0.06); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: 10px; padding: 12px 14px; margin-top: 14px; margin-bottom: 14px; display: block;">
               <div style="font-family:var(--exo);font-size:.65rem;color:var(--teal);letter-spacing:1.5px;margin-bottom:6px;" data-i18n="set_ai_sees_this">// AI SEES THIS</div>
               <div id="aip-preview-text" style="font-family:var(--exo);font-size:.78rem;color:var(--silver);line-height:1.7;"></div>
             </div>
@@ -2384,8 +1986,252 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
             <button class="set-btn accent" onclick="saveAIProfile()" style="width:100%;" data-i18n="set_save_ai_profile">✦ Save AI Profile</button>
           </div>
         </div>
+        <div class="ps-detail-section" id="ps-goals">
+          <div class="ps-card">
+            <div class="ps-card-label" data-i18n="set_daily_goals">// DAILY STUDY GOALS</div>
+            <div class="ps-form-label" style="margin-bottom:16px;" data-i18n="set_daily_goals_sub">Set targets — progress tracked automatically each day</div>
+            <div class="ps-goals-list">
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">📚</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name" data-i18n="set_goal_questions">Questions to ask</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-q" style="background:var(--accent)"></div></div>
+                  <div class="ps-form-label" id="goal-label-q" style="margin-top:4px;">0 / 5 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('questions',-1)" aria-label="Decrease questions goal">−</button>
+                  <span class="ps-goal-val" id="goal-val-questions">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('questions',1)" aria-label="Increase questions goal">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">📓</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name" data-i18n="set_goal_journal">Journal entries</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-journal" style="background: rgb(192, 132, 252); width: 0%;"></div></div>
+                  <div class="ps-form-label" id="goal-label-journal" style="margin-top:4px;">0 / 1 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('journal',-1)" aria-label="Decrease journal goal">−</button>
+                  <span class="ps-goal-val" id="goal-val-journal">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('journal',1)" aria-label="Increase journal goal">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">🃏</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name" data-i18n="set_goal_flashcards">Flashcard sets</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-flashcards" style="background: var(--teal); width: 0%;"></div></div>
+                  <div class="ps-form-label" id="goal-label-flashcards" style="margin-top:4px;">0 / 1 today</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',-1)" aria-label="Decrease flashcards goal">−</button>
+                  <span class="ps-goal-val" id="goal-val-flashcards">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('flashcards',1)" aria-label="Increase flashcards goal">+</button>
+                </div>
+              </div>
+              <div class="ps-goal-row">
+                <div class="ps-goal-icon">🎮</div>
+                <div class="ps-goal-info">
+                  <div class="ps-goal-name" data-i18n="set_goal_games">Games to play</div>
+                  <div class="ps-prog-bar" style="margin-top:6px;"><div class="ps-prog-fill" id="goal-bar-games" style="background: rgb(251, 146, 60); width: 100%;"></div></div>
+                  <div class="ps-form-label" id="goal-label-games" style="margin-top:4px;">14 / 1 today ✅</div>
+                </div>
+                <div class="ps-goal-ctrl">
+                  <button class="ps-goal-btn" onclick="adjustGoal('games',-1)" aria-label="Decrease games goal">−</button>
+                  <span class="ps-goal-val" id="goal-val-games">1</span>
+                  <button class="ps-goal-btn" onclick="adjustGoal('games',1)" aria-label="Increase games goal">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div class="ps-panel" id="ps-apikey">
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label" data-i18n="set_todays_summary">// TODAY'S SUMMARY</div>
+            <div id="ps-goals-summary" class="ps-goals-summary"><div class="ps-goal-summary-item">
+        <div class="ps-goal-summary-icon">📚</div>
+        <div class="ps-goal-summary-text">
+          <strong style="color:var(--teal2)">✅ Done!</strong>
+          Questions
+        </div>
+      </div><div class="ps-goal-summary-item">
+        <div class="ps-goal-summary-icon">📓</div>
+        <div class="ps-goal-summary-text">
+          <strong style="color:var(--text)">0/1</strong>
+          Journal
+        </div>
+      </div><div class="ps-goal-summary-item">
+        <div class="ps-goal-summary-icon">🃏</div>
+        <div class="ps-goal-summary-text">
+          <strong style="color:var(--text)">0/1</strong>
+          Flashcards
+        </div>
+      </div><div class="ps-goal-summary-item">
+        <div class="ps-goal-summary-icon">🎮</div>
+        <div class="ps-goal-summary-text">
+          <strong style="color:var(--teal2)">✅ Done!</strong>
+          Games
+        </div>
+      </div></div>
+          </div>
+        </div>
+
+          </div><!-- /ps-me-detail -->
+        </div><!-- /ps-me -->
+        </div><!-- /set-area-me -->
+
+        <!-- ══ AREA: LOOK & FEEL ══ -->
+        <div class="set-area" id="set-area-lookfeel">
+          <button type="button" class="set-area-back" onclick="settingsGo(null)">‹ <span data-i18n="set_back_to_settings">Settings</span></button>
+      <div class="ps-card" style="margin-top:14px;">
+        <div class="ps-card-label" data-i18n="set_master_theme">// MASTER THEME</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;max-width:520px;">
+          <div id="master-theme-veda" onclick="setMasterTheme('veda',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid var(--accent);background:linear-gradient(135deg,#0a0e1a,#0f1528);position:relative;overflow:hidden;transition:all .2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
+            <div style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:900;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:4px;">VEDA</div>
+            <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:#8899bb;letter-spacing:1px;" data-i18n="set_theme_veda_tag">Dark · Glowing · Futuristic</div>
+            <div id="veda-active-dot" style="position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
+          </div>
+          <div id="master-theme-ivory" onclick="setMasterTheme('ivory',this)" style="cursor:pointer;border-radius:14px;padding:16px 14px;border:2px solid rgba(176,125,74,0.3);background:linear-gradient(135deg,#1c1c1f,#232326);position:relative;overflow:hidden;transition:all .2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#4d9fff,#00d4aa);"></div>
+            <div style="font-family:'Helvetica Neue',sans-serif;font-size:.85rem;font-weight:700;background:linear-gradient(135deg,#4d9fff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-bottom:4px;">IVORY</div>
+            <div style="font-family:'SF Mono','Courier New',monospace;font-size:.65rem;color:#6b7280;letter-spacing:1px;" data-i18n="set_theme_ivory_tag">Dark · Sharp · Professional</div>
+            <div id="ivory-active-dot" style="display:none;position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#00d4aa;box-shadow:0 0 6px #00d4aa;"></div>
+          </div>
+        </div>
+      </div>
+      <div id="veda-only-theme">
+        <div class="ps-card" id="veda-only-skin" style="margin-top:12px;">
+          <div class="ps-card-label" data-i18n="set_ui_skin">// UI SKIN</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px;max-width:640px;">
+            <div class="skin-card on" id="style-default" onclick="setUIStyle('default',this)">
+              <div class="skin-preview skin-prev-default"></div>
+              <div class="skin-label" data-i18n="set_skin_default">🖥️ Default</div>
+            </div>
+            <div class="skin-card" id="style-hacker" onclick="setUIStyle('hacker',this)">
+              <div class="skin-preview skin-prev-hacker"></div>
+              <div class="skin-label" data-i18n="set_skin_hacker">💻 Hacker</div>
+            </div>
+            <div class="skin-card" id="style-glass" onclick="setUIStyle('glass',this)">
+              <div class="skin-preview skin-prev-glass"></div>
+              <div class="skin-label" data-i18n="set_skin_glass">🔮 Frosted</div>
+            </div>
+            <div class="skin-card" id="style-synthwave" onclick="setUIStyle('synthwave',this)">
+              <div class="skin-preview skin-prev-synthwave"></div>
+              <div class="skin-label" data-i18n="set_skin_synthwave">🌆 Synthwave</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ps-card" id="theme-tile-card" style="margin-top:12px;">
+          <div class="ps-card-label" data-i18n="set_theme_label">// THEME</div>
+          <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
+            <div class="tcats" id="tcats" style="flex:1;margin-bottom:0;"><button class="tcat on" data-i18n="set_tcat_vibes">✨ Vibes</button><button class="tcat" data-i18n="set_tcat_aesthetic">🎨 Aesthetic</button><button class="tcat" data-i18n="set_tcat_wallpapers">🖼️ Wallpapers</button></div>
+            <button class="abtn" style="white-space:nowrap;padding:8px 16px;font-size:.5rem;" onclick="toggleShop()" data-i18n="set_gem_shop">💎 Gem Shop</button>
+          </div>
+          <div id="shop-panel" style="display:none;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="font-family:var(--orb);font-size:.5rem;color:var(--accent2);letter-spacing:2px;" data-i18n="set_gem_shop_label">// GEM SHOP</div>
+              <div style="font-family:var(--orb);font-size:.55rem;color:var(--teal2);">💎 <span id="shop-gems-display">0</span> <span data-i18n="home_gems">gems</span></div>
+            </div>
+            <div class="shop-grid" id="shop-grid"></div>
+          </div>
+          <input type="file" id="custom-wallpaper-in" accept="image/*" style="display:none" onchange="handleCustomWallpaper(this)">
+          <div class="tgrid" id="tgrid"></div>
+        </div>
+      </div>
+      <div class="ps-card" style="margin-top:12px;">
+        <div class="ps-card-label" data-i18n="set_accent_color">// ACCENT COLOR</div>
+        <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:16px;line-height:1.6;" data-i18n="set_accent_color_desc">Pick a color to use across buttons, highlights, and active states throughout Veda.</div>
+        <div class="color-row" style="flex-wrap:wrap;gap:12px;margin-top:4px;">
+          <div class="color-swatch on" style="background:#4d9fff;" data-color="#4d9fff" onclick="setAccent('#4d9fff',this)"></div>
+          <div class="color-swatch" style="background:#00d4aa;" data-color="#00d4aa" onclick="setAccent('#00d4aa',this)"></div>
+          <div class="color-swatch" style="background:#c084fc;" data-color="#c084fc" onclick="setAccent('#c084fc',this)"></div>
+          <div class="color-swatch" style="background:#f472b6;" data-color="#f472b6" onclick="setAccent('#f472b6',this)"></div>
+          <div class="color-swatch" style="background:#fb923c;" data-color="#fb923c" onclick="setAccent('#fb923c',this)"></div>
+          <div class="color-swatch" style="background:#34d399;" data-color="#34d399" onclick="setAccent('#34d399',this)"></div>
+          <div class="color-swatch" style="background:#fbbf24;" data-color="#fbbf24" onclick="setAccent('#fbbf24',this)"></div>
+          <div class="color-swatch" style="background:#ff6b6b;" data-color="#ff6b6b" onclick="setAccent('#ff6b6b',this)"></div>
+          <div class="color-custom-wrap" title="Custom color">
+            <div class="color-swatch" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);" onclick="document.getElementById('custom-color-in').click()"></div>
+            <input type="color" id="custom-color-in" style="position:absolute;opacity:0;width:1px;height:1px;" oninput="setAccent(this.value,null)">
+          </div>
+        </div>
+      </div>
+          <!-- Quiet utility block: font size, sidebar, interface language —
+               minor/utility settings, visually de-emphasized vs. the visual
+               choices above. Interface language stays separate from the AI
+               response-language control (that one lives in Me → Learning
+               Profile → Personalize further) by deliberate design. -->
+          <div class="set-quiet-block">
+          <div class="ps-card">
+            <div class="ps-card-label">// FONT SIZE</div>
+            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Controls base text size across the entire app.</div>
+            <div class="pers-row">
+              <button class="pers-btn" id="fs-small" onclick="setFontSize('small',this)">Small</button>
+              <button class="pers-btn" id="fs-medium" onclick="setFontSize('medium',this)">Medium</button>
+              <button class="pers-btn on" id="fs-large" onclick="setFontSize('large',this)">Large</button>
+              <button class="pers-btn" id="fs-huge" onclick="setFontSize('huge',this)">Giant</button>
+            </div>
+          </div>
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label">// SIDEBAR</div>
+            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:12px;line-height:1.6;">Control when the left sidebar is visible.</div>
+            <div class="pers-row">
+              <button class="pers-btn" id="sb-auto" onclick="setSbPref('auto',this)">Auto</button>
+              <button class="pers-btn on" id="sb-open" onclick="setSbPref('open',this)">Open</button>
+              <button class="pers-btn" id="sb-closed" onclick="setSbPref('closed',this)">Closed</button>
+            </div>
+          </div>
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label" data-i18n="lang_section">// LANGUAGE</div>
+            <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);margin-bottom:14px;line-height:1.6;">Choose the language for Veda's interface.</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:4px;" id="lang-pill-grid">
+              <div class="lang-pill on" id="lang-en" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span></div>
+              <div class="lang-pill" id="lang-es" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span></div>
+              <div class="lang-pill" id="lang-ms" onclick="setLang('ms',this)"><span class="lang-flag">🇲🇾</span><span class="lang-name">Bahasa Melayu</span></div>
+              <div class="lang-pill" id="lang-zh" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span></div>
+              <div class="lang-pill" id="lang-ja" onclick="setLang('ja',this)"><span class="lang-flag">🇯🇵</span><span class="lang-name">日本語</span></div>
+            </div>
+
+            <!-- More languages (AI-translated, beta) -->
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(77,159,255,.1);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                <span style="font-family:var(--exo);font-size:.75rem;color:var(--text);">🌐 More languages</span>
+                <span style="font-family:var(--orb);font-size:.55rem;letter-spacing:1px;color:#000;background:linear-gradient(135deg,var(--teal),var(--accent2));padding:2px 8px;border-radius:999px;font-weight:800;">BETA</span>
+              </div>
+              <div style="font-family:var(--exo);font-size:.7rem;color:var(--silver);opacity:.75;margin-bottom:10px;line-height:1.5;">
+                Type any language — Veda's AI translates the whole interface on the spot and remembers it for next time.
+              </div>
+              <div class="set-row">
+                <input class="set-input" id="custom-lang-in" type="text" placeholder="e.g. Hindi, Korean, Tamil, German..." onkeydown="if(event.key==='Enter')translateCustomLang()">
+                <button class="set-btn accent" id="custom-lang-btn" onclick="translateCustomLang()">Translate</button>
+              </div>
+              <div id="custom-lang-pills" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px;"></div>
+            </div>
+          </div>
+          </div><!-- /set-quiet-block -->
+
+          <!-- About — static, de-emphasized -->
+          <div class="set-quiet-block" style="opacity:.6;">
+            <div class="ps-card">
+              <div class="ps-card-label">// ABOUT</div>
+              <div class="ps-about">
+                <div class="ps-about-logo">VEDA</div>
+                <div class="ps-about-motto">ज्ञानं परमं ध्येयम्</div>
+                <div class="ps-about-motto-en">Knowledge is the Supreme Goal</div>
+                <div class="ps-about-ver">Version 3.0</div>
+                <div class="ps-about-line">Powered by Google Gemini AI · Built for students 🎓</div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /set-area-lookfeel -->
+
+        <!-- ══ AREA: ACCOUNT & SAFETY ══ -->
+        <div class="set-area" id="set-area-account">
+          <button type="button" class="set-area-back" onclick="settingsGo(null)">‹ <span data-i18n="set_back_to_settings">Settings</span></button>
+        <div class="ps-panel on" id="ps-apikey">
 
           <!-- HUB — compact nav grid for everything Google/AI-related. Default view: no scroll on most screens. -->
           <div id="ps-api-hub">
@@ -2604,6 +2450,256 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
 
           </div>
         </div>
+        </div><!-- /set-area-account -->
+
+        <!-- ══ AREA: PROGRESS — pure read-only (titles can be tapped to equip) ══ -->
+        <div class="set-area" id="set-area-progress">
+          <button type="button" class="set-area-back" onclick="settingsGo(null)">‹ <span data-i18n="set_back_to_settings">Settings</span></button>
+
+          <div class="ps-subnav-groups" style="margin-top:0;">
+            <div class="ps-subnav-group">
+              <div class="ps-subnav">
+                <button class="ps-tab on" onclick="psGo('stats',this)" data-i18n="set_stats">📊 Stats</button>
+                <button class="ps-tab" onclick="psGo('badges',this)" data-i18n="set_badges">🏅 Badges</button>
+                <button class="ps-tab" onclick="psGo('titles',this)" data-i18n="set_titles">🏷️ Titles</button>
+              </div>
+            </div>
+          </div>
+
+        <div class="ps-panel on" id="ps-stats">
+          <div class="ps-stats-grid" id="ps-stats-grid">
+            <div class="ps-stat-card"><div class="ps-stat-icon">📚</div><div class="ps-stat-val" id="pss-questions">97</div><div class="ps-stat-lbl" data-i18n="set_stat_questions">Questions Asked</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">📝</div><div class="ps-stat-val" id="pss-notes">59</div><div class="ps-stat-lbl" data-i18n="set_stat_notes">Notes Summarised</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🃏</div><div class="ps-stat-val" id="pss-flashcards">55</div><div class="ps-stat-lbl" data-i18n="set_stat_flashcards">Flashcard Sets</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🎮</div><div class="ps-stat-val" id="pss-games">80</div><div class="ps-stat-lbl" data-i18n="set_stat_games">Games Played</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">📓</div><div class="ps-stat-val" id="pss-journal">12</div><div class="ps-stat-lbl" data-i18n="set_stat_journal">Journal Entries</div></div>
+            <div class="ps-stat-card"><div class="ps-stat-icon">🔥</div><div class="ps-stat-val" id="pss-streak">31</div><div class="ps-stat-lbl" data-i18n="set_stat_streak">Day Streak</div></div>
+          </div>
+
+          <!-- Activity chart -->
+          <div class="ps-card" style="margin-top:16px;">
+            <div class="ps-card-label" data-i18n="set_activity_week">// ACTIVITY THIS WEEK</div>
+            <div class="ps-chart" id="ps-chart"><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Mon</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Tue</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Wed</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:36px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Thu</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:24px;background:var(--accent);opacity:1"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:1"></div>
+        <div class="ps-bar" style="height:70px;background:#fb923c;opacity:1"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--accent2)">Fri</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Sat</div>
+    </div><div class="ps-chart-day">
+      <div class="ps-bar-grp">
+        <div class="ps-bar" style="height:2px;background:var(--accent);opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#c084fc;opacity:0.6"></div>
+        <div class="ps-bar" style="height:2px;background:#fb923c;opacity:0.6"></div>
+      </div>
+      <div class="ps-chart-day-label" style="color:var(--silver)">Sun</div>
+    </div></div>
+            <div class="ps-chart-legend">
+              <span><span class="ps-dot" style="background:var(--accent)"></span><span data-i18n="set_stat_questions_short">Questions</span></span>
+              <span><span class="ps-dot" style="background:var(--teal)"></span><span data-i18n="set_chart_journal">Journal</span></span>
+              <span><span class="ps-dot" style="background:#c084fc"></span><span data-i18n="set_chart_games">Games</span></span>
+            </div>
+          </div>
+
+          <!-- High scores -->
+          <div class="ps-card" style="margin-top:12px;">
+            <div class="ps-card-label" data-i18n="set_hiscores">// GAME HIGH SCORES</div>
+            <div class="ps-hiscore-list" id="ps-hiscores"><div class="ps-hiscore-row"><span class="ps-hiscore-name">🫧 Bubble Pop</span><span class="ps-hiscore-val">73</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🔤 Word Scramble</span><span class="ps-hiscore-val">18</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">➗ Maths Blitz</span><span class="ps-hiscore-val">34</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">⌨️ Typing Speed</span><span class="ps-hiscore-val">87 WPM</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">⚡ Reaction Time</span><span class="ps-hiscore-val">214 ms</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🐍 Snake</span><span class="ps-hiscore-val">420</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🌍 Flag Quiz</span><span class="ps-hiscore-val">22</span></div><div class="ps-hiscore-row"><span class="ps-hiscore-name">🔢 Sudoku</span><span class="ps-hiscore-val">950</span></div></div>
+          </div>
+        </div>
+        <div class="ps-panel" id="ps-badges">
+          <div class="ps-badges-header">
+            <div>
+              <div class="ps-card-label" data-i18n="set_achievements">// ACHIEVEMENTS</div>
+              <div class="ps-form-label" id="ps-badges-count" style="margin-top:4px;">22 of 23 unlocked</div>
+            </div>
+          </div>
+          <div class="ps-badges-full" id="badges-grid">
+    <div class="badge-item earned" title="Asked your first homework question">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🎓</div>
+      <div class="badge-name">First Question</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Asked your first homework question</div>
+    </div>
+    <div class="badge-item earned" title="Used Veda 3 days in a row">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🔥</div>
+      <div class="badge-name">3-Day Streak</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Veda 3 days in a row</div>
+    </div>
+    <div class="badge-item earned" title="7-day study streak">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">💪</div>
+      <div class="badge-name">Week Warrior</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">7-day study streak</div>
+    </div>
+    <div class="badge-item earned" title="14-day study streak">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🏅</div>
+      <div class="badge-name">Fortnight Focus</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">14-day study streak</div>
+    </div>
+    <div class="badge-item earned" title="30-day study streak">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">👑</div>
+      <div class="badge-name">Monthly Master</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">30-day study streak</div>
+    </div>
+    <div class="badge-item earned" title="Earned 100 gems">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">💎</div>
+      <div class="badge-name">Gem Collector</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 100 gems</div>
+    </div>
+    <div class="badge-item earned" title="Earned 500 gems">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">💎💎</div>
+      <div class="badge-name">Gem Hoarder</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 500 gems</div>
+    </div>
+    <div class="badge-item earned" title="Earned 1000 gems total">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🏆</div>
+      <div class="badge-name">Gem Legend</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Earned 1000 gems total</div>
+    </div>
+    <div class="badge-item earned" title="Played 5 games">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🎮</div>
+      <div class="badge-name">Gamer</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Played 5 games</div>
+    </div>
+    <div class="badge-item earned" title="Played 20 games">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🕹️</div>
+      <div class="badge-name">Arcade Addict</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Played 20 games</div>
+    </div>
+    <div class="badge-item earned" title="Wrote 5 journal entries">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">📓</div>
+      <div class="badge-name">Journaler</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Wrote 5 journal entries</div>
+    </div>
+    <div class="badge-item locked" title="Wrote 20 journal entries">
+      
+      <div class="badge-emoji">✍️</div>
+      <div class="badge-name">Diarist</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Wrote 20 journal entries</div>
+    </div>
+    <div class="badge-item earned" title="Used Notes 10 times">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">📝</div>
+      <div class="badge-name">Note Taker</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Notes 10 times</div>
+    </div>
+    <div class="badge-item earned" title="Used Notes 50 times">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">📚</div>
+      <div class="badge-name">Note Ninja</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Used Notes 50 times</div>
+    </div>
+    <div class="badge-item earned" title="Generated 10 flashcard sets">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🃏</div>
+      <div class="badge-name">Flash Master</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 10 flashcard sets</div>
+    </div>
+    <div class="badge-item earned" title="Generated 50 flashcard sets">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">⚡</div>
+      <div class="badge-name">Card Shark</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 50 flashcard sets</div>
+    </div>
+    <div class="badge-item earned" title="Completed 5 Pomodoro focus sessions">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🍅</div>
+      <div class="badge-name">Pomodoro Pro</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 5 Pomodoro focus sessions</div>
+    </div>
+    <div class="badge-item earned" title="Completed 20 Pomodoro sessions">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">⏱️</div>
+      <div class="badge-name">Time Lord</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 20 Pomodoro sessions</div>
+    </div>
+    <div class="badge-item earned" title="Generated your first exam paper">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">📄</div>
+      <div class="badge-name">Paper Setter</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated your first exam paper</div>
+    </div>
+    <div class="badge-item earned" title="Generated 10 exam papers">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🏫</div>
+      <div class="badge-name">Exam Factory</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Generated 10 exam papers</div>
+    </div>
+    <div class="badge-item earned" title="Completed 10 to-do tasks">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">✅</div>
+      <div class="badge-name">Task Crusher</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Completed 10 to-do tasks</div>
+    </div>
+    <div class="badge-item earned" title="Asked 50 homework questions">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🔬</div>
+      <div class="badge-name">Curious Mind</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Asked 50 homework questions</div>
+    </div>
+    <div class="badge-item earned" title="Visited every section of Veda">
+      <div class="badge-earned-tick">✓</div>
+      <div class="badge-emoji">🌟</div>
+      <div class="badge-name">Explorer</div>
+      <div style="font-family:var(--exo);font-size:.6rem;color:var(--silver);margin-top:4px;line-height:1.3;">Visited every section of Veda</div>
+    </div></div>
+        </div>
+        <div class="ps-panel" id="ps-titles">
+          <div class="ps-badges-header">
+            <div>
+              <div class="ps-card-label">// TITLES</div>
+              <div class="ps-form-label" id="ps-titles-count" style="margin-top:4px;">0 of 10 unlocked</div>
+            </div>
+          </div>
+          <div style="font-family:var(--exo);font-size:.72rem;color:var(--silver);opacity:.75;margin:2px 0 14px;line-height:1.5;">Earned from lifetime gems — spending gems on games or the shop never locks a title back up. Tap any unlocked title to display it next to your name on the leaderboard.</div>
+          <div class="ps-badges-full" id="titles-grid"></div>
+        </div>
+        </div><!-- /set-area-progress -->
 
       </div><!-- /tab-settings -->
       <!-- GAMES -->
@@ -4377,6 +4473,19 @@ const LANGS = {
     set_ap_language: '🌐 Language',
     set_ap_layout: '📐 Layout',
     set_ap_look: '🎨 Look',
+    ttl_settings: '⚙️ Settings',
+    sub_settings: 'Everything about you and how Veda looks and works',
+    set_area_me_title: 'Me',
+    set_area_me_desc: 'Your learning profile, goals, and daily targets',
+    set_area_lookfeel_title: 'Look & Feel',
+    set_area_lookfeel_desc: 'Themes, wallpapers, accent color, and display',
+    set_area_account_title: 'Account & Safety',
+    set_area_account_desc: 'Google sign-in, AI key, guardian contact, and data',
+    set_area_progress_title: 'Progress',
+    set_area_progress_desc: "Stats, badges, and titles you've earned",
+    set_back_to_settings: 'Settings',
+    set_personalize_further: '🎛️ Personalize further',
+    set_titles: '🏷️ Titles',
     set_avatar_emoji: 'Avatar Emoji',
     set_back: '‹ Back',
     set_backup_key_ph: 'Paste backup key (AIza...)...',
@@ -4437,6 +4546,12 @@ const LANGS = {
     set_hub_gemini_key: 'Gemini AI Key',
     set_hub_google_account: 'Google Account',
     set_hub_guardian: 'Parental Safety Contact',
+    set_hub_profile: 'Profile',
+    set_hub_profile_status: 'Name, avatar, and level',
+    set_hub_learning: 'Learning Profile',
+    set_hub_learning_status: 'Curriculum, subjects, and how AI treats you',
+    set_hub_goals: 'Daily Goals',
+    set_hub_goals_status: 'Set your daily targets',
     set_key_active_full: 'AI key is active — AI features enabled',
     set_key_inactive_full: 'No AI key — AI features disabled',
     set_key_step1: 'Go to',
@@ -5017,6 +5132,19 @@ const LANGS = {
     set_ap_language: '🌐 Idioma',
     set_ap_layout: '📐 Diseño',
     set_ap_look: '🎨 Aspecto',
+    ttl_settings: '⚙️ Ajustes',
+    sub_settings: 'Todo sobre ti y cómo se ve y funciona Veda',
+    set_area_me_title: 'Yo',
+    set_area_me_desc: 'Tu perfil de aprendizaje, metas y objetivos diarios',
+    set_area_lookfeel_title: 'Aspecto',
+    set_area_lookfeel_desc: 'Temas, fondos de pantalla, color de acento y pantalla',
+    set_area_account_title: 'Cuenta y Seguridad',
+    set_area_account_desc: 'Inicio de sesión de Google, clave de IA, contacto del tutor y datos',
+    set_area_progress_title: 'Progreso',
+    set_area_progress_desc: 'Estadísticas, insignias y títulos que has ganado',
+    set_back_to_settings: 'Ajustes',
+    set_personalize_further: '🎛️ Personalizar más',
+    set_titles: '🏷️ Títulos',
     set_avatar_emoji: 'Emoji de Avatar',
     set_back: '‹ Volver',
     set_backup_key_ph: 'Pega la clave de respaldo (AIza...)...',
@@ -5077,6 +5205,12 @@ const LANGS = {
     set_hub_gemini_key: 'Clave de IA Gemini',
     set_hub_google_account: 'Cuenta de Google',
     set_hub_guardian: 'Contacto de Seguridad Parental',
+    set_hub_profile: 'Perfil',
+    set_hub_profile_status: 'Nombre, avatar y nivel',
+    set_hub_learning: 'Perfil de Aprendizaje',
+    set_hub_learning_status: 'Currículo, materias y cómo te trata la IA',
+    set_hub_goals: 'Metas Diarias',
+    set_hub_goals_status: 'Establece tus objetivos diarios',
     set_key_active_full: 'Clave de IA activa — funciones de IA habilitadas',
     set_key_inactive_full: 'Sin clave de IA — funciones de IA deshabilitadas',
     set_key_step1: 'Ve a',
@@ -5577,6 +5711,19 @@ const LANGS = {
     set_ap_language: '🌐 Bahasa',
     set_ap_layout: '📐 Susun Atur',
     set_ap_look: '🎨 Rupa',
+    ttl_settings: '⚙️ Tetapan',
+    sub_settings: 'Semua tentang anda dan cara Veda kelihatan dan berfungsi',
+    set_area_me_title: 'Saya',
+    set_area_me_desc: 'Profil pembelajaran, matlamat, dan sasaran harian anda',
+    set_area_lookfeel_title: 'Rupa & Gaya',
+    set_area_lookfeel_desc: 'Tema, kertas dinding, warna aksen, dan paparan',
+    set_area_account_title: 'Akaun & Keselamatan',
+    set_area_account_desc: 'Log masuk Google, kunci AI, kenalan penjaga, dan data',
+    set_area_progress_title: 'Kemajuan',
+    set_area_progress_desc: 'Statistik, lencana, dan gelaran yang telah anda perolehi',
+    set_back_to_settings: 'Tetapan',
+    set_personalize_further: '🎛️ Peribadikan lagi',
+    set_titles: '🏷️ Gelaran',
     set_avatar_emoji: 'Emoji Avatar',
     set_back: '‹ Kembali',
     set_backup_key_ph: 'Tampal kunci sandaran (AIza...)...',
@@ -5637,6 +5784,12 @@ const LANGS = {
     set_hub_gemini_key: 'Kunci AI Gemini',
     set_hub_google_account: 'Akaun Google',
     set_hub_guardian: 'Kenalan Keselamatan Ibu Bapa',
+    set_hub_profile: 'Profil',
+    set_hub_profile_status: 'Nama, avatar, dan tahap',
+    set_hub_learning: 'Profil Pembelajaran',
+    set_hub_learning_status: 'Kurikulum, subjek, dan cara AI melayan anda',
+    set_hub_goals: 'Matlamat Harian',
+    set_hub_goals_status: 'Tetapkan sasaran harian anda',
     set_key_active_full: 'Kunci AI aktif — ciri AI didayakan',
     set_key_inactive_full: 'Tiada kunci AI — ciri AI dinyahaktifkan',
     set_key_step1: 'Pergi ke',
@@ -6137,6 +6290,19 @@ const LANGS = {
     set_ap_language: '🌐 语言',
     set_ap_layout: '📐 布局',
     set_ap_look: '🎨 外观',
+    ttl_settings: '⚙️ 设置',
+    sub_settings: '关于你的一切，以及 Veda 的外观和运作方式',
+    set_area_me_title: '我',
+    set_area_me_desc: '你的学习档案、目标和每日任务',
+    set_area_lookfeel_title: '外观',
+    set_area_lookfeel_desc: '主题、壁纸、强调色和显示',
+    set_area_account_title: '账户与安全',
+    set_area_account_desc: 'Google 登录、AI 密钥、监护人联系方式和数据',
+    set_area_progress_title: '进度',
+    set_area_progress_desc: '你获得的统计数据、徽章和称号',
+    set_back_to_settings: '设置',
+    set_personalize_further: '🎛️ 进一步个性化',
+    set_titles: '🏷️ 称号',
     set_avatar_emoji: '头像表情符号',
     set_back: '‹ 返回',
     set_backup_key_ph: '粘贴备用密钥（AIza...）……',
@@ -6197,6 +6363,12 @@ const LANGS = {
     set_hub_gemini_key: 'Gemini AI密钥',
     set_hub_google_account: 'Google账户',
     set_hub_guardian: '家长安全联系人',
+    set_hub_profile: '个人资料',
+    set_hub_profile_status: '姓名、头像和等级',
+    set_hub_learning: '学习档案',
+    set_hub_learning_status: '课程、科目，以及 AI 如何对待你',
+    set_hub_goals: '每日目标',
+    set_hub_goals_status: '设置你的每日目标',
     set_key_active_full: 'AI密钥已激活——AI功能已启用',
     set_key_inactive_full: '无AI密钥——AI功能已禁用',
     set_key_step1: '前往',
@@ -6697,6 +6869,19 @@ const LANGS = {
     set_ap_language: '🌐 言語',
     set_ap_layout: '📐 レイアウト',
     set_ap_look: '🎨 見た目',
+    ttl_settings: '⚙️ 設定',
+    sub_settings: 'あなたに関するすべてと、Vedaの見た目や動作',
+    set_area_me_title: '自分',
+    set_area_me_desc: '学習プロフィール、目標、毎日の目標',
+    set_area_lookfeel_title: '見た目',
+    set_area_lookfeel_desc: 'テーマ、壁紙、アクセントカラー、表示',
+    set_area_account_title: 'アカウントと安全',
+    set_area_account_desc: 'Googleサインイン、AIキー、保護者の連絡先、データ',
+    set_area_progress_title: '進捗',
+    set_area_progress_desc: '獲得した統計、バッジ、称号',
+    set_back_to_settings: '設定',
+    set_personalize_further: '🎛️ さらにカスタマイズ',
+    set_titles: '🏷️ 称号',
     set_avatar_emoji: 'アバター絵文字',
     set_back: '‹ 戻る',
     set_backup_key_ph: 'バックアップキーを貼り付け（AIza...）...',
@@ -6757,6 +6942,12 @@ const LANGS = {
     set_hub_gemini_key: 'Gemini AIキー',
     set_hub_google_account: 'Googleアカウント',
     set_hub_guardian: '保護者への安全連絡先',
+    set_hub_profile: 'プロフィール',
+    set_hub_profile_status: '名前、アバター、レベル',
+    set_hub_learning: '学習プロフィール',
+    set_hub_learning_status: 'カリキュラム、科目、AIの対応方法',
+    set_hub_goals: '毎日の目標',
+    set_hub_goals_status: '毎日の目標を設定',
     set_key_active_full: 'AIキーが有効です — AI機能が利用可能です',
     set_key_inactive_full: 'AIキーがありません — AI機能は無効です',
     set_key_step1: 'にアクセス',
@@ -6991,21 +7182,11 @@ function applyLang() {
   document.querySelectorAll('.mood-chip').forEach((chip, i) => {
     if (moodKeys[i]) chip.textContent = t(moodKeys[i]);
   });
-  // Account and Settings sub-navs — these .ps-tab buttons have no data-i18n
-  // attribute of their own, so they're relabeled by DOM position within their
-  // own tab instead. `null` = no i18n key for that button (Titles is
-  // English-only, like this session's other additions) — keeps the
-  // positional index aligned for every button after it.
-  const accountTabMap = [
-    {key:'set_profile'},{key:'set_goals'},{key:'set_stats'},{key:'set_badges'},null
-  ];
-  const accountTab = document.getElementById('tab-account');
-  if (accountTab) accountTab.querySelectorAll('.ps-tab').forEach((tab, i) => { if (accountTabMap[i]) tab.textContent = t(accountTabMap[i].key); });
-  const settingsTabMap = [
-    {key:'set_aiprofile'},{key:'set_apikey'},{key:'set_ap_layout'},{key:'set_ap_language'}
-  ];
-  const settingsTab = document.getElementById('tab-settings');
-  if (settingsTab) settingsTab.querySelectorAll('.ps-tab').forEach((tab, i) => { if (settingsTabMap[i]) tab.textContent = t(settingsTabMap[i].key); });
+  // Settings → Progress sub-nav (Stats/Badges/Titles) now carries its own
+  // data-i18n attributes directly (2026-09 reorg) instead of being relabeled
+  // by DOM position — that positional approach broke once before when tabs
+  // got reordered, so it's gone for good. The generic [data-i18n] sweep below
+  // covers these buttons like everything else.
   // Home streak
   const homeStreak = document.getElementById('home-streak');
   if (homeStreak) {
@@ -7232,24 +7413,26 @@ if (!sbOpen) {
 
 // ── TABS ──
 function go(name) {
-  // 'profile' is a legacy alias — Account used to live inside the Settings tab.
-  if (name === 'profile') { name = 'account'; }
+  // Legacy aliases: Account and Themes used to be their own destinations;
+  // they're now areas inside the single Settings tab (2026-09 reorg). 'profile'
+  // is an older alias for Account, from even before that.
+  let settingsArea = null;
+  if (name === 'profile' || name === 'account') { settingsArea = 'me'; name = 'settings'; }
+  else if (name === 'themes') { settingsArea = 'lookfeel'; name = 'settings'; }
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
   const tabEl = document.getElementById('tab-' + name);
   if (tabEl) tabEl.classList.add('on');
   document.querySelectorAll('.nb').forEach(b => { if (b.getAttribute('onclick')?.includes("'" + name + "'")) b.classList.add('on'); });
-  if (name === 'settings') { loadSettingsPage(); }
-  if (name === 'account') {
-    const btn = tabEl ? tabEl.querySelector('.ps-tab[onclick*="\'profile\'"]') : null;
-    psGo('profile', btn);
-    renderGoalsPanel();
+  if (name === 'settings') {
+    loadSettingsPage();
+    settingsGo(settingsArea); // null → landing menu; otherwise jumps straight into that area
   }
   if (name === 'home') setTimeout(updateHomeStats, 0);
   if (name === 'music') setTimeout(initMusicTab, 0);
-  // Hide music/themes/account nav again when navigating away from them — all
-  // three are reveal-on-demand sidebar entries, not permanent nav items.
-  [['music','nb-music'], ['themes','nb-themes'], ['account','nb-account']].forEach(([tabName, btnId]) => {
+  // Hide music nav again when navigating away from it — still a reveal-on-demand
+  // sidebar entry (Account/Themes no longer are; they live inside Settings now).
+  [['music','nb-music']].forEach(([tabName, btnId]) => {
     if (name === tabName) return;
     const nb = document.getElementById(btnId);
     if (nb && nb.style.display !== 'none') {
@@ -10177,6 +10360,33 @@ function toggleJournalExpand(id) {
 
 document.addEventListener('DOMContentLoaded', renderJournal);
 document.addEventListener('DOMContentLoaded', () => setTimeout(renderGameLocks, 200));
+
+// ── SETTINGS: landing menu + 4 areas (Me / Look & Feel / Account & Safety /
+// Progress) — replaces the old separate Settings/Account/Themes tabs. ──
+const SETTINGS_AREAS = ['me', 'lookfeel', 'account', 'progress'];
+function settingsGo(area) {
+  const landing = document.getElementById('set-landing');
+  if (landing) landing.classList.toggle('on', !area);
+  SETTINGS_AREAS.forEach(a => {
+    const el = document.getElementById('set-area-' + a);
+    if (el) el.classList.toggle('on', area === a);
+  });
+  if (!area) return;
+  if (area === 'me') {
+    renderGoalsPanel();
+    meHubBack();
+  } else if (area === 'progress') {
+    const tabEl = document.getElementById('tab-settings');
+    const btn = tabEl ? tabEl.querySelector('#set-area-progress .ps-tab[onclick*="\'stats\'"]') : null;
+    psGo('stats', btn);
+  } else if (area === 'account') {
+    renderApiKeyPanel();
+  }
+}
+function toggleSetDisclosure(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
 // ── SETTINGS ──
 function loadSettingsPage() {
   const display = document.getElementById('set-key-display');
@@ -10369,9 +10579,10 @@ function renderHdrProfile() {
   uname.textContent = window._isGuest ? 'Guest' : (a.name || 'Student');
 }
 
-// ── REVEAL-ON-DEMAND TABS (Themes, Account — plus Music in playlist-manager.js) ──
-// These have no permanent sidebar entry; opening one slides its nav button in,
-// go() slides it back out again once you navigate away.
+// ── REVEAL-ON-DEMAND TABS (Music only, in playlist-manager.js — Themes and
+// Account used to work the same way, but as of the 2026-09 Settings reorg
+// they're areas inside Settings instead, so they no longer need a sidebar
+// button to reveal). ──
 function revealNavAndGo(btnId, tabName) {
   const btn = document.getElementById(btnId);
   if (btn) {
@@ -10386,8 +10597,12 @@ function revealNavAndGo(btnId, tabName) {
   }
   setTimeout(() => go(tabName), 200);
 }
-function openThemesTab() { revealNavAndGo('nb-themes', 'themes'); }
-function openAccountTab() { revealNavAndGo('nb-account', 'account'); }
+// openThemesTab()/openAccountTab() are called from several header/widget
+// onclicks (hdr-theme-btn, hdr-profile, universal-gem-counter, the home
+// progress widget) that predate the reorg — kept as thin wrappers so none of
+// those call sites needed touching. Both now land inside Settings.
+function openThemesTab() { go('themes'); }
+function openAccountTab() { go('account'); }
 function saveAcct(d) {
   // gemsTotal is a high-water mark, not a running total — bumping it here
   // (the one choke point every gem award/spend already passes through)
@@ -10917,6 +11132,28 @@ function apiHubOpen(section) {
   if (panel) panel.scrollTop = 0;
 }
 
+function meHubOpen(section) {
+  const hub = document.getElementById('ps-me-hub');
+  const detail = document.getElementById('ps-me-detail');
+  if (hub) hub.style.display = 'none';
+  if (detail) detail.style.display = 'flex';
+  document.querySelectorAll('#ps-me-detail .ps-detail-section').forEach(s => s.classList.remove('on'));
+  const idMap = { profile: 'ps-profile', learning: 'ps-aiprofile', goals: 'ps-goals' };
+  const target = document.getElementById(idMap[section] || section);
+  if (target) target.classList.add('on');
+  if (section === 'goals' && typeof renderGoalsPanel === 'function') renderGoalsPanel();
+  const panel = document.getElementById('ps-me');
+  if (panel) panel.scrollTop = 0;
+}
+
+function meHubBack() {
+  const hub = document.getElementById('ps-me-hub');
+  const detail = document.getElementById('ps-me-detail');
+  if (detail) detail.style.display = 'none';
+  if (hub) hub.style.display = 'block';
+  document.querySelectorAll('#ps-me-detail .ps-detail-section').forEach(s => s.classList.remove('on'));
+}
+
 function apiHubBack() {
   const hub = document.getElementById('ps-api-hub');
   const detail = document.getElementById('ps-api-detail');
@@ -11002,9 +11239,9 @@ function renderAcctPage() {
 }
 
 function editProfile() {
-  // Profile Details lives in the unified Settings tab (Account group)
+  // Profile Details lives in Settings → Me
   go('settings');
-  psGo('profile', null);
+  settingsGo('me');
 }
 
 </script>
@@ -11121,6 +11358,8 @@ function loadPersonalizePrefs() {
   const masterTheme = localStorage.getItem('veda_master_theme') || 'veda';
   if (masterTheme === 'ivory') {
     document.documentElement.setAttribute('data-theme', 'ivory');
+    const themeCard = document.getElementById('veda-only-theme');
+    if (themeCard) { themeCard.classList.add('veda-only-section', 'swooped'); }
     document.body.style.background = '';
     document.body.style.backgroundSize = '';
     document.body.classList.remove('anim-bg');
@@ -11195,23 +11434,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTokenDisplay();
   document.querySelectorAll('.model-tier-btn').forEach(b => b.classList.toggle('on', b.dataset.model === AI_MODEL));
 
-  // Desktop clock
-  function updateDtClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    const timeStr = h + ':' + m;
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const dateStr = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
-    const cb = document.getElementById('dt-clock-big');
-    const cd = document.getElementById('dt-clock-date');
-    if (cb) cb.textContent = timeStr;
-    if (cd) cd.textContent = dateStr;
-  }
-  updateDtClock();
-  setInterval(updateDtClock, 1000);
-
   // Restore quick note
   const qn = document.getElementById('dt-quicknote');
   if (qn) qn.value = localStorage.getItem('studly_quicknote') || '';
@@ -11220,7 +11442,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.renderAcctPage = function() { _origRenderAcct(); updateHomeStats(); };
 
   // Load hi scores
-  ['bubble','scramble','math','typing','reaction','snake','flags','sudoku'].forEach(g => {
+  ['bubble','scramble','math','typing','reaction','snake','flags','sudoku','hangman','tetris','brickbreaker','icytower','flappy','spaceinvaders','pong','asteroids','game2048','wordle','memorymatch','aimtrainer','simonmemory','numbertouch','capitals','elements','timeline','blitz'].forEach(g => {
     const el = document.getElementById('hi-'+g);
     const v = localStorage.getItem('hi_'+g) || 0;
     if (!el) return;
@@ -12408,8 +12630,15 @@ function closeLibOut() {
 document.addEventListener('DOMContentLoaded', () => {
   const DEFAULT_THEME = { b1: '#0a0e1a', b2: '#0f1528' };
   const s = JSON.parse(localStorage.getItem('studly_theme') || 'null');
-  applyBg(s || DEFAULT_THEME);
   if (s) locked = s;
+  // Skip applying the Veda gradient tile's inline --accent/--accent2 vars when
+  // Ivory is the saved master theme — this used to run unconditionally and
+  // clobber loadPersonalizePrefs()'s ivory var cleanup (which runs in an
+  // earlier-registered DOMContentLoaded handler), making --accent-colored
+  // text across the whole app nearly invisible on a fresh Ivory load.
+  if ((localStorage.getItem('veda_master_theme') || 'veda') !== 'ivory') {
+    applyBg(s || DEFAULT_THEME);
+  }
   renderThemes();
   checkOnboarding();
   renderHdrProfile();
@@ -14759,7 +14988,7 @@ function appendDailyBriefMemoryTag(contentEl) {
 
 // ── FLAPPY BIRD ──
 function startFlappy(area) {
-  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="fl-score">0</span></div></div><button class="abtn sec" onclick="exitGame(flappyScore,'Flappy score','')">Quit</button></div><canvas id="fl-canvas" height="360" style="border-radius:10px;cursor:pointer;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">Tap / Space to flap</div>`;
+  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="fl-score">0</span></div></div><button class="abtn sec" onclick="flQuit()">Quit</button></div><canvas id="fl-canvas" height="360" style="border-radius:10px;cursor:pointer;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">Tap / Space to flap</div>`;
   const canvas = document.getElementById('fl-canvas');
   canvas.width = canvas.offsetWidth;
   const ctx = canvas.getContext('2d');
@@ -14769,6 +14998,7 @@ function startFlappy(area) {
   function flap(){bird.vy=-5.5;}
   canvas.addEventListener('click',flap);
   document.addEventListener('keydown',function fk(e){const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;if(e.code==='Space'){e.preventDefault();flap();}if(!running)document.removeEventListener('keydown',fk);});
+  window.flQuit=function(){running=false;document.removeEventListener('keydown',fk);exitGame(window.flappyScore,'Flappy score','');};
   function loop(){
     if(!document.getElementById('fl-canvas')){running=false;return;}
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -14794,7 +15024,7 @@ function startFlappy(area) {
 
 // ── SPACE INVADERS ──
 function startSpaceInvaders(area) {
-  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="si-score">0</span></div><div class="gscore">Lives: <span id="si-lives">3</span></div></div><button class="abtn sec" onclick="exitGame(siScore,'Space Invaders','')">Quit</button></div><canvas id="si-canvas" height="360" style="border-radius:10px;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">← → to move · Space to shoot</div>`;
+  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="si-score">0</span></div><div class="gscore">Lives: <span id="si-lives">3</span></div></div><button class="abtn sec" onclick="siQuit()">Quit</button></div><canvas id="si-canvas" height="360" style="border-radius:10px;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">← → to move · Space to shoot</div>`;
   const canvas=document.getElementById('si-canvas'); canvas.width=canvas.offsetWidth;
   const ctx=canvas.getContext('2d');
   let ship={x:canvas.width/2,y:canvas.height-30,w:24,h:16};
@@ -14803,14 +15033,17 @@ function startSpaceInvaders(area) {
   function makeAliens(){aliens=[];for(let r=0;r<4;r++)for(let c=0;c<9;c++)aliens.push({x:50+c*50,y:40+r*38,w:22,h:16,alive:true});}
   makeAliens();
   const keys={};
-  document.addEventListener('keydown',function sik(e){
+  function sik(e){
     const tag = document.activeElement?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
-    keys[e.code]=true;if(e.code==='Space'){e.preventDefault();bullets.push({x:ship.x,y:ship.y-10,vy:-7});}if(!running)document.removeEventListener('keydown',sik);});
-  document.addEventListener('keyup',e=>keys[e.code]=false);
+    keys[e.code]=true;if(e.code==='Space'){e.preventDefault();bullets.push({x:ship.x,y:ship.y-10,vy:-7});}if(!running)document.removeEventListener('keydown',sik);}
+  function siup(e){keys[e.code]=false;}
+  document.addEventListener('keydown',sik);
+  document.addEventListener('keyup',siup);
+  window.siQuit=function(){running=false;clearInterval(alienShoot);document.removeEventListener('keydown',sik);document.removeEventListener('keyup',siup);exitGame(score,'Space Invaders','');};
   let alienShoot=setInterval(()=>{const live=aliens.filter(a=>a.alive);if(live.length){const a=live[Math.floor(Math.random()*live.length)];alienBullets.push({x:a.x+11,y:a.y+16,vy:3.5});}},1200);
   function loop(){
-    if(!document.getElementById('si-canvas')){running=false;clearInterval(alienShoot);return;}
+    if(!document.getElementById('si-canvas')){running=false;clearInterval(alienShoot);document.removeEventListener('keydown',sik);document.removeEventListener('keyup',siup);return;}
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle='#0a1628';ctx.fillRect(0,0,canvas.width,canvas.height);
     if(keys['ArrowLeft'])ship.x=Math.max(20,ship.x-4);
@@ -14819,7 +15052,7 @@ function startSpaceInvaders(area) {
     ctx.fillStyle='#4d9fff';ctx.beginPath();ctx.moveTo(ship.x,ship.y-ship.h);ctx.lineTo(ship.x-ship.w,ship.y+ship.h/2);ctx.lineTo(ship.x+ship.w,ship.y+ship.h/2);ctx.fill();
     // bullets
     bullets=bullets.filter(b=>{b.y+=b.vy;ctx.fillStyle='#fbbf24';ctx.fillRect(b.x-2,b.y-8,4,10);return b.y>0;});
-    alienBullets=alienBullets.filter(b=>{b.y+=b.vy;ctx.fillStyle='#f87171';ctx.fillRect(b.x-2,b.y,4,10);if(Math.abs(b.x-ship.x)<22&&b.y>ship.y-16){lives--;const le=document.getElementById('si-lives');if(le)le.textContent=lives;if(lives<=0){running=false;clearInterval(alienShoot);exitGame(score,'Space Invaders','Game over!');return false;}return false;}return b.y<canvas.height;});
+    alienBullets=alienBullets.filter(b=>{b.y+=b.vy;ctx.fillStyle='#f87171';ctx.fillRect(b.x-2,b.y,4,10);if(Math.abs(b.x-ship.x)<22&&b.y>ship.y-16){lives--;const le=document.getElementById('si-lives');if(le)le.textContent=lives;if(lives<=0){running=false;clearInterval(alienShoot);document.removeEventListener('keydown',sik);document.removeEventListener('keyup',siup);exitGame(score,'Space Invaders','Game over!');return false;}return false;}return b.y<canvas.height;});
     // move aliens
     let hitWall=false;
     aliens.filter(a=>a.alive).forEach(a=>{a.x+=alienDir*alienSpeed;if(a.x<20||a.x>canvas.width-30)hitWall=true;});
@@ -14828,7 +15061,7 @@ function startSpaceInvaders(area) {
     aliens.forEach(a=>{if(!a.alive)return;ctx.fillStyle='#c084fc';ctx.fillRect(a.x,a.y,a.w,a.h);ctx.fillStyle='#0a1628';ctx.fillRect(a.x+5,a.y+4,4,4);ctx.fillRect(a.x+13,a.y+4,4,4);bullets.forEach(b=>{if(b.x>a.x&&b.x<a.x+a.w&&b.y>a.y&&b.y<a.y+a.h){a.alive=false;b.y=-999;score+=10;window.siScore=score;const se=document.getElementById('si-score');if(se)se.textContent=score;}});});
     alienSpeed=0.5+((36-aliens.filter(a=>a.alive).length)*0.04);
     if(!aliens.some(a=>a.alive)){makeAliens();alienSpeed=0.5;}
-    if(aliens.some(a=>a.alive&&a.y>canvas.height-50)){running=false;clearInterval(alienShoot);exitGame(score,'Space Invaders','They landed!');return;}
+    if(aliens.some(a=>a.alive&&a.y>canvas.height-50)){running=false;clearInterval(alienShoot);document.removeEventListener('keydown',sik);document.removeEventListener('keyup',siup);exitGame(score,'Space Invaders','They landed!');return;}
     requestAnimationFrame(loop);
   }
   loop();
@@ -14868,7 +15101,7 @@ function startPong(area) {
 
 // ── ASTEROIDS ──
 function startAsteroids(area) {
-  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="ast-score">0</span></div><div class="gscore">Lives: <span id="ast-lives">3</span></div></div><button class="abtn sec" onclick="exitGame(astScore,'Asteroids','')">Quit</button></div><canvas id="ast-canvas" height="360" style="border-radius:10px;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">← → Rotate · ↑ Thrust · Space Shoot</div>`;
+  area.innerHTML = `<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="ast-score">0</span></div><div class="gscore">Lives: <span id="ast-lives">3</span></div></div><button class="abtn sec" onclick="astQuit()">Quit</button></div><canvas id="ast-canvas" height="360" style="border-radius:10px;"></canvas><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:6px;">← → Rotate · ↑ Thrust · Space Shoot</div>`;
   const canvas=document.getElementById('ast-canvas'); canvas.width=canvas.offsetWidth;
   const ctx=canvas.getContext('2d'); const W=canvas.width,H=360;
   let ship={x:W/2,y:H/2,angle:0,vx:0,vy:0,inv:120},bullets=[],asteroids=[],score=0,lives=3,running=true;
@@ -14876,11 +15109,14 @@ function startAsteroids(area) {
   function spawnAst(x,y,r){asteroids.push({x:x||Math.random()*W,y:y||Math.random()*H,r:r||35,vx:(Math.random()-.5)*1.8,vy:(Math.random()-.5)*1.8,angle:Math.random()*Math.PI*2,va:(Math.random()-.5)*.04});}
   for(let i=0;i<5;i++)spawnAst();
   const keys={};
-  document.addEventListener('keydown',function ak(e){const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;keys[e.code]=true;if(e.code==='Space'){e.preventDefault();const a=ship.angle-Math.PI/2;bullets.push({x:ship.x,y:ship.y,vx:Math.cos(a)*9,vy:Math.sin(a)*9,life:50});}if(!running)document.removeEventListener('keydown',ak);});
-  document.addEventListener('keyup',e=>keys[e.code]=false);
+  function ak(e){const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;keys[e.code]=true;if(e.code==='Space'){e.preventDefault();const a=ship.angle-Math.PI/2;bullets.push({x:ship.x,y:ship.y,vx:Math.cos(a)*9,vy:Math.sin(a)*9,life:50});}if(!running)document.removeEventListener('keydown',ak);}
+  function astup(e){keys[e.code]=false;}
+  document.addEventListener('keydown',ak);
+  document.addEventListener('keyup',astup);
+  window.astQuit=function(){running=false;document.removeEventListener('keydown',ak);document.removeEventListener('keyup',astup);exitGame(score,'Asteroids','');};
   function wrap(v,max){return((v%max)+max)%max;}
   function loop(){
-    if(!document.getElementById('ast-canvas')){running=false;return;}
+    if(!document.getElementById('ast-canvas')){running=false;document.removeEventListener('keydown',ak);document.removeEventListener('keyup',astup);return;}
     ctx.fillStyle='rgba(10,22,40,0.85)';ctx.fillRect(0,0,W,H);
     if(keys['ArrowLeft'])ship.angle-=0.05;
     if(keys['ArrowRight'])ship.angle+=0.05;
@@ -14899,7 +15135,7 @@ function startAsteroids(area) {
     toAdd.forEach(a=>asteroids.push(a));
     if(asteroids.length===0)for(let i=0;i<5;i++)spawnAst();
     // ship collision
-    if(ship.inv===0&&asteroids.some(a=>Math.hypot(ship.x-a.x,ship.y-a.y)<a.r+12)){lives--;const le=document.getElementById('ast-lives');if(le)le.textContent=lives;ship.vx=0;ship.vy=0;ship.x=W/2;ship.y=H/2;ship.inv=120;if(lives<=0){running=false;exitGame(score,'Asteroids','Destroyed!');return;}}
+    if(ship.inv===0&&asteroids.some(a=>Math.hypot(ship.x-a.x,ship.y-a.y)<a.r+12)){lives--;const le=document.getElementById('ast-lives');if(le)le.textContent=lives;ship.vx=0;ship.vy=0;ship.x=W/2;ship.y=H/2;ship.inv=120;if(lives<=0){running=false;document.removeEventListener('keydown',ak);document.removeEventListener('keyup',astup);exitGame(score,'Asteroids','Destroyed!');return;}}
     requestAnimationFrame(loop);
   }
   loop();
@@ -14912,10 +15148,12 @@ function start2048(area) {
   addTile();addTile();
   function render(){const g=document.getElementById('g2048');if(!g)return;g.innerHTML='';const colors={'0':'rgba(255,255,255,.04)','2':'#1a3a6e','4':'#1e4578','8':'#00796b','16':'#00897b','32':'#fb923c','64':'#f97316','128':'#fbbf24','256':'#f59e0b','512':'#a78bfa','1024':'#8b5cf6','2048':'#ec4899'};grid.forEach(row=>row.forEach(v=>{const d=document.createElement('div');d.style.cssText=`height:70px;border-radius:10px;background:${colors[v]||'#c084fc'};display:flex;align-items:center;justify-content:center;font-family:var(--orb);font-size:${v>=1000?'1.1rem':v>=100?'1.3rem':'1.5rem'};font-weight:900;color:#fff;border:1px solid rgba(255,255,255,.08);`;d.textContent=v||'';g.appendChild(d);}));const se=document.getElementById('g2048-score');if(se)se.textContent=score;}
   function slide(row){let r=row.filter(v=>v);for(let i=0;i<r.length-1;i++)if(r[i]===r[i+1]){r[i]*=2;score+=r[i];r.splice(i+1,1);i++;}while(r.length<4)r.push(0);return r;}
-  function move(dir){let moved=false;let ng=grid.map(r=>[...r]);if(dir==='left')ng=ng.map(r=>{const s=slide(r);if(s.join()!==r.join())moved=true;return s;});else if(dir==='right')ng=ng.map(r=>{const s=slide([...r].reverse()).reverse();if(s.join()!==r.join())moved=true;return s;});else if(dir==='up'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]);const s=slide(col);s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}}else if(dir==='down'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]).reverse();const s=slide(col).reverse();s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}};if(moved){grid=ng;addTile();const se=document.getElementById('g2048-score');if(se)se.textContent=score;render();if(grid.some(r=>r.includes(2048))){exitGame(score,'2048','You reached 2048! 🎉');running=false;}}}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="g2048-score">0</span></div></div><button class="abtn sec" onclick="exitGame(${score},'2048','')">Quit</button></div><div id="g2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;background:rgba(255,255,255,.03);border-radius:14px;max-width:320px;margin:0 auto;"></div><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:8px;">Arrow keys to slide tiles</div>`;
+  function move(dir){let moved=false;let ng=grid.map(r=>[...r]);if(dir==='left')ng=ng.map(r=>{const s=slide(r);if(s.join()!==r.join())moved=true;return s;});else if(dir==='right')ng=ng.map(r=>{const s=slide([...r].reverse()).reverse();if(s.join()!==r.join())moved=true;return s;});else if(dir==='up'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]);const s=slide(col);s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}}else if(dir==='down'){for(let c=0;c<4;c++){const col=ng.map(r=>r[c]).reverse();const s=slide(col).reverse();s.forEach((v,i)=>{if(ng[i][c]!==v)moved=true;ng[i][c]=v;});}};if(moved){grid=ng;addTile();const se=document.getElementById('g2048-score');if(se)se.textContent=score;render();if(grid.some(r=>r.includes(2048))){running=false;document.removeEventListener('keydown',k2);exitGame(score,'2048','You reached 2048! 🎉');}}}
+  window.g2048Quit=function(){running=false;document.removeEventListener('keydown',k2);exitGame(score,'2048','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="g2048-score">0</span></div></div><button class="abtn sec" onclick="g2048Quit()">Quit</button></div><div id="g2048" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;background:rgba(255,255,255,.03);border-radius:14px;max-width:320px;margin:0 auto;"></div><div style="text-align:center;font-family:var(--exo);font-size:.72rem;color:var(--silver);margin-top:8px;">Arrow keys to slide tiles</div>`;
   render();
-  document.addEventListener('keydown',function k2(e){if(!running){document.removeEventListener('keydown',k2);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;const m={'ArrowLeft':'left','ArrowRight':'right','ArrowUp':'up','ArrowDown':'down'};if(m[e.code]){e.preventDefault();move(m[e.code]);}});
+  function k2(e){if(!running){document.removeEventListener('keydown',k2);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;const m={'ArrowLeft':'left','ArrowRight':'right','ArrowUp':'up','ArrowDown':'down'};if(m[e.code]){e.preventDefault();move(m[e.code]);}}
+  document.addEventListener('keydown',k2);
   // swipe
   let tx=0,ty=0;
   const el=document.getElementById('g2048');
@@ -14930,10 +15168,12 @@ function startWordle(area) {
   let guesses=[],current='',row=0,done=false;
   function renderGrid(){const g=document.getElementById('wl-grid');if(!g)return;g.innerHTML='';for(let r=0;r<6;r++){const rd=document.createElement('div');rd.style.cssText='display:flex;gap:6px;margin-bottom:6px;justify-content:center;';for(let c=0;c<5;c++){const cd=document.createElement('div');let letter='',bg='rgba(255,255,255,.04)',border='rgba(255,255,255,.15)';if(r<guesses.length){letter=guesses[r][c]||'';const g2=guesses[r];const tc=target[c];if(letter===tc){bg='#00796b';border='#00796b';}else if(target.includes(letter)){bg='#92400e';border='#92400e';}else{bg='rgba(255,255,255,.1)';border='rgba(255,255,255,.2)';}}else if(r===row){letter=current[c]||'';if(letter)border='rgba(77,159,255,.6)';}cd.style.cssText=`width:48px;height:52px;border-radius:8px;background:${bg};border:2px solid ${border};display:flex;align-items:center;justify-content:center;font-family:var(--orb);font-size:1.3rem;font-weight:900;color:#fff;`;cd.textContent=letter;rd.appendChild(cd);}g.appendChild(rd);}}
   function renderKeys(){const k=document.getElementById('wl-keys');if(!k)return;const rows=[['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','⌫']];const used={};guesses.forEach(g=>{g.split('').forEach((l,i)=>{if(l===target[i])used[l]='#00796b';else if(target.includes(l)&&used[l]!=='#00796b')used[l]='#92400e';else if(!used[l])used[l]='rgba(255,255,255,.1)';});});k.innerHTML='';rows.forEach(row=>{const rd=document.createElement('div');rd.style.cssText='display:flex;gap:5px;justify-content:center;margin-bottom:5px;';row.forEach(key=>{const kd=document.createElement('button');kd.textContent=key;const bg=used[key]||'rgba(255,255,255,.08)';kd.style.cssText=`padding:8px ${key.length>1?'10px':'8px'};border-radius:7px;background:${bg};border:none;color:#fff;font-family:var(--orb);font-size:.75rem;cursor:pointer;`;kd.onclick=()=>handleKey(key);rd.appendChild(kd);});k.appendChild(rd);});}
-  function handleKey(k){if(done)return;if(k==='⌫'||k==='Backspace'){current=current.slice(0,-1);}else if(k==='ENTER'||k==='Enter'){if(current.length!==5)return;guesses.push(current);if(current===target){done=true;setTimeout(()=>exitGame(100+(6-row)*50,'Wordle','You got it! 🎉'),600);}else if(guesses.length>=6){done=true;setTimeout(()=>exitGame(10,'Wordle',`The word was ${target}`),600);}else{row++;}current='';}else if(/^[A-Za-z]$/.test(k)&&current.length<5){current+=k.toUpperCase();}renderGrid();renderKeys();}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Guess the 5-letter word!</div></div><button class="abtn sec" onclick="exitGame(0,'Wordle','')">Quit</button></div><div id="wl-grid" style="margin:10px 0;"></div><div id="wl-keys"></div>`;
+  function handleKey(k){if(done)return;if(k==='⌫'||k==='Backspace'){current=current.slice(0,-1);}else if(k==='ENTER'||k==='Enter'){if(current.length!==5)return;guesses.push(current);if(current===target){done=true;document.removeEventListener('keydown',wlk);setTimeout(()=>exitGame(100+(6-row)*50,'Wordle','You got it! 🎉'),600);}else if(guesses.length>=6){done=true;document.removeEventListener('keydown',wlk);setTimeout(()=>exitGame(10,'Wordle',`The word was ${target}`),600);}else{row++;}current='';}else if(/^[A-Za-z]$/.test(k)&&current.length<5){current+=k.toUpperCase();}renderGrid();renderKeys();}
+  window.wlQuit=function(){done=true;document.removeEventListener('keydown',wlk);exitGame(0,'Wordle','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Guess the 5-letter word!</div></div><button class="abtn sec" onclick="wlQuit()">Quit</button></div><div id="wl-grid" style="margin:10px 0;"></div><div id="wl-keys"></div>`;
   renderGrid();renderKeys();
-  document.addEventListener('keydown',function wlk(e){if(done){document.removeEventListener('keydown',wlk);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;handleKey(e.key);});
+  function wlk(e){if(done){document.removeEventListener('keydown',wlk);return;}const tag=document.activeElement?.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement?.isContentEditable)return;handleKey(e.key);}
+  document.addEventListener('keydown',wlk);
 }
 
 // ── MEMORY MATCH ──
@@ -14943,14 +15183,16 @@ function startMemoryMatch(area) {
   let flipped=[],score=0,moves=0,locked=false,startTime=Date.now();
   function render(){const g=document.getElementById('mm-grid');if(!g)return;g.innerHTML='';cards.forEach(c=>{const d=document.createElement('div');d.style.cssText=`height:64px;border-radius:10px;background:${c.flipped||c.matched?'rgba(77,159,255,.15)':'rgba(255,255,255,.05)'};border:2px solid ${c.matched?'#00d4aa':c.flipped?'rgba(77,159,255,.5)':'rgba(255,255,255,.1)'};display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:${c.matched||locked?'default':'pointer'};transition:all .2s;`;d.textContent=c.flipped||c.matched?c.emoji:'';if(!c.matched&&!locked)d.onclick=()=>flip(c.id);g.appendChild(d);});}
   function flip(id){if(locked)return;const c=cards[id];if(c.flipped||c.matched)return;c.flipped=true;flipped.push(id);render();if(flipped.length===2){moves++;locked=true;const[a,b]=flipped.map(i=>cards[i]);if(a.emoji===b.emoji){a.matched=b.matched=true;score+=10;flipped=[];locked=false;render();if(cards.every(c=>c.matched)){const t=Math.round((Date.now()-startTime)/1000);exitGame(score+Math.max(0,100-t),'Memory Match',`All matched in ${t}s!`);}}else{setTimeout(()=>{a.flipped=b.flipped=false;flipped=[];locked=false;render();},900);}}}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="mm-score">0</span></div></div><button class="abtn sec" onclick="exitGame(${score},'Memory Match','')">Quit</button></div><div id="mm-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;max-width:340px;margin:0 auto;"></div>`;
+  window.mmQuit=function(){exitGame(score,'Memory Match','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="mm-score">0</span></div></div><button class="abtn sec" onclick="mmQuit()">Quit</button></div><div id="mm-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;max-width:340px;margin:0 auto;"></div>`;
   render();
 }
 
 // ── AIM TRAINER ──
 function startAimTrainer(area) {
   let score=0,timeLeft=30,running=true;
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="at-score">0</span></div><div class="gscore">Time: <span id="at-time">30</span>s</div></div><button class="abtn sec" onclick="exitGame(${score},'Aim Trainer','')">Quit</button></div><div id="at-area" style="position:relative;height:320px;background:rgba(255,255,255,.02);border-radius:12px;overflow:hidden;cursor:crosshair;"></div>`;
+  window.atQuit=function(){clearInterval(gameTimer);running=false;exitGame(score,'Aim Trainer','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="at-score">0</span></div><div class="gscore">Time: <span id="at-time">30</span>s</div></div><button class="abtn sec" onclick="atQuit()">Quit</button></div><div id="at-area" style="position:relative;height:320px;background:rgba(255,255,255,.02);border-radius:12px;overflow:hidden;cursor:crosshair;"></div>`;
   const atArea=document.getElementById('at-area');
   let targets=[];
   function spawnTarget(){const size=20+Math.random()*25,x=size+Math.random()*(atArea.offsetWidth-size*2),y=size+Math.random()*(atArea.offsetHeight-size*2);const d=document.createElement('div');d.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:${size*2}px;height:${size*2}px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff6b9d,#c084fc);border:2px solid rgba(255,255,255,.3);cursor:crosshair;transform:translate(-50%,-50%);transition:transform .1s;box-shadow:0 0 12px rgba(192,132,252,.5);`;d.onclick=e=>{e.stopPropagation();score++;const se=document.getElementById('at-score');if(se)se.textContent=score;d.remove();targets=targets.filter(t=>t!==d);spawnTarget();};atArea.appendChild(d);targets.push(d);if(targets.length>6){const old=targets.shift();if(old.parentNode)old.remove();}}
@@ -14963,7 +15205,8 @@ function startSimonMemory(area) {
   const COLS=['#4d9fff','#00d4aa','#f87171','#fbbf24'];
   const NAMES=['Blue','Teal','Red','Yellow'];
   let sequence=[],step=0,score=0,phase='watch',locked=false;
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Level: <span id="sm-level">1</span></div></div><button class="abtn sec" onclick="exitGame(${score},'Simon Says','')">Quit</button></div><div id="sm-status" style="text-align:center;font-family:var(--exo);font-size:.8rem;color:var(--silver);margin:6px 0 12px;">Watch the sequence...</div><div id="sm-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:260px;margin:0 auto;padding:8px;"></div>`;
+  window.smQuit=function(){exitGame(score*10,'Simon Says','');};
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Level: <span id="sm-level">1</span></div></div><button class="abtn sec" onclick="smQuit()">Quit</button></div><div id="sm-status" style="text-align:center;font-family:var(--exo);font-size:.8rem;color:var(--silver);margin:6px 0 12px;">Watch the sequence...</div><div id="sm-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:260px;margin:0 auto;padding:8px;"></div>`;
   function renderButtons(flash=-1){const g=document.getElementById('sm-grid');if(!g)return;g.innerHTML='';COLS.forEach((col,i)=>{const d=document.createElement('div');d.style.cssText=`height:100px;border-radius:14px;background:${i===flash?col:col+'44'};border:3px solid ${col};cursor:${phase==='input'&&!locked?'pointer':'default'};transition:background .1s;box-shadow:${i===flash?`0 0 24px ${col}`:'none'};`;if(phase==='input'&&!locked)d.onclick=()=>playerClick(i);g.appendChild(d);});}
   function playSequence(){phase='watch';locked=true;const st=document.getElementById('sm-status');if(st)st.textContent='Watch the sequence...';let i=0;const iv=setInterval(()=>{if(!document.getElementById('sm-grid')){clearInterval(iv);return;}renderButtons(sequence[i]);setTimeout(()=>renderButtons(-1),500);i++;if(i>=sequence.length){clearInterval(iv);setTimeout(()=>{phase='input';step=0;locked=false;const st2=document.getElementById('sm-status');if(st2)st2.textContent='Your turn! Repeat the sequence.';renderButtons();},700);}},900);}
   function playerClick(idx){if(phase!=='input'||locked)return;renderButtons(idx);setTimeout(()=>renderButtons(-1),200);if(idx===sequence[step]){step++;if(step===sequence.length){score++;const le=document.getElementById('sm-level');if(le)le.textContent=score+1;sequence.push(Math.floor(Math.random()*4));setTimeout(playSequence,600);}}else{exitGame(score*10,'Simon Says',`You reached level ${score+1}!`);}}
@@ -14985,8 +15228,9 @@ function startNumberTouch(area) {
 const CAPITALS_DATA=[['France','Paris'],['Japan','Tokyo'],['Brazil','Brasília'],['Australia','Canberra'],['Egypt','Cairo'],['Canada','Ottawa'],['India','New Delhi'],['Germany','Berlin'],['Argentina','Buenos Aires'],['Russia','Moscow'],['China','Beijing'],['South Korea','Seoul'],['Mexico','Mexico City'],['Italy','Rome'],['Spain','Madrid'],['South Africa','Pretoria'],['Nigeria','Abuja'],['Turkey','Ankara'],['Saudi Arabia','Riyadh'],['Thailand','Bangkok'],['Poland','Warsaw'],['Netherlands','Amsterdam'],['Sweden','Stockholm'],['Norway','Oslo'],['Greece','Athens'],['Portugal','Lisbon'],['Pakistan','Islamabad'],['Indonesia','Jakarta'],['Vietnam','Hanoi'],['Philippines','Manila']];
 function startCapitals(area) {
   let score=0,qIdx=0,questions=CAPITALS_DATA.sort(()=>Math.random()-.5);
+  window.capQuit=function(){exitGame(score,'Capital Cities','');};
   function showQ(){if(qIdx>=15){exitGame(score,'Capital Cities',`${score}/15 correct!`);return;}const[country,capital]=questions[qIdx];const wrongs=CAPITALS_DATA.filter(([c])=>c!==country).sort(()=>Math.random()-.5).slice(0,3).map(([,cap])=>cap);const opts=[capital,...wrongs].sort(()=>Math.random()-.5);const qa=document.getElementById('cap-qa');if(!qa)return;qa.innerHTML=`<div style="text-align:center;font-family:var(--orb);font-size:1.1rem;color:var(--text);margin-bottom:16px;">What is the capital of <span style="color:#4d9fff;">${country}</span>?</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">`;opts.forEach(opt=>{const b=document.createElement('button');b.style.cssText='padding:14px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(77,159,255,.2);color:var(--text);font-family:var(--raj);font-size:.9rem;cursor:pointer;transition:all .2s;';b.textContent=opt;b.onclick=()=>{const correct=opt===capital;if(correct)score++;b.style.background=correct?'rgba(0,212,170,.3)':'rgba(248,113,113,.2)';b.style.borderColor=correct?'#00d4aa':'#f87171';qa.querySelectorAll('button').forEach(btn=>{btn.onclick=null;btn.style.cursor='default';if(btn.textContent===capital)btn.style.background='rgba(0,212,170,.3)';});const se=document.getElementById('cap-score');if(se)se.textContent=score;qIdx++;setTimeout(showQ,900);};qa.querySelector('div:last-child').appendChild(b);});}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="cap-score">0</span>/15</div></div><button class="abtn sec" onclick="exitGame(${score},'Capital Cities','')">Quit</button></div><div id="cap-qa" style="padding:8px;"></div>`;
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="cap-score">0</span>/15</div></div><button class="abtn sec" onclick="capQuit()">Quit</button></div><div id="cap-qa" style="padding:8px;"></div>`;
   showQ();
 }
 
@@ -14994,8 +15238,9 @@ function startCapitals(area) {
 const ELEMENTS_DATA=[['H','Hydrogen'],['He','Helium'],['Li','Lithium'],['C','Carbon'],['N','Nitrogen'],['O','Oxygen'],['F','Fluorine'],['Na','Sodium'],['Mg','Magnesium'],['Al','Aluminium'],['Si','Silicon'],['P','Phosphorus'],['S','Sulphur'],['Cl','Chlorine'],['K','Potassium'],['Ca','Calcium'],['Fe','Iron'],['Cu','Copper'],['Zn','Zinc'],['Br','Bromine'],['Ag','Silver'],['I','Iodine'],['Au','Gold'],['Hg','Mercury'],['Pb','Lead'],['W','Tungsten'],['U','Uranium'],['Cr','Chromium'],['Mn','Manganese'],['Ni','Nickel']];
 function startElements(area) {
   let score=0,qIdx=0,questions=ELEMENTS_DATA.sort(()=>Math.random()-.5),mode=Math.random()>.5;
+  window.elQuit=function(){exitGame(score,'Element Symbols','');};
   function showQ(){if(qIdx>=15){exitGame(score,'Element Symbols',`${score}/15 correct!`);return;}const[sym,name]=questions[qIdx];const isSymToName=mode;const prompt=isSymToName?`What element has the symbol <span style="color:#a78bfa;font-size:1.4rem;">${sym}</span>?`:`What is the symbol for <span style="color:#a78bfa;">${name}</span>?`;const answer=isSymToName?name:sym;const wrongs=ELEMENTS_DATA.filter(([s,n])=>isSymToName?n!==name:s!==sym).sort(()=>Math.random()-.5).slice(0,3).map(([s,n])=>isSymToName?n:s);const opts=[answer,...wrongs].sort(()=>Math.random()-.5);const qa=document.getElementById('el-qa');if(!qa)return;qa.innerHTML=`<div style="text-align:center;font-family:var(--raj);font-size:.95rem;color:var(--text);margin-bottom:16px;">${prompt}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">`;opts.forEach(opt=>{const b=document.createElement('button');b.style.cssText='padding:14px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(167,139,250,.2);color:var(--text);font-family:var(--raj);font-size:.9rem;cursor:pointer;';b.textContent=opt;b.onclick=()=>{const correct=opt===answer;if(correct)score++;b.style.background=correct?'rgba(0,212,170,.3)':'rgba(248,113,113,.2)';b.style.borderColor=correct?'#00d4aa':'#f87171';qa.querySelectorAll('button').forEach(btn=>{btn.onclick=null;btn.style.cursor='default';if(btn.textContent===answer)btn.style.background='rgba(0,212,170,.3)';});const se=document.getElementById('el-score');if(se)se.textContent=score;qIdx++;setTimeout(showQ,900);};qa.querySelector('div:last-child').appendChild(b);});}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="el-score">0</span>/15</div></div><button class="abtn sec" onclick="exitGame(${score},'Element Symbols','')">Quit</button></div><div id="el-qa" style="padding:8px;"></div>`;
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="el-score">0</span>/15</div></div><button class="abtn sec" onclick="elQuit()">Quit</button></div><div id="el-qa" style="padding:8px;"></div>`;
   showQ();
 }
 
@@ -15009,6 +15254,7 @@ const TIMELINE_SETS=[
 ];
 function startTimeline(area) {
   let score=0,round=0,selected=[];
+  window.tlQuit=function(){exitGame(score,'Timeline Quiz','');};
   const sets=TIMELINE_SETS.sort(()=>Math.random()-.5).slice(0,5);
   function showRound(){if(round>=5){exitGame(score,'Timeline Quiz',`${score}/5 rounds correct!`);return;}const events=[...sets[round]].sort(()=>Math.random()-.5);selected=[];renderRound(events);}
   function renderRound(events){const qa=document.getElementById('tl-qa');if(!qa)return;selected=[];qa.innerHTML=`<div style="font-family:var(--exo);font-size:.72rem;color:var(--teal);letter-spacing:1px;margin-bottom:10px;">Drag or tap to order from EARLIEST to LATEST:</div><div id="tl-items" style="display:flex;flex-direction:column;gap:8px;"></div><button id="tl-submit" style="margin-top:14px;width:100%;padding:11px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--teal));border:none;color:#fff;font-family:var(--orb);font-size:.7rem;letter-spacing:2px;cursor:pointer;">CONFIRM ORDER</button>`;
@@ -15017,7 +15263,7 @@ function startTimeline(area) {
   function renderItems(){container.innerHTML='';order.forEach((ev,i)=>{const d=document.createElement('div');d.style.cssText='padding:10px 14px;border-radius:10px;background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.2);color:var(--text);font-family:var(--raj);font-size:.85rem;display:flex;align-items:center;gap:10px;cursor:grab;';d.innerHTML=`<span style="color:var(--silver);font-family:var(--exo);font-size:.7rem;">${i+1}.</span>${ev.e}`;d.draggable=true;d.dataset.idx=i;d.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',i));d.addEventListener('dragover',e=>e.preventDefault());d.addEventListener('drop',e=>{e.preventDefault();const from=parseInt(e.dataTransfer.getData('text/plain'));const to=i;const tmp=order[from];order[from]=order[to];order[to]=tmp;renderItems();});container.appendChild(d);});}
   renderItems();
   document.getElementById('tl-submit').onclick=()=>{const correct=order.every((ev,i)=>ev.y===([...events].sort((a,b)=>a.y-b.y)[i].y));if(correct)score++;const se=document.getElementById('tl-score');if(se)se.textContent=score;const sorted=[...events].sort((a,b)=>a.y-b.y);container.innerHTML='';sorted.forEach((ev,i)=>{const d=document.createElement('div');d.style.cssText=`padding:10px 14px;border-radius:10px;background:${order[i]&&order[i].e===ev.e?'rgba(0,212,170,.2)':'rgba(248,113,113,.15)'};border:1px solid ${order[i]&&order[i].e===ev.e?'#00d4aa':'#f87171'};color:var(--text);font-family:var(--raj);font-size:.82rem;`;d.textContent=`${ev.y} — ${ev.e}`;container.appendChild(d);});setTimeout(()=>{round++;showRound();},1400);};}
-  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="tl-score">0</span>/5</div></div><button class="abtn sec" onclick="exitGame(${score},'Timeline Quiz','')">Quit</button></div><div id="tl-qa" style="padding:6px;"></div>`;
+  area.innerHTML=`<div class="game-header"><div class="game-score-row"><div class="gscore">Score: <span id="tl-score">0</span>/5</div></div><button class="abtn sec" onclick="tlQuit()">Quit</button></div><div id="tl-qa" style="padding:6px;"></div>`;
   showRound();
 }
 

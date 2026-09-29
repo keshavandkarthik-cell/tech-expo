@@ -80,8 +80,8 @@ function initMusicTab() {
 }
 
 function setMusicTabSource(src, skipSave) {
-  musicTabSource = 'spotify';
-  if (!skipSave) localStorage.setItem('studly_music_src', 'spotify');
+  musicTabSource = src;
+  if (!skipSave) localStorage.setItem('studly_music_src', src);
   const spPl = document.getElementById('music-tab-spotify-player');
   if (spPl) spPl.style.display = 'block';
 }
@@ -131,8 +131,8 @@ function renderMusicTabPlaylists() {
 
 
 function setMusicSource(src) {
-  musicSource = 'spotify';
-  localStorage.setItem('studly_music_src', 'spotify');
+  musicSource = src;
+  localStorage.setItem('studly_music_src', src);
   const spPl  = document.getElementById('spotify-player');
   const nudge = document.getElementById('spotify-nudge');
   if (spPl) spPl.style.display = 'block';
@@ -195,7 +195,7 @@ function deletePlaylist(id) {
   savePlaylists(list);
   renderPlTabs(); renderPlSavedList(); renderPresets();
   if (list.length) playPlaylist(list[0]);
-  else document.getElementById('spotify-frame').src = 'about:blank';
+  else { const frame = document.getElementById('spotify-frame'); if (frame) frame.src = 'about:blank'; }
   showToast('🗑 Removed');
 }
 
@@ -281,9 +281,9 @@ function renderPresets() {
 }
 
 // ── Manager tab toggle ──
-function setManagerTab(src) {
+function setManagerTab(tab) {
   const spPanel = document.getElementById('mgr-spotify-panel');
-  if (spPanel) spPanel.style.display = '';
+  if (spPanel) spPanel.style.display = tab === 'spotify' ? '' : 'none';
   renderPlSavedList(); renderPresets();
 }
 

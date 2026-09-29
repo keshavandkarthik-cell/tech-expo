@@ -7,9 +7,6 @@
 // Plain global-scope script (not a module/IIFE). Referenced only via
 // onclick="..." HTML attributes, which resolve at click time — so
 // load position relative to other files doesn't matter here.
-// Known pre-existing bug (not introduced by this split): the Sudoku
-// game reuses element ids sdk-timer/sdk-mistakes/sdk-grid across its
-// two difficulty templates — see index.html review notes.
 // ══════════════════════════════════════════════════════
 
 // ── GAMES ──
@@ -205,7 +202,7 @@ function startBubble(area) {
         <div class="gscore">Score: <span id="bp-score">0</span></div>
         <div class="gscore">Time: <span id="bp-time">30</span>s</div>
       </div>
-      <button class="abtn sec" onclick="exitGame(${score},'','')">Quit</button>
+      <button class="abtn sec" onclick="bpQuit()">Quit</button>
     </div>
     <canvas id="bubble-canvas" height="340"></canvas>`;
 
@@ -227,6 +224,10 @@ function startBubble(area) {
   }
 
   let spawnInt = setInterval(spawnBubble, 600);
+  window.bpQuit = function() {
+    clearInterval(gameTimer); clearInterval(spawnInt);
+    exitGame(score, '', '');
+  };
   gameTimer = setInterval(() => {
     timeLeft--;
     const tel = document.getElementById('bp-time');
@@ -516,7 +517,7 @@ function startReaction(area) {
         width:100%;height:clamp(200px,40vh,320px);border-radius:16px;
         display:flex;flex-direction:column;align-items:center;justify-content:center;
         cursor:pointer;user-select:none;transition:background .15s;
-        background:${state==='go'?'linear-gradient(135deg,#00d4aa,#00ffcc)':'state'==='ready'?'rgba(255,200,0,.15)':'rgba(77,159,255,.06)'};
+        background:${state==='go'?'linear-gradient(135deg,#00d4aa,#00ffcc)':state==='ready'?'rgba(255,200,0,.15)':'rgba(77,159,255,.06)'};
         border:2px solid ${state==='go'?'var(--teal)':'rgba(77,159,255,.2)'};
       " onclick="rxClick()">
         <div style="font-size:3rem;margin-bottom:12px;">${state==='go'?'🟢':state==='early'?'❌':'⏳'}</div>
