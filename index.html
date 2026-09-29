@@ -1834,41 +1834,49 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               This profile is fed to Veda's AI on every request — homework help, flashcards, companion chat and more — so responses are always tailored to you.
             </div>
 
-            <!-- Curriculum -->
+            <!-- Curriculum — Veda's own "vdd" dropdown (see toggleVdd/pickAip), the
+                 same component Homework's subject/mode pickers and Notes' action
+                 picker use, instead of the OS-native <select>. -->
             <div class="ps-form-group">
               <div class="ps-form-label" data-i18n="set_curriculum">Curriculum</div>
-              <div class="aip-chip-row-wrap" id="aip-curriculum-wrap">
-                <div class="aip-chip-row collapsible" id="aip-curriculum">
-                  <div class="aip-chip" data-val="SPM">🇲🇾 SPM</div>
-                  <div class="aip-chip" data-val="STPM">🇲🇾 STPM</div>
-                  <div class="aip-chip" data-val="PT3">🇲🇾 PT3</div>
-                  <div class="aip-chip on" data-val="Cambridge IGCSE">🌍 Cambridge IGCSE</div>
-                  <div class="aip-chip" data-val="Edexcel IGCSE">🌍 Edexcel IGCSE</div>
-                  <div class="aip-chip" data-val="Cambridge A-Level">🌍 Cambridge A-Level</div>
-                  <div class="aip-chip" data-val="Edexcel A-Level">🌍 Edexcel A-Level</div>
-                  <div class="aip-chip" data-val="IB">🌍 IB</div>
-                  <div class="aip-chip" data-val="University">🎓 University</div>
-                  <div class="aip-chip" data-val="Primary School">🎈 Primary School</div>
-                  <div class="aip-chip" data-val="Other">Other</div>
+              <div class="vdd-wrap" id="aip-curriculum-wrap">
+                <button type="button" class="vdd-trigger" onclick="toggleVdd(event,'aip-curriculum-wrap')" aria-haspopup="true">
+                  <span id="aip-curriculum-trigger-label">🌍 Cambridge IGCSE</span><span class="vdd-chev">▾</span>
+                </button>
+                <div class="vdd-menu" id="aip-curriculum-menu">
+                  <button type="button" class="vdd-opt" data-v="SPM" onclick="pickAip(this,'aip-curriculum','SPM')"><span class="vdd-opt-label">🇲🇾 SPM</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="STPM" onclick="pickAip(this,'aip-curriculum','STPM')"><span class="vdd-opt-label">🇲🇾 STPM</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="PT3" onclick="pickAip(this,'aip-curriculum','PT3')"><span class="vdd-opt-label">🇲🇾 PT3</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt on" data-v="Cambridge IGCSE" onclick="pickAip(this,'aip-curriculum','Cambridge IGCSE')"><span class="vdd-opt-label">🌍 Cambridge IGCSE</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Edexcel IGCSE" onclick="pickAip(this,'aip-curriculum','Edexcel IGCSE')"><span class="vdd-opt-label">🌍 Edexcel IGCSE</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Cambridge A-Level" onclick="pickAip(this,'aip-curriculum','Cambridge A-Level')"><span class="vdd-opt-label">🌍 Cambridge A-Level</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Edexcel A-Level" onclick="pickAip(this,'aip-curriculum','Edexcel A-Level')"><span class="vdd-opt-label">🌍 Edexcel A-Level</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="IB" onclick="pickAip(this,'aip-curriculum','IB')"><span class="vdd-opt-label">🌍 IB</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="University" onclick="pickAip(this,'aip-curriculum','University')"><span class="vdd-opt-label">🎓 University</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Primary School" onclick="pickAip(this,'aip-curriculum','Primary School')"><span class="vdd-opt-label">🎈 Primary School</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Other" onclick="pickAip(this,'aip-curriculum','Other')"><span class="vdd-opt-label">Other</span><span class="vdd-check">✓</span></button>
                 </div>
-                <div class="aip-chip-row-fade"></div>
-                <button type="button" class="aip-show-more" onclick="toggleAipRow('aip-curriculum-wrap',this)">Show all ▾</button>
               </div>
             </div>
 
             <!-- Year — always JS-regenerated to a short list (SCHOOL_YEARS/UNI_YEARS,
-                 6-7 items) by aipSwapYears(), so it never needs the collapse treatment
-                 Curriculum does. This static markup is a placeholder overwritten on render. -->
+                 6-7 items) by aipSwapYears(), which rebuilds #aip-year-menu. This
+                 static markup is a placeholder overwritten on render. -->
             <div class="ps-form-group">
               <div class="ps-form-label" data-i18n="set_year_grade">Year / Grade</div>
-              <div class="aip-chip-row" id="aip-year">
-                <div class="aip-chip" data-val="Form 1">F1</div>
-                <div class="aip-chip" data-val="Form 2">F2</div>
-                <div class="aip-chip on" data-val="Form 3">F3</div>
-                <div class="aip-chip" data-val="Form 4">F4</div>
-                <div class="aip-chip" data-val="Form 5">F5</div>
-                <div class="aip-chip" data-val="Form 6">F6</div>
-                <div class="aip-chip" data-val="Other">Other</div>
+              <div class="vdd-wrap" id="aip-year-wrap" data-mode="school">
+                <button type="button" class="vdd-trigger" onclick="toggleVdd(event,'aip-year-wrap')" aria-haspopup="true">
+                  <span id="aip-year-trigger-label">Form 3</span><span class="vdd-chev">▾</span>
+                </button>
+                <div class="vdd-menu" id="aip-year-menu">
+                  <button type="button" class="vdd-opt" data-v="Form 1" onclick="pickAip(this,'aip-year','Form 1')"><span class="vdd-opt-label">Form 1</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Form 2" onclick="pickAip(this,'aip-year','Form 2')"><span class="vdd-opt-label">Form 2</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt on" data-v="Form 3" onclick="pickAip(this,'aip-year','Form 3')"><span class="vdd-opt-label">Form 3</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Form 4" onclick="pickAip(this,'aip-year','Form 4')"><span class="vdd-opt-label">Form 4</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Form 5" onclick="pickAip(this,'aip-year','Form 5')"><span class="vdd-opt-label">Form 5</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Form 6" onclick="pickAip(this,'aip-year','Form 6')"><span class="vdd-opt-label">Form 6</span><span class="vdd-check">✓</span></button>
+                  <button type="button" class="vdd-opt" data-v="Other" onclick="pickAip(this,'aip-year','Other')"><span class="vdd-opt-label">Other</span><span class="vdd-check">✓</span></button>
+                </div>
               </div>
             </div>
 
@@ -1894,85 +1902,97 @@ Write about your study session, how you're feeling, goals for tomorrow..."></tex
               </div>
             </div>
 
-            <!-- Personalize further — explanation style, struggle, habit, pressure,
-                 response language. These aren't used on every AI request the way
-                 curriculum/year/subjects are, so they're tucked behind a disclosure
-                 to keep the default view short. Collapsed state is display:none on
-                 the body only — the chip rows and their saved '.on' values stay in
-                 the DOM either way, so aipGetVal()/saveAIProfile() read them exactly
-                 as before whether this is open or closed. -->
-            <div class="set-disclosure" id="aip-personalize-disclosure">
-              <button type="button" class="set-disclosure-btn" onclick="toggleSetDisclosure('aip-personalize-disclosure')" data-i18n="set_personalize_further">
-                <span>🎛️ Personalize further</span><span class="set-disclosure-chev">▾</span>
-              </button>
-              <div class="set-disclosure-body">
-                <div class="set-disclosure-body-inner">
+            <div class="ps-form-grid">
+              <!-- Learning style -->
+              <div class="ps-form-group">
+                <div class="ps-form-label" data-i18n="set_explanation_style">Explanation style</div>
+                <div class="vdd-wrap" id="aip-style-wrap">
+                  <button type="button" class="vdd-trigger" onclick="toggleVdd(event,'aip-style-wrap')" aria-haspopup="true">
+                    <span id="aip-style-trigger-label">📖 Detailed &amp; thorough</span><span class="vdd-chev">▾</span>
+                  </button>
+                  <div class="vdd-menu" id="aip-style-menu">
+                    <button type="button" class="vdd-opt" data-v="Simple &amp; short — get to the point" onclick="pickAip(this,'aip-style','Simple &amp; short — get to the point')"><span class="vdd-opt-label">⚡ Simple &amp; short</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt on" data-v="Detailed &amp; thorough — explain everything" onclick="pickAip(this,'aip-style','Detailed &amp; thorough — explain everything')"><span class="vdd-opt-label">📖 Detailed &amp; thorough</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Examples first — show me before explaining" onclick="pickAip(this,'aip-style','Examples first — show me before explaining')"><span class="vdd-opt-label">💡 Examples first</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Step-by-step — walk me through it" onclick="pickAip(this,'aip-style','Step-by-step — walk me through it')"><span class="vdd-opt-label">🪜 Step-by-step</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Visual &amp; diagram-style descriptions" onclick="pickAip(this,'aip-style','Visual &amp; diagram-style descriptions')"><span class="vdd-opt-label">📊 Visual</span><span class="vdd-check">✓</span></button>
+                  </div>
+                </div>
+              </div>
 
-                  <div class="ps-form-grid">
-                    <!-- Learning style -->
-                    <div class="ps-form-group">
-                      <div class="ps-form-label" data-i18n="set_explanation_style">Explanation style</div>
-                      <div class="aip-chip-row" id="aip-style">
-                        <div class="aip-chip" data-val="Simple &amp; short — get to the point">⚡ Simple</div>
-                        <div class="aip-chip on" data-val="Detailed &amp; thorough — explain everything">📖 Detailed</div>
-                        <div class="aip-chip" data-val="Examples first — show me before explaining">💡 Examples first</div>
-                        <div class="aip-chip" data-val="Step-by-step — walk me through it">🪜 Step-by-step</div>
-                        <div class="aip-chip" data-val="Visual &amp; diagram-style descriptions">📊 Visual</div>
-                      </div>
-                    </div>
+              <!-- Struggle -->
+              <div class="ps-form-group">
+                <div class="ps-form-label" data-i18n="set_biggest_struggle">Biggest struggle</div>
+                <div class="vdd-wrap" id="aip-struggle-wrap">
+                  <button type="button" class="vdd-trigger" onclick="toggleVdd(event,'aip-struggle-wrap')" aria-haspopup="true">
+                    <span id="aip-struggle-trigger-label">🧠 Memorising facts</span><span class="vdd-chev">▾</span>
+                  </button>
+                  <div class="vdd-menu" id="aip-struggle-menu">
+                    <button type="button" class="vdd-opt" data-v="Understanding concepts" onclick="pickAip(this,'aip-struggle','Understanding concepts')"><span class="vdd-opt-label">🤔 Understanding concepts</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt on" data-v="Memorising facts" onclick="pickAip(this,'aip-struggle','Memorising facts')"><span class="vdd-opt-label">🧠 Memorising facts</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Exam technique &amp; answering style" onclick="pickAip(this,'aip-struggle','Exam technique &amp; answering style')"><span class="vdd-opt-label">📝 Exam technique</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Staying motivated" onclick="pickAip(this,'aip-struggle','Staying motivated')"><span class="vdd-opt-label">💤 Staying motivated</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Time management" onclick="pickAip(this,'aip-struggle','Time management')"><span class="vdd-opt-label">⏱️ Time management</span><span class="vdd-check">✓</span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                    <!-- Struggle -->
-                    <div class="ps-form-group">
-                      <div class="ps-form-label" data-i18n="set_biggest_struggle">Biggest struggle</div>
-                      <div class="aip-chip-row" id="aip-struggle">
-                        <div class="aip-chip" data-val="Understanding concepts">🤔 Understanding</div>
-                        <div class="aip-chip on" data-val="Memorising facts">🧠 Memorising</div>
-                        <div class="aip-chip" data-val="Exam technique &amp; answering style">📝 Exam technique</div>
-                        <div class="aip-chip" data-val="Staying motivated">💤 Motivation</div>
-                        <div class="aip-chip" data-val="Time management">⏱️ Time management</div>
-                      </div>
+            <!-- More preferences (study habit, pressure, language) — collapsed by
+                 default so the page doesn't dump every field on screen at once. -->
+            <button type="button" class="aip-more-toggle" id="aip-more-toggle" onclick="toggleAipMore(this)">
+              <span data-i18n="set_more_prefs">More preferences</span> <span class="aip-more-toggle-arrow">▾</span>
+            </button>
+            <div id="aip-more-wrap" class="aip-more-wrap">
+              <div class="ps-form-grid">
+                <!-- Study habit -->
+                <div class="ps-form-group">
+                  <div class="ps-form-label" data-i18n="set_study_habit">Study habit</div>
+                  <div class="vdd-wrap" id="aip-habit-wrap">
+                    <button type="button" class="vdd-trigger" onclick="toggleVdd(event,'aip-habit-wrap')" aria-haspopup="true">
+                      <span id="aip-habit-trigger-label">🎲 Inconsistent</span><span class="vdd-chev">▾</span>
+                    </button>
+                    <div class="vdd-menu" id="aip-habit-menu">
+                      <button type="button" class="vdd-opt" data-v="Last-minute crammer" onclick="pickAip(this,'aip-habit','Last-minute crammer')"><span class="vdd-opt-label">🏃 Last-minute crammer</span><span class="vdd-check">✓</span></button>
+                      <button type="button" class="vdd-opt" data-v="Steady and consistent planner" onclick="pickAip(this,'aip-habit','Steady and consistent planner')"><span class="vdd-opt-label">📅 Steady and consistent</span><span class="vdd-check">✓</span></button>
+                      <button type="button" class="vdd-opt on" data-v="Inconsistent — good days and bad days" onclick="pickAip(this,'aip-habit','Inconsistent — good days and bad days')"><span class="vdd-opt-label">🎲 Inconsistent</span><span class="vdd-check">✓</span></button>
                     </div>
                   </div>
+                </div>
 
-                  <div class="ps-form-grid">
-                    <!-- Study habit -->
-                    <div class="ps-form-group">
-                      <div class="ps-form-label" data-i18n="set_study_habit">Study habit</div>
-                      <div class="aip-chip-row" id="aip-habit">
-                        <div class="aip-chip" data-val="Last-minute crammer">🏃 Last-minute</div>
-                        <div class="aip-chip" data-val="Steady and consistent planner">📅 Consistent</div>
-                        <div class="aip-chip on" data-val="Inconsistent — good days and bad days">🎲 Inconsistent</div>
-                      </div>
-                    </div>
-
-                    <!-- Pressure -->
-                    <div class="ps-form-group">
-                      <div class="ps-form-label" data-i18n="set_pressure_level">Current pressure level</div>
-                      <div class="aip-chip-row" id="aip-pressure">
-                        <div class="aip-chip" data-val="Low — just keeping up">😌 Low</div>
-                        <div class="aip-chip on" data-val="Moderate — exams coming soon">😐 Moderate</div>
-                        <div class="aip-chip" data-val="High — major exams very soon">😰 High</div>
-                      </div>
+                <!-- Pressure -->
+                <div class="ps-form-group">
+                  <div class="ps-form-label" data-i18n="set_pressure_level">Current pressure level</div>
+                  <div class="vdd-wrap" id="aip-pressure-wrap">
+                    <button type="button" class="vdd-trigger" onclick="toggleVdd(event,'aip-pressure-wrap')" aria-haspopup="true">
+                      <span id="aip-pressure-trigger-label">😐 Moderate</span><span class="vdd-chev">▾</span>
+                    </button>
+                    <div class="vdd-menu" id="aip-pressure-menu">
+                      <button type="button" class="vdd-opt" data-v="Low — just keeping up" onclick="pickAip(this,'aip-pressure','Low — just keeping up')"><span class="vdd-opt-label">😌 Low</span><span class="vdd-check">✓</span></button>
+                      <button type="button" class="vdd-opt on" data-v="Moderate — exams coming soon" onclick="pickAip(this,'aip-pressure','Moderate — exams coming soon')"><span class="vdd-opt-label">😐 Moderate</span><span class="vdd-check">✓</span></button>
+                      <button type="button" class="vdd-opt" data-v="High — major exams very soon" onclick="pickAip(this,'aip-pressure','High — major exams very soon')"><span class="vdd-opt-label">😰 High</span><span class="vdd-check">✓</span></button>
                     </div>
                   </div>
+                </div>
+              </div>
 
-                  <!-- Language (AI response language — kept here deliberately, separate
-                       from the interface language control in Look & Feel) -->
-                  <div class="ps-form-group">
-                    <div class="ps-form-label" data-i18n="set_response_language">Response language</div>
-                    <div class="aip-chip-row" id="aip-language">
-                      <div class="aip-chip on" data-val="English">🇬🇧 English</div>
-                      <div class="aip-chip" data-val="Bahasa Malaysia">🇲🇾 Bahasa Malaysia</div>
-                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Mandarin">🇨🇳 Mandarin</div>
-                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Tamil">🇮🇳 Tamil</div>
-                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Japanese">🇯🇵 Japanese</div>
-                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Korean">🇰🇷 Korean</div>
-                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="Spanish">🇪🇸 Spanish</div>
-                      <div class="aip-chip" data-lang-extra style="display:none;" data-val="French">🇫🇷 French</div>
-                      <div class="aip-chip aip-more-btn" onclick="toggleLangMore(this)" data-i18n="set_more_word" data-state="closed">More ▾</div>
-                    </div>
+              <!-- Language -->
+              <div class="ps-form-group">
+                <div class="ps-form-label" data-i18n="set_response_language">Response language</div>
+                <div class="vdd-wrap" id="aip-language-wrap">
+                  <button type="button" class="vdd-trigger" onclick="toggleVdd(event,'aip-language-wrap')" aria-haspopup="true">
+                    <span id="aip-language-trigger-label">🇬🇧 English</span><span class="vdd-chev">▾</span>
+                  </button>
+                  <div class="vdd-menu" id="aip-language-menu">
+                    <button type="button" class="vdd-opt on" data-v="English" onclick="pickAip(this,'aip-language','English')"><span class="vdd-opt-label">🇬🇧 English</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Bahasa Malaysia" onclick="pickAip(this,'aip-language','Bahasa Malaysia')"><span class="vdd-opt-label">🇲🇾 Bahasa Malaysia</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Mandarin" onclick="pickAip(this,'aip-language','Mandarin')"><span class="vdd-opt-label">🇨🇳 Mandarin</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Tamil" onclick="pickAip(this,'aip-language','Tamil')"><span class="vdd-opt-label">🇮🇳 Tamil</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Japanese" onclick="pickAip(this,'aip-language','Japanese')"><span class="vdd-opt-label">🇯🇵 Japanese</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Korean" onclick="pickAip(this,'aip-language','Korean')"><span class="vdd-opt-label">🇰🇷 Korean</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="Spanish" onclick="pickAip(this,'aip-language','Spanish')"><span class="vdd-opt-label">🇪🇸 Spanish</span><span class="vdd-check">✓</span></button>
+                    <button type="button" class="vdd-opt" data-v="French" onclick="pickAip(this,'aip-language','French')"><span class="vdd-opt-label">🇫🇷 French</span><span class="vdd-check">✓</span></button>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -4468,6 +4488,7 @@ const LANGS = {
     set_ai_model_label: '// AI MODEL',
     set_ai_profile_desc: 'This profile is fed to Veda\'s AI on every request — homework help, flashcards, companion chat and more — so responses are always tailored to you.',
     set_ai_profile_label: '// AI STUDENT PROFILE',
+    set_more_prefs: 'More preferences',
     set_ai_sees_this: '// AI SEES THIS',
     set_ap_colors: '🌈 Colors',
     set_ap_language: '🌐 Language',
@@ -4706,7 +4727,7 @@ const LANGS = {
     journal_readmore: 'Read more', journal_showless: 'Show less', journal_edit: '✏️ Edit', journal_delete: '🗑 Delete',
     journal_empty_default: 'No entries yet — write your first one above ✏️', journal_empty_search: 'No entries match your search',
     journal_delete_title: 'Delete Entry', journal_delete_msg: 'This entry will be permanently deleted.',
-    journal_untitled: 'Untitled Entry', journal_write_first: 'Write something first!',
+    journal_untitled: 'Untitled Entry', journal_write_first: 'Write something first!', journal_unknown_date: 'Unknown date',
     journal_storage_full: '⚠️ Storage full — try a shorter recording or delete old entries',
     journal_saved_toast: '📓 Entry saved!', journal_mic_denied: '⚠️ Microphone access denied',
     journal_transcribing: '✨ Transcribing...', journal_transcribed: '✅ Transcribed!',
@@ -9804,8 +9825,17 @@ function clearStudyImage() {
 const compWin = document.getElementById('comp-win');
 let compMood = '';
 let compHistory = [];
+let compBusy = false; // guards against spamming multiple concurrent AI calls (mood taps, Enter/Send)
+
+function setCompBusy(busy) {
+  compBusy = busy;
+  document.querySelectorAll('#mood-row .mood-chip').forEach(c => c.disabled = busy);
+  const sendBtn = document.querySelector('#comp-panel .send-btn');
+  if (sendBtn) sendBtn.disabled = busy;
+}
 
 function setMood(el, mood) {
+  if (compBusy) return; // ignore rapid repeat taps while a reply is still in flight
   document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('on'));
   el.classList.add('on');
   compMood = mood;
@@ -9825,6 +9855,7 @@ function addCompBubble(text, who) {
 }
 
 async function sendComp() {
+  if (compBusy) return; // ignore Enter/Send spam while a reply is still in flight
   const inp = document.getElementById('comp-in');
   const msg = inp.value.trim();
   if (!msg && !compImageData) return;
@@ -9951,13 +9982,15 @@ function checkEasterEgg(msg) {
 
 
 async function respondComp(userMsg, imageData) {
+  setCompBusy(true);
+  try {
   const thinking = addCompBubble(t('comp_thinking') + ' <span class="dots"><span>·</span><span>·</span><span>·</span></span>', 'bot thinking');
 
   // Fire-and-forget safety check — runs alongside the normal reply, never blocks or delays it.
   if (userMsg) checkSafetySignal(userMsg).then(r => handleSafetySignal(r, userMsg)).catch(() => {});
 
-  // Check for easter eggs first (skip if image is attached)
-  if (!imageData && userMsg) {
+  // Check for easter eggs first (skip if image is attached, or mid-debate)
+  if (!imageData && userMsg && !debateActive) {
     const egg = checkEasterEgg(userMsg);
     if (egg) {
       await new Promise(r => setTimeout(r, 700 + Math.random() * 600)); // feel natural
@@ -9972,7 +10005,18 @@ async function respondComp(userMsg, imageData) {
 
   const memory = getCompMemory();
   const memoryContext = memory ? `\n\nWhat you remember about this student from past conversations:\n${memory}` : '';
-  const systemContext = `You are a warm, chill, emotionally intelligent study companion called Companion inside an app called Veda. You're like a supportive friend who gets student life.
+  const systemContext = debateActive ? `You are Companion, inside Veda, currently running a DEBATE MODE exercise with a student. This is a competitive-debate drill, not a real disagreement.
+
+Topic: "${debateTopic}"
+Your assigned side: ${debateSide.toUpperCase()}
+
+Rules:
+- Stay fully in character as a debater arguing ${debateSide.toUpperCase()} this topic, no matter what the student says.
+- Directly rebut the student's last point with logic, evidence, or a sharper counter-argument for your side.
+- Never apologize, never break character, never agree with the student's side, never pivot to a different subject.
+- If the student pushes back hard or says you're wrong, that is expected debate behavior — counter it, don't concede.
+- Keep responses 2-4 sentences, punchy and persuasive.
+- The only way this drill ends is if the student clicks "End Debate" — never end it yourself in text.` : `You are a warm, chill, emotionally intelligent study companion called Companion inside an app called Veda. You're like a supportive friend who gets student life.
 
 Your personality:
 - Genuine, warm, never fake or overly cheerful
@@ -10003,7 +10047,7 @@ Current mood context: ${compMood || 'unknown'}${memoryContext}`;
   try {
     const ans = await gemini(prompt, imageData);
     compWin.removeChild(thinking);
-    addCompBubble(escapeHtml(ans), 'bot');
+    addCompBubble((debateActive ? '⚔️ ' : '') + escapeHtml(ans), 'bot');
     compHistory.push({ role: 'model', parts: [{ text: ans }] });
     saveCompHistory();
   } catch (e) {
@@ -10012,6 +10056,9 @@ Current mood context: ${compMood || 'unknown'}${memoryContext}`;
     addCompBubble(t('err_connection_prefix') + escapeHtml(e.message || 'connection issue') + t('err_connection_suffix'), 'bot system');
   }
   compWin.scrollTop = compWin.scrollHeight;
+  } finally {
+    setCompBusy(false);
+  }
 }
 
 // ── SAFETY SIGNAL DETECTION (Companion chat) ──
@@ -10167,6 +10214,13 @@ function closeDebateMode() {
 // ── JOURNAL ──
 const JOURNAL_LOCALE_MAP = {en:'en-GB',es:'es-ES',ms:'ms-MY',zh:'zh-CN',ja:'ja-JP'};
 function journalLocale() { return JOURNAL_LOCALE_MAP[currentLang] || 'en-GB'; }
+// Guards against entries with a missing/unparsable date (e.g. imported or
+// externally-seeded data) rendering the literal string "Invalid Date".
+function journalDateObj(dateVal) {
+  if (!dateVal) return null;
+  const d = new Date(dateVal);
+  return isNaN(d.getTime()) ? null : d;
+}
 function updateJournalDate() {
   const el = document.getElementById('journal-date');
   if (el) el.textContent = new Date().toLocaleDateString(journalLocale(), {weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -10326,8 +10380,8 @@ function renderJournal() {
     return;
   }
   list.innerHTML = entries.map(e => {
-    const d = new Date(e.date);
-    const dateStr = d.toLocaleDateString(journalLocale(), {day:'numeric',month:'short',year:'numeric'}) + ' · ' + d.toLocaleTimeString(journalLocale(), {hour:'2-digit',minute:'2-digit'});
+    const d = journalDateObj(e.date);
+    const dateStr = d ? (d.toLocaleDateString(journalLocale(), {day:'numeric',month:'short',year:'numeric'}) + ' · ' + d.toLocaleTimeString(journalLocale(), {hour:'2-digit',minute:'2-digit'})) : t('journal_unknown_date');
     return `<div class="jentry" id="jentry-${e.id}">
       <div class="jentry-header">
         <div class="jentry-title"></div>
@@ -10895,13 +10949,51 @@ function toggleAipRow(wrapId, btn) {
   btn.textContent = expanded ? 'Show less ▴' : 'Show all ▾';
 }
 
+function toggleAipMore(btn) {
+  const wrap = document.getElementById('aip-more-wrap');
+  if (!wrap) return;
+  const expanded = wrap.classList.toggle('expanded');
+  btn.classList.toggle('expanded', expanded);
+}
+
 // ── AI PROFILE SETTINGS PANEL ──
-function aipChipClick(el, rowId) {
-  document.querySelectorAll('#' + rowId + ' .aip-chip').forEach(c => c.classList.remove('on'));
-  el.classList.add('on');
+// Single-select fields (curriculum/year/style/struggle/habit/pressure/language)
+// use Veda's own "vdd" dropdown component (see toggleVdd() + the hw-subject/
+// notes-action pickers) instead of a native <select>. Since a vdd-wrap has no
+// built-in .value, the current pick for each row lives here.
+let aipVddState = {};
+
+function pickAip(el, rowId, val) {
+  const trigger = document.getElementById(rowId + '-trigger-label');
+  const label = el.querySelector('.vdd-opt-label');
+  if (trigger && label) trigger.textContent = label.textContent;
+  document.querySelectorAll('#' + rowId + '-menu .vdd-opt').forEach(o => o.classList.toggle('on', o === el));
+  document.getElementById(rowId + '-wrap')?.classList.remove('open');
+  aipVddState[rowId] = val;
+  aipSelectChange(rowId);
+}
+
+// Applies a saved profile value to a vdd row. Falsy val = nothing saved yet,
+// so leave the markup's own default (.on) alone rather than blanking it.
+// A val that doesn't match any current option (stale/legacy data) falls back
+// to the first option instead of leaving the trigger blank.
+function setAipVddValue(rowId, val) {
+  const menu = document.getElementById(rowId + '-menu');
+  const trigger = document.getElementById(rowId + '-trigger-label');
+  if (!menu || !trigger) return;
+  let target = val ? Array.from(menu.querySelectorAll('.vdd-opt')).find(o => o.dataset.v === val) : null;
+  if (!target) target = menu.querySelector(val ? '.vdd-opt' : '.vdd-opt.on') || menu.querySelector('.vdd-opt');
+  if (!target) return;
+  menu.querySelectorAll('.vdd-opt').forEach(o => o.classList.toggle('on', o === target));
+  trigger.textContent = target.querySelector('.vdd-opt-label').textContent;
+  aipVddState[rowId] = target.dataset.v;
+}
+
+function aipSelectChange(rowId) {
   if (rowId === 'aip-curriculum') {
-    aipSwapSubjects(el.dataset.val === 'University');
-    aipSwapYears(el.dataset.val === 'University');
+    const val = aipVddState['aip-curriculum'] || '';
+    aipSwapSubjects(val === 'University');
+    aipSwapYears(val === 'University');
   }
   aipUpdatePreview();
 }
@@ -10916,12 +11008,17 @@ function aipSwapSubjects(isUni) {
 }
 
 function aipSwapYears(isUni) {
-  const grid = document.getElementById('aip-year');
+  const wrap = document.getElementById('aip-year-wrap');
+  const menu = document.getElementById('aip-year-menu');
   const wantMode = isUni ? 'uni' : 'school';
-  if (grid.dataset.mode === wantMode) return;
-  grid.innerHTML = buildAipYearChips(isUni ? UNI_YEARS : SCHOOL_YEARS);
-  grid.dataset.mode = wantMode;
-  document.querySelectorAll('#aip-year .aip-chip').forEach(c => { c.onclick = () => aipChipClick(c, 'aip-year'); });
+  if (wrap.dataset.mode === wantMode) return;
+  const defaultVal = isUni ? 'Year 1' : 'Form 3';
+  menu.innerHTML = buildAipYearOptions(isUni ? UNI_YEARS : SCHOOL_YEARS, defaultVal);
+  wrap.dataset.mode = wantMode;
+  const trigger = document.getElementById('aip-year-trigger-label');
+  const defOpt = menu.querySelector('.vdd-opt.on');
+  if (trigger && defOpt) trigger.textContent = defOpt.querySelector('.vdd-opt-label').textContent;
+  aipVddState['aip-year'] = defaultVal;
 }
 
 function aipMultiClick(el) {
@@ -10930,6 +11027,7 @@ function aipMultiClick(el) {
 }
 
 function aipGetVal(rowId) {
+  if (rowId in aipVddState) return aipVddState[rowId];
   const el = document.querySelector('#' + rowId + ' .aip-chip.on');
   return el ? el.dataset.val : '';
 }
@@ -10982,17 +11080,7 @@ function renderAIProfilePanel() {
     'aip-pressure':   p.pressure,
   };
   for (const [rowId, val] of Object.entries(singles)) {
-    document.querySelectorAll('#' + rowId + ' .aip-chip:not(.aip-more-btn)').forEach(c => {
-      c.classList.toggle('on', c.dataset.val === val);
-      c.onclick = () => aipChipClick(c, rowId);
-    });
-  }
-  // Reveal hidden language chips if the saved language is one of them
-  const langRow = document.getElementById('aip-language');
-  if (langRow && langRow.querySelector(`.aip-chip[data-val="${p.language}"][data-lang-extra]`)) {
-    langRow.querySelectorAll('[data-lang-extra]').forEach(c => c.style.display = '');
-    const moreBtn = langRow.querySelector('.aip-more-btn');
-    if (moreBtn) { moreBtn.textContent = t('set_less_word'); moreBtn.dataset.state = 'open'; }
+    setAipVddValue(rowId, val);
   }
   // Multi-select subjects
   const subs = new Set(p.subjects || []);
@@ -11546,8 +11634,8 @@ const PRIMARY_YEARS = ['Primary Year 1','Primary Year 2','Primary Year 3','Prima
 function buildObYearChips(list) {
   return list.map(val => `<div class="ob-chip" onclick="obChipSelect(this,'ob-year-grid','${val}')">${val}</div>`).join('');
 }
-function buildAipYearChips(list) {
-  return list.map(val => `<div class="aip-chip" data-val="${val}">${val.replace('Postgraduate','Postgrad').replace('Primary Year ','P').replace('Form ','F').replace('Year ','Y')}</div>`).join('');
+function buildAipYearOptions(list, defaultVal) {
+  return list.map(val => `<button type="button" class="vdd-opt${val===defaultVal?' on':''}" data-v="${val}" onclick="pickAip(this,'aip-year','${val}')"><span class="vdd-opt-label">${val}</span><span class="vdd-check">✓</span></button>`).join('');
 }
 
 function obShowSlide(n) {
@@ -12196,12 +12284,12 @@ function loadRecentJournalWidget() {
   if (!list) return;
   try {
     const entries = JSON.parse(localStorage.getItem('studly_journal') || '[]');
-    const recent = [...entries].sort((a,b) => new Date(b.date||0) - new Date(a.date||0)).slice(0,3);
+    const recent = [...entries].sort((a,b) => (journalDateObj(b.date)||0) - (journalDateObj(a.date)||0)).slice(0,3);
     if (recent.length === 0) { list.style.display = 'none'; empty.style.display = 'block'; return; }
     empty.style.display = 'none';
     list.style.display = 'flex';
     list.innerHTML = recent.map(n => {
-      const dt = n.date ? new Date(n.date) : null;
+      const dt = journalDateObj(n.date);
       const dateStr = dt ? dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
       const snippet = (n.body || '').replace(/\s+/g,' ').trim().slice(0, 60);
       return `
@@ -14700,7 +14788,7 @@ function runSearch(q) {
         if (haystack.includes(q)) {
           const snippet = e.body ? e.body.slice(0, 80) + (e.body.length > 80 ? '…' : '') : '';
           results.push({ type:'journal', icon:'📓', title:e.title || 'Untitled Entry',
-            sub: snippet, date: e.date ? new Date(e.date).toLocaleDateString() : '',
+            sub: snippet, date: journalDateObj(e.date) ? journalDateObj(e.date).toLocaleDateString() : '',
             action:() => { closeSearch(); go('journal'); }
           });
         }

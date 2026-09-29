@@ -12,15 +12,15 @@
      EDIT HERE — colours, fonts, sizes
      ============================================================ */
   :root{
-    --navy-1:#1c2942;      /* bg top-left  */
-    --navy-2:#141f37;      /* bg mid       */
-    --navy-3:#0c1526;      /* bg bottom    */
-    --gold:#E7B857;        /* doodles, tagline, button, nav, logo */
-    --gold-2:#F1CE83;      /* button gradient highlight */
-    --teal:#74D8C6;        /* card icons + outlines + glow */
-    --ink:#EEF3FA;         /* script wordmark */
-    --card-fill:rgba(19,30,50,.55);
-    --card-line:rgba(122,224,206,.72);
+    --navy-1:#2a3a56;      /* bg top-left  */
+    --navy-2:#1c2942;      /* bg mid       */
+    --navy-3:#121b2e;      /* bg bottom    */
+    --accent:#DCE6F5;      /* tagline, button text-on-dark, doodles */
+    --accent-2:#B7C6DE;    /* button gradient, muted accents */
+    --teal:#AEC3E0;        /* card icons + outlines + glow (cool, not teal-green) */
+    --ink:#F5F8FC;         /* script wordmark */
+    --card-fill:rgba(255,255,255,.04);
+    --card-line:rgba(214,226,247,.35);
     --muted:#93A6BE;       /* card body text */
     --script-size:132px;
     --tagline-size:30px;
@@ -34,9 +34,9 @@
     width:1120px;height:620px;position:relative;transform-origin:center;
     border-radius:18px;overflow:hidden;
     background:
-      radial-gradient(120% 80% at 30% 20%, rgba(38,74,110,.35), transparent 60%),
-      radial-gradient(90% 70% at 60% 115%, rgba(20,60,58,.30), transparent 60%),
-      linear-gradient(150deg, var(--navy-1) 0%, var(--navy-2) 45%, var(--navy-3) 100%);
+      radial-gradient(120% 80% at 50% 8%, rgba(120,150,195,.22), transparent 62%),
+      linear-gradient(150deg, rgba(42,58,86,.35) 0%, rgba(28,41,66,.45) 48%, rgba(18,27,46,.65) 100%),
+      url("data:image/jpeg;base64,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") center/cover no-repeat;
     box-shadow:0 40px 120px rgba(0,0,0,.55);
   }
   /* paper-ish grain */
@@ -51,14 +51,14 @@
 
   /* ---------- top bar ---------- */
   .topbar{position:absolute;top:24px;left:40px;right:40px;display:flex;align-items:center;justify-content:space-between;z-index:5}
-  .brand{display:flex;align-items:center;gap:10px;color:var(--gold)}
-  .brand .bi{width:26px;height:26px}
-  .brand .bi svg{width:100%;height:100%}
+  .brand{display:flex;align-items:center;gap:10px;color:var(--accent)}
+  .brand .bi{width:26px;height:26px;border:1.4px solid rgba(220,230,245,.45);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:"Poppins",sans-serif;font-weight:600;font-size:13px;color:var(--accent)}
   .brand span{font-weight:400;font-size:16px;letter-spacing:.2px;color:#C9D4E2}
-  .nav{display:flex;align-items:center;gap:26px;color:var(--gold)}
-  .nav a{position:relative;width:22px;height:22px;display:block;color:var(--gold);opacity:.9}
+  .nav{display:flex;align-items:center;gap:26px;color:var(--accent)}
+  .nav a{position:relative;width:22px;height:22px;display:block;color:var(--accent);opacity:.75}
   .nav a svg{width:100%;height:100%}
-  .nav a.on::after{content:"";position:absolute;left:-3px;right:-3px;bottom:-9px;height:2px;background:var(--gold);border-radius:2px}
+  .nav a.on{opacity:1}
+  .nav a.on::after{content:"";position:absolute;left:-3px;right:-3px;bottom:-9px;height:2px;background:var(--accent);border-radius:2px}
 
   /* ---------- centre ---------- */
   .centre{position:absolute;left:0;right:0;top:120px;text-align:center;z-index:4}
@@ -67,40 +67,48 @@
     text-shadow:0 2px 30px rgba(150,190,230,.25);
   }
   .tagline{
-    margin-top:6px;font-weight:400;font-size:var(--tagline-size);letter-spacing:.5px;color:var(--gold);
+    margin-top:6px;font-weight:400;font-size:var(--tagline-size);letter-spacing:.5px;color:var(--accent);
   }
   .cta{
     margin-top:30px;display:inline-flex;align-items:center;gap:12px;
     padding:13px 30px;border-radius:999px;border:0;cursor:pointer;
     font-family:"Poppins",sans-serif;font-weight:500;font-size:16px;color:#1a2438;
-    background:linear-gradient(180deg,var(--gold-2),var(--gold));
-    box-shadow:0 10px 30px rgba(231,184,87,.35), inset 0 1px 0 rgba(255,255,255,.4);
+    background:linear-gradient(180deg,#EFF4FB,var(--accent-2));
+    box-shadow:0 10px 30px rgba(180,200,230,.28), inset 0 1px 0 rgba(255,255,255,.5);
   }
   .cta svg{width:18px;height:18px}
 
-  /* ---------- floating cards (chamfered top-right, like the target) ---------- */
+  /* ---------- floating cards (plain rounded rectangle, like the target) ---------- */
   .card{ position:absolute;width:184px;height:210px;z-index:3;
-    filter:drop-shadow(4px 6px 0 rgba(30,47,74,.85)) drop-shadow(0 14px 22px rgba(0,0,0,.35)); }
-  .card .shape{position:absolute;inset:0;z-index:0}
-  .card .shape svg{width:100%;height:100%;overflow:visible;display:block}
+    border-radius:20px;background:var(--card-fill);border:1.4px solid var(--card-line);
+    box-shadow:4px 6px 0 rgba(30,47,74,.55), 0 14px 22px rgba(0,0,0,.30); }
   .card .body{position:absolute;inset:0;padding:22px 18px 16px;z-index:1;display:flex;flex-direction:column}
   .card .dots{position:absolute;top:16px;right:20px;color:#8298b0;letter-spacing:2px;font-size:14px}
   .card .badge{
     position:absolute;top:-13px;left:16px;width:28px;height:28px;border-radius:50%;
-    background:#12203a;border:1.5px solid var(--card-line);display:flex;align-items:center;justify-content:center;
-    color:var(--teal);box-shadow:0 0 10px rgba(116,216,198,.35);z-index:2
+    background:#16223a;border:1.5px solid var(--card-line);display:flex;align-items:center;justify-content:center;
+    color:var(--teal);box-shadow:0 0 10px rgba(174,195,224,.3);z-index:2
   }
   .card .badge svg{width:14px;height:14px}
-  .card .glyph{width:36px;height:36px;color:var(--teal);margin:4px 0 14px;filter:drop-shadow(0 0 9px rgba(116,216,198,.6))}
+  .card .glyph{width:36px;height:36px;color:var(--teal);margin:4px 0 14px;filter:drop-shadow(0 0 9px rgba(174,195,224,.5))}
   .card .glyph svg{width:100%;height:100%}
   .card h3{font-weight:600;font-size:14.5px;color:#EAF1F8;margin-bottom:5px}
   .card p{font-weight:300;font-size:11px;line-height:1.5;color:var(--muted)}
-  .card .bar{margin-top:auto;height:3px;width:78px;border-radius:3px;background:linear-gradient(90deg,var(--teal),rgba(116,216,198,.05))}
+  .card .bar{margin-top:auto;height:3px;width:78px;border-radius:3px;background:linear-gradient(90deg,var(--teal),rgba(174,195,224,.05))}
 
   #c1{left:58px; top:150px; transform:rotate(-4deg)}
   #c2{left:876px;top:140px; transform:rotate(4deg)}
   #c3{left:126px;top:382px; transform:rotate(3deg)}
   #c4{left:836px;top:392px; transform:rotate(-3deg)}
+
+  /* ---------- QR block, bottom centre ---------- */
+  .qr-block{position:absolute;left:50%;bottom:46px;transform:translateX(-50%);z-index:4;
+    display:flex;flex-direction:column;align-items:center;gap:10px}
+  .qr-square{width:140px;height:140px;border-radius:16px;background:linear-gradient(180deg,#EFF4FB,var(--accent-2));
+    padding:12px;box-shadow:0 10px 26px rgba(180,200,230,.22), inset 0 1px 0 rgba(255,255,255,.5);
+    border:1.4px solid var(--card-line)}
+  .qr-square svg{width:100%;height:100%;display:block}
+  .qr-label{font-family:"Poppins",sans-serif;font-weight:400;font-size:13px;letter-spacing:.3px;color:var(--muted)}
 
   /* ---------- scroll hint ---------- */
   .scroll{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:20px;height:32px;border:2px solid #8fa2ba;border-radius:12px;opacity:.6;z-index:4}
@@ -111,91 +119,32 @@
 <body>
 <div id="wrap"><div id="stage">
 
-  <svg width="0" height="0" style="position:absolute"><defs>
-    <linearGradient id="cardFill" x1="0" y1="0" x2="0.35" y2="1">
-      <stop offset="0" stop-color="#213655" stop-opacity="0.82"/>
-      <stop offset="1" stop-color="#0f1d34" stop-opacity="0.74"/>
-    </linearGradient>
-    <filter id="cardGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="0" stdDeviation="4.5" flood-color="#66E6D0" flood-opacity="0.55"/>
-    </filter>
-  </defs></svg>
+  <!-- ================= DOODLE LAYER — sparse, matches the calmer target ================= -->
+  <div id="doodles"><svg viewBox="0 0 1120 620" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <g opacity=".75">
+      <!-- one clear outline star, upper-right of the wordmark -->
+      <path d="M700 108 l7 15 16 2 -12 11 3 16 -14 -8 -14 8 3 -16 -12 -11 16 -2Z"/>
 
-  <!-- ================= DOODLE LAYER (edit paths freely) ================= -->
-  <div id="doodles"><svg viewBox="0 0 1120 620" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <g opacity=".85">
-      <!-- 4-point sparkles -->
-      <g id="spk">
-        <path d="M0 -9 C1 -3 3 -1 9 0 C3 1 1 3 0 9 C-1 3 -3 1 -9 0 C-3 -1 -1 -3 0 -9Z"/>
-      </g>
-      <use href="#spk" x="360" y="112" transform="translate(360,112) scale(1.1)"/>
-      <use href="#spk" transform="translate(300,300) scale(.7)"/>
-      <use href="#spk" transform="translate(486,150) scale(.5)"/>
-      <use href="#spk" transform="translate(690,150) scale(.8)"/>
-      <use href="#spk" transform="translate(792,300) scale(.55)"/>
-      <use href="#spk" transform="translate(250,470) scale(.7)"/>
-      <use href="#spk" transform="translate(560,486) scale(.6)"/>
-      <use href="#spk" transform="translate(470,540) scale(.5)"/>
-      <use href="#spk" transform="translate(880,470) scale(.6)"/>
-      <use href="#spk" transform="translate(360,300) scale(.4)"/>
+      <!-- a small saturn planet, upper-left -->
+      <g transform="translate(190,140)"><circle r="12"/><ellipse rx="22" ry="7" transform="rotate(-20)"/></g>
 
-      <!-- outline 5-point stars -->
-      <path d="M792 78 l7 15 16 2 -12 11 3 16 -14 -8 -14 8 3 -16 -12 -11 16 -2Z"/>
-      <path d="M980 150 l5 10 11 1 -8 8 2 11 -10 -5 -10 5 2 -11 -8 -8 11 -1Z"/>
-      <path d="M150 250 l5 10 11 1 -8 8 2 11 -10 -5 -10 5 2 -11 -8 -8 11 -1Z"/>
-
-      <!-- saturn planets -->
-      <g transform="translate(210,110)"><circle r="13"/><ellipse rx="24" ry="7" transform="rotate(-20)"/></g>
-      <g transform="translate(320,380)"><circle r="10"/><ellipse rx="19" ry="6" transform="rotate(18)"/></g>
-      <g transform="translate(300,395) rotate(0)"></g>
-
-      <!-- galaxy spiral (small, top-left) -->
-      <path transform="translate(180,150)" d="M0 0 C 10 -14 30 -14 38 2 C 46 20 28 40 6 40 C -22 40 -40 16 -40 -12 C -40 -46 -8 -70 30 -70"/>
-      <ellipse cx="180" cy="150" rx="4" ry="4"/>
-
-      <!-- big faint galaxy, bottom centre -->
-      <g opacity=".28" transform="translate(560,610)">
-        <path d="M-150 -6 C-120 -70 -30 -104 70 -84 C 150 -68 186 -14 150 34"/>
-        <path d="M-96 18 C-70 -30 6 -58 84 -44 C 132 -35 152 2 132 36"/>
-        <path d="M-46 30 C -34 6 6 -12 44 -6"/>
-        <circle cx="0" cy="6" r="3" fill="var(--gold)" stroke="none"/>
-      </g>
-
-      <!-- comet arcs -->
-      <path d="M120 470 C 150 452 170 452 196 470"/>
-      <path d="M60 150 C 92 132 112 134 132 156"/>
-      <path d="M980 470 C 1006 452 1028 454 1046 474"/>
-
-      <!-- paper airplane -->
-      <g transform="translate(1000,120) rotate(12)"><path d="M0 0 L34 -12 L20 22 L14 8 Z"/><path d="M0 0 L14 8"/></g>
-
-      <!-- small orbits / rings -->
-      <ellipse cx="640" cy="120" rx="26" ry="10" transform="rotate(20 640 120)"/>
-      <ellipse cx="470" cy="420" rx="18" ry="7" transform="rotate(-15 470 420)"/>
-
-      <!-- compass, bottom right -->
-      <g transform="translate(1000,510)"><circle r="20"/><path d="M-7 7 L0 -12 L7 7 L0 2 Z" fill="var(--gold)" stroke="none"/></g>
+      <!-- a couple of 4-point sparkles -->
+      <g id="spk"><path d="M0 -8 C1 -3 3 -1 8 0 C3 1 1 3 0 8 C-1 3 -3 1 -8 0 C-3 -1 -1 -3 0 -8Z"/></g>
+      <use href="#spk" transform="translate(258,232) scale(.8)"/>
+      <use href="#spk" transform="translate(360,540) scale(.6)"/>
+      <use href="#spk" transform="translate(605,486) scale(.55)"/>
 
       <!-- scattered dots -->
-      <g fill="var(--gold)" stroke="none" opacity=".8">
-        <circle cx="430" cy="120" r="2"/><circle cx="520" cy="470" r="2"/><circle cx="760" cy="110" r="2.5"/>
-        <circle cx="300" cy="200" r="2"/><circle cx="860" cy="360" r="2"/><circle cx="250" cy="360" r="2"/>
-        <circle cx="900" cy="200" r="2"/><circle cx="620" cy="500" r="2"/>
+      <g fill="var(--accent)" stroke="none" opacity=".7">
+        <circle cx="430" cy="120" r="2"/><circle cx="520" cy="470" r="2"/>
+        <circle cx="300" cy="200" r="2"/><circle cx="620" cy="500" r="2"/>
       </g>
-    </g>
-
-    <!-- brain doodle (teal-ish), upper right of centre -->
-    <g transform="translate(726,132) scale(1.2)" stroke="#8FE0D2" opacity=".7">
-      <path d="M-18 4 C-24 -2 -22 -14 -12 -16 C-10 -24 4 -24 8 -16 C 18 -18 26 -8 20 2 C 26 8 22 20 12 20 C 8 28 -8 28 -12 20 C -22 20 -24 10 -18 4Z"/>
-      <path d="M-4 -14 C -6 -4 -6 6 -2 18"/>
-      <path d="M-12 -6 C -6 -4 -4 0 -8 6"/>
-      <path d="M4 -12 C 2 -2 6 6 2 14"/>
     </g>
   </svg></div>
 
   <!-- ================= TOP BAR ================= -->
   <div class="topbar">
-    <div class="brand"><span class="bi"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-book-open"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5v16" />  <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></span><span>veda-net.com</span></div>
+    <div class="brand"><span class="bi">1</span><span>veda-net.com</span></div>
     <nav class="nav">
       <a class="on" href="#"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-house"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />  <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></a>
       <a href="#"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-star"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg></a>
@@ -212,11 +161,8 @@
   </div>
 
   <!-- ================= CARDS ================= -->
-  
+
   <div class="card" id="c1">
-    <div class="shape"><svg viewBox="0 0 184 210" preserveAspectRatio="none">
-      <path d="M16 1 H152 L183 32 V193 Q183 209 167 209 H16 Q1 209 1 193 V16 Q1 1 16 1 Z" fill="url(#cardFill)" stroke="var(--card-line)" stroke-width="1.6" filter="url(#cardGlow)"/>
-    </svg></div>
     <span class="badge"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-sparkles"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />  <path d="M20 2v4" />  <path d="M22 4h-4" />  <circle cx="4" cy="20" r="2" /></svg></span>
     <div class="body">
       <span class="dots">···</span>
@@ -226,11 +172,8 @@
       <div class="bar"></div>
     </div>
   </div>
-  
+
   <div class="card" id="c2">
-    <div class="shape"><svg viewBox="0 0 184 210" preserveAspectRatio="none">
-      <path d="M16 1 H152 L183 32 V193 Q183 209 167 209 H16 Q1 209 1 193 V16 Q1 1 16 1 Z" fill="url(#cardFill)" stroke="var(--card-line)" stroke-width="1.6" filter="url(#cardGlow)"/>
-    </svg></div>
     <span class="badge"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-book-open"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M12 5v16" />  <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></span>
     <div class="body">
       <span class="dots">···</span>
@@ -240,11 +183,8 @@
       <div class="bar"></div>
     </div>
   </div>
-  
+
   <div class="card" id="c3">
-    <div class="shape"><svg viewBox="0 0 184 210" preserveAspectRatio="none">
-      <path d="M16 1 H152 L183 32 V193 Q183 209 167 209 H16 Q1 209 1 193 V16 Q1 1 16 1 Z" fill="url(#cardFill)" stroke="var(--card-line)" stroke-width="1.6" filter="url(#cardGlow)"/>
-    </svg></div>
     <span class="badge"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-check"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M20 6 9 17l-5-5" /></svg></span>
     <div class="body">
       <span class="dots">···</span>
@@ -254,11 +194,8 @@
       <div class="bar"></div>
     </div>
   </div>
-  
+
   <div class="card" id="c4">
-    <div class="shape"><svg viewBox="0 0 184 210" preserveAspectRatio="none">
-      <path d="M16 1 H152 L183 32 V193 Q183 209 167 209 H16 Q1 209 1 193 V16 Q1 1 16 1 Z" fill="url(#cardFill)" stroke="var(--card-line)" stroke-width="1.6" filter="url(#cardGlow)"/>
-    </svg></div>
     <span class="badge"><!-- @license lucide-static v1.43.0 - ISC --><svg  class="lucide lucide-star"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg></span>
     <div class="body">
       <span class="dots">···</span>
@@ -267,6 +204,11 @@
       <p>Get instant answers to any question.</p>
       <div class="bar"></div>
     </div>
+  </div>
+
+  <div class="qr-block">
+    <div class="qr-square"><svg viewBox="0 0 108 108" fill="#1c2942"><rect x="4" y="4" width="4" height="4"/><rect x="8" y="4" width="4" height="4"/><rect x="12" y="4" width="4" height="4"/><rect x="16" y="4" width="4" height="4"/><rect x="20" y="4" width="4" height="4"/><rect x="24" y="4" width="4" height="4"/><rect x="28" y="4" width="4" height="4"/><rect x="36" y="4" width="4" height="4"/><rect x="40" y="4" width="4" height="4"/><rect x="48" y="4" width="4" height="4"/><rect x="52" y="4" width="4" height="4"/><rect x="56" y="4" width="4" height="4"/><rect x="60" y="4" width="4" height="4"/><rect x="76" y="4" width="4" height="4"/><rect x="80" y="4" width="4" height="4"/><rect x="84" y="4" width="4" height="4"/><rect x="88" y="4" width="4" height="4"/><rect x="92" y="4" width="4" height="4"/><rect x="96" y="4" width="4" height="4"/><rect x="100" y="4" width="4" height="4"/><rect x="4" y="8" width="4" height="4"/><rect x="28" y="8" width="4" height="4"/><rect x="36" y="8" width="4" height="4"/><rect x="48" y="8" width="4" height="4"/><rect x="52" y="8" width="4" height="4"/><rect x="60" y="8" width="4" height="4"/><rect x="76" y="8" width="4" height="4"/><rect x="100" y="8" width="4" height="4"/><rect x="4" y="12" width="4" height="4"/><rect x="12" y="12" width="4" height="4"/><rect x="16" y="12" width="4" height="4"/><rect x="20" y="12" width="4" height="4"/><rect x="28" y="12" width="4" height="4"/><rect x="36" y="12" width="4" height="4"/><rect x="40" y="12" width="4" height="4"/><rect x="44" y="12" width="4" height="4"/><rect x="56" y="12" width="4" height="4"/><rect x="60" y="12" width="4" height="4"/><rect x="76" y="12" width="4" height="4"/><rect x="84" y="12" width="4" height="4"/><rect x="88" y="12" width="4" height="4"/><rect x="92" y="12" width="4" height="4"/><rect x="100" y="12" width="4" height="4"/><rect x="4" y="16" width="4" height="4"/><rect x="12" y="16" width="4" height="4"/><rect x="16" y="16" width="4" height="4"/><rect x="20" y="16" width="4" height="4"/><rect x="28" y="16" width="4" height="4"/><rect x="40" y="16" width="4" height="4"/><rect x="44" y="16" width="4" height="4"/><rect x="56" y="16" width="4" height="4"/><rect x="64" y="16" width="4" height="4"/><rect x="68" y="16" width="4" height="4"/><rect x="76" y="16" width="4" height="4"/><rect x="84" y="16" width="4" height="4"/><rect x="88" y="16" width="4" height="4"/><rect x="92" y="16" width="4" height="4"/><rect x="100" y="16" width="4" height="4"/><rect x="4" y="20" width="4" height="4"/><rect x="12" y="20" width="4" height="4"/><rect x="16" y="20" width="4" height="4"/><rect x="20" y="20" width="4" height="4"/><rect x="28" y="20" width="4" height="4"/><rect x="36" y="20" width="4" height="4"/><rect x="40" y="20" width="4" height="4"/><rect x="48" y="20" width="4" height="4"/><rect x="52" y="20" width="4" height="4"/><rect x="56" y="20" width="4" height="4"/><rect x="60" y="20" width="4" height="4"/><rect x="76" y="20" width="4" height="4"/><rect x="84" y="20" width="4" height="4"/><rect x="88" y="20" width="4" height="4"/><rect x="92" y="20" width="4" height="4"/><rect x="100" y="20" width="4" height="4"/><rect x="4" y="24" width="4" height="4"/><rect x="28" y="24" width="4" height="4"/><rect x="40" y="24" width="4" height="4"/><rect x="48" y="24" width="4" height="4"/><rect x="56" y="24" width="4" height="4"/><rect x="60" y="24" width="4" height="4"/><rect x="68" y="24" width="4" height="4"/><rect x="76" y="24" width="4" height="4"/><rect x="100" y="24" width="4" height="4"/><rect x="4" y="28" width="4" height="4"/><rect x="8" y="28" width="4" height="4"/><rect x="12" y="28" width="4" height="4"/><rect x="16" y="28" width="4" height="4"/><rect x="20" y="28" width="4" height="4"/><rect x="24" y="28" width="4" height="4"/><rect x="28" y="28" width="4" height="4"/><rect x="36" y="28" width="4" height="4"/><rect x="44" y="28" width="4" height="4"/><rect x="52" y="28" width="4" height="4"/><rect x="60" y="28" width="4" height="4"/><rect x="68" y="28" width="4" height="4"/><rect x="76" y="28" width="4" height="4"/><rect x="80" y="28" width="4" height="4"/><rect x="84" y="28" width="4" height="4"/><rect x="88" y="28" width="4" height="4"/><rect x="92" y="28" width="4" height="4"/><rect x="96" y="28" width="4" height="4"/><rect x="100" y="28" width="4" height="4"/><rect x="44" y="32" width="4" height="4"/><rect x="56" y="32" width="4" height="4"/><rect x="68" y="32" width="4" height="4"/><rect x="4" y="36" width="4" height="4"/><rect x="16" y="36" width="4" height="4"/><rect x="20" y="36" width="4" height="4"/><rect x="24" y="36" width="4" height="4"/><rect x="28" y="36" width="4" height="4"/><rect x="32" y="36" width="4" height="4"/><rect x="36" y="36" width="4" height="4"/><rect x="40" y="36" width="4" height="4"/><rect x="44" y="36" width="4" height="4"/><rect x="52" y="36" width="4" height="4"/><rect x="60" y="36" width="4" height="4"/><rect x="64" y="36" width="4" height="4"/><rect x="72" y="36" width="4" height="4"/><rect x="84" y="36" width="4" height="4"/><rect x="92" y="36" width="4" height="4"/><rect x="96" y="36" width="4" height="4"/><rect x="100" y="36" width="4" height="4"/><rect x="8" y="40" width="4" height="4"/><rect x="12" y="40" width="4" height="4"/><rect x="16" y="40" width="4" height="4"/><rect x="24" y="40" width="4" height="4"/><rect x="44" y="40" width="4" height="4"/><rect x="48" y="40" width="4" height="4"/><rect x="52" y="40" width="4" height="4"/><rect x="56" y="40" width="4" height="4"/><rect x="60" y="40" width="4" height="4"/><rect x="64" y="40" width="4" height="4"/><rect x="80" y="40" width="4" height="4"/><rect x="84" y="40" width="4" height="4"/><rect x="88" y="40" width="4" height="4"/><rect x="92" y="40" width="4" height="4"/><rect x="96" y="40" width="4" height="4"/><rect x="12" y="44" width="4" height="4"/><rect x="16" y="44" width="4" height="4"/><rect x="24" y="44" width="4" height="4"/><rect x="28" y="44" width="4" height="4"/><rect x="36" y="44" width="4" height="4"/><rect x="40" y="44" width="4" height="4"/><rect x="48" y="44" width="4" height="4"/><rect x="52" y="44" width="4" height="4"/><rect x="64" y="44" width="4" height="4"/><rect x="68" y="44" width="4" height="4"/><rect x="76" y="44" width="4" height="4"/><rect x="88" y="44" width="4" height="4"/><rect x="100" y="44" width="4" height="4"/><rect x="4" y="48" width="4" height="4"/><rect x="8" y="48" width="4" height="4"/><rect x="16" y="48" width="4" height="4"/><rect x="44" y="48" width="4" height="4"/><rect x="48" y="48" width="4" height="4"/><rect x="60" y="48" width="4" height="4"/><rect x="76" y="48" width="4" height="4"/><rect x="80" y="48" width="4" height="4"/><rect x="88" y="48" width="4" height="4"/><rect x="92" y="48" width="4" height="4"/><rect x="96" y="48" width="4" height="4"/><rect x="100" y="48" width="4" height="4"/><rect x="8" y="52" width="4" height="4"/><rect x="12" y="52" width="4" height="4"/><rect x="16" y="52" width="4" height="4"/><rect x="20" y="52" width="4" height="4"/><rect x="28" y="52" width="4" height="4"/><rect x="32" y="52" width="4" height="4"/><rect x="40" y="52" width="4" height="4"/><rect x="44" y="52" width="4" height="4"/><rect x="56" y="52" width="4" height="4"/><rect x="60" y="52" width="4" height="4"/><rect x="64" y="52" width="4" height="4"/><rect x="68" y="52" width="4" height="4"/><rect x="76" y="52" width="4" height="4"/><rect x="100" y="52" width="4" height="4"/><rect x="4" y="56" width="4" height="4"/><rect x="8" y="56" width="4" height="4"/><rect x="16" y="56" width="4" height="4"/><rect x="20" y="56" width="4" height="4"/><rect x="24" y="56" width="4" height="4"/><rect x="44" y="56" width="4" height="4"/><rect x="52" y="56" width="4" height="4"/><rect x="60" y="56" width="4" height="4"/><rect x="64" y="56" width="4" height="4"/><rect x="68" y="56" width="4" height="4"/><rect x="84" y="56" width="4" height="4"/><rect x="96" y="56" width="4" height="4"/><rect x="4" y="60" width="4" height="4"/><rect x="8" y="60" width="4" height="4"/><rect x="12" y="60" width="4" height="4"/><rect x="16" y="60" width="4" height="4"/><rect x="20" y="60" width="4" height="4"/><rect x="28" y="60" width="4" height="4"/><rect x="60" y="60" width="4" height="4"/><rect x="64" y="60" width="4" height="4"/><rect x="68" y="60" width="4" height="4"/><rect x="72" y="60" width="4" height="4"/><rect x="76" y="60" width="4" height="4"/><rect x="84" y="60" width="4" height="4"/><rect x="88" y="60" width="4" height="4"/><rect x="92" y="60" width="4" height="4"/><rect x="96" y="60" width="4" height="4"/><rect x="100" y="60" width="4" height="4"/><rect x="4" y="64" width="4" height="4"/><rect x="36" y="64" width="4" height="4"/><rect x="40" y="64" width="4" height="4"/><rect x="44" y="64" width="4" height="4"/><rect x="52" y="64" width="4" height="4"/><rect x="56" y="64" width="4" height="4"/><rect x="60" y="64" width="4" height="4"/><rect x="64" y="64" width="4" height="4"/><rect x="76" y="64" width="4" height="4"/><rect x="80" y="64" width="4" height="4"/><rect x="88" y="64" width="4" height="4"/><rect x="92" y="64" width="4" height="4"/><rect x="100" y="64" width="4" height="4"/><rect x="4" y="68" width="4" height="4"/><rect x="12" y="68" width="4" height="4"/><rect x="20" y="68" width="4" height="4"/><rect x="24" y="68" width="4" height="4"/><rect x="28" y="68" width="4" height="4"/><rect x="48" y="68" width="4" height="4"/><rect x="52" y="68" width="4" height="4"/><rect x="68" y="68" width="4" height="4"/><rect x="72" y="68" width="4" height="4"/><rect x="76" y="68" width="4" height="4"/><rect x="80" y="68" width="4" height="4"/><rect x="84" y="68" width="4" height="4"/><rect x="92" y="68" width="4" height="4"/><rect x="96" y="68" width="4" height="4"/><rect x="36" y="72" width="4" height="4"/><rect x="40" y="72" width="4" height="4"/><rect x="48" y="72" width="4" height="4"/><rect x="68" y="72" width="4" height="4"/><rect x="84" y="72" width="4" height="4"/><rect x="92" y="72" width="4" height="4"/><rect x="96" y="72" width="4" height="4"/><rect x="4" y="76" width="4" height="4"/><rect x="8" y="76" width="4" height="4"/><rect x="12" y="76" width="4" height="4"/><rect x="16" y="76" width="4" height="4"/><rect x="20" y="76" width="4" height="4"/><rect x="24" y="76" width="4" height="4"/><rect x="28" y="76" width="4" height="4"/><rect x="36" y="76" width="4" height="4"/><rect x="44" y="76" width="4" height="4"/><rect x="52" y="76" width="4" height="4"/><rect x="56" y="76" width="4" height="4"/><rect x="60" y="76" width="4" height="4"/><rect x="68" y="76" width="4" height="4"/><rect x="76" y="76" width="4" height="4"/><rect x="84" y="76" width="4" height="4"/><rect x="100" y="76" width="4" height="4"/><rect x="4" y="80" width="4" height="4"/><rect x="28" y="80" width="4" height="4"/><rect x="36" y="80" width="4" height="4"/><rect x="44" y="80" width="4" height="4"/><rect x="48" y="80" width="4" height="4"/><rect x="56" y="80" width="4" height="4"/><rect x="64" y="80" width="4" height="4"/><rect x="68" y="80" width="4" height="4"/><rect x="84" y="80" width="4" height="4"/><rect x="100" y="80" width="4" height="4"/><rect x="4" y="84" width="4" height="4"/><rect x="12" y="84" width="4" height="4"/><rect x="16" y="84" width="4" height="4"/><rect x="20" y="84" width="4" height="4"/><rect x="28" y="84" width="4" height="4"/><rect x="36" y="84" width="4" height="4"/><rect x="48" y="84" width="4" height="4"/><rect x="56" y="84" width="4" height="4"/><rect x="64" y="84" width="4" height="4"/><rect x="68" y="84" width="4" height="4"/><rect x="72" y="84" width="4" height="4"/><rect x="76" y="84" width="4" height="4"/><rect x="80" y="84" width="4" height="4"/><rect x="84" y="84" width="4" height="4"/><rect x="96" y="84" width="4" height="4"/><rect x="100" y="84" width="4" height="4"/><rect x="4" y="88" width="4" height="4"/><rect x="12" y="88" width="4" height="4"/><rect x="16" y="88" width="4" height="4"/><rect x="20" y="88" width="4" height="4"/><rect x="28" y="88" width="4" height="4"/><rect x="36" y="88" width="4" height="4"/><rect x="40" y="88" width="4" height="4"/><rect x="52" y="88" width="4" height="4"/><rect x="56" y="88" width="4" height="4"/><rect x="64" y="88" width="4" height="4"/><rect x="68" y="88" width="4" height="4"/><rect x="72" y="88" width="4" height="4"/><rect x="76" y="88" width="4" height="4"/><rect x="96" y="88" width="4" height="4"/><rect x="100" y="88" width="4" height="4"/><rect x="4" y="92" width="4" height="4"/><rect x="12" y="92" width="4" height="4"/><rect x="16" y="92" width="4" height="4"/><rect x="20" y="92" width="4" height="4"/><rect x="28" y="92" width="4" height="4"/><rect x="44" y="92" width="4" height="4"/><rect x="48" y="92" width="4" height="4"/><rect x="56" y="92" width="4" height="4"/><rect x="68" y="92" width="4" height="4"/><rect x="72" y="92" width="4" height="4"/><rect x="84" y="92" width="4" height="4"/><rect x="88" y="92" width="4" height="4"/><rect x="92" y="92" width="4" height="4"/><rect x="96" y="92" width="4" height="4"/><rect x="100" y="92" width="4" height="4"/><rect x="4" y="96" width="4" height="4"/><rect x="28" y="96" width="4" height="4"/><rect x="40" y="96" width="4" height="4"/><rect x="44" y="96" width="4" height="4"/><rect x="48" y="96" width="4" height="4"/><rect x="52" y="96" width="4" height="4"/><rect x="56" y="96" width="4" height="4"/><rect x="72" y="96" width="4" height="4"/><rect x="76" y="96" width="4" height="4"/><rect x="80" y="96" width="4" height="4"/><rect x="84" y="96" width="4" height="4"/><rect x="92" y="96" width="4" height="4"/><rect x="96" y="96" width="4" height="4"/><rect x="100" y="96" width="4" height="4"/><rect x="4" y="100" width="4" height="4"/><rect x="8" y="100" width="4" height="4"/><rect x="12" y="100" width="4" height="4"/><rect x="16" y="100" width="4" height="4"/><rect x="20" y="100" width="4" height="4"/><rect x="24" y="100" width="4" height="4"/><rect x="28" y="100" width="4" height="4"/><rect x="36" y="100" width="4" height="4"/><rect x="40" y="100" width="4" height="4"/><rect x="44" y="100" width="4" height="4"/><rect x="48" y="100" width="4" height="4"/><rect x="52" y="100" width="4" height="4"/><rect x="56" y="100" width="4" height="4"/><rect x="64" y="100" width="4" height="4"/><rect x="68" y="100" width="4" height="4"/><rect x="76" y="100" width="4" height="4"/><rect x="88" y="100" width="4" height="4"/><rect x="100" y="100" width="4" height="4"/></svg></div>
+    <div class="qr-label">veda-net.com</div>
   </div>
 
   <div class="scroll"></div>
