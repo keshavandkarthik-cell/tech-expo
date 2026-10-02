@@ -15370,7 +15370,7 @@ function startBlitz(area) {
   const BZ_SUBJECTS = ['Mathematics','Physics','Chemistry','Biology','History','Geography','English','Computer Science','Economics'];
   const BZ_BATCH = 10; // questions pre-generated in one API call
   let bzLives = 3, bzScore = 0, bzQNum = 0, bzCurrent = null, bzTimer = null, bzSecsLeft = 20;
-  let bzSubject = 'Random', bzDiff = 'medium', bzRunning = false;
+  let bzSubject = 'Random', bzDiff = 'medium', bzRunning = false, bzMode = 'short';
   let bzQueue = []; // pre-loaded question batch
 
   function render() {
@@ -15407,6 +15407,13 @@ function startBlitz(area) {
             </div>
           </div>
         </div>
+        <div style="margin-bottom:14px;">
+          <div style="font-family:var(--exo);font-size:.62rem;color:var(--teal2);letter-spacing:1.5px;margin-bottom:7px;">// MODE</div>
+          <div style="display:flex;gap:6px;">
+            <div class="aip-chip on" data-val="short" onclick="bzPickMode(this)">✍️ Short Answer</div>
+            <div class="aip-chip" data-val="mcq" onclick="bzPickMode(this)">🔘 MCQ</div>
+          </div>
+        </div>
         <button onclick="bzStart()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,#ff6b6b,#f59e0b);border:none;color:#fff;font-family:var(--orb);font-size:.78rem;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,107,.25);">START ⚡</button>
       </div>
       <div id="bz-game-wrap" style="display:none;">
@@ -15429,12 +15436,15 @@ function startBlitz(area) {
           <input id="bz-ans" type="text" placeholder="Your answer..." onkeydown="if(event.key==='Enter')bzSubmit()" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,107,107,.22);border-radius:8px;padding:8px 11px;color:var(--text);font-family:var(--exo);font-size:.82rem;outline:none;">
           <button onclick="bzSubmit()" style="background:linear-gradient(135deg,#ff6b6b,#f59e0b);border:none;border-radius:8px;padding:8px 14px;color:#fff;font-family:var(--exo);font-size:.75rem;font-weight:700;cursor:pointer;">Go</button>
         </div>
+        <div id="bz-mcq-row" style="display:none;flex-direction:column;gap:7px;"></div>
         <div id="bz-fb" style="display:none;text-align:center;padding:10px 0;font-family:var(--raj);font-size:.88rem;"></div>
       </div>`;
 
     window.bzPickSubject = el => { document.querySelectorAll('#bz-subject-chips .aip-chip').forEach(c=>c.classList.remove('on')); el.classList.add('on'); bzSubject = el.dataset.val; };
-    window.bzPickDiff    = el => { el.closest('div').querySelectorAll('.aip-chip').forEach(c=>c.classList.remove('on')); el.classList.add('on'); bzDiff = el.dataset.val; };
+    window.bzPickDiff    = el => { el.parentElement.querySelectorAll('.aip-chip').forEach(c=>c.classList.remove('on')); el.classList.add('on'); bzDiff = el.dataset.val; };
+    window.bzPickMode    = el => { el.parentElement.querySelectorAll('.aip-chip').forEach(c=>c.classList.remove('on')); el.classList.add('on'); bzMode = el.dataset.val; };
     window.bzStart       = startRound;
+    window.bzPickMCQ     = pickMCQ;
     window.bzSubmit      = doSubmit;
     window.bzQuit        = () => { bzStopTimer(); bzRunning = false; exitGame(bzScore, 'Blitz Quiz', bzScore > 0 ? `${bzQNum} question${bzQNum!==1?'s':''} answered!` : 'Better luck next time!'); };
   }
@@ -15446,7 +15456,9 @@ function startBlitz(area) {
       ? BZ_SUBJECTS.slice().sort(()=>Math.random()-.5).slice(0, BZ_BATCH).join(', ')
       : Array(BZ_BATCH).fill(bzSubject).join(', ');
 
-    const prompt = `Generate exactly ${BZ_BATCH} unique ${diffWord} short-answer questions for a high school student. Use these subjects in order: ${subjectList}. Each answer must be 1-5 words. No repeated questions. For each question include an "aliases" array of alternative acceptable answers (synonyms, alternate names). Return ONLY a valid JSON array, no markdown:\n[{"question":"...","answer":"...","aliases":["..."],"subject":"..."},...]`;
+    const prompt = bzMode === 'mcq'
+      ? `Generate exactly ${BZ_BATCH} unique ${diffWord} multiple-choice questions for a high school student. Use these subjects in order: ${subjectList}. Each question needs exactly 4 options and a "correct" field holding the 0-based index of the right option. Shuffle which index is correct across questions — don't always put it first. No repeated questions. Return ONLY a valid JSON array, no markdown:\n[{"question":"...","options":["...","...","...","..."],"correct":0,"subject":"..."},...]`
+      : `Generate exactly ${BZ_BATCH} unique ${diffWord} short-answer questions for a high school student. Use these subjects in order: ${subjectList}. Each answer must be 1-5 words. No repeated questions. For each question include an "aliases" array of alternative acceptable answers (synonyms, alternate names). Return ONLY a valid JSON array, no markdown:\n[{"question":"...","answer":"...","aliases":["..."],"subject":"..."},...]`;
 
     const raw = await gemini(prompt);
     const parsed = JSON.parse(raw.replace(/^```(?:json)?|```$/gm,'').trim());
@@ -15497,15 +15509,50 @@ function startBlitz(area) {
     bzQNum++;
     document.getElementById('bz-stag').textContent = '📚 ' + (bzCurrent.subject || '');
     if (qEl) qEl.textContent = bzCurrent.question;
-    if (inRow) inRow.style.display = 'flex';
-    if (ans) { ans.value = ''; ans.disabled = false; setTimeout(() => ans.focus(), 60); }
+    const mcqRow = document.getElementById('bz-mcq-row');
+    if (bzMode === 'mcq') {
+      if (inRow) inRow.style.display = 'none';
+      if (mcqRow) {
+        mcqRow.style.display = 'flex';
+        mcqRow.innerHTML = (bzCurrent.options || []).map((opt, i) => `
+          <button class="bz-mcq-opt" data-i="${i}" onclick="bzPickMCQ(this)" style="text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,107,107,.22);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--exo);font-size:.8rem;cursor:pointer;transition:all .15s;">${opt}</button>
+        `).join('');
+      }
+    } else {
+      if (mcqRow) { mcqRow.style.display = 'none'; mcqRow.innerHTML = ''; }
+      if (inRow) inRow.style.display = 'flex';
+      if (ans) { ans.value = ''; ans.disabled = false; setTimeout(() => ans.focus(), 60); }
+    }
     document.getElementById('bz-qnum').textContent = bzQNum;
     startTimer();
   }
 
+  function pickMCQ(el) {
+    if (!bzCurrent || !bzRunning) return;
+    bzStopTimer();
+    document.querySelectorAll('#bz-mcq-row .bz-mcq-opt').forEach(b => b.onclick = null);
+    const picked = Number(el.dataset.i);
+    const correct = picked === bzCurrent.correct;
+    el.style.borderColor = correct ? '#4ade80' : '#ff6b6b';
+    el.style.background  = correct ? 'rgba(74,222,128,.12)' : 'rgba(255,107,107,.12)';
+    if (!correct) {
+      const correctBtn = document.querySelector(`#bz-mcq-row .bz-mcq-opt[data-i="${bzCurrent.correct}"]`);
+      if (correctBtn) { correctBtn.style.borderColor = '#4ade80'; correctBtn.style.background = 'rgba(74,222,128,.12)'; }
+    }
+    (correct ? onCorrect() : onWrong(false));
+  }
+
   function startTimer() {
     bzStopTimer(); bzSecsLeft = 20; updateTimerUI();
-    bzTimer = setInterval(() => { bzSecsLeft--; updateTimerUI(); if (bzSecsLeft <= 0) { bzStopTimer(); onWrong(true); } }, 1000);
+    bzTimer = setInterval(() => { bzSecsLeft--; updateTimerUI(); if (bzSecsLeft <= 0) {
+      bzStopTimer();
+      if (bzMode === 'mcq') {
+        document.querySelectorAll('#bz-mcq-row .bz-mcq-opt').forEach(b => { b.onclick = null; if (Number(b.dataset.i) === bzCurrent?.correct) { b.style.borderColor = '#4ade80'; b.style.background = 'rgba(74,222,128,.12)'; } });
+      } else {
+        const ans = document.getElementById('bz-ans'); if (ans) ans.disabled = true;
+      }
+      onWrong(true);
+    } }, 1000);
   }
   function bzStopTimer() { if (bzTimer) { clearInterval(bzTimer); bzTimer = null; } }
   function updateTimerUI() {
@@ -15540,7 +15587,8 @@ function startBlitz(area) {
     const hearts = ['🤍🤍🤍','❤️🤍🤍','❤️❤️🤍','❤️❤️❤️'];
     const livesEl = document.getElementById('bz-lives');
     if (livesEl) livesEl.textContent = hearts[Math.max(0,bzLives)] || '🤍🤍🤍';
-    flash(timedOut ? `⏱ Time\'s up! Answer: ${bzCurrent?.answer||'?'}` : `❌ Nope! Answer: ${bzCurrent?.answer||'?'}`, '#ff6b6b');
+    const correctText = bzMode === 'mcq' ? (bzCurrent?.options?.[bzCurrent.correct] ?? '?') : (bzCurrent?.answer || '?');
+    flash(timedOut ? `⏱ Time\'s up! Answer: ${correctText}` : `❌ Nope! Answer: ${correctText}`, '#ff6b6b');
     if (bzLives <= 0) { await delay(1400); bzRunning = false; exitGame(bzScore, 'Blitz Quiz', `${bzQNum} question${bzQNum!==1?'s':''} answered — score: ${bzScore}`); }
     else { await delay(1400); clearFlash(); nextQ(); }
   }
