@@ -1915,8 +1915,13 @@ body.mobile-mode .ps-hub-title { font-size:.84rem; }
   background: radial-gradient(ellipse at center, #0f1528 0%, #050810 100%);
   display: flex; align-items: center; justify-content: center;
   flex-direction: column;
+  overflow-y: auto;
 }
-.ob-slide { display: none; flex-direction: column; align-items: center; text-align: center; padding: 40px 32px; max-width: 420px; width: 90vw; animation: obIn .4s cubic-bezier(.4,1.2,.2,1); }
+/* A slide taller than the viewport (e.g. the subjects grid with many chips, or
+   the rewards slide) used to push its NEXT/LAUNCH button below the fold with
+   no way to scroll to it — #onboarding now scrolls, and min-height:min-content
+   stops this flex item from being squashed below its natural content height. */
+.ob-slide { display: none; flex-direction: column; align-items: center; text-align: center; padding: 40px 32px; max-width: 420px; width: 90vw; min-height: min-content; margin: auto 0; animation: obIn .4s cubic-bezier(.4,1.2,.2,1); }
 .ob-slide.active { display: flex; }
 @keyframes obIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
 .ob-emoji { font-size: 3.5rem; margin-bottom: 20px; animation: obBounce 2s ease-in-out infinite; }
