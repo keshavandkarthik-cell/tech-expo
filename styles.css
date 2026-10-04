@@ -142,8 +142,14 @@ html[data-theme="ivory"] .dt-hero-badge {
 }
 
 /* ── Ivory theme: swoop away veda-only sections ── */
+/* flex-shrink:0 matters here: this is a flex child of .set-area (flex-direction:
+   column), and its overflow:hidden makes the browser's automatic flex-shrink
+   minimum 0 instead of content-based — without this it can silently collapse
+   to height:0 under layout pressure and never recover, even after the
+   'swooped' class (which toggles the theme section back in) is removed. */
 .veda-only-section {
   overflow: hidden;
+  flex-shrink: 0;
   transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.35s ease,
               transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
