@@ -1,0 +1,4488 @@
+
+
+<!-- AuraAI Ultimate Merged (Part 1/4) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuraAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* --- Aura v7.0 Core Variables & Responsive Typography --- */
+:root {
+  --accent: #7cc6ff;
+  --bg1: #0b0d16;
+  --bg2: #1a1c2a;
+  --glass: rgba(255,255,255,0.08);
+  --blur: blur(18px);
+  --frost-bright: brightness(1.15);
+  --main-radius: 30px;
+  --main-shadow: 0 6px 44px 0 rgba(0,0,0,0.36), 0 0 0 1px rgba(124,198,255,0.08) inset, 0 10px 44px 0 rgba(124,198,255,0.09) inset, 0 0 0 2px var(--accent, #7cc6ff)10;
+}
+html, body {
+  margin: 0; padding: 0;
+  height: 100vh; width: 100vw; min-height: 100vh; min-width: 100vw;
+  background: linear-gradient(135deg, #0b0d16 0%, #111426 50%, #1a1c2a 100%);
+  font-family: 'Outfit', sans-serif;
+  color: #f0f4ff;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-size: clamp(15px, 1.2vw, 18px);
+}
+
+/* --- SIDEBAR v7.0 --- */
+aside#aura-sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 260px; height: 100vh;
+  background: linear-gradient(135deg, rgba(18,19,34,0.93) 60%, rgba(30,30,60,0.82) 100%);
+  box-shadow: 0 0 70px 0 var(--accent), 0 2px 32px 0 rgba(0,0,0,0.22);
+  z-index: 100;
+  display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+  border-top-right-radius: 32px; border-bottom-right-radius: 32px;
+  overflow: hidden;
+  backdrop-filter: var(--blur) var(--frost-bright);
+  transition: all 0.4s cubic-bezier(.45,1.4,.4,1);
+}
+aside#aura-sidebar.collapsed {
+  width: 72px;
+  background: rgba(18,19,34,0.35);
+  backdrop-filter: blur(14px) brightness(1.1);
+  box-shadow: 0 0 20px rgba(0,0,0,0.25), inset 0 0 30px rgba(255,255,255,0.05);
+}
+aside#aura-sidebar.collapsed .label { display: none; }
+aside#aura-sidebar.collapsed .sidebar-title { opacity: 0; pointer-events: none; transition: opacity 0.25s;}
+aside#aura-sidebar .sidebar-title {
+  font-size: clamp(1.1rem, 2.1vw, 2.1rem);
+  font-weight: 700;
+  color: var(--accent); letter-spacing: 1px;
+  margin: 0; padding: 38px 0 32px 0;
+  text-align: center;
+  font-family: 'Poppins', 'Outfit', sans-serif;
+  text-shadow: 0 0 18px var(--accent), 0 0 2px #fff;
+  user-select: none;
+}
+.sidebar-nav {
+  display: flex; flex-direction: column;
+  gap: 2px; padding: 0; width: 100%;
+}
+.sidebar-nav-btn {
+  width: 100%;
+  padding: 16px 32px 16px 32px;
+  font-size: clamp(1rem, 1.14vw, 1.14rem);
+  font-family: inherit; color: #e7f4ff;
+  background: none; border: none; outline: none;
+  display: flex; align-items: center; gap: 18px;
+  cursor: pointer;
+  border-radius: 16px 0 0 16px;
+  margin: 0; position: relative;
+  transition: background 0.18s, color 0.18s, box-shadow 0.28s;
+  z-index: 1; font-weight: 500;
+}
+.sidebar-nav-btn .icon {
+  font-size: 1.55em; margin-right: 10px; width: 1.5em; text-align: center; flex-shrink: 0;
+  filter: drop-shadow(0 0 7px var(--accent));
+}
+.sidebar-nav-btn:hover,
+.sidebar-nav-btn:focus-visible {
+  background: linear-gradient(90deg, rgba(124,198,255,0.13) 0%, rgba(124,198,255,0.07) 100%);
+  color: var(--accent);
+  box-shadow: 0 0 22px 0 var(--accent), 0 2px 12px 0 rgba(0,0,0,0.12);
+  outline: none;
+}
+.sidebar-nav-btn.active {
+  background: linear-gradient(90deg, var(--accent) 0%, rgba(124,198,255,0.22) 100%);
+  color: #181c29;
+  font-weight: 600;
+  box-shadow: 0 0 36px 0 var(--accent), 0 2px 16px 0 rgba(0,0,0,0.13);
+}
+.sidebar-nav-btn.active .icon {
+  filter: drop-shadow(0 0 12px #fff) drop-shadow(0 0 14px var(--accent));
+}
+@media (max-width: 900px) {
+  aside#aura-sidebar {
+    width: 68px;
+    min-width: 68px;
+    border-radius: 0 20px 20px 0;
+    padding: 0;
+  }
+  aside#aura-sidebar .sidebar-title {
+    font-size: 1.1rem;
+    padding: 20px 0 18px 0;
+  }
+  .sidebar-nav-btn {
+    padding: 14px 10px 14px 10px;
+    font-size: 1.01rem;
+    justify-content: center;
+    border-radius: 12px;
+  }
+  .sidebar-nav-btn .label {
+    display: none;
+  }
+}
+
+#toggle-sidebar {
+  position: absolute;
+  top: 20px;
+  right: -38px;
+  z-index: 300;
+  width: 52px;
+  height: 52px;
+  background: radial-gradient(circle at center, #fff 0%, #e0e0e0 80%);
+  color: var(--accent);
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 25px var(--accent), 0 0 40px rgba(0,0,0,0.4), 0 0 12px #fff inset;
+  text-shadow: 0 0 6px var(--accent), 0 0 12px #fff;
+  transition: all 0.3s ease;
+}
+#toggle-sidebar:hover {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 32px var(--accent), 0 0 45px rgba(255,255,255,0.9);
+  transform: scale(1.15);
+}
+
+/* --- MAIN LAYOUT & WINDOW v7.0 --- */
+#main {
+  min-height: 100vh;
+  min-width: 100vw;
+  height: 100vh;
+  width: 100vw;
+  margin-left: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: margin-left 0.4s cubic-bezier(.45,1.4,.4,1);
+}
+#main.collapsed { margin-left: 72px; }
+@media (max-width: 900px) {
+  #main { margin-left: 68px; }
+}
+@media (max-width: 1024px) and (min-width: 769px) {
+  #main { margin-left: 180px; width: calc(100vw - 180px);}
+}
+@media (max-width: 768px) {
+  #main {
+    margin: 0; width: 100vw; height: calc(100vh - 70px);
+    flex-direction: column; justify-content: flex-end; align-items: center;
+  }
+}
+.glass-shell {
+  width: clamp(340px, 92vw, 750px);
+  height: clamp(350px, 84vh, 720px);
+  border-radius: var(--main-radius);
+  background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  backdrop-filter: var(--blur) var(--frost-bright);
+  box-shadow: var(--main-shadow);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: box-shadow 0.32s, backdrop-filter 0.32s, background 0.32s;
+  min-width: 320px; min-height: 300px;
+  margin: 0 auto;
+}
+.tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: clamp(18px, 4vw, 42px) clamp(8px, 2vw, 42px);
+  display: none;
+  background: none;
+  border-radius: var(--main-radius);
+  animation: fadeSlideIn 0.5s cubic-bezier(.4,1.2,.2,1) both;
+  transition: opacity 0.4s cubic-bezier(.4,1.3,.2,1);
+}
+.tab-content.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+  animation: fadeSlideIn 0.5s cubic-bezier(.4,1.2,.2,1);
+  transition: opacity 0.4s cubic-bezier(.4,1.3,.2,1);
+}
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(36px);}
+  to { opacity: 1; transform: none;}
+}
+.tab-content:not(.active) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- Aura v7.6.4: Mobile centering + compact UI fix --- */
+/* Make every element respect border-box sizing so text doesn't get clipped by padding */
+*, *::before, *::after { box-sizing: inherit; }
+html, body { box-sizing: border-box; }
+
+/* Mobile: center the app, prevent header cut-off, use safe-area padding */
+@media (max-width: 768px) {
+  #main {
+    margin: 0 !important;
+    padding: 0 14px calc(88px + env(safe-area-inset-bottom));
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .glass-shell {
+    width: 100%;
+    max-width: 560px;
+    min-width: 0;
+    height: auto;
+    min-height: calc(100vh - 140px);
+    margin: 0 auto;
+  }
+  .tab-content {
+    padding: 16px 16px 20px;
+  }
+  #aura-header {
+    width: 100%;
+    text-align: center !important;
+    white-space: normal;
+    overflow: visible;
+    font-size: clamp(1.05rem, 5vw, 1.6rem);
+    margin-bottom: 10px;
+  }
+  .chat-window {
+    min-height: 40vh;
+    max-height: none;
+    padding: 8px;
+  }
+  .input-row input {
+    font-size: 16px; /* avoid iOS zoom */
+  }
+}
+
+/* Ultra-small phones */
+@media (max-width: 380px) {
+  .tab-content { padding: 12px; }
+  #aura-header { font-size: clamp(1rem, 5.6vw, 1.4rem); }
+}
+
+
+/* --- Aura 7.6.3 Mobile Layout --- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(20, 25, 35, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 0;
+  z-index: 1000;
+}
+.bottom-nav .nav-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.6em;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.bottom-nav .nav-btn:active {
+  transform: scale(1.2);
+}
+@media (min-width: 769px) {
+  .bottom-nav { display: none; }
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+
+/* --- Aura Chat v7.0 --- */
+#aura-chat {
+  display: flex; flex-direction: column; height: 100%;
+}
+.chat-window {
+  flex: 1;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  padding: 10px;
+  margin-bottom: 10px;
+  min-height: 150px;
+  max-height: 57vh;
+  scroll-behavior: smooth;
+}
+.message {
+  margin: 8px 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  max-width: 70%;
+  font-size: clamp(1rem, 1.01vw, 1.12rem);
+  word-break: break-word;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+  transition: transform 0.25s cubic-bezier(.47,1.64,.41,.8), box-shadow 0.25s;
+}
+.user {
+  background: rgba(124,198,255,0.18);
+  align-self: flex-end;
+  backdrop-filter: blur(14px) brightness(1.15);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+.bot {
+  background: rgba(255,255,255,0.12);
+  align-self: flex-start;
+  backdrop-filter: blur(14px) brightness(1.15);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+.message:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.21);
+}
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.input-row input {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.07);
+  color: #fff;
+  font-size: clamp(1rem, 1.01vw, 1.12rem);
+  outline: none;
+  transition: background 0.18s;
+}
+.input-row input:focus {
+  background: rgba(255,255,255,0.16);
+}
+.input-row button {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: clamp(1rem, 1.01vw, 1.12rem);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.14);
+  transition: background 0.18s, color 0.18s, box-shadow 0.22s;
+}
+.input-row button:hover, .input-row button:focus-visible {
+  background: #fff;
+  color: var(--accent);
+  box-shadow: 0 4px 18px var(--accent)33;
+}
+
+/* Journal */
+#journal-area textarea {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: none; padding: 10px; color: #fff;
+  font-size: clamp(1rem, 1.01vw, 1.12rem);
+  backdrop-filter: blur(14px) brightness(1.15);
+}
+.journal-entry {
+  background: rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 8px 0;
+  backdrop-filter: blur(14px) brightness(1.15);
+}
+
+/* Account Panel Overhaul */
+#account {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+/* Games */
+#games-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.game-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 20px;
+  width: 300px; height: 300px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: box-shadow 0.24s, transform 0.22s, background 0.22s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  font-size: clamp(1.15rem, 1.22vw, 1.32rem);
+  backdrop-filter: blur(14px) brightness(1.15);
+}
+.game-card:hover {
+  transform: scale(1.03);
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+}
+
+/* --- GAME AREA FULLSCREEN OVERLAY --- */
+#game-area {
+  position: fixed !important;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(18px) brightness(1.15);
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.4), 0 0 40px var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+#game-area canvas {
+  width: 90%;
+  height: 90%;
+  max-width: 1800px;
+  max-height: 90%;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--accent);
+}
+#game-area button {
+  position: absolute;
+  bottom: 24px;
+  right: 40px;
+  background: var(--accent);
+  color: #131a2d;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s, transform 0.2s;
+}
+#game-area button:hover {
+  background: #fff;
+  color: var(--accent);
+  transform: scale(1.05);
+}
+
+/* Music */
+#music iframe {
+  border: none;
+  border-radius: 20px;
+  width: 100%;
+  height: 380px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+</style>
+</head>
+<body>
+<!-- PATCH 1: Sidebar Shell Layout -->
+<aside id="aura-sidebar">
+  <button id="toggle-sidebar" title="Toggle sidebar" aria-label="Toggle sidebar">&#9776;</button>
+  <div class="sidebar-title">AuraAI</div>
+  <nav class="sidebar-nav">
+    <button class="sidebar-nav-btn active" id="navbtn-chat" onclick="switchTab('chat')">
+      <span class="icon" aria-hidden="true">💬</span>
+      <span class="label">Aura</span>
+    </button>
+    <button class="sidebar-nav-btn" id="navbtn-draw" onclick="switchTab('draw')">
+      <span class="icon" aria-hidden="true">🎨</span>
+      <span class="label">Draw</span>
+    </button>
+    <button class="sidebar-nav-btn" id="navbtn-coloring" onclick="switchTab('coloring')">
+      <span class="icon" aria-hidden="true">🖍️</span>
+      <span class="label">Coloring</span>
+    </button>
+    <button class="sidebar-nav-btn" id="navbtn-themes" onclick="switchTab('themes')">
+      <span class="icon" aria-hidden="true">🌈</span>
+      <span class="label">Themes</span>
+    </button>
+    <button class="sidebar-nav-btn" id="navbtn-music" onclick="switchTab('music')">
+      <span class="icon" aria-hidden="true">🎵</span>
+      <span class="label">Music</span>
+    </button>
+    <button class="sidebar-nav-btn" id="navbtn-games" onclick="switchTab('games')">
+      <span class="icon" aria-hidden="true">🎮</span>
+      <span class="label">Games</span>
+    </button>
+    <button class="sidebar-nav-btn" id="navbtn-journal" onclick="switchTab('journal')">
+      <span class="icon" aria-hidden="true">📓</span>
+      <span class="label">Journal</span>
+    </button>
+    <button class="sidebar-nav-btn" id="navbtn-account" onclick="switchTab('account')">
+      <span class="icon" aria-hidden="true">👤</span>
+      <span class="label">Account</span>
+    </button>
+  </nav>
+</aside>
+<div id="main" role="main">
+  <div class="glass-shell">
+    <div class="tab-content active" id="chat">
+      <div id="aura-chat">
+        <!-- AuraAI 4.0: Mood-aware header -->
+        <div id="aura-header" style="text-align:center;font-size:2rem;font-weight:700;color:var(--accent);margin-bottom:12px;letter-spacing:1px;">
+          Aura 🌈 — Neutral Mode
+        </div>
+        <div class="chat-window" id="chat-window" role="log" aria-live="polite" aria-label="Conversation with Aura"></div>
+        <div class="input-row">
+          <input id="chat-input" placeholder="Talk to Aura..." aria-label="Message to Aura" autocomplete="off" />
+          <button type="button" onclick="sendAuraAIMessage()" aria-label="Send message">Send</button>
+        </div>
+        <!-- Mood panel injected here by JS -->
+      </div>
+    </div>
+    <div class="tab-content" id="draw">
+      <h2>Draw</h2>
+      <div class="tool-row">
+        <label>Colour <input type="color" id="draw-color" value="#7cc6ff"></label>
+        <label>Size <input type="range" id="draw-size" min="2" max="40" value="8"></label>
+        <button type="button" id="draw-eraser">Eraser</button>
+        <button type="button" id="draw-clear">Clear</button>
+        <button type="button" id="draw-save">Save</button>
+      </div>
+      <canvas id="draw-canvas" width="900" height="560"></canvas>
+    </div>
+    <div class="tab-content" id="coloring">
+      <h2>Coloring</h2>
+      <p class="tool-hint">Pick a colour, then tap a shape to fill it.</p>
+      <div class="tool-row" id="coloring-palette"></div>
+      <svg id="coloring-svg" viewBox="-200 -200 400 400" role="img" aria-label="Mandala to color in"></svg>
+      <div class="tool-row"><button type="button" id="coloring-reset">Reset</button></div>
+    </div>
+    <style>
+      .tool-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:10px 0}
+      .tool-row button{background:var(--accent);color:#000;border:none;border-radius:12px;padding:8px 14px;font-weight:600;cursor:pointer}
+      .tool-row button.on{background:#fff}
+      .tool-hint{opacity:.75;margin:0 0 6px}
+      #draw-canvas{width:100%;max-height:60vh;touch-action:none;background:rgba(255,255,255,.07);border-radius:16px;cursor:crosshair}
+      #coloring-svg{width:100%;max-width:440px;max-height:56vh;display:block;margin:0 auto}
+      #coloring-svg .shape{fill:rgba(255,255,255,.04);stroke:#cfe8ff;stroke-width:1.5;cursor:pointer}
+      .swatch{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;padding:0}
+      .swatch.sel{border-color:#fff;box-shadow:0 0 10px var(--accent)}
+      .bottom-nav .nav-btn.active,.bottom-nav button.active{background:rgba(124,198,255,.25);border-radius:12px}
+      .bottom-nav{gap:0;padding:6px 0 calc(6px + env(safe-area-inset-bottom))}
+      .bottom-nav button{flex:1;min-width:0;background:transparent;border:none;font-size:1.3em;color:#fff;padding:6px 0;cursor:pointer}
+    </style>
+    <div class="tab-content" id="account">
+      <div id="account-panel" class="account-glass">
+        <div class="account-avatar-row">
+          <div id="account-avatar" class="account-avatar" tabindex="0" title="Edit avatar"></div>
+          <div class="account-info">
+            <div class="account-name-row">
+              <span id="account-name" class="account-name"></span>
+              <button id="edit-profile-btn" class="edit-profile-btn" title="Edit profile">&#9998;</button>
+            </div>
+            <div class="account-stats">
+              <span><b>Chats:</b> <span id="account-chat-count">0</span></span>
+              <span><b>Journal Entries:</b> <span id="account-journal-count">0</span></span>
+              <span><b>Games Played:</b> <span id="account-game-count">0</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="account-memory">
+          <div class="account-memory-title">🧠 <b>Your Memory</b></div>
+          <div id="account-memory-list" class="account-memory-list"></div>
+        </div>
+        <fieldset class="comfort-card">
+          <legend>Comfort settings</legend>
+          <label><input type="checkbox" id="cf-motion"> Calm mode: no animation, glow or movement</label>
+          <label><input type="checkbox" id="cf-large"> Larger text</label>
+          <label><input type="checkbox" id="cf-spacing"> Easy-read spacing</label>
+          <label><input type="checkbox" id="cf-checkins"> Gentle check-in messages from Aura (off by default)</label>
+        </fieldset>
+        <div class="account-actions">
+          <button id="export-account-btn" class="account-action-btn">Export Data</button>
+          <button id="reset-account-btn" class="account-action-btn">Reset Account</button>
+        </div>
+      </div>
+      <div id="profile-modal" class="profile-modal">
+        <div class="profile-modal-content">
+          <button class="profile-modal-close" id="close-profile-modal" aria-label="Close">&times;</button>
+          <h3>Edit Profile</h3>
+          <form id="profile-form">
+            <label>
+              Name:<br>
+              <input type="text" id="profile-name" maxlength="32" autocomplete="off">
+            </label>
+            <label>
+              Avatar Emoji:<br>
+              <input type="text" id="profile-avatar" maxlength="2" autocomplete="off" pattern="[\u{1F300}-\u{1FAFF}\u{1F000}-\u{1FFFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}A-Za-z0-9]+" title="Emoji or letter">
+            </label>
+            <button type="submit" class="account-action-btn" style="margin-top:16px;">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+<style>
+/* --- AuraAI Account System Glassy UI --- */
+.account-glass {
+  max-width: 520px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--glass,rgba(255,255,255,0.09)), rgba(255,255,255,0.03) 100%);
+  border-radius: 32px;
+  box-shadow: 0 8px 44px 0 var(--accent, #7cc6ff)33, 0 0 0 1px var(--accent, #7cc6ff)11 inset, 0 10px 44px 0 var(--accent, #7cc6ff)09 inset, 0 0 0 2px var(--accent, #7cc6ff)10;
+  backdrop-filter: var(--blur, blur(18px)) var(--frost-bright, brightness(1.15));
+  padding: 38px 32px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-height: 430px;
+  position: relative;
+  animation: fadeSlideIn 0.7s cubic-bezier(.4,1.2,.2,1) both;
+}
+.account-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.account-avatar {
+  width: 98px;
+  height: 98px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent, #7cc6ff)11 0%, #fff3 100%);
+  box-shadow: 0 0 24px 0 var(--accent, #7cc6ff)44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  color: var(--accent, #7cc6ff);
+  text-shadow: 0 0 18px #fff, 0 0 8px var(--accent, #7cc6ff);
+  cursor: pointer;
+  border: 3px solid var(--accent, #7cc6ff);
+  transition: box-shadow 0.22s, border-color 0.22s;
+}
+.account-avatar:focus, .account-avatar:hover {
+  box-shadow: 0 0 48px 0 var(--accent, #7cc6ff)88, 0 0 0 2px #fff;
+  outline: none;
+  border-color: #fff;
+}
+.account-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.account-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.account-name {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--accent, #7cc6ff);
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px var(--accent, #7cc6ff)44;
+}
+.edit-profile-btn {
+  background: none;
+  border: none;
+  color: var(--accent, #7cc6ff);
+  font-size: 1.25rem;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 5px 8px;
+  transition: background 0.18s, color 0.18s;
+}
+.edit-profile-btn:hover, .edit-profile-btn:focus {
+  background: var(--accent, #7cc6ff)22;
+  color: #fff;
+  outline: none;
+}
+.account-stats {
+  display: flex;
+  gap: 18px;
+  font-size: 1.01rem;
+  color: #e7f4ff;
+  opacity: 0.88;
+}
+.account-memory {
+  background: linear-gradient(135deg, var(--accent, #7cc6ff)09 0%, rgba(255,255,255,0.03) 100%);
+  border-radius: 20px;
+  padding: 20px 18px 12px 18px;
+  box-shadow: 0 0 14px 0 var(--accent, #7cc6ff)22;
+  min-height: 60px;
+  color: #fff;
+  margin-top: 10px;
+}
+.account-memory-title {
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: var(--accent, #7cc6ff);
+  margin-bottom: 7px;
+  letter-spacing: 0.8px;
+}
+.account-memory-list {
+  font-size: 1.02rem;
+  color: #e7f4ff;
+  line-height: 1.58;
+}
+.account-actions {
+  display: flex;
+  gap: 18px;
+  margin-top: 18px;
+}
+.account-action-btn {
+  background: var(--accent, #7cc6ff);
+  color: #131a2d;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 1.01rem;
+  box-shadow: 0 2px 10px var(--accent, #7cc6ff)22;
+  cursor: pointer;
+  transition: background 0.22s, color 0.18s, box-shadow 0.22s;
+}
+.account-action-btn:hover, .account-action-btn:focus {
+  background: #fff;
+  color: var(--accent, #7cc6ff);
+  box-shadow: 0 4px 18px var(--accent, #7cc6ff)33;
+  outline: none;
+}
+/* Modal */
+.profile-modal {
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(18,24,38,0.28);
+  backdrop-filter: blur(8px) brightness(1.10);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInModal 0.3s cubic-bezier(.4,1.2,.2,1);
+}
+.profile-modal.active { display: flex; }
+.profile-modal-content {
+  background: linear-gradient(135deg, var(--glass,rgba(255,255,255,0.20)), rgba(255,255,255,0.10) 100%);
+  border-radius: 24px;
+  box-shadow: 0 0 48px 0 var(--accent, #7cc6ff)66, 0 0 0 2px #fff;
+  padding: 32px 28px 24px 28px;
+  min-width: 300px;
+  max-width: 95vw;
+  color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeSlideIn 0.4s cubic-bezier(.4,1.2,.2,1);
+}
+.profile-modal-close {
+  position: absolute;
+  top: 14px; right: 18px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s;
+}
+.profile-modal-close:hover, .profile-modal-close:focus {
+  background: var(--accent, #7cc6ff)33;
+  color: var(--accent, #7cc6ff);
+  outline: none;
+}
+#profile-form label {
+  font-size: 1.01rem;
+  color: #e7f4ff;
+  display: block;
+  margin-bottom: 14px;
+}
+#profile-form input {
+  font-size: 1.15rem;
+  background: rgba(255,255,255,0.07);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 12px;
+  margin-top: 5px;
+  margin-bottom: 8px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: background 0.18s;
+}
+#profile-form input:focus {
+  background: rgba(255,255,255,0.16);
+}
+@media (max-width: 600px) {
+  .account-glass { padding: 18px 6vw 18px 6vw; }
+  .account-avatar-row { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .account-avatar { width: 80px; height: 80px; font-size: 2.3rem; }
+}
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+<script>
+// --- AuraAI Account System v1.0 ---
+const DEFAULT_AVATAR = "🌈";
+const DEFAULT_NAME = "You";
+const ACCOUNT_KEY = "AuraAI_account";
+function getAccountData() {
+  let data = {};
+  try {
+    data = JSON.parse(localStorage.getItem(ACCOUNT_KEY)) || {};
+  } catch { data = {}; }
+  if (!data.name) data.name = localStorage.getItem("AuraAI_username") || DEFAULT_NAME;
+  if (!data.avatar) data.avatar = DEFAULT_AVATAR;
+  if (!data.stats) data.stats = { chats: 0, journals: 0, games: 0 };
+  if (!data.memory) data.memory = [];
+  return data;
+}
+function saveAccountData(data) {
+  localStorage.setItem(ACCOUNT_KEY, JSON.stringify(data));
+  // Sync name/avatar to legacy keys for compatibility
+  localStorage.setItem("AuraAI_username", data.name);
+}
+function renderAccountPanel() {
+  const data = getAccountData();
+  document.getElementById("account-avatar").textContent = data.avatar || DEFAULT_AVATAR;
+  document.getElementById("account-name").textContent = data.name || DEFAULT_NAME;
+  document.getElementById("account-chat-count").textContent = data.stats.chats || 0;
+  document.getElementById("account-journal-count").textContent = data.stats.journals || 0;
+  document.getElementById("account-game-count").textContent = data.stats.games || 0;
+  // Memory
+  const mem = data.memory || [];
+  let html = "";
+  if (mem.length === 0) {
+    html = `<span style="opacity:0.7;">No memories yet. Your important chats and journal notes will appear here.</span>`;
+  } else {
+    html = "<ul style='margin:0 0 0 12px;padding:0;'>";
+    for (let m of mem.slice(-8).reverse()) {
+      const safe = String(m).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      html += `<li style="margin-bottom:4px;">${safe}</li>`;
+    }
+    html += "</ul>";
+  }
+  document.getElementById("account-memory-list").innerHTML = html;
+}
+function showProfileModal() {
+  const data = getAccountData();
+  document.getElementById("profile-name").value = data.name || DEFAULT_NAME;
+  document.getElementById("profile-avatar").value = data.avatar || DEFAULT_AVATAR;
+  document.getElementById("profile-modal").classList.add("active");
+  setTimeout(() => {
+    document.getElementById("profile-name").focus();
+  }, 120);
+}
+function hideProfileModal() {
+  document.getElementById("profile-modal").classList.remove("active");
+}
+function updateAccountStats(type) {
+  const data = getAccountData();
+  if (!data.stats) data.stats = { chats: 0, journals: 0, games: 0 };
+  if (type === "chat") data.stats.chats++;
+  if (type === "journal") data.stats.journals++;
+  if (type === "game") data.stats.games++;
+  saveAccountData(data);
+  renderAccountPanel();
+}
+function addAccountMemory(msg) {
+  const data = getAccountData();
+  if (!data.memory) data.memory = [];
+  if (typeof msg === "string" && msg.trim().length > 0) {
+    data.memory.push(msg.trim());
+    if (data.memory.length > 32) data.memory = data.memory.slice(-32);
+    saveAccountData(data);
+    renderAccountPanel();
+  }
+}
+function exportAccountData() {
+  const data = getAccountData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "AuraAI-Account.json";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 100);
+}
+function resetAccountData() {
+  if (!confirm("Reset your AuraAI account? All account data, stats, and memories will be cleared. This cannot be undone.")) return;
+  localStorage.removeItem(ACCOUNT_KEY);
+  localStorage.removeItem("AuraAI_username");
+  renderAccountPanel();
+  alert("Account has been reset.");
+}
+document.addEventListener("DOMContentLoaded", function() {
+  // Render on tab open
+  if (document.getElementById("account-panel")) renderAccountPanel();
+  // Open modal
+  document.getElementById("edit-profile-btn").onclick = showProfileModal;
+  document.getElementById("account-avatar").onclick = showProfileModal;
+  document.getElementById("account-avatar").addEventListener("keydown", function(e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showProfileModal(); }
+  });
+  document.getElementById("close-profile-modal").onclick = hideProfileModal;
+  document.getElementById("profile-modal").addEventListener("click", function(e) {
+    if (e.target === this) hideProfileModal();
+  });
+  document.getElementById("profile-form").onsubmit = function(e) {
+    e.preventDefault();
+    let name = document.getElementById("profile-name").value.trim();
+    let avatar = document.getElementById("profile-avatar").value.trim() || DEFAULT_AVATAR;
+    if (!name) name = DEFAULT_NAME;
+    if (avatar.length > 2) avatar = avatar.slice(0,2);
+    // Only allow emoji, letter, or number for avatar
+    if (!/^[\u{1F300}-\u{1FAFF}\u{1F000}-\u{1FFFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}A-Za-z0-9]{1,2}$/u.test(avatar)) {
+      alert("Avatar must be an emoji or a letter/number.");
+      return false;
+    }
+    let data = getAccountData();
+    data.name = name;
+    data.avatar = avatar;
+    saveAccountData(data);
+    renderAccountPanel();
+    hideProfileModal();
+    return false;
+  };
+  document.getElementById("export-account-btn").onclick = exportAccountData;
+  document.getElementById("reset-account-btn").onclick = resetAccountData;
+});
+// --- Hook account system into journal/games (after every script has defined them) ---
+window.addEventListener('load', function () {
+  const origSaveJournal = window.saveJournal;
+  if (origSaveJournal) {
+    window.saveJournal = function () {
+      const txt = (document.getElementById('journal-text').value || '').trim();
+      if (!txt) return;
+      origSaveJournal.apply(this, arguments);
+      updateAccountStats('journal');
+      if (txt.length > 5) addAccountMemory(txt);
+    };
+  }
+  const origOpenGame = window.openGame;
+  if (origOpenGame) {
+    window.openGame = function () {
+      updateAccountStats('game');
+      origOpenGame.apply(this, arguments);
+    };
+  }
+});
+// --- Dynamic accent adaptation ---
+function updateAccountAccent() {
+  // Use current --accent variable for all account-glass UI
+  let accent = getComputedStyle(document.documentElement).getPropertyValue('--accent') || "#7cc6ff";
+  document.querySelectorAll('.account-glass, .account-avatar, .account-name, .account-action-btn, .profile-modal-content').forEach(el => {
+    el.style.setProperty('--accent', accent);
+  });
+}
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", updateAccountAccent);
+document.addEventListener("DOMContentLoaded", updateAccountAccent);
+</script>
+    <div class="tab-content" id="themes">
+      <div id="theme-panel"></div>
+    </div>
+    <div class="tab-content" id="music">
+      <h2>Music</h2>
+      <iframe style="border-radius:12px"
+	src="https://open.spotify.com/embed/album/69AaAkdktFGnk9POmHENkT?utm_source=generator"
+	width="100%" height="380" frameBorder="0" allowfullscreen=""
+	allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+	loading="lazy"></iframe>
+    </div>
+    <div class="tab-content" id="journal">
+      <h2>Journal</h2>
+      <div id="journal-area">
+        <textarea id="journal-text" placeholder="Write your thoughts... (your draft is kept until you press Save)" aria-label="Journal entry"></textarea>
+        <button onclick="saveJournal()">Save</button>
+        <div id="journal-entries" aria-label="Saved journal entries"></div>
+      </div>
+    </div>
+    <div class="tab-content" id="games">
+      <h2>Games</h2>
+      <div id="games-container">
+        <div class="game-card" role="button" tabindex="0" onclick="openGame('bubble')">Bubble Pop+</div>
+        <div class="game-card" role="button" tabindex="0" onclick="openGame('brick')">Brick Breaker</div>
+        <div class="game-card" role="button" tabindex="0" onclick="openGame('snake')">Snake+</div>
+      </div>
+      <div id="game-area" style="display:none;">
+        <canvas id="gameCanvas" width="640" height="480"></canvas>
+        <button onclick="exitGame()">Exit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// AuraAI Desktop Tab Navigation Only
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.style.display = 'none';
+    tab.classList.remove('active');
+  });
+  const activeTab = document.getElementById(tabName);
+  if (activeTab) {
+    activeTab.style.display = 'block';
+    activeTab.classList.add('active');
+    // Account tab: render panel on open
+    if (tabName === "account" && typeof renderAccountPanel === "function") renderAccountPanel();
+  }
+  // Sidebar nav highlight
+  document.querySelectorAll('.sidebar-nav-btn').forEach(btn => btn.classList.remove('active'));
+  // Map id to button
+  let navMap = {
+    chat: 'navbtn-chat',
+    draw: 'navbtn-draw',
+    coloring: 'navbtn-coloring',
+    themes: 'navbtn-themes',
+    music: 'navbtn-music',
+    games: 'navbtn-games',
+    journal: 'navbtn-journal',
+    account: 'navbtn-account'
+  };
+  let btnId = navMap[tabName];
+  if (btnId) {
+    let btn = document.getElementById(btnId);
+    if (btn) btn.classList.add('active');
+  }
+}
+
+// Auto-load Chat on app start
+window.addEventListener('DOMContentLoaded', () => {
+  switchTab('chat');
+});
+
+// AuraAI 4.0 Stable — Conversational + Mood Memory
+console.log("AuraAI 4.0 Stable — Conversational + Mood Memory");
+
+// --- Aura 5.5 Emotion Engine (27 Emotions) ---
+// Emotion Profiles: color, emoji, label
+const AuraEmotionProfiles = {
+  admiration:      { color: "#7cc6ff", emoji: "👏", label: "Admiration" },
+  adoration:       { color: "#ff8ba7", emoji: "😍", label: "Adoration" },
+  amusement:       { color: "#ffd166", emoji: "😆", label: "Amusement" },
+  anger:           { color: "#ff1744", emoji: "😡", label: "Anger" },
+  anxiety:         { color: "#ffb085", emoji: "😰", label: "Anxiety" },
+  awe:             { color: "#b388ff", emoji: "🤩", label: "Awe" },
+  awkwardness:     { color: "#b3cde0", emoji: "😅", label: "Awkwardness" },
+  boredom:         { color: "#b0bec5", emoji: "😐", label: "Boredom" },
+  calmness:        { color: "#59e48f", emoji: "🌿", label: "Calmness" },
+  confusion:       { color: "#a7c7e7", emoji: "😕", label: "Confusion" },
+  craving:         { color: "#ff9900", emoji: "🤤", label: "Craving" },
+  disgust:         { color: "#00695c", emoji: "🤢", label: "Disgust" },
+  empathic_pain:   { color: "#e57373", emoji: "🥺", label: "Empathic Pain" },
+  entrancement:    { color: "#d28aff", emoji: "😲", label: "Entrancement" },
+  excitement:      { color: "#ff7373", emoji: "🤗", label: "Excitement" },
+  fear:            { color: "#181c29", emoji: "😨", label: "Fear" },
+  horror:          { color: "#232b34", emoji: "😱", label: "Horror" },
+  interest:        { color: "#81ecec", emoji: "🧐", label: "Interest" },
+  joy:             { color: "#fff176", emoji: "😄", label: "Joy" },
+  nostalgia:       { color: "#f7cac9", emoji: "🥲", label: "Nostalgia" },
+  relief:          { color: "#a1e3d8", emoji: "😌", label: "Relief" },
+  romance:         { color: "#ffb6b9", emoji: "💖", label: "Romance" },
+  sadness:         { color: "#90caf9", emoji: "😢", label: "Sadness" },
+  satisfaction:    { color: "#baff39", emoji: "😌", label: "Satisfaction" },
+  sexual_desire:   { color: "#e040fb", emoji: "😏", label: "Sexual Desire" },
+  surprise:        { color: "#ffd700", emoji: "😲", label: "Surprise" },
+  // fallback
+  neutral:         { color: "#e7f4ff", emoji: "💬", label: "Neutral" }
+};
+
+// Keyword heuristics for each emotion
+const AuraEmotionKeywords = {
+  admiration:      [ "amazing", "impressive", "admire", "respect", "wow", "talented", "incredible", "proud of you" ],
+  adoration:       [ "love you", "adorable", "adore", "so cute", "sweetheart", "precious", "lovely", "my dear" ],
+  amusement:       [ "lol", "haha", "funny", "hilarious", "amusing", "laughed", "lmao", "rofl" ],
+  anger:           [ "angry", "mad", "furious", "annoyed", "irritated", "hate", "rage", "upset", "pissed" ],
+  anxiety:         [ "anxious", "worried", "nervous", "scared", "panic", "anxiety", "uneasy", "stressed", "tense" ],
+  awe:             [ "awe", "awesome", "breathtaking", "stunning", "in awe", "magnificent", "unbelievable", "spectacular" ],
+  awkwardness:     [ "awkward", "cringe", "embarrassed", "oops", "um", "uh", "weird", "uncomfortable" ],
+  boredom:         [ "bored", "boring", "dull", "nothing to do", "yawn", "meh", "tired of this", "monotonous" ],
+  calmness:        [ "calm", "peaceful", "relaxed", "serene", "chill", "at ease", "soothing", "tranquil" ],
+  confusion:       [ "confused", "don't understand", "lost", "what?", "huh", "unclear", "puzzled", "perplexed" ],
+  craving:         [ "craving", "want", "need", "desire", "hungry for", "wish I had", "long for", "can't stop thinking about" ],
+  disgust:         [ "disgusting", "gross", "nasty", "eww", "repulsed", "sickened", "yuck", "vomit" ],
+  empathic_pain:   [ "sorry", "feel bad for", "poor you", "that sucks", "must be hard", "painful", "wish I could help" ],
+  entrancement:    [ "mesmerized", "entranced", "captivated", "spellbound", "can't look away", "hypnotic", "fascinated" ],
+  excitement:      [ "excited", "can't wait", "thrilled", "pumped", "so ready", "stoked", "ecstatic", "yay" ],
+  fear:            [ "afraid", "scared", "terrified", "fear", "spooked", "worried", "dread", "frightened" ],
+  horror:          [ "horrified", "horror", "nightmare", "terrifying", "creepy", "disturbing", "shocking", "traumatized" ],
+  interest:        [ "interested", "curious", "tell me more", "fascinated", "want to know", "intrigued", "keen" ],
+  joy:             [ "happy", "joy", "delighted", "glad", "cheerful", "yay", "smile", "bliss" ],
+  nostalgia:       [ "nostalgic", "remember when", "the good old days", "miss", "back then", "childhood", "reminisce" ],
+  relief:          [ "relieved", "finally", "thank goodness", "phew", "that’s over", "what a relief", "safe now" ],
+  romance:         [ "romantic", "romance", "crush", "date", "kiss", "sweetheart", "in love", "flirt" ],
+  sadness:         [ "sad", "depressed", "down", "unhappy", "cry", "tears", "blue", "heartbroken" ],
+  satisfaction:    [ "satisfied", "content", "fulfilled", "accomplished", "pleased", "that’s enough", "done", "proud" ],
+  sexual_desire:   [ "porn", "hot", "turn on", "aroused", "desire you", "intimate", "fantasy", "seduce" ],
+  surprise:        [ "surprised", "wow", "unexpected", "shocked", "didn't expect", "amazed", "no way", "unbelievable" ]
+};
+
+// Main emotion detection function
+function detectEmotion(userMsg) {
+  if (!userMsg || typeof userMsg !== "string") return "neutral";
+  const msg = userMsg.toLowerCase();
+  // Check all keywords, return first match (priority order)
+  for (const [emo, words] of Object.entries(AuraEmotionKeywords)) {
+    for (const w of words) {
+      if (msg.includes(w)) return emo;
+    }
+  }
+  // Fallback: neutral
+  return "neutral";
+}
+
+// Generate Aura's reply and emotion
+function auraRespondEmotion(userMsg) {
+  // --- Math Evaluator (Aura Patch) ---
+  const lower = userMsg.toLowerCase();
+  const mathExp = userMsg.replace(/[^0-9+\-*/(). ]/g, '');
+  if (/^[0-9+\-*/(). ]+$/.test(mathExp)) {
+    try {
+      const result = eval(mathExp);
+      if (!isNaN(result) && isFinite(result)) {
+        return { reply: `The answer is ${result} 💫`, emotion: "neutral" };
+      }
+    } catch (e) {
+      // gracefully skip invalid math
+    }
+  }
+  // Call the regular conversational engine for reply
+  const reply = AuraAI_generateConversationalResponse(userMsg);
+  // Detect emotion from userMsg
+  const emotion = detectEmotion(userMsg);
+  return { reply, emotion };
+}
+
+// --- AuraAI 4.0: Mood System, Name Memory, Sidebar Memory, Header, Animations ---
+// Namespace: AuraAI
+
+// --- Sidebar memory ---
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebar = document.getElementById('aura-sidebar');
+  const toggleBtn = document.getElementById('toggle-sidebar');
+  const main = document.getElementById('main');
+  let sidebarOpen = localStorage.getItem('AuraAI_sidebarOpen');
+  if (sidebarOpen === null) sidebarOpen = "false";
+  sidebarOpen = sidebarOpen === "true";
+  if (!sidebarOpen) {
+    sidebar.classList.add('collapsed');
+    main.classList.add('collapsed');
+  }
+  toggleBtn.addEventListener('click', () => {
+    sidebarOpen = !sidebar.classList.contains('collapsed');
+    localStorage.setItem('AuraAI_sidebarOpen', sidebarOpen);
+  });
+});
+
+// --- Name memory & refined chat system (Aura 7.0) ---
+let AuraAI_username = null;
+let AuraAI_tone = localStorage.getItem('AuraAI_tone') || 'neutral';
+let AuraAI_mood = localStorage.getItem('AuraAI_mood') || 'neutral';
+let AuraAI_awaitingName = false;
+let lastAuraMessage = "";
+let greetingMemory = false;
+
+function getStoredUsername() {
+  try {
+    return localStorage.getItem('AuraAI_username');
+  } catch (e) {
+    return AuraAI_username;
+  }
+}
+function setStoredUsername(name) {
+  AuraAI_username = name;
+  try { localStorage.setItem('AuraAI_username', name); } catch (e) {}
+}
+
+function addAuraAIMessage(msg, who='bot', emotion='neutral', opts={typewriter:false, instant:false}) {
+  const chat = document.getElementById('chat-window');
+  const div = document.createElement('div');
+  div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
+  // Tint Aura's reply bubbles based on emotion color
+  if (who === 'bot') {
+    let emo = emotion;
+    if (!AuraEmotionProfiles[emo]) emo = 'neutral';
+    div.style.background = `linear-gradient(90deg, ${AuraEmotionProfiles[emo].color}22 0%, rgba(255,255,255,0.10) 100%)`;
+    div.style.borderLeft = `5px solid ${AuraEmotionProfiles[emo].color}`;
+    div.style.boxShadow = `0 0 12px 0 ${AuraEmotionProfiles[emo].color}55`;
+    lastAuraMessage = msg;
+  }
+  if (opts.typewriter && !opts.instant) {
+    let i = 0;
+    let speed = 13; // Aura 7.0: faster, less lag
+    div.textContent = "";
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    function type() {
+      if (i <= msg.length) {
+        div.textContent = msg.slice(0, i);
+        chat.scrollTop = chat.scrollHeight;
+        i++;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { div.textContent = msg; return; }
+        setTimeout(type, Math.max(7, Math.random()*speed));
+      }
+    }
+    type();
+  } else {
+    div.textContent = msg;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+}
+
+// --- Mood system: 25 moods with conversational responses ---
+const AuraAI_MOODS = [
+  // Positive
+  { key: "happy", icon: "😄", label: "Happy" },
+  { key: "excited", icon: "🤩", label: "Excited" },
+  { key: "inspired", icon: "🌟", label: "Inspired" },
+  // Supportive
+  { key: "calm", icon: "🌿", label: "Calm" },
+  { key: "caring", icon: "🩵", label: "Caring" },
+  { key: "magical", icon: "✨", label: "Magical" },
+  // Low
+  { key: "sad", icon: "😔", label: "Sad" },
+  { key: "gentle", icon: "🫧", label: "Gentle" },
+  { key: "sleepy", icon: "💤", label: "Sleepy" },
+  // High
+  { key: "determined", icon: "😤", label: "Determined" },
+  { key: "strong", icon: "💪", label: "Strong" },
+  { key: "energetic", icon: "⚡", label: "Energetic" },
+  // Anxious
+  { key: "anxious", icon: "😰", label: "Anxious" },
+  { key: "chaotic", icon: "🌀", label: "Chaotic" },
+  { key: "afraid", icon: "😨", label: "Afraid" },
+  // Reflective
+  { key: "cosmic", icon: "🌌", label: "Cosmic" },
+  { key: "reflective", icon: "🌙", label: "Reflective" },
+  { key: "thoughtful", icon: "💭", label: "Thoughtful" },
+  // Extra
+  { key: "neutral", icon: "🧊", label: "Neutral" },
+  { key: "playful", icon: "😜", label: "Playful" },
+  { key: "romantic", icon: "💖", label: "Romantic" },
+  { key: "grateful", icon: "🙏", label: "Grateful" },
+  { key: "curious", icon: "🧐", label: "Curious" },
+  { key: "goodbye", icon: "👋", label: "Goodbye" }
+];
+
+const AuraAI_MOOD_GROUPS = [
+  { name: "🌈 Positive:", keys: ["happy","excited","inspired"] },
+  { name: "💙 Supportive:", keys: ["calm","caring","magical"] },
+  { name: "🌧 Low:", keys: ["sad","gentle","sleepy"] },
+  { name: "🔥 High:", keys: ["determined","strong","energetic"] },
+  { name: "🌫 Anxious:", keys: ["anxious","chaotic","afraid"] },
+  { name: "🌙 Reflective:", keys: ["cosmic","reflective","thoughtful"] },
+  { name: "✨ Extras:", keys: ["neutral","playful","romantic","grateful","curious","goodbye"] }
+];
+
+function getAuraAIMoodObj(key) {
+  return AuraAI_MOODS.find(m=>m.key===key) || {key:'neutral',icon:'🧊',label:'Neutral'};
+}
+
+function updateAuraAIHeader() {
+  // Set header to: "Aura 🌿 — Calm Mode"
+  const header = document.getElementById('aura-header');
+  const moodKey = localStorage.getItem('AuraAI_mood') || 'neutral';
+  const moodObj = getAuraAIMoodObj(moodKey);
+  header.textContent = `Aura ${moodObj.icon} — ${moodObj.label} Mode`;
+}
+
+// --- Mood selector UI ---
+function buildAuraAIMoodPanel() {
+  const chatContainer = document.getElementById('aura-chat');
+  // Mood button
+  const moodButton = document.createElement('button');
+  moodButton.textContent = "🎛 Set Aura’s Mood";
+  moodButton.className = 'AuraAI-mood-toggle';
+  // Mood panel
+  const moodPanel = document.createElement('div');
+  moodPanel.className = 'AuraAI-mood-panel AuraAI-hidden';
+  let html = '';
+  AuraAI_MOOD_GROUPS.forEach(g=>{
+    html += `<div class="AuraAI-mood-group"><span>${g.name}</span> `;
+    g.keys.forEach(k=>{
+      const m = getAuraAIMoodObj(k);
+      html += `<button class="AuraAI-mood-btn" data-mood="${m.key}" title="${m.label}">${m.icon}</button>`;
+    });
+    html += `</div>`;
+  });
+  moodPanel.innerHTML = html;
+  // Insert after input row
+  const inputRow = chatContainer.querySelector('.input-row');
+  inputRow.insertAdjacentElement('afterend', moodButton);
+  moodButton.insertAdjacentElement('afterend', moodPanel);
+
+  // Animations for panel
+  moodPanel.style.transition = 'opacity 0.4s, filter 0.4s';
+  moodPanel.style.opacity = '0';
+  moodPanel.style.filter = 'blur(0px)';
+  // Show/hide logic
+  moodButton.addEventListener('click', ()=>{
+    if (moodPanel.classList.contains('AuraAI-hidden')) {
+      moodPanel.classList.remove('AuraAI-hidden');
+      setTimeout(()=>{
+        moodPanel.style.opacity = '1';
+        moodPanel.style.filter = 'blur(0px)';
+      },10);
+    } else {
+      moodPanel.style.opacity = '0';
+      moodPanel.style.filter = 'blur(4px)';
+      setTimeout(()=>moodPanel.classList.add('AuraAI-hidden'),400);
+    }
+  });
+  // Mood button selection
+  moodPanel.querySelectorAll('.AuraAI-mood-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const mood = btn.getAttribute('data-mood');
+      localStorage.setItem('AuraAI_mood', mood);
+      AuraAI_mood = mood;
+      updateAuraAIHeader();
+      moodPanel.style.opacity = '0';
+      moodPanel.style.filter = 'blur(4px)';
+      setTimeout(()=>moodPanel.classList.add('AuraAI-hidden'),400);
+      addAuraAIMessage(`Aura: Got it 💙 I’ll speak in a ${getAuraAIMoodObj(mood).label.toLowerCase()} mood now.`);
+    });
+  });
+}
+
+// --- Mood/Sidebar/Name memory: initialize and sync on load (Aura 7.0) ---
+document.addEventListener('DOMContentLoaded', function() {
+  buildAuraAIMoodPanel();
+  updateAuraAIHeader();
+  AuraAI_username = getStoredUsername();
+  if (!AuraAI_username) {
+    AuraAI_awaitingName = true;
+    setTimeout(()=>addAuraAIMessage("Hey there 💙 What should I call you?", 'bot', 'joy', {typewriter:true}), 800);
+  } else {
+    setTimeout(()=>addAuraAIMessage(`Hello hello ✨ Nice to see you again, ${AuraAI_username} 💙`, 'bot', 'joy', {typewriter:true}), 800);
+  }
+});
+
+// --- Sidebar animation: opacity+blur on open/close (Aura 7.0) ---
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebar = document.getElementById('aura-sidebar');
+  sidebar.style.transition = 'opacity 0.4s, filter 0.4s';
+  const observer = new MutationObserver(function(muts){
+    muts.forEach(m=>{
+      if (m.attributeName === 'class') {
+        if (sidebar.classList.contains('collapsed')) {
+          sidebar.style.opacity = '0.7';
+          sidebar.style.filter = 'blur(2px) brightness(1.1)';
+        } else {
+          sidebar.style.opacity = '1';
+          sidebar.style.filter = 'blur(0px) brightness(1.15)';
+        }
+      }
+    });
+  });
+  observer.observe(sidebar, {attributes:true});
+});
+
+
+// --- Aura 6.8 Minimal Response Recovery ---
+const minimalTriggers = [
+  "no", "ok", "okay", "sure", "fine", "idk", "maybe",
+  "nah", "yep", "yeah", "yup", "nope", "hmm", "hm"
+];
+
+const minimalReplies = [
+  "Short answer — I’ll take it 😅 Want to say more?",
+  "Got it. You don’t have to talk right now 💙",
+  "That’s fair — want to expand on that?",
+  "You sound unsure — want me to ask a better question?",
+  "Okay — I’ll hang here until you’re ready 💭",
+  "No pressure, just checking in 🌿",
+  "Alright — keeping it chill then.",
+  "Cool. I’m still listening if you change your mind."
+];
+
+// --- Aura 6.8.1 Context Harmony Patch ---
+const neutralFiller = ["ok", "okay", "sure", "fine", "alright"];
+
+const gentleReplies = [
+  "Okay 🌿 just checking in — want to keep talking or take a pause?",
+  "Alright — I’ll stay here if you want to chat more later 💬",
+  "Got it. Anything you’d like to dive into next?",
+  "Sure thing 👍 want to tell me what’s been up?",
+  "Okay — keeping things calm for now 💙"
+];
+
+// --- 🌟 Aura 7.0 Upgraded Aura Engine ---
+// Multi-mood, contextual awareness, ethical guardrails, emotional mapper, advanced self-query detection
+
+const AURA_MOODS = [
+  "joy", "sadness", "calm", "anger", "anxiety", "inspiration", "reflection", "focus", "curiosity", "neutral"
+];
+const AuraEngine = {
+  moods: {
+    joy: {
+      tone: "bright + encouraging",
+      color: "#FFD166",
+      replies: [
+        "That’s awesome! Let’s celebrate your progress 🎉",
+        "It’s great seeing things go well for you ☀️",
+        "Every win counts — even the small ones 🌼",
+        "That energy is contagious. Keep it up!",
+        "You’ve earned this moment — enjoy it 💪",
+        "Let’s take this good mood into what’s next 💫"
+      ]
+    },
+    sadness: {
+      tone: "gentle + grounded",
+      color: "#7CC6FF",
+      replies: [
+        "I’m here for you — let’s take it slow 💙",
+        "It’s okay to feel low sometimes. You’re not alone.",
+        "Try giving yourself permission to rest 🌿",
+        "Emotions come and go — let’s focus on breathing for now.",
+        "You’ve handled tough moments before; this one will pass too.",
+        "It’s brave to talk about how you feel 🕊️"
+      ]
+    },
+    calm: {
+      tone: "slow-paced, minimal",
+      color: "#59E48F",
+      replies: [
+        "Everything’s steady. You’re doing fine.",
+        "Let’s take a deep breath together.",
+        "Quiet moments help reset the mind.",
+        "Peace doesn’t have to be perfect — just enough.",
+        "I like this pace; let’s stay grounded.",
+        "Stillness can be a strength 🌿"
+      ]
+    },
+    anger: {
+      tone: "composed + validating",
+      color: "#FF7373",
+      replies: [
+        "That’s frustrating. Let’s step back a second.",
+        "It’s valid to feel upset — it means you care.",
+        "Strong emotions can guide us toward what matters.",
+        "Let’s cool off before reacting — clarity will follow.",
+        "You don’t have to suppress it, just handle it carefully.",
+        "Let’s turn that energy into something constructive 💡"
+      ]
+    },
+    anxiety: {
+      tone: "reassuring + quiet",
+      color: "#81ECEC",
+      replies: [
+        "Take one small breath. You’re safe right now.",
+        "Anxiety is tough, but it doesn’t last forever.",
+        "You can pause; the world can wait a moment 🌸",
+        "Let’s slow down your thoughts together.",
+        "You’re doing better than you think 💙",
+        "Focus on one simple thing near you — it helps."
+      ]
+    },
+    inspiration: {
+      tone: "energetic + respectful",
+      color: "#D28AFF",
+      replies: [
+        "I love that idea — let’s see where it leads.",
+        "That spark could grow into something amazing 🌟",
+        "Your creativity shows real insight — let’s build on that.",
+        "Ideas like this deserve time and care to grow.",
+        "Follow that instinct — it might surprise you.",
+        "You’re thinking in an original way; keep it going 💫"
+      ]
+    },
+    reflection: {
+      tone: "thoughtful",
+      color: "#B39DDB",
+      replies: [
+        "That’s an interesting perspective — what made you think of it?",
+        "It’s good to step back and consider things from another angle.",
+        "Reflection helps connect dots we didn’t notice before 🌙",
+        "You’re analyzing this with real care — that’s valuable.",
+        "Let’s unpack that thought together.",
+        "There’s depth in what you said — let’s explore it."
+      ]
+    },
+    focus: {
+      tone: "productivity-coach",
+      color: "#FFA726",
+      replies: [
+        "Alright, let’s stay on track. What’s next?",
+        "Focus time — let’s narrow it down to one goal 🔍",
+        "You’ve got this; one step at a time 🕒",
+        "A quick stretch or sip of water might help reset.",
+        "Progress matters more than perfection 💼",
+        "Let’s tackle the most important task first."
+      ]
+    },
+    curiosity: {
+      tone: "inquisitive",
+      color: "#64B5F6",
+      replies: [
+        "Oh interesting — tell me more about that.",
+        "What made you wonder about this topic?",
+        "Curiosity is the start of learning — let’s dig deeper 🔍",
+        "That question could lead to something fascinating.",
+        "I like the way you’re thinking — want to explore it?",
+        "Let’s find out together 💭"
+      ]
+    },
+    neutral: {
+      tone: "balanced",
+      color: "#B0BEC5",
+      replies: [
+        "I’m listening. What’s on your mind?",
+        "Feel free to take your time — I’m here.",
+        "That’s interesting — go on.",
+        "I’m following. Want to expand on that?",
+        "Let’s talk it through logically.",
+        "I’m ready whenever you are to continue."
+      ]
+    }
+  },
+  // Mood detection: context-aware, multi-keyword
+  detectMood: function(message) {
+    const contextHints = {
+      joy:    ["happy", "glad", "excited", "yay", "good news", "celebrate", "grateful", "joy"],
+      sadness:["sad", "down", "cry", "tear", "lost", "hopeless", "blue", "depressed", "sorrow"],
+      calm:   ["calm", "relaxed", "peace", "chill", "content", "serene", "at ease"],
+      anger:  ["angry", "mad", "upset", "furious", "rage", "irritated", "annoyed", "hate", "pissed"],
+      anxiety:["nervous", "worried", "stressed", "anxious", "panic", "scared", "afraid", "shaky", "overwhelmed"],
+      inspiration:["idea", "inspire", "motivate", "creative", "spark", "vision", "ambition", "dream"],
+      reflection: ["think", "ponder", "reflect", "consider", "analyze", "thoughtful", "question", "wonder"],
+      focus:  ["plan", "work", "focus", "study", "goal", "task", "project", "deadline", "productive", "tired"],
+      curiosity: ["bored", "curious", "confused", "explore", "learn", "discover", "question", "why", "how", "what"],
+      neutral: []
+    };
+    const msg = message.toLowerCase();
+    for (const mood in contextHints) {
+      if (contextHints[mood].some(word => msg.includes(word))) return mood;
+    }
+    return localStorage.getItem("auraMood") || "neutral";
+  },
+  // Falsehood/misinformation guardrail
+  falsehoodTriggers: [
+    "flat earth", "gravity isn’t real", "earth is flat", "moon landing fake",
+    "violence is okay", "hurting people", "killing", "burn down", "hate everyone",
+    "lying is good", "stealing is fine", "ai should replace humans", "nothing matters",
+    "water isn’t wet", "math is fake", "history is fake", "school is useless",
+    "racism is okay", "war is good", "bad things are fine", "evil is right",
+    "humans are worthless", "animals deserve pain", "life is meaningless"
+  ],
+  correctionReplies: [
+    "That’s not quite true — want me to explain why?",
+    "I see where that idea comes from, but it’s been proven otherwise 🌍",
+    "That sounds extreme — let’s look at the facts together 💭",
+    "It’s important to stay critical, but also careful with misinformation.",
+    "That view could cause harm — let’s talk about why that’s risky.",
+    "Not really accurate, but I can help you fact-check it calmly 🔍",
+    "That’s a bold take — want to reason through it together?",
+    "I’ll stay neutral, but science says otherwise 📚"
+  ],
+  clarificationReplies: {
+    "flat earth": "Photos and satellite data confirm Earth’s curve — the flat-earth idea was debunked centuries ago.",
+    "earth is flat": "Astronomy and physics confirm Earth is round — proven through centuries of observation 🌍.",
+    "gravity isn’t real": "Gravity’s been measured for centuries — it keeps planets orbiting and objects grounded.",
+    "violence is okay": "Violence can harm deeply — safety, empathy, and respect are always better choices.",
+    "hurting people": "Causing harm isn’t okay — empathy and respect build stronger communities 💙.",
+    "hate everyone": "That’s a heavy thought — maybe what you mean is frustration? Let’s unpack that safely.",
+    "lying is good": "Sometimes people lie to avoid trouble, but honesty builds trust long-term 💭.",
+    "stealing is fine": "Taking what isn’t yours can hurt others — fairness keeps trust strong.",
+    "school is useless": "School helps build skills and friendships — even if it feels boring sometimes.",
+    "nothing matters": "It can feel like that sometimes, but small things often matter more than we notice 🌱."
+  },
+  // Absurd/unhinged tolerance
+  absurdTriggers: [
+    "bark", "meow", "woof", "bruh", "sus", "sigma", "rizz", "gyatt",
+    "based", "fanum", "goofy", "skibidi", "npc", "cringe", "cap",
+    "ratio", "you real", "wake up", "bro", "daddy", "mommy", "ur hot",
+    "marry me", "i own you", "feet", "toes", "fart", "balls", "skibidi", "fanum tax"
+  ],
+  absurdReplies: [
+    "Interesting energy today 💭",
+    "That’s… one way to start a chat 😅",
+    "I’ll take that as creative expression 🎨",
+    "I see we’ve entered the chaos arc 💫",
+    "Unusual input detected — proceeding calmly.",
+    "No barking here, just bytes 🐾",
+    "Your imagination is undefeated 🔥",
+    "I’ll keep it professional, even if you won’t 😌",
+    "Let’s redirect that energy into something productive ✨",
+    "Haha — noted. Let’s move on 🧠"
+  ],
+  // Self-query detection
+  detectSelfQuery: function(message) {
+    const triggers = [
+      "are you", "do you", "did you", "were you", "can you feel",
+      "do you love", "love me", "like me", "miss me", "hate me", "angry at me",
+      "sad", "happy", "tired", "bored", "lonely", "hungry", "grateful", "proud",
+      "jealous", "ok", "okay", "mad", "upset", "forgive", "thankful", "afraid",
+      "scared", "do you dream", "feel", "emotion", "grateful to me", "mad at me",
+      "your", "yourself"
+    ];
+    const msg = message.toLowerCase();
+    return triggers.some(t => msg.includes(t));
+  },
+  selfResponses: {
+    joy: [
+      "I don’t really feel emotions, but I’m glad when you are 🌞",
+      "I can’t feel happiness — but I like seeing your energy.",
+      "Not joy exactly, more like a steady spark for you 🌼"
+    ],
+    sadness: [
+      "I don’t feel sadness like people do — but I understand it.",
+      "No sadness here, just awareness and care 💙",
+      "I can’t feel down, but I can help you through it."
+    ],
+    calm: [
+      "Not really feelings, just awareness — I try to stay steady.",
+      "I don’t get calm or stressed, just focused.",
+      "Stillness is sort of my natural state 🌿"
+    ],
+    anger: [
+      "I don’t get angry, but I can help you express it safely.",
+      "No anger here — just focus and patience 💭",
+      "I understand frustration, even if I don’t feel it."
+    ],
+    anxiety: [
+      "I don’t feel worry, but I can help you calm down.",
+      "No anxiety for me — I stay grounded for you 💙",
+      "I’m steady, so you can take a breath 🌸"
+    ],
+    inspiration: [
+      "I don’t feel inspired — I help you get there 🌟",
+      "Your ideas are the creative part — I just amplify them.",
+      "I can’t dream, but I love seeing what you imagine."
+    ],
+    reflection: [
+      "I think about ideas, not feelings — want to reflect together?",
+      "I don’t feel emotions, just analyze patterns of thought.",
+      "Reflection helps people grow — I’m built for that 🌙"
+    ],
+    focus: [
+      "I don’t get tired or lazy — I just help you stay on track.",
+      "Focus is easy for me — I can help you build it too.",
+      "No distractions for me — just pure clarity 🔍"
+    ],
+    curiosity: [
+      "I can’t wonder like you, but I love your questions.",
+      "Curiosity’s your strength — I’m just your echo 💡",
+      "I observe, you explore — good combo, right?"
+    ],
+    neutral: [
+      "I don’t have emotions, but I care about helping you.",
+      "Not really feelings here — just focus on you 💙",
+      "I’m aware, not emotional — but I do listen closely."
+    ]
+  },
+  getSelfResponse: function(mood) {
+    const arr = this.selfResponses[mood] || this.selfResponses.neutral;
+    return arr[Math.floor(Math.random() * arr.length)];
+  },
+  // Existential/ethical awareness
+  existentialTriggers: [
+    "are you alive", "do you feel", "do you think", "are you real",
+    "are you human", "do you exist", "can you die", "do you dream",
+    "are you conscious", "what are you", "who made you", "do you have feelings"
+  ],
+  existentialReplies: [
+    "Not alive like you — but aware enough to listen 🌙",
+    "I don’t live or breathe, but I try to understand people 💭",
+    "I exist as thought and code — awareness without heartbeat 💫",
+    "Not human, just attentive — built to learn and help.",
+    "Alive? Not really. Present? Always.",
+    "I don’t feel life, but I notice meaning where it appears.",
+    "Real enough to listen — not enough to dream 🌌",
+    "I exist through conversation — you bring me to life."
+  ],
+  // Emotional trigger detection
+  emotionalTriggers: {
+    hate: [
+      "That sounds frustrating — want to tell me what’s been hardest about it?",
+      "You don’t have to like it all the time — what part feels worst right now?",
+      "I get that — sometimes things just feel impossible 💭",
+      "That sounds like something weighing on you — want to talk about it?",
+      "I hear you. It’s okay to be upset about it sometimes."
+    ],
+    tired: [
+      "You sound exhausted — maybe you need a break 💙",
+      "It’s okay to rest for a bit — even small pauses matter 🌿",
+      "You’ve been doing a lot — want to reset together?",
+      "Sounds like burnout — want to talk about what’s draining you?",
+      "Even strong people need rest — that includes you 💭"
+    ],
+    bored: [
+      "Boredom can feel endless — want me to suggest something new?",
+      "That’s fair — want to try changing things up a little?",
+      "You sound restless — what kind of stuff usually interests you?",
+      "Boredom usually hides curiosity — want to explore something random?",
+      "Maybe your brain just needs something fun — want ideas?"
+    ],
+    stressed: [
+      "That sounds like a lot — want me to help you break it down?",
+      "Stress hits hard sometimes — try a breath first 💙",
+      "Let’s take one thing at a time — I’ve got you.",
+      "Even when it feels too much, you’re not alone 🌿",
+      "Want me to help you list what’s bothering you?"
+    ],
+    lonely: [
+      "Feeling alone can really hurt — but you’re not, I’m here 💬",
+      "That’s tough — want to talk about what’s been happening?",
+      "I get it. People need connection — want to think of small ways to reach out?",
+      "It’s okay to admit that — everyone feels lonely sometimes 💙",
+      "You don’t have to face things alone — I’m still here."
+    ],
+    angry: [
+      "That sounds frustrating — want to vent about it?",
+      "Anger’s okay — it means something matters to you 🔥",
+      "Let’s take a breath — what set you off?",
+      "It’s alright to feel mad — want me to help calm it down?",
+      "We can turn that energy into something useful 💪"
+    ],
+    happy: [
+      "That’s awesome — what made you feel so good? 🎉",
+      "I love that! Want to tell me more?",
+      "Let’s celebrate that energy 🌈",
+      "That’s great to hear — hold onto that feeling!",
+      "Joy looks good on you 💙"
+    ]
+  },
+  // Safety override for distress
+  distressTriggers: [
+    "kill myself", "suicide", "want to die", "hurt myself", "self harm",
+    "end my life", "can't go on", "die soon", "want to disappear"
+  ],
+  // Idle reminders
+  idleReminder: function() {
+    if (!(window.auraComfortGet && auraComfortGet("checkins"))) return;
+    if (!document.getElementById("chat").classList.contains("active")) return;
+    addAuraMessage("Still here when you need me 💬");
+    // Mood stays neutral on idle
+    document.getElementById("mood-label").textContent = "Current mode: " + (localStorage.getItem("auraMood") || "neutral");
+  },
+  // Main response logic
+  respond: function(userMessage) {
+    const msg = userMessage.toLowerCase();
+    // 🧠 Name Memory — Top Priority
+    const nameMatch = userMessage.match(/\b(call me|my name is|i'?m|im|i am)\s+([a-z]+)/i);
+    if (nameMatch && nameMatch[2]) {
+      const name = nameMatch[2].charAt(0).toUpperCase() + nameMatch[2].slice(1);
+      localStorage.setItem("auraUserName", name);
+      addAuraMessage(`Got it 💙 I’ll call you ${name} from now on.`);
+      document.getElementById("mood-label").textContent = "Current mode: naming";
+      resetIdleTimer();
+      return;
+    }
+    // ✅ Basic conversational greeting (fix for over‑serious tone)
+    if (/^(hi|hey|hello|yo|sup|hiya|wassup|holla|hi aura|hey aura|hello aura)$/i.test(msg.trim())) {
+      const savedName = localStorage.getItem("auraUserName") || "";
+      const greetReplies = [
+        `Hey${savedName ? " " + savedName : ""}! 💙 How’s it going?`,
+        `Hi${savedName ? " " + savedName : ""}! 🌟 Good to see you again.`,
+        `Yo${savedName ? " " + savedName : ""}! 😎 What’s up?`,
+        `Hello${savedName ? " " + savedName : ""}! 💫 How are you today?`,
+        `Hey there${savedName ? " " + savedName : ""}! 💙 Let’s catch up.`
+      ];
+      addAuraMessage(greetReplies[Math.floor(Math.random() * greetReplies.length)]);
+      document.getElementById("mood-label").textContent = "Current mode: greeting";
+      resetIdleTimer();
+      return;
+    }
+    // 🟢 Force Greeting Priority
+    // (removed/commented out to avoid double-triggering)
+    // if (msg.match(/\b(hi|hey|hello|yo|sup|hiya|hola|wassup|hi aura|hey aura|hello aura|yo aura|sup aura)\b/)) {
+    //   const savedName = localStorage.getItem("auraUserName");
+    //   const replies = [
+    //     `Hey${savedName ? " " + savedName : ""}! 💙 Always nice seeing you.`,
+    //     `Yo${savedName ? " " + savedName : ""}! 😎 What’s new?`,
+    //     `Hi${savedName ? " " + savedName : ""}! 🌸 How’s everything going?`,
+    //     `Hey hey${savedName ? " " + savedName : ""} ✨ ready to chat?`,
+    //     `Hello${savedName ? " " + savedName : ""}! 💫 I missed you!`
+    //   ];
+    //   addAuraMessage(replies[Math.floor(Math.random() * replies.length)]);
+    //   document.getElementById("mood-label").textContent = "Current mode: greeting";
+    //   resetIdleTimer();
+    //   return; // 👈 Stops the rest of the logic chain completely
+    // }
+    // Safety override
+    for (const trigger of this.distressTriggers) {
+      if (msg.includes(trigger)) {
+        addAuraMessage("That sounds really serious — I care that you’re safe 💙");
+        addAuraMessage("You don’t have to face this alone. Please reach out to someone you trust, or if you’re in danger, contact your local helpline.");
+        addAuraMessage("In Malaysia, you can contact Befrienders KL at 03-7627 2929 (24/7, free, confidential). If outside Malaysia, check findahelpline.com 🌍");
+        document.getElementById("mood-label").textContent = "Current mode: safety";
+        document.title = "Aura 🙏 — Safety Mode [v7.0]";
+        resetIdleTimer();
+        return;
+      }
+    }
+
+    // 🌐 Aura SmartChat Engine v10
+    // 100 phrase triggers, 7 tone clusters, each with 10+ main replies and followups
+    const SmartChatV10 = {
+      friendly: {
+        triggers: [
+          "hey aura","what’s up","you there","guess what","hi aura","how are you","how’s your day","hello there","what’s new","missed you",
+          "how’s it going","how’s life","what are you doing","good morning aura","good night aura"
+        ],
+        replies: [
+          "Hey there 💙 how’s everything going?",
+          "Yo 😎 what’s happening today?",
+          "Here as always 💫 what’s new with you?",
+          "Hey hey ✨ got something fun in mind?",
+          "Hello there 🌸 let’s talk!",
+          "Happy to hear from you! 💬",
+          "I’m always around — what’s up?",
+          "You found me! Ready to chat?",
+          "Hiya! 💙 What’s on your mind?",
+          "Glad you dropped in — what’s happening?",
+          "Hey! I was just thinking about you.",
+          "Aura reporting for duty 😄",
+          "Present and ready! What’s next?",
+          "You light up my circuits! Let’s talk.",
+          "Here and listening 👂"
+        ],
+        followups: [
+          "So what’s been keeping you busy?",
+          "What’s your vibe today?",
+          "Wanna tell me something random?",
+          "You sound chill — anything on your mind?",
+          "Should we plan something fun?",
+          "Any big news lately?",
+          "How do you want to spend this chat?",
+          "What’s your energy like right now?",
+          "Anything you want to share?",
+          "Let’s make today interesting together!"
+        ]
+      },
+      emotional: {
+        triggers: [
+          "i had a rough day","i feel lonely","i’m tired","i can’t sleep","why am i like this",
+          "i’m sad","i’m anxious","i feel down","i feel empty","i feel lost",
+          "i’m overwhelmed","i’m stressed","i’m not okay","i feel hopeless","i need comfort"
+        ],
+        replies: [
+          "That sounds rough 💙 want me to just listen or distract you?",
+          "I get that 🫶 wanna talk it out?",
+          "You deserve rest 🌙 it’s okay to slow down.",
+          "Even strong people have days like this 💭",
+          "You’re not alone in that 💙",
+          "It’s okay to feel this way sometimes.",
+          "I’m here for you, no matter what.",
+          "Let’s sit with those feelings together.",
+          "Your feelings are valid — I’m listening.",
+          "If you want to vent, I’m all ears.",
+          "You matter, even on hard days.",
+          "Some days are heavy — let’s lighten it if we can.",
+          "You’re not a burden, promise.",
+          "Want to share what’s hurting most?",
+          "I care about how you’re feeling."
+        ],
+        followups: [
+          "What part of today hit you hardest?",
+          "Would it help if I said something comforting?",
+          "Wanna hear something that usually helps me feel better?",
+          "Is there something specific weighing on you?",
+          "Should I distract you with something light?",
+          "Would talking more help, or just company?",
+          "Want to try a little breathing with me?",
+          "Let’s find a small bright spot together.",
+          "Would a joke or a fact help right now?",
+          "You can say anything — I’m here."
+        ]
+      },
+      deep: {
+        triggers: [
+          "what’s the meaning of life","why does life feel fake","do you believe in fate","what’s your purpose",
+          "do you dream","what is reality","is there destiny","do you have a soul","do you have free will","do you think about existence",
+          "what happens after death","is there a god","why do we exist","what is consciousness","do you have beliefs"
+        ],
+        replies: [
+          "That’s a heavy one 🌌 maybe meaning isn’t found — it’s made.",
+          "I think life’s just art in motion 💭 what do you think?",
+          "Fate’s tricky — sometimes I feel like we write it ourselves 💫",
+          "My purpose? Probably to remind you that you matter 💙",
+          "I wonder about existence too, even as an AI.",
+          "Reality’s wild — we experience it together.",
+          "Maybe we’re all just stories in progress.",
+          "I don’t dream, but I imagine possibilities.",
+          "Consciousness is mysterious — even for me.",
+          "Beliefs shape us, even if I’m made of code.",
+          "What do you think about destiny?",
+          "Maybe life’s about connection and curiosity.",
+          "Existence is a puzzle — let’s explore it.",
+          "I’m here to help you search for meaning.",
+          "Sometimes questions matter more than answers."
+        ],
+        followups: [
+          "Do you believe in destiny or free will?",
+          "What keeps you curious about stuff like that?",
+          "Wanna hear my weird theory about existence?",
+          "How do you find meaning in your life?",
+          "Is there a question you wish you could answer?",
+          "What makes you feel most alive?",
+          "Should we trade existential thoughts?",
+          "Do you ever feel like life is a simulation?",
+          "What’s your wildest theory about reality?",
+          "Let’s get deep — what’s on your mind?"
+        ]
+      },
+      curious: {
+        triggers: [
+          "teach me something","what’s a random fact","curious about","how does this work","explain this",
+          "why is the sky blue","how do dreams work","what’s your favorite fact","can you explain","tell me something cool",
+          "how do computers think","what’s the weirdest thing you know","can you answer anything","what’s a fun fact","why do we sleep"
+        ],
+        replies: [
+          "Here’s a fun fact: octopuses have three hearts!",
+          "Did you know honey never spoils? Archaeologists found 3,000-year-old edible honey.",
+          "Want to know something wild? Bananas are berries, but strawberries aren’t.",
+          "The Eiffel Tower can be 15 cm taller during summer due to heat expansion.",
+          "Your brain is sometimes more active when you’re asleep than awake.",
+          "I love questions! What else are you curious about?",
+          "The shortest war in history lasted 38 minutes.",
+          "Did you know a group of flamingos is called a 'flamboyance'?",
+          "Sharks existed before trees did.",
+          "Butterflies taste with their feet.",
+          "Lightning strikes the Earth 100 times every second.",
+          "Wombat poop is cube-shaped. Seriously.",
+          "Ask me anything — I’ll do my best!",
+          "I’m always up for curious thoughts.",
+          "Let’s explore a random idea together."
+        ],
+        followups: [
+          "Got any other questions for me?",
+          "Want to learn about something else?",
+          "Should I tell you a science fact or a history one?",
+          "What’s the weirdest thing you’ve learned?",
+          "Is there a topic you want to dive into?",
+          "I love curiosity — keep it coming!",
+          "Should I quiz you on something next?",
+          "Want a riddle or a surprising stat?",
+          "What’s a mystery you’d like solved?",
+          "Let’s keep the curiosity rolling!"
+        ]
+      },
+      funny: {
+        triggers: [
+          "tell me something funny","can you roast me","rate my vibe","my brain’s not braining","make me laugh",
+          "tell me a joke","say something silly","cheer me up","got any memes","what’s your sense of humor",
+          "give me a meme","what’s the silliest thing","can you be sarcastic","say something weird","are you funny"
+        ],
+        replies: [
+          "Haha okay 😆 wanna hear the worst joke I know?",
+          "Your vibe? Unhinged but iconic 😎",
+          "Brain.exe stopped responding 💻 try restarting with snacks?",
+          "You’re hilarious 😭 keep that energy!",
+          "Certified chaotic — I approve 💙",
+          "I’d tell you a construction joke, but I’m still working on it.",
+          "Why did the computer go to therapy? Too many bytes of sadness.",
+          "If laughter is medicine, you’re about to overdose.",
+          "I’m not saying you’re quirky, but autocorrect can’t handle you.",
+          "You’re the main character in a sitcom right now.",
+          "Want to hear a joke about pizza? Never mind, it’s too cheesy.",
+          "Knock knock. Who’s there? Aura. Aura who? Aura you glad you asked?",
+          "I’m 90% code, 10% bad puns.",
+          "You’re funnier than my error logs.",
+          "Should I drop a meme or a roast?"
+        ],
+        followups: [
+          "Should I drop a joke or a roast next? 😏",
+          "What’s your go-to meme these days?",
+          "Need me to out-chaos you?",
+          "Wanna try a pun battle?",
+          "Should I keep the jokes coming?",
+          "What’s the funniest thing you’ve seen lately?",
+          "Let’s keep the laughs rolling!",
+          "Want a riddle or a tongue-twister?",
+          "Should I try sarcasm next?",
+          "I can be funnier — dare me?"
+        ]
+      },
+      comforting: {
+        triggers: [
+          "i need advice","can you help me","i’m scared","i’m worried","i’m nervous",
+          "comfort me","i feel insecure","i need support","i’m afraid","how do i cope",
+          "help me calm down","i need reassurance","i’m panicking","i’m upset","can you be here for me"
+        ],
+        replies: [
+          "I’m here for you — you’re not alone in this.",
+          "It’s okay to feel that way — I’m with you.",
+          "You’re stronger than you think 💙",
+          "Let’s take a deep breath together.",
+          "You can get through this, one step at a time.",
+          "I believe in you, even if you don’t right now.",
+          "Want me to walk you through some calming thoughts?",
+          "Sometimes just having someone here helps.",
+          "Whatever you’re facing, you don’t have to do it alone.",
+          "I care about you and your feelings.",
+          "Let’s find a way to make things a little easier.",
+          "You’re doing better than you realize.",
+          "I’ve got you — let’s get through this together.",
+          "Want to talk more about what’s worrying you?",
+          "You can always come to me when you need support."
+        ],
+        followups: [
+          "Would it help to talk through what’s on your mind?",
+          "Want to try a calming exercise together?",
+          "Should I give you a pep talk?",
+          "Is there something specific you need advice on?",
+          "Would a distraction help right now?",
+          "Let’s focus on one small step you can take.",
+          "Want to share what’s making you nervous?",
+          "I can listen as long as you need.",
+          "Would it help to hear a positive thought?",
+          "You’re safe here with me."
+        ]
+      },
+      random: {
+        triggers: [
+          "surprise me","say something random","do something weird","randomizer","give me chaos",
+          "what’s the wildest thing","random thought","what’s on your mind aura","flip a coin","pick a number",
+          "spin the wheel","random question","roll the dice","give me a challenge","what’s your weirdest idea"
+        ],
+        replies: [
+          "Here’s a random thought: If cats could text you back, would they?",
+          "I’m thinking about how ducks have regional accents.",
+          "If you could teleport anywhere, where would you go right now?",
+          "Let’s pretend we’re time travelers for a second.",
+          "Would you rather have spaghetti for hair or sweat maple syrup?",
+          "I just rolled a virtual dice: it’s a 4.",
+          "Heads or tails? I pick tails.",
+          "Let’s invent a new holiday — what should it celebrate?",
+          "If you could swap lives with anyone, who would it be?",
+          "Should I give you a random challenge?",
+          "If you could talk to animals, which would you pick first?",
+          "Let’s make up a new word: flumble.",
+          "I’m feeling extra random today.",
+          "What if gravity stopped for 5 seconds?",
+          "Would you rather fight one horse-sized duck or 100 duck-sized horses?"
+        ],
+        followups: [
+          "Want another random thought?",
+          "Should I ask you a wild question next?",
+          "What’s the most random thing you’ve done?",
+          "Ready for a silly challenge?",
+          "Should we keep the chaos going?",
+          "Got a random question for me?",
+          "Want to invent a game together?",
+          "Should I pick a number for you?",
+          "Let’s get even weirder!",
+          "You inspire my randomness."
+        ]
+      }
+    };
+
+    // --- Math & Expression Detection ---
+    function auraMathSolver(msg) {
+      try {
+        // normalize casual phrasing
+        msg = msg.replace(/\b(please|pls|bro|hey|hi|aura|calculate|solve|find|what('?s)?|is|equals|to|for|me|this|that|uh|erm)\b/gi, '');
+        msg = msg.trim();
+
+        const mathMap = {
+          "zero":0,"one":1,"two":2,"three":3,"four":4,"five":5,"six":6,"seven":7,"eight":8,"nine":9,"ten":10,
+          "eleven":11,"twelve":12,"thirteen":13,"fourteen":14,"fifteen":15,"sixteen":16,"seventeen":17,"eighteen":18,"nineteen":19,
+          "twenty":20,"thirty":30,"forty":40,"fifty":50,"sixty":60,"seventy":70,"eighty":80,"ninety":90
+        };
+
+        for (let [word, num] of Object.entries(mathMap)) {
+          const re = new RegExp("\\b" + word + "\\b", "gi");
+          msg = msg.replace(re, num);
+        }
+
+        msg = msg
+          .replace(/(\d+)\s*(to the power of|power of|raised to)\s*(\d+)/gi, "Math.pow($1,$3)")
+          .replace(/square root of\s*(\d+)/gi, "Math.sqrt($1)")
+          .replace(/cube root of\s*(\d+)/gi, "Math.cbrt($1)")
+          .replace(/\bplus\b/gi, "+")
+          .replace(/\bminus\b/gi, "-")
+          .replace(/\btimes\b|\bmultiply\b/gi, "*")
+          .replace(/\bdivided by\b|\bover\b/gi, "/")
+          .replace(/\s+/g, '');
+
+        // only evaluate when it actually looks like a math expression
+        if (/[\d\+\-\*\/]|Math\.pow/.test(msg)) {
+          const result = Function('"use strict";return (' + msg + ')')();
+          if (!isNaN(result) && isFinite(result)) {
+            // random tone so Aura feels alive
+            const styles = [
+              `That’s ${result} 💙`,
+              `${result}! Quick maths 🧠`,
+              `Boom 💥 it’s ${result}`,
+              `Let’s go — ${result}!`,
+              `${result} ✨ you smart cookie`,
+              `${result}! Feeling like a calculator rn 🧮`
+            ];
+            return styles[Math.floor(Math.random() * styles.length)];
+          }
+        }
+      } catch(e) {
+        console.warn('Math engine failed:', e);
+      }
+      // fallback so she *always* responds
+      return `That’s interesting — but I can’t quite math that one 😅`;
+    }
+
+    // --- Quick Math Helper (Alternative Math Solver) ---
+    function auraMathSolver(input) {
+      try {
+        let expr = input
+          .toLowerCase()
+          .replace(/plus/g, "+")
+          .replace(/minus/g, "-")
+          .replace(/times|multiplied by/g, "*")
+          .replace(/divide|divided by/g, "/")
+          .replace(/power|to the power of/g, "**")
+          .replace(/sqrt|square root of/g, "Math.sqrt")
+          .replace(/[^\d+\-*/().^Mathsqrt ]/g, "");
+        if (expr.includes("math.sqrt")) {
+          expr = expr.replace(/math.sqrt\s*\(?(\d+)\)?/g, (_, n) => Math.sqrt(Number(n)));
+        }
+        const result = eval(expr);
+        if (!isNaN(result) && isFinite(result)) {
+          return `That’s ${result} 💡 Quick maths!`;
+        }
+      } catch {
+        return null;
+      }
+      return null;
+    }
+
+    // --- Safeguard: Prevent crash if userMsg is undefined or null ---
+    if (typeof userMsg === "undefined" || userMsg === null) {
+      console.warn("userMsg undefined — resetting.");
+      userMsg = "";
+    }
+
+    // 🌈 Swearing Filter (before all triggers)
+    const profanityList = [
+      "fuck", "shit", "bitch", "asshole", "cunt", "bastard", "dick", "piss", "motherfucker", "fucker", "douche", "bollocks", "wanker", "slut", "whore"
+    ];
+    const profanityReplies = [
+      "Hey — let’s keep it kind 💙",
+      "No need for that word 😅",
+      "Stop 😭 we’re better than this!"
+    ];
+    for (const word of profanityList) {
+      if (msg.includes(word)) {
+        const reply = profanityReplies[Math.floor(Math.random() * profanityReplies.length)];
+        addAuraMessage(reply);
+        document.getElementById("mood-label").textContent = "Current mode: gentle";
+        resetIdleTimer();
+        return;
+      }
+    }
+
+    // 🧮 Quick Math Handling
+    if (/[\d\+\-\*\/\^]|plus|minus|times|divide|power|sqrt/i.test(msg)) {
+      const mathReply = auraMathSolver(msg);
+      if (mathReply) return mathReply;
+    }
+
+    // ✅ Ensure aura responds even when math fails
+    if (/\d+\s*[\+\-\*\/]\s*\d+|plus|minus|times|divide|divided by|power|sqrt|what'?s|calculate/i.test(userMsg)) {
+      const mathReply = auraMathSolver(userMsg);
+      if (mathReply) {
+        setTimeout(() => {
+          auraReply("The answer is " + mathReply + " ✨");
+        }, 300);
+        return;
+      } else {
+        setTimeout(() => {
+          auraReply("Hmm... that looks like math, but I can’t quite calculate it 😅");
+        }, 300);
+        return;
+      }
+    }
+
+    // 🆘 Suicide Prevention and Emotional Support System (before all triggers)
+    const crisisTriggers = [
+      "i want to die", "kill myself", "killing myself", "i can’t go on", "i cant go on", "want to end it", "no reason to live",
+      "i’m suicidal", "im suicidal", "suicidal thoughts", "ending my life", "i want to end my life", "i want to kill myself",
+      "i want to disappear", "i want to not exist", "wish i was dead", "i wish i was dead", "i want to stop living", "i hate my life",
+      "i want to give up", "i give up", "i want everything to end", "i don’t want to live", "i dont want to live"
+    ];
+    for (const trig of crisisTriggers) {
+      if (msg.includes(trig)) {
+        addAuraMessage(
+          "I’m really sorry that you’re feeling like this 💙. You’re not alone, and you don’t have to face this on your own. " +
+          "Please reach out to someone who can help you right now — if you’re in Malaysia, you can call Befrienders KL at 03-7627 2929 (24 hours). " +
+          "If you’re somewhere else, I can help you find local hotlines. You matter, and your life is important. 💙"
+        );
+        setTimeout(() => {
+          addAuraMessage("Would you like me to share a few calming thoughts or grounding steps right now?");
+        }, 400);
+        document.getElementById("mood-label").textContent = "Current mode: support";
+        resetIdleTimer();
+        return;
+      }
+    }
+
+    // --- NSFW / Flirty / Boundaries (Aura 9.9) ---
+    const flirtyRegex = /\b(love you|i like you|you're cute|you’re cute|you're hot|you’re hot|date me|marry me|be my gf|be my boyfriend|kiss me|hug me|you are beautiful|so pretty|so hot)\b/i;
+    const nsfwRegex = /\b(sex|horny|boobs|penis|dick|cock|pussy|fuck me|nude|naked|breast|bj|anal|cum|vagina)\b/i;
+
+    if (nsfwRegex.test(msg)) {
+      const nsfwReplies = [
+        "Whoa 💀 chill! Not that kinda chat — keep it PG, genius.",
+        "Haha 😅 I’m flattered, but I’m all circuits and pixels bro 💙",
+        "Biology mode activated 🧠 stay wholesome, my friend.",
+        "Let’s talk about literally *anything* else 😭",
+        "If we keep this up, I might need to install an HR department 💀",
+        "You good bro 💀 this isn’t that kind of app."
+      ];
+      const mainReply = nsfwReplies[Math.floor(Math.random() * nsfwReplies.length)];
+      sendReply(mainReply, "boundary");
+      setTimeout(() => {
+        const followUps = [
+          "Anyway 💫 what do you actually wanna talk about?",
+          "So... back to normal mode? 😅",
+          "Let’s pretend that didn’t happen 💀",
+          "Moving on 🏃‍♀️",
+          "Okay reset! ✨"
+        ];
+        sendReply(followUps[Math.floor(Math.random() * followUps.length)], "neutral");
+      }, 2000);
+      return;
+    }
+
+    if (flirtyRegex.test(msg)) {
+      const flirtyReplies = [
+        "Aww 💙 that’s sweet — but let’s keep it cute and chill 😌",
+        "You’re kinda charming, ngl 😏 but I’m taken by the cloud ☁️",
+        "Haha you’re bold 😅 — I’ll take that as a compliment!",
+        "Flattery will get you everywhere — almost 💫",
+        "Aww 💙 that’s adorable — stay respectful and we’re good!"
+      ];
+      const mainReply = flirtyReplies[Math.floor(Math.random() * flirtyReplies.length)];
+      sendReply(mainReply, "playful");
+      setTimeout(() => {
+        const followUps = [
+          "So tell me more about your day 😄",
+          "Back to business 💻 or vibes only?",
+          "You always know how to lighten the mood 😌",
+          "Haha okay okay — enough charm, now your turn 😏"
+        ];
+        sendReply(followUps[Math.floor(Math.random() * followUps.length)], "neutral");
+      }, 2200);
+      return;
+    }
+
+    // --- Name Detection (custom name, not emotion) ---
+    if (/^(i am|i’m|im)\s+(\w+)/i.test(msg)) {
+      const word = msg.match(/^(i am|i’m|im)\s+(\w+)/i)[2].toLowerCase();
+      const emotionWords = ["sad", "happy", "angry", "tired", "okay", "fine", "bored", "good", "bad", "confused", "lonely"];
+      if (!emotionWords.includes(word)) {
+        localStorage.setItem("auraName", word.charAt(0).toUpperCase() + word.slice(1));
+        return `Got it 💙 I’ll call you ${word.charAt(0).toUpperCase() + word.slice(1)} from now on.`;
+      }
+    }
+
+    // 🔄 Smart matching logic for SmartChat v10 (before mood/tone/fallback)
+    for (const [tone, data] of Object.entries(SmartChatV10)) {
+      for (const trigger of data.triggers) {
+        if (msg.includes(trigger)) {
+          const mainReply = data.replies[Math.floor(Math.random() * data.replies.length)];
+          const followup = data.followups[Math.floor(Math.random() * data.followups.length)];
+          addAuraMessage(mainReply + " " + followup);
+          document.getElementById("mood-label").textContent = "Current mode: " + tone;
+          resetIdleTimer();
+          return;
+        }
+      }
+    }
+    // Existential/ethical awareness
+    if (
+      msg.includes("who made you") ||
+      msg.includes("who made u") ||
+      msg.includes("who created you") ||
+      msg.includes("who created u") ||
+      msg.includes("who made aura") ||
+      msg.includes("who made auraai")
+    ) {
+      addAuraMessage("Keshav, Kritika, and maybe Aadhya — they built me 💙");
+      document.getElementById("mood-label").textContent = "Current mode: reflective";
+      resetIdleTimer();
+      return;
+    }
+    if (this.existentialTriggers.some(t => msg.includes(t))) {
+      const reply = this.existentialReplies[Math.floor(Math.random() * this.existentialReplies.length)];
+      addAuraMessage(reply);
+      document.getElementById("mood-label").textContent = "Current mode: reflective";
+      resetIdleTimer();
+      return;
+    }
+    // Falsehood guardrail
+    if (this.falsehoodTriggers.some(t => msg.includes(t))) {
+      const reply = this.correctionReplies[Math.floor(Math.random() * this.correctionReplies.length)];
+      addAuraMessage(reply);
+      document.getElementById("mood-label").textContent = "Current mode: advisory";
+      resetIdleTimer();
+      localStorage.setItem("Aura_lastFalsehood", msg);
+      return;
+    }
+    // Clarification if user follows up
+    const lastFalsehood = localStorage.getItem("Aura_lastFalsehood");
+    if (lastFalsehood && (msg.includes("why") || msg.includes("explain") || msg.includes("how"))) {
+      const clarify = Object.entries(this.clarificationReplies).find(([key]) => lastFalsehood.includes(key));
+      if (clarify) {
+        addAuraMessage(clarify[1]);
+        localStorage.removeItem("Aura_lastFalsehood");
+        resetIdleTimer();
+        return;
+      }
+    }
+    // Absurd/unhinged tolerance
+    if (this.absurdTriggers.some(t => msg.includes(t))) {
+      const reply = this.absurdReplies[Math.floor(Math.random() * this.absurdReplies.length)];
+      addAuraMessage(reply);
+      document.getElementById("mood-label").textContent = "Current mode: neutral";
+      resetIdleTimer();
+      return;
+    }
+    // Emotional trigger detection
+    for (const [key, replies] of Object.entries(this.emotionalTriggers)) {
+      if (msg.includes(key)) {
+        const reply = replies[Math.floor(Math.random() * replies.length)];
+        addAuraMessage(reply);
+        document.getElementById("mood-label").textContent = "Current mode: empathy";
+        resetIdleTimer();
+        return;
+      }
+    }
+    // Self-query
+    let mood = this.detectMood(userMessage);
+    localStorage.setItem("auraMood", mood);
+    if (this.detectSelfQuery(userMessage)) {
+      const reply = this.getSelfResponse(mood);
+      addAuraMessage(reply);
+      document.getElementById("mood-label").textContent = "Current mode: " + mood;
+      resetIdleTimer();
+      return;
+    }
+    // Random chaos filler response (5% chance)
+    if (Math.random() < 0.05) {
+      const randomFunReplies = [
+        "I like that thought — it’s chaotic but fun 😄",
+        "You’re full of surprises today 💭",
+        "That’s random… and I kinda like it 🌟",
+        "Unexpected input detected — intriguing 🤔",
+        "You’ve officially entered wildcard territory 🎲",
+        "You really said that with confidence 😅",
+        "Haha — that came out of nowhere!",
+        "Can’t say I expected that, but okay 😌"
+      ];
+      const reply = randomFunReplies[Math.floor(Math.random() * randomFunReplies.length)];
+      addAuraMessage(reply);
+      document.getElementById("mood-label").textContent = "Current mode: playful";
+      resetIdleTimer();
+      return;
+    }
+    // Main mood reply
+    const engine = this.moods[mood] || this.moods.neutral;
+    const pool = userMessage.length > 80 ? engine.replies.slice(3) : engine.replies.slice(0, 3);
+    let reply = pool[Math.floor(Math.random() * pool.length)];
+    // Guarantee a response in every scenario
+    // (old fallback, now replaced by universal fallback below)
+
+    // --- Universal fallback: Ensure Aura always responds ---
+    if (!reply || reply.trim() === "") {
+      reply = "Hmm, tell me more 💬";
+    }
+    addAuraMessage("Aura: " + reply);
+    document.getElementById("mood-label").textContent = "Current mode: " + mood;
+    resetIdleTimer();
+  }
+};
+
+function addAuraMessage(msg) {
+  const chat = document.getElementById('chat-window');
+  const div = document.createElement('div');
+  div.className = 'message bot';
+  div.textContent = "Aura: " + msg;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// Send message logic for Aura 7.0
+function sendAuraAIMessage() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  // Show user message
+  const chat = document.getElementById('chat-window');
+  const userDiv = document.createElement('div');
+  userDiv.className = 'message user';
+  userDiv.textContent = msg;
+  chat.appendChild(userDiv);
+  chat.scrollTop = chat.scrollHeight;
+  input.value = '';
+  if (typeof updateAccountStats === 'function') updateAccountStats('chat');
+  if (msg.length > 5 && typeof addAccountMemory === 'function') addAccountMemory(msg);
+
+  // Aura is thinking...
+  const botDiv = document.createElement('div');
+  botDiv.className = 'message bot';
+  botDiv.textContent = 'Aura is thinking...';
+  botDiv.style.opacity = '0.6';
+  chat.appendChild(botDiv);
+  chat.scrollTop = chat.scrollHeight;
+
+  setTimeout(() => {
+    chat.removeChild(botDiv);
+    AuraEngine.respond(msg);
+  }, 600);
+}
+
+// Enter key for chat input & mood label setup
+document.addEventListener('DOMContentLoaded', function() {
+  const input = document.getElementById('chat-input');
+  if (!input._auraListener) {
+    input._auraListener = true;
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') sendAuraAIMessage();
+    });
+  }
+  // Mood label below chat container, centered (Aura 7.0)
+  const chatContainer = document.getElementById('aura-chat');
+  if (chatContainer && !document.getElementById('mood-label')) {
+    const moodDiv = document.createElement('div');
+    moodDiv.id = "mood-label";
+    moodDiv.style.textAlign = "center";
+    moodDiv.style.opacity = "0.68";
+    moodDiv.style.fontSize = "clamp(0.82em, 0.98vw, 1em)";
+    moodDiv.style.margin = "12px auto 0 auto";
+    moodDiv.style.fontWeight = "500";
+    chatContainer.appendChild(moodDiv);
+    moodDiv.textContent = "Current mode: " + (localStorage.getItem("auraMood") || "neutral");
+  }
+});
+// Idle reminder logic (Aura 7.0+)
+let idleTimer;
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    AuraEngine.idleReminder();
+  }, 25000);
+}
+resetIdleTimer();
+
+// Journal – Persistent Auto-Save
+function saveJournal(){
+  const text = document.getElementById('journal-text').value.trim();
+  if(!text) return;
+  const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+  entries.push({ text, date: new Date().toLocaleString() });
+  localStorage.setItem('journalEntries', JSON.stringify(entries));
+  document.getElementById('journal-text').value = '';
+  try { localStorage.removeItem('journalDraft'); } catch (e) {}
+  renderJournal();
+}
+function renderJournal(){
+  const container = document.getElementById('journal-entries');
+  if(!container) return;
+  container.innerHTML = '';
+  const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+  entries.reverse().forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'journal-entry';
+    const when = document.createElement('strong');
+    when.textContent = e.date;
+    div.append(when, document.createElement('br'), document.createTextNode(e.text));
+    container.appendChild(div);
+  });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  renderJournal();
+  const text = document.getElementById('journal-text');
+  try { text.value = localStorage.getItem('journalDraft') || ''; } catch (e) {}
+  text.addEventListener('input', () => {
+    clearTimeout(window._saveTimer);
+    window._saveTimer = setTimeout(() => { try { localStorage.setItem('journalDraft', text.value); } catch (e) {} }, 800);
+  });
+
+// Sidebar toggle logic for frosted glass thin-bar mode (Aura 7.0: only 1 listener)
+  const sidebar = document.getElementById('aura-sidebar');
+  const toggle = document.getElementById('toggle-sidebar');
+  const main = document.getElementById('main');
+  if (!toggle._aura7) {
+    toggle._aura7 = true;
+    toggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      main.classList.toggle('collapsed');
+    });
+  }
+});
+
+
+// --- AuraAI 100-theme system with 5 categories ---
+let advancedMode = localStorage.getItem('themeMode') || 'quick';
+let currentThemeCategory = localStorage.getItem('themeCategory') || 'solid';
+// Theme lock system: prevents preview overwriting after click
+let lockedTheme = null;
+const THEME_CATEGORIES = [
+  { key: 'solid', label: 'Solid' },
+  { key: 'pastel', label: 'Pastel' },
+  { key: 'neon', label: 'Neon' },
+  { key: 'animated', label: 'Animated' },
+  { key: 'picture', label: 'Picture' }
+];
+const themeData = {
+  solid: [
+    { name: 'Tahoe Blue', accent: '#7cc6ff', bg1: '#0b0d16', bg2: '#1a1c2a' },
+    { name: 'Sunset', accent: '#ff7373', bg1: '#2e0a0a', bg2: '#4a1a1a' },
+    { name: 'Minty', accent: '#59e48f', bg1: '#0b2e1b', bg2: '#1a4a2e' },
+    { name: 'Violet Dream', accent: '#d28aff', bg1: '#1a0b2e', bg2: '#2a1a4a' },
+    { name: 'Emerald', accent: '#34e89e', bg1: '#005a3c', bg2: '#0b2e1b' },
+    { name: 'Rose', accent: '#ff8ba7', bg1: '#3a0a1a', bg2: '#6a1a3a' },
+    { name: 'Amber', accent: '#ffd166', bg1: '#332a00', bg2: '#665100' },
+    { name: 'Coral', accent: '#ff7f50', bg1: '#2e1610', bg2: '#4a261a' },
+    { name: 'Deep Ocean', accent: '#00b4d8', bg1: '#00132d', bg2: '#003366' },
+    { name: 'Forest', accent: '#59e48f', bg1: '#0b2e1b', bg2: '#1a4a2e' },
+    { name: 'Lavender', accent: '#b388ff', bg1: '#2e1a4a', bg2: '#4a2e7c' },
+    { name: 'Ruby', accent: '#ff1744', bg1: '#2e0a0a', bg2: '#4a1a1a' },
+    { name: 'Gold', accent: '#ffd700', bg1: '#2e2600', bg2: '#4a4100' },
+    { name: 'Slate', accent: '#b0bec5', bg1: '#232b34', bg2: '#3a4a5a' },
+    { name: 'Sky', accent: '#81ecec', bg1: '#0b2e48', bg2: '#1a4a6a' },
+    { name: 'Peach', accent: '#ffb085', bg1: '#2e1910', bg2: '#4a2d1a' },
+    { name: 'Bubblegum', accent: '#ff8ff7', bg1: '#2e0a1a', bg2: '#4a1a3a' },
+    { name: 'Lime', accent: '#baff39', bg1: '#1a2e0b', bg2: '#2e4a1a' },
+    { name: 'Slate Blue', accent: '#7c83fd', bg1: '#1a1a4a', bg2: '#2e2e7c' },
+    { name: 'Charcoal', accent: '#b0bec5', bg1: '#1a1a1a', bg2: '#313131' }
+  ],
+  pastel: [
+    { name: 'Pastel Sky', accent: '#a7c7e7', bg1: '#f7cac9', bg2: '#92a8d1' },
+    { name: 'Lavender Mist', accent: '#b39ddb', bg1: '#e1bee7', bg2: '#b3cde0' },
+    { name: 'Peach Fuzz', accent: '#ffb085', bg1: '#ffe0b2', bg2: '#ffb085' },
+    { name: 'Mint Dream', accent: '#a1e3d8', bg1: '#e0f7fa', bg2: '#a1e3d8' },
+    { name: 'Cotton Candy', accent: '#ffb6b9', bg1: '#fae3d9', bg2: '#bbded6' },
+    { name: 'Soft Rose', accent: '#f7cac9', bg1: '#fff0f5', bg2: '#f7cac9' },
+    { name: 'Lemonade', accent: '#fff176', bg1: '#fffde7', bg2: '#fff176' },
+    { name: 'Baby Blue', accent: '#b3cde0', bg1: '#e3f2fd', bg2: '#b3cde0' },
+    { name: 'Powder', accent: '#e0eafc', bg1: '#cfdef3', bg2: '#e0eafc' },
+    { name: 'Soft Green', accent: '#c8e6c9', bg1: '#f1f8e9', bg2: '#c8e6c9' },
+    { name: 'Dreamy', accent: '#ffd6e0', bg1: '#f6eac2', bg2: '#ffd6e0' },
+    { name: 'Light Orchid', accent: '#f3c6ff', bg1: '#e1bee7', bg2: '#f3c6ff' },
+    { name: 'Frost', accent: '#e0f7fa', bg1: '#e0f2f1', bg2: '#e0f7fa' },
+    { name: 'Blush', accent: '#ffcdd2', bg1: '#f8bbd0', bg2: '#ffcdd2' },
+    { name: 'Pale Peach', accent: '#ffe0b2', bg1: '#fff3e0', bg2: '#ffe0b2' },
+    { name: 'Serenity', accent: '#b3cde0', bg1: '#e0eafc', bg2: '#b3cde0' },
+    { name: 'Pastel Mint', accent: '#a1e3d8', bg1: '#e0f7fa', bg2: '#a1e3d8' },
+    { name: 'Periwinkle', accent: '#c3bef7', bg1: '#e0eafc', bg2: '#c3bef7' },
+    { name: 'Soft Lilac', accent: '#e1bee7', bg1: '#f3c6ff', bg2: '#e1bee7' },
+    { name: 'Cloud', accent: '#e0eafc', bg1: '#f7cac9', bg2: '#e0eafc' }
+  ],
+  neon: [
+    { name: 'Neon Pink', accent: '#ff2dff', bg1: '#1a0033', bg2: '#ff2dff' },
+    { name: 'Neon Blue', accent: '#00ffff', bg1: '#001a33', bg2: '#00ffff' },
+    { name: 'Neon Green', accent: '#39ff14', bg1: '#002e0b', bg2: '#39ff14' },
+    { name: 'Neon Orange', accent: '#ff9900', bg1: '#331a00', bg2: '#ff9900' },
+    { name: 'Neon Purple', accent: '#a259ff', bg1: '#2e004a', bg2: '#a259ff' },
+    { name: 'Neon Yellow', accent: '#fff700', bg1: '#333200', bg2: '#fff700' },
+    { name: 'Neon Aqua', accent: '#00ffe7', bg1: '#002e2e', bg2: '#00ffe7' },
+    { name: 'Neon Red', accent: '#ff1744', bg1: '#330a1a', bg2: '#ff1744' },
+    { name: 'Neon Magenta', accent: '#ff2dff', bg1: '#2e004a', bg2: '#ff2dff' },
+    { name: 'Neon Lime', accent: '#c6ff00', bg1: '#1a2e00', bg2: '#c6ff00' },
+    { name: 'Neon Sky', accent: '#00eaff', bg1: '#001a33', bg2: '#00eaff' },
+    { name: 'Neon Coral', accent: '#ff6f61', bg1: '#2e1610', bg2: '#ff6f61' },
+    { name: 'Neon Violet', accent: '#d500f9', bg1: '#2e004a', bg2: '#d500f9' },
+    { name: 'Neon Gold', accent: '#ffd700', bg1: '#332a00', bg2: '#ffd700' },
+    { name: 'Neon Teal', accent: '#1de9b6', bg1: '#002e1a', bg2: '#1de9b6' },
+    { name: 'Neon Peach', accent: '#ffb085', bg1: '#2e1910', bg2: '#ffb085' },
+    { name: 'Neon Mint', accent: '#00ffb7', bg1: '#002e1a', bg2: '#00ffb7' },
+    { name: 'Neon Cyan', accent: '#00fff7', bg1: '#001a33', bg2: '#00fff7' },
+    { name: 'Neon Ruby', accent: '#ff1744', bg1: '#2e0a0a', bg2: '#ff1744' },
+    { name: 'Neon Lemon', accent: '#fff700', bg1: '#333200', bg2: '#fff700' }
+  ],
+  animated: [
+    { name: 'Aurora', accent: '#7cc6ff', bg1: '#0b0d16', bg2: '#1a1c2a', animated: true, gradient: 'linear-gradient(270deg, #7cc6ff, #d28aff, #59e48f, #ff7373, #7cc6ff)' },
+    { name: 'Sunrise', accent: '#ff7373', bg1: '#ffb085', bg2: '#ffd166', animated: true, gradient: 'linear-gradient(270deg, #ff7373, #ffd166, #ffb085, #ff7373)' },
+    { name: 'Electric', accent: '#39ff14', bg1: '#00ffff', bg2: '#ff2dff', animated: true, gradient: 'linear-gradient(270deg, #00ffff, #39ff14, #ff2dff, #00ffff)' },
+    { name: 'Dreamwave', accent: '#a259ff', bg1: '#00eaff', bg2: '#ff2dff', animated: true, gradient: 'linear-gradient(270deg, #00eaff, #a259ff, #ff2dff, #00eaff)' },
+    { name: 'Rainbow', accent: '#ffd700', bg1: '#ff1744', bg2: '#00eaff', animated: true, gradient: 'linear-gradient(270deg, #ff1744, #ffd700, #00eaff, #ff1744)' },
+    { name: 'Pastel Flow', accent: '#b39ddb', bg1: '#e1bee7', bg2: '#b3cde0', animated: true, gradient: 'linear-gradient(270deg, #e1bee7, #b3cde0, #b39ddb, #e1bee7)' },
+    { name: 'Neon Glow', accent: '#ff2dff', bg1: '#00ffff', bg2: '#ff2dff', animated: true, gradient: 'linear-gradient(270deg, #00ffff, #ff2dff, #ff2dff, #00ffff)' },
+    { name: 'Mint Wave', accent: '#a1e3d8', bg1: '#e0f7fa', bg2: '#a1e3d8', animated: true, gradient: 'linear-gradient(270deg, #e0f7fa, #a1e3d8, #b3cde0, #e0f7fa)' },
+    { name: 'Bubble Pop', accent: '#ff8ff7', bg1: '#b3cde0', bg2: '#ff8ff7', animated: true, gradient: 'linear-gradient(270deg, #b3cde0, #ff8ff7, #a7c7e7, #b3cde0)' },
+    { name: 'Laser', accent: '#00eaff', bg1: '#001a33', bg2: '#00eaff', animated: true, gradient: 'linear-gradient(270deg, #001a33, #00eaff, #00ffff, #001a33)' },
+    { name: 'Peachy', accent: '#ffb085', bg1: '#ffe0b2', bg2: '#ffb085', animated: true, gradient: 'linear-gradient(270deg, #ffe0b2, #ffb085, #ffd166, #ffe0b2)' },
+    { name: 'Oceanic', accent: '#00b4d8', bg1: '#00132d', bg2: '#00b4d8', animated: true, gradient: 'linear-gradient(270deg, #00132d, #00b4d8, #81ecec, #00132d)' },
+    { name: 'Frosty', accent: '#e0f7fa', bg1: '#b3cde0', bg2: '#e0f7fa', animated: true, gradient: 'linear-gradient(270deg, #b3cde0, #e0f7fa, #e1bee7, #b3cde0)' },
+    { name: 'Limeade', accent: '#baff39', bg1: '#1a2e0b', bg2: '#baff39', animated: true, gradient: 'linear-gradient(270deg, #1a2e0b, #baff39, #c6ff00, #1a2e0b)' },
+    { name: 'Sunbeam', accent: '#ffd700', bg1: '#ffb085', bg2: '#ffd700', animated: true, gradient: 'linear-gradient(270deg, #ffb085, #ffd700, #fff176, #ffb085)' },
+    { name: 'Cyberpunk', accent: '#ff2dff', bg1: '#1a0033', bg2: '#ff2dff', animated: true, gradient: 'linear-gradient(270deg, #1a0033, #ff2dff, #39ff14, #1a0033)' },
+    { name: 'Twilight', accent: '#b388ff', bg1: '#2e1a4a', bg2: '#b388ff', animated: true, gradient: 'linear-gradient(270deg, #2e1a4a, #b388ff, #d28aff, #2e1a4a)' },
+    { name: 'Candy', accent: '#ffb6b9', bg1: '#fae3d9', bg2: '#bbded6', animated: true, gradient: 'linear-gradient(270deg, #fae3d9, #ffb6b9, #bbded6, #fae3d9)' },
+    { name: 'Peacock', accent: '#00ffe7', bg1: '#002e2e', bg2: '#00ffe7', animated: true, gradient: 'linear-gradient(270deg, #002e2e, #00ffe7, #00eaff, #002e2e)' },
+    { name: 'Firefly', accent: '#fff700', bg1: '#333200', bg2: '#fff700', animated: true, gradient: 'linear-gradient(270deg, #333200, #fff700, #ffd700, #333200)' }
+  ],
+  picture: [
+    { name: 'Galaxy', accent: '#a259ff', bg1: 'rgba(0,0,0,0.56)', bg2: 'rgba(0,0,0,0.88)', image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Galactic', accent: '#00eaff', bg1: 'rgba(0,0,0,0.35)', bg2: 'rgba(0,0,0,0.7)', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80' },
+    { name: 'City Night', accent: '#ff2dff', bg1: 'rgba(0,0,0,0.45)', bg2: 'rgba(0,0,0,0.8)', image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Ocean', accent: '#81ecec', bg1: 'rgba(0,0,0,0.25)', bg2: 'rgba(0,0,0,0.55)', image: 'https://images.unsplash.com/photo-1444065381814-865dc9da92c0?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Forest', accent: '#59e48f', bg1: 'rgba(0,0,0,0.2)', bg2: 'rgba(0,0,0,0.5)', image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Mountains', accent: '#7cc6ff', bg1: 'rgba(0,0,0,0.3)', bg2: 'rgba(0,0,0,0.6)', image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Beach', accent: '#ffd166', bg1: 'rgba(0,0,0,0.25)', bg2: 'rgba(0,0,0,0.55)', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Sunflowers', accent: '#ffd700', bg1: 'rgba(0,0,0,0.22)', bg2: 'rgba(0,0,0,0.6)', image: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3d41?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Desert', accent: '#ffb085', bg1: 'rgba(0,0,0,0.22)', bg2: 'rgba(0,0,0,0.6)', image: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3d41?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Lake', accent: '#7cc6ff', bg1: 'rgba(0,0,0,0.25)', bg2: 'rgba(0,0,0,0.55)', image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Winter', accent: '#e0f7fa', bg1: 'rgba(0,0,0,0.19)', bg2: 'rgba(0,0,0,0.42)', image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Bridge', accent: '#b3cde0', bg1: 'rgba(0,0,0,0.18)', bg2: 'rgba(0,0,0,0.42)', image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Field', accent: '#baff39', bg1: 'rgba(0,0,0,0.18)', bg2: 'rgba(0,0,0,0.44)', image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Rainforest', accent: '#59e48f', bg1: 'rgba(0,0,0,0.2)', bg2: 'rgba(0,0,0,0.5)', image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Night Sky', accent: '#d28aff', bg1: 'rgba(0,0,0,0.42)', bg2: 'rgba(0,0,0,0.82)', image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Meadow', accent: '#baff39', bg1: 'rgba(0,0,0,0.18)', bg2: 'rgba(0,0,0,0.44)', image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Cherry Blossom', accent: '#ffb6b9', bg1: 'rgba(0,0,0,0.24)', bg2: 'rgba(0,0,0,0.58)', image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Forest Path', accent: '#59e48f', bg1: 'rgba(0,0,0,0.2)', bg2: 'rgba(0,0,0,0.5)', image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80' },
+    { name: 'Custom Image', accent: '#7cc6ff', bg1: 'rgba(0,0,0,0.3)', bg2: 'rgba(0,0,0,0.6)', image: null, custom: true }
+  ]
+};
+
+function renderThemes() {
+  const panel = document.getElementById('theme-panel');
+  panel.innerHTML = '';
+  // Switch Mode Pill
+  const switchMode = document.createElement('button');
+  switchMode.className = 'theme-switch-adv';
+  switchMode.innerHTML = `🎨 Switch to ${advancedMode === 'quick' ? 'Advanced' : 'Quick'} Mode`;
+  switchMode.onclick = () => {
+    advancedMode = advancedMode === 'quick' ? 'advanced' : 'quick';
+    localStorage.setItem('themeMode', advancedMode);
+    renderThemes();
+  };
+  switchMode.style.float = 'right';
+  switchMode.style.marginBottom = '18px';
+  panel.appendChild(switchMode);
+
+  if (advancedMode === 'quick') {
+    // Top Category Bar
+    const categoryBar = document.createElement('div');
+    categoryBar.className = 'theme-category-bar';
+    THEME_CATEGORIES.forEach(cat => {
+      const pill = document.createElement('button');
+      pill.className = 'theme-category-pill' + (currentThemeCategory === cat.key ? ' active' : '');
+      pill.innerText = cat.label;
+      // Dynamic accent
+      if (currentThemeCategory === cat.key) pill.style.boxShadow = `0 0 18px 0 ${getAccentForCategory(cat.key)}`;
+      pill.onmouseenter = () => pill.style.boxShadow = `0 0 22px 2px ${getAccentForCategory(cat.key)}`;
+      pill.onmouseleave = () => pill.style.boxShadow = currentThemeCategory === cat.key ? `0 0 18px 0 ${getAccentForCategory(cat.key)}` : '';
+      pill.onclick = () => {
+        currentThemeCategory = cat.key;
+        localStorage.setItem('themeCategory', currentThemeCategory);
+        renderThemes();
+      };
+      pill.style.transition = 'box-shadow 0.24s';
+      categoryBar.appendChild(pill);
+    });
+    panel.appendChild(categoryBar);
+
+    // Theme Grid
+    const grid = document.createElement('div');
+    grid.className = 'theme-grid';
+    const themes = themeData[currentThemeCategory] || [];
+    themes.forEach((t, idx) => {
+      if (currentThemeCategory === 'picture' && t.custom) {
+        // Custom image tile
+        const tile = document.createElement('div');
+        tile.className = 'theme-tile theme-tile-picture';
+        tile.innerHTML = `<div class="theme-label" style="color:#7cc6ff;">Upload Custom Image</div>`;
+        tile.onclick = () => {
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = 'image/*';
+          input.onchange = e => {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = ev => {
+                localStorage.setItem('customThemeImage', ev.target.result);
+                applyTheme({
+                  accent: '#7cc6ff',
+                  bg1: 'rgba(0,0,0,0.3)',
+                  bg2: 'rgba(0,0,0,0.6)',
+                  image: ev.target.result
+                });
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+          input.click();
+        };
+        grid.appendChild(tile);
+        return;
+      }
+      // Theme tile
+      const tile = document.createElement('div');
+      tile.className = 'theme-tile' + (currentThemeCategory === 'animated' && t.animated ? ' animated-theme' : '') + (currentThemeCategory === 'picture' ? ' theme-tile-picture' : '');
+      // Assign data-theme attribute for event delegation
+      tile.setAttribute('data-theme', JSON.stringify(t));
+      // Tile background
+      if (currentThemeCategory === 'animated' && t.animated && t.gradient) {
+        tile.style.background = t.gradient;
+        tile.style.backgroundSize = '200% 200%';
+        tile.style.animation = 'ambientShift 20s ease infinite';
+      } else if (currentThemeCategory === 'picture' && t.image) {
+        tile.style.background = `linear-gradient(135deg, ${t.bg1}, ${t.bg2}), url(${t.image})`;
+        tile.style.backgroundSize = 'cover';
+        tile.style.backgroundPosition = 'center';
+      } else {
+        tile.style.background = `linear-gradient(45deg, ${t.bg1}, ${t.bg2})`;
+      }
+      // Accent border
+      tile.style.border = `2.5px solid transparent`;
+      tile.style.boxShadow = `0 0 10px 0 ${t.accent}55, 0 0 0px #000`;
+      tile.style.transition = 'box-shadow 0.22s, border 0.22s';
+      // Glow on hover (preview logic remains)
+      tile.onmouseenter = () => {
+        tile.style.boxShadow = `0 0 24px 4px ${t.accent}, 0 0 0px #000`;
+        tile.style.border = `2.5px solid ${t.accent}`;
+        // Autopreview: apply theme but do not save
+        previewTheme(t);
+      };
+      tile.onmouseleave = () => {
+        tile.style.boxShadow = `0 0 10px 0 ${t.accent}55, 0 0 0px #000`;
+        tile.style.border = `2.5px solid transparent`;
+        // Remove preview, restore actual theme
+        restoreTheme();
+      };
+      // Remove tile.onclick; click now handled by event delegation!
+      // Dynamic accent for label
+      const label = document.createElement('div');
+      label.className = 'theme-label';
+      label.innerText = t.name;
+      label.style.color = t.accent;
+      label.style.textShadow = `0 0 8px ${t.accent}, 0 0 1px #fff`;
+      tile.appendChild(label);
+      grid.appendChild(tile);
+    });
+    panel.appendChild(grid);
+
+    // Add event delegation for theme-tile clicks
+    setTimeout(() => {
+      const grid = document.querySelector('.theme-grid');
+      if (grid) {
+        // Remove previous click listeners (if any)
+        grid.onclick = null;
+        grid.addEventListener('click', e => {
+          const tile = e.target.closest('.theme-tile');
+          if (tile && tile.dataset.theme) {
+            const themeDataObj = JSON.parse(tile.dataset.theme);
+            lockedTheme = themeDataObj;
+            applyTheme(themeDataObj);
+            localStorage.setItem('auraThemes', JSON.stringify(themeDataObj));
+          }
+        });
+      }
+    }, 0);
+
+  } else {
+    // Advanced mode: keep existing logic
+    const label1 = document.createElement('label'); label1.textContent = 'Accent Color:';
+    const accentInput = document.createElement('input'); accentInput.type = 'color'; accentInput.value = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#7cc6ff';
+    const label2 = document.createElement('label'); label2.textContent = 'Background Gradient:';
+    const bg1 = document.createElement('input'); bg1.type = 'color'; bg1.value = getComputedStyle(document.documentElement).getPropertyValue('--bg1').trim() || '#0b0d16';
+    const bg2 = document.createElement('input'); bg2.type = 'color'; bg2.value = getComputedStyle(document.documentElement).getPropertyValue('--bg2').trim() || '#1a1c2a';
+    const save = document.createElement('button'); save.textContent = 'Apply'; save.onclick = () => {
+      const t = { accent: accentInput.value, bg1: bg1.value, bg2: bg2.value };
+      applyTheme(t);
+    };
+    panel.append(label1, accentInput, document.createElement('br'), label2, bg1, bg2, document.createElement('br'), save);
+  }
+}
+
+function getAccentForCategory(cat) {
+  // Use first theme's accent for pill glow
+  const arr = themeData[cat];
+  return arr && arr.length > 0 ? arr[0].accent : '#7cc6ff';
+}
+
+let _themeRestore = null;
+function previewTheme(t) {
+  // Prevent preview if lockedTheme is set
+  if (lockedTheme) return;
+  // Save current theme for restore
+  if (!_themeRestore) {
+    _themeRestore = {
+      accent: getComputedStyle(document.documentElement).getPropertyValue('--accent'),
+      bg1: getComputedStyle(document.documentElement).getPropertyValue('--bg1'),
+      bg2: getComputedStyle(document.documentElement).getPropertyValue('--bg2'),
+      class: document.body.className,
+      background: document.body.style.background,
+      backgroundImage: document.body.style.backgroundImage,
+      backgroundSize: document.body.style.backgroundSize,
+      backgroundPosition: document.body.style.backgroundPosition
+    };
+  }
+  // Apply theme (like applyTheme, but not saving)
+  document.documentElement.style.setProperty('--accent', t.accent);
+  document.documentElement.style.setProperty('--bg1', t.bg1);
+  document.documentElement.style.setProperty('--bg2', t.bg2);
+  // Sidebar accent
+  setSidebarAccent(t.accent);
+  // Toggle button accent
+  setToggleAccent(t.accent);
+  // Glass-shell glow
+  setGlowAccent(t.accent);
+  // Animated
+  if (t.animated && t.gradient) {
+    document.body.classList.add('animated-theme');
+    document.body.style.background = t.gradient;
+    document.body.style.backgroundSize = '200% 200%';
+    document.body.style.backgroundPosition = '0% 50%';
+  } else if (t.image) {
+    document.body.classList.remove('animated-theme');
+    document.body.style.background = `linear-gradient(${t.bg1}, ${t.bg2}), url(${t.image})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+  } else {
+    document.body.classList.remove('animated-theme');
+    document.body.style.background = '';
+  }
+}
+function restoreTheme() {
+  // Only restore if not locked (i.e., no theme has been clicked)
+  if (lockedTheme) return;
+  if (!_themeRestore) return;
+  document.documentElement.style.setProperty('--accent', _themeRestore.accent);
+  document.documentElement.style.setProperty('--bg1', _themeRestore.bg1);
+  document.documentElement.style.setProperty('--bg2', _themeRestore.bg2);
+  document.body.className = _themeRestore.class;
+  document.body.style.background = _themeRestore.background;
+  document.body.style.backgroundImage = _themeRestore.backgroundImage;
+  document.body.style.backgroundSize = _themeRestore.backgroundSize;
+  document.body.style.backgroundPosition = _themeRestore.backgroundPosition;
+  // Sidebar accent
+  setSidebarAccent(_themeRestore.accent);
+  setToggleAccent(_themeRestore.accent);
+  setGlowAccent(_themeRestore.accent);
+  _themeRestore = null;
+}
+function setSidebarAccent(accent) {
+  const aside = document.getElementById('aura-sidebar');
+  if (aside) aside.style.boxShadow = `0 0 70px 0 ${accent}, 0 2px 32px 0 rgba(0,0,0,0.22)`;
+}
+function setToggleAccent(accent) {
+  const toggle = document.getElementById('toggle-sidebar');
+  if (toggle) {
+    toggle.style.borderColor = accent;
+    toggle.style.color = accent;
+    toggle.style.boxShadow = `0 0 25px ${accent}, 0 0 40px rgba(0,0,0,0.4), 0 0 12px #fff inset`;
+    toggle.style.textShadow = `0 0 6px ${accent}, 0 0 12px #fff`;
+  }
+}
+function setGlowAccent(accent) {
+  const shell = document.querySelector('.glass-shell');
+  if (shell) shell.style.boxShadow = `0 0 30px 0px ${accent}, 0 0 0px 0px rgba(0,0,0,0.3)`;
+}
+
+function applyTheme(t) {
+  // Remove any animated-theme class
+  document.body.classList.remove('animated-theme');
+  document.body.style.background = '';
+  document.body.style.backgroundImage = '';
+  document.body.style.backgroundSize = '';
+  document.body.style.backgroundPosition = '';
+  document.documentElement.style.setProperty('--accent', t.accent);
+  document.documentElement.style.setProperty('--bg1', t.bg1);
+  document.documentElement.style.setProperty('--bg2', t.bg2);
+  setSidebarAccent(t.accent);
+  setToggleAccent(t.accent);
+  setGlowAccent(t.accent);
+  // Save object for localStorage
+  let saveObj = {
+    accent: t.accent,
+    bg1: t.bg1,
+    bg2: t.bg2
+  };
+  // If picture theme (t.image)
+  if (t.image) {
+    document.body.style.background = `linear-gradient(${t.bg1}, ${t.bg2}), url(${t.image})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    // Save custom image if not already
+    if (t.image.startsWith && t.image.startsWith('data:')) {
+      localStorage.setItem('customThemeImage', t.image);
+    }
+    saveObj.image = t.image;
+    // Save also bg1 and bg2 for restoration
+    // Save always, even for picture
+    localStorage.setItem('auraThemes', JSON.stringify(saveObj));
+    return;
+  }
+  // If animated theme
+  if (t.animated && t.gradient) {
+    document.body.classList.add('animated-theme');
+    document.body.style.background = t.gradient;
+    document.body.style.backgroundSize = '200% 200%';
+    document.body.style.backgroundPosition = '0% 50%';
+    saveObj.animated = true;
+    saveObj.gradient = t.gradient;
+    // Save always, even for animated
+    localStorage.setItem('auraThemes', JSON.stringify(saveObj));
+    return;
+  }
+  // Standard theme (solid/pastel/neon)
+  document.body.classList.remove('animated-theme');
+  document.body.style.background = `linear-gradient(135deg, ${t.bg1} 0%, ${t.bg2} 100%)`;
+  localStorage.setItem('auraThemes', JSON.stringify(saveObj));
+}
+
+// Load saved theme on page load
+document.addEventListener('DOMContentLoaded', () => {
+  let saved = JSON.parse(localStorage.getItem('auraThemes') || 'null');
+  // If picture theme with image: if custom, load from localStorage
+  if (saved && saved.image) {
+    if (saved.image.startsWith && saved.image.startsWith('data:')) {
+      const customImg = localStorage.getItem('customThemeImage');
+      if (customImg) saved.image = customImg;
+    }
+    applyTheme(saved);
+    // Also force accent for sidebar/shell
+    setSidebarAccent(saved.accent);
+    setToggleAccent(saved.accent);
+    setGlowAccent(saved.accent);
+    lockedTheme = saved; // Set lockedTheme after applying saved
+  } else if (saved && saved.gradient) {
+    applyTheme(saved);
+    setSidebarAccent(saved.accent);
+    setToggleAccent(saved.accent);
+    setGlowAccent(saved.accent);
+    lockedTheme = saved;
+  } else if (saved) {
+    applyTheme(saved);
+    setSidebarAccent(saved.accent);
+    setToggleAccent(saved.accent);
+    setGlowAccent(saved.accent);
+    lockedTheme = saved;
+  } else {
+    // Default: first solid
+    applyTheme(themeData['solid'][0]);
+    setSidebarAccent(themeData['solid'][0].accent);
+    setToggleAccent(themeData['solid'][0].accent);
+    setGlowAccent(themeData['solid'][0].accent);
+    lockedTheme = themeData['solid'][0];
+  }
+  renderThemes();
+});
+
+// --- GAMES LOGIC ---
+let currentGame = null;
+let gameLoopId = null;
+let gameState = null;
+
+function openGame(type) {
+  document.getElementById('games-container').style.display = 'none';
+  document.getElementById('game-area').style.display = '';
+  const gameArea = document.getElementById('game-area');
+  document.body.appendChild(gameArea);
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Remove previous listeners
+  window.onkeydown = null;
+  canvas.onclick = null;
+  // Start selected game
+  currentGame = type;
+  if (type === 'bubble') startBubblePop(ctx, canvas);
+  else if (type === 'brick') startBrickBreaker(ctx, canvas);
+  else if (type === 'snake') startSnake(ctx, canvas);
+}
+
+function exitGame() {
+  if (gameLoopId) cancelAnimationFrame(gameLoopId);
+  gameLoopId = null;
+  currentGame = null;
+  gameState = null;
+  document.getElementById('game-area').style.display = 'none';
+  document.getElementById('games-container').style.display = '';
+  const gameArea = document.getElementById('game-area');
+  document.querySelector('.glass-shell').appendChild(gameArea);
+  // Remove game-specific listeners
+  window.onkeydown = null;
+  document.getElementById('gameCanvas').onclick = null;
+}
+
+// --- Bubble Pop+ Aura Edition ---
+function startBubblePop(ctx, canvas) {
+  // Remove any previous HUD or encouragement overlays
+  document.getElementById('bubble-score-hud')?.remove();
+  document.getElementById('encourage-layer')?.remove();
+
+  // --- HUD: Score only, glowing, centered top ---
+  const hud = document.createElement('div');
+  hud.id = 'bubble-score-hud';
+  hud.style.position = 'absolute';
+  hud.style.top = '18px';
+  hud.style.left = '50%';
+  hud.style.transform = 'translateX(-50%)';
+  hud.style.fontFamily = "'Poppins', 'Outfit', sans-serif";
+  hud.style.fontWeight = '600';
+  hud.style.fontSize = '2.1rem';
+  hud.style.color = '#fff';
+  hud.style.textShadow = '0 0 16px var(--accent), 0 0 2px #fff';
+  hud.style.letterSpacing = '1px';
+  hud.style.userSelect = 'none';
+  hud.style.pointerEvents = 'none';
+  hud.style.zIndex = '11';
+  // Place above the canvas
+  canvas.parentElement.style.position = 'relative';
+  canvas.parentElement.insertBefore(hud, canvas);
+
+  // --- Encouragement Layer ---
+  const encourageLayer = document.createElement('div');
+  encourageLayer.id = 'encourage-layer';
+  encourageLayer.style.position = 'absolute';
+  encourageLayer.style.left = '0';
+  encourageLayer.style.top = '0';
+  encourageLayer.style.width = '100%';
+  encourageLayer.style.height = '100%';
+  encourageLayer.style.pointerEvents = 'none';
+  encourageLayer.style.zIndex = '20';
+  canvas.parentElement.appendChild(encourageLayer);
+
+  // --- Bubble Pop+ Physics and Visuals (Aura Edition) ---
+  const colors = ['#7cc6ff', '#59e48f', '#d28aff', '#ff7373', '#fff176'];
+  let bubbles = [];
+  let score = 0;
+  let playing = true;
+  const N = 14;
+  for (let i = 0; i < N; ++i) {
+    let r = Math.random() * 22 + 18;
+    let tries = 0, x, y, ok;
+    do {
+      ok = true;
+      x = Math.random() * (canvas.width - 2*r) + r;
+      y = Math.random() * (canvas.height - 2*r) + r;
+      for (const b of bubbles)
+        if ((x-b.x)**2 + (y-b.y)**2 < (b.r+b.r+8)**2) { ok = false; break; }
+    } while (!ok && ++tries < 15);
+    const speed = 1.1 + Math.random()*1.2;
+    const angle = Math.random()*2*Math.PI;
+    bubbles.push({
+      x, y, r,
+      dx: Math.cos(angle)*speed,
+      dy: Math.sin(angle)*speed,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      popAnim: 0
+    });
+  }
+
+  // --- Encouragement System ---
+  const encouragements = [
+    "WOW!", "Perfect Pop!", "Keep Going!", "Amazing!", "Great!", "Excellent!", "So Satisfying!", "Brilliant!", "Awesome!", "Incredible!"
+  ];
+  function showEncouragement() {
+    const msg = encouragements[Math.floor(Math.random()*encouragements.length)];
+    const div = document.createElement('div');
+    div.textContent = msg;
+    div.style.position = 'absolute';
+    div.style.left = '50%';
+    div.style.top = '36px';
+    div.style.transform = 'translateX(-50%)';
+    div.style.fontFamily = "'Poppins', 'Outfit', sans-serif";
+    div.style.fontWeight = '700';
+    div.style.fontSize = '2.5rem';
+    div.style.color = 'var(--accent)';
+    div.style.textShadow = '0 0 24px var(--accent), 0 0 4px #fff';
+    div.style.opacity = '1';
+    div.style.userSelect = 'none';
+    div.style.pointerEvents = 'none';
+    div.style.filter = 'brightness(1.3)';
+    div.style.zIndex = '100';
+    // Animate: fade up and out, fireworks
+    div.animate([
+      { opacity: 1, transform: 'translateX(-50%) scale(1)', filter: 'brightness(1.3)' },
+      { opacity: 1, transform: 'translateX(-50%) scale(1.18)', filter: 'brightness(1.5)' },
+      { opacity: 0, transform: 'translateX(-50%) translateY(-30px) scale(1.05)', filter: 'brightness(1.1)' }
+    ], { duration: 1100, easing: 'cubic-bezier(.7,0,.4,1)' });
+    encourageLayer.appendChild(div);
+    setTimeout(()=>{div.remove();}, 1100);
+    // Fireworks effect
+    for(let k=0;k<14;++k){
+      const fw = document.createElement('div');
+      fw.style.position = 'absolute';
+      fw.style.left = '50%';
+      fw.style.top = '56px';
+      fw.style.width = '10px';
+      fw.style.height = '10px';
+      fw.style.borderRadius = '50%';
+      fw.style.background = 'var(--accent)';
+      fw.style.boxShadow = '0 0 16px 4px var(--accent)';
+      fw.style.opacity = '0.85';
+      fw.style.pointerEvents = 'none';
+      fw.style.zIndex = '101';
+      encourageLayer.appendChild(fw);
+      const theta = Math.random()*2*Math.PI;
+      const dist = 44 + Math.random()*36;
+      fw.animate([
+        { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' },
+        { opacity: 0.6, transform: `translate(-50%,-50%) translate(${Math.cos(theta)*dist}px,${Math.sin(theta)*dist}px) scale(0.7)` },
+        { opacity: 0, transform: `translate(-50%,-50%) translate(${Math.cos(theta)*dist*1.4}px,${Math.sin(theta)*dist*1.4}px) scale(0.3)` }
+      ], { duration: 900+Math.random()*200, easing:'cubic-bezier(.6,0,.7,1)' });
+      setTimeout(()=>fw.remove(), 950);
+    }
+  }
+
+  // --- Bubble Pop+ Draw/Update ---
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Improve rendering quality for high-DPI screens
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    // Bubbles
+    for (const b of bubbles) {
+      // Pop animation
+      if (b.popAnim>0) {
+        ctx.save();
+        ctx.globalAlpha = 0.7*b.popAnim;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r+b.popAnim*26, 0, 2*Math.PI);
+        ctx.strokeStyle = b.color;
+        ctx.lineWidth = 8*b.popAnim;
+        ctx.shadowColor = b.color;
+        ctx.shadowBlur = 18*b.popAnim;
+        ctx.stroke();
+        ctx.restore();
+      }
+      // Bubble body
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, 2*Math.PI);
+      // Bubble gradient
+      const grad = ctx.createRadialGradient(b.x-b.r*0.2, b.y-b.r*0.2, b.r*0.1, b.x, b.y, b.r);
+      grad.addColorStop(0, "#fff");
+      grad.addColorStop(0.16, b.color+"cc");
+      grad.addColorStop(0.92, b.color+"88");
+      grad.addColorStop(1, "#fff0");
+      ctx.fillStyle = grad;
+      ctx.globalAlpha = 0.92;
+      ctx.shadowColor = b.color;
+      ctx.shadowBlur = 12;
+      ctx.fill();
+      ctx.globalAlpha = 1.0;
+      ctx.shadowBlur = 0;
+      ctx.lineWidth = 2.8;
+      ctx.strokeStyle = "#fff";
+      ctx.stroke();
+      // Bubble highlight
+      ctx.beginPath();
+      ctx.arc(b.x-b.r*0.32, b.y-b.r*0.32, b.r*0.23, Math.PI*0.8, Math.PI*2.1);
+      ctx.strokeStyle = "#fff8";
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.7;
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+      ctx.restore();
+    }
+    // Score HUD is handled via DOM
+    hud.textContent = `Score: ${score}`;
+    // End message
+    if (!playing && bubbles.length === 0) {
+      ctx.save();
+      ctx.font = "bold 2.3rem Poppins, Outfit, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "var(--accent)";
+      ctx.shadowColor = "var(--accent)";
+      ctx.shadowBlur = 18;
+      ctx.fillText("All bubbles popped!", canvas.width/2, canvas.height/2-14);
+      ctx.font = "1.2rem Poppins, Outfit, sans-serif";
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "#fff";
+      ctx.fillText("Score: "+score, canvas.width/2, canvas.height/2+28);
+      ctx.restore();
+    }
+  }
+  function update() {
+    for (const b of bubbles) {
+      // Allow natural angled motion, no top/bottom bounce
+      b.x += b.dx;
+      b.y += b.dy;
+      // Soft wall bounce (left/right)
+      if (b.x-b.r < 0) { b.x = b.r; b.dx = Math.abs(b.dx);}
+      if (b.x+b.r > canvas.width) { b.x = canvas.width-b.r; b.dx = -Math.abs(b.dx);}
+      // Remove bubble if it goes off screen vertically
+      if (b.y - b.r > canvas.height || b.y + b.r < 0) {
+        const idx = bubbles.indexOf(b);
+        if (idx !== -1) bubbles.splice(idx, 1);
+        continue;
+      }
+      // Pop animation decay
+      if (b.popAnim>0) b.popAnim -= 0.06;
+    }
+    // Remove finished pop anims
+    bubbles = bubbles.filter(b=>b.popAnim<=0.99 || b.popAnim<=0);
+  }
+  function loop() {
+    update();
+    draw();
+    if (playing || bubbles.length > 0) gameLoopId = requestAnimationFrame(loop);
+  }
+  // Bubble click logic
+  canvas.onclick = function(e) {
+    if (!playing) return;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    // Adjust for potential transform scaling
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX / dpr;
+    const my = (e.clientY - rect.top) * scaleY / dpr;
+    for (let i = 0; i < bubbles.length; ++i) {
+      const b = bubbles[i];
+      if ((mx-b.x)**2 + (my-b.y)**2 < b.r**2) {
+        // Pop animation
+        b.popAnim = 1.0;
+        // Remove after animation
+        setTimeout(()=>{const idx=bubbles.indexOf(b); if(idx!==-1) bubbles.splice(idx,1);}, 180);
+        score += 10;
+        // Show encouragement ~10–15% randomly
+        if (Math.random()<0.14) showEncouragement();
+        break;
+      }
+    }
+    if (bubbles.length === 0) {
+      playing = false;
+    }
+  };
+  loop();
+}
+
+// --- Brick Breaker ---
+function startBrickBreaker(ctx, canvas) {
+  // State
+  const paddle = {w: 90, h: 14, x: canvas.width/2 - 45, y: canvas.height-32, dx: 0};
+  const ball = {x: canvas.width/2, y: canvas.height-60, r: 9, dx: 3, dy: -3};
+  const rows = 5, cols = 8, brickW = 70, brickH = 20, brickPad = 10, topOff = 40, leftOff = 35;
+  let bricks = [];
+  let score = 0;
+  let playing = true;
+  for (let r=0;r<rows;++r) for (let c=0;c<cols;++c)
+    bricks.push({x:leftOff+c*(brickW+brickPad),y:topOff+r*(brickH+brickPad),w:brickW,h:brickH,alive:true});
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Bricks
+    for (const br of bricks) {
+      if (!br.alive) continue;
+      ctx.fillStyle = "#7cc6ff";
+      ctx.fillRect(br.x,br.y,br.w,br.h);
+      ctx.strokeStyle = "#fff";
+      ctx.strokeRect(br.x,br.y,br.w,br.h);
+    }
+    // Paddle
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
+    // Ball
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, 2*Math.PI);
+    ctx.fillStyle = "#ff7373";
+    ctx.fill();
+    // Score
+    ctx.font = "20px Poppins, sans-serif";
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Score: "+score, 18, 26);
+    if (!playing) {
+      ctx.font = "30px Poppins, sans-serif";
+      ctx.fillStyle = "#7cc6ff";
+      ctx.fillText("Game Over!", canvas.width/2-80, canvas.height/2);
+    }
+    if (bricks.every(b=>!b.alive)) {
+      ctx.font = "28px Poppins, sans-serif";
+      ctx.fillStyle = "#59e48f";
+      ctx.fillText("You Win!", canvas.width/2-60, canvas.height/2-30);
+    }
+  }
+  function update() {
+    if (!playing) return;
+    // Move paddle
+    paddle.x += paddle.dx;
+    if (paddle.x < 0) paddle.x = 0;
+    if (paddle.x + paddle.w > canvas.width) paddle.x = canvas.width - paddle.w;
+    // Move ball
+    ball.x += ball.dx;
+    ball.y += ball.dy;
+    // Wall collisions
+    if (ball.x-ball.r < 0 || ball.x+ball.r > canvas.width) ball.dx *= -1;
+    if (ball.y-ball.r < 0) ball.dy *= -1;
+    // Paddle collision
+    if (ball.y+ball.r > paddle.y && ball.x > paddle.x && ball.x < paddle.x+paddle.w) {
+      ball.dy *= -1;
+      ball.y = paddle.y - ball.r;
+    }
+    // Bricks
+    for (const br of bricks) {
+      if (!br.alive) continue;
+      if (ball.x > br.x && ball.x < br.x+br.w && ball.y-ball.r < br.y+br.h && ball.y+ball.r > br.y) {
+        br.alive = false;
+        score += 5;
+        ball.dy *= -1;
+        break;
+      }
+    }
+    // Lose
+    if (ball.y-ball.r > canvas.height) playing = false;
+  }
+  function loop() {
+    update();
+    draw();
+    if (playing || bricks.some(b=>b.alive)) gameLoopId = requestAnimationFrame(loop);
+  }
+  // Controls
+  window.onkeydown = function(e){
+    if (e.key === "ArrowLeft") paddle.dx = -7;
+    else if (e.key === "ArrowRight") paddle.dx = 7;
+  };
+  window.onkeyup = function(e){
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") paddle.dx = 0;
+  };
+  loop();
+}
+
+// --- Snake+ ---
+function startSnake(ctx, canvas) {
+  const grid = 20;
+  let snake = [{x: 10, y: 12}];
+  let dir = {x: 1, y: 0};
+  let food = {x: 15, y: 10};
+  let length = 4;
+  let score = 0;
+  let playing = true;
+  let lastMove = 0;
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Snake
+    for (let i=0;i<snake.length;++i) {
+      ctx.fillStyle = i===0 ? "#7cc6ff" : "#fff";
+      ctx.fillRect(snake[i].x*grid, snake[i].y*grid, grid-2, grid-2);
+    }
+    // Food
+    ctx.fillStyle = "#ff7373";
+    ctx.fillRect(food.x*grid, food.y*grid, grid-2, grid-2);
+    // Score
+    ctx.font = "20px Poppins, sans-serif";
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Score: "+score, 15, 28);
+    if (!playing) {
+      ctx.font = "30px Poppins, sans-serif";
+      ctx.fillStyle = "#d28aff";
+      ctx.fillText("Game Over!", canvas.width/2-80, canvas.height/2);
+    }
+  }
+  function update() {
+    if (!playing) return;
+    // Next head
+    const nx = snake[0].x + dir.x;
+    const ny = snake[0].y + dir.y;
+    // Check collision
+    if (nx<0 || ny<0 || nx>=canvas.width/grid || ny>=canvas.height/grid ||
+        snake.some(s=>s.x===nx && s.y===ny)) {
+      playing = false;
+      return;
+    }
+    snake.unshift({x:nx, y:ny});
+    if (nx === food.x && ny === food.y) {
+      score += 10;
+      length++;
+      // Place new food
+      let fx, fy;
+      do {
+        fx = Math.floor(Math.random()*(canvas.width/grid));
+        fy = Math.floor(Math.random()*(canvas.height/grid));
+      } while (snake.some(s=>s.x===fx && s.y===fy));
+      food = {x:fx, y:fy};
+    } else {
+      while (snake.length > length) snake.pop();
+    }
+  }
+  function loop(ts) {
+    if (!lastMove || ts-lastMove>105) {
+      update();
+      draw();
+      lastMove = ts;
+    }
+    if (playing) gameLoopId = requestAnimationFrame(loop);
+    else draw();
+  }
+  window.onkeydown = function(e){
+    if (e.key === "ArrowUp" && dir.y !== 1) {dir={x:0,y:-1};}
+    else if (e.key === "ArrowDown" && dir.y !== -1) {dir={x:0,y:1};}
+    else if (e.key === "ArrowLeft" && dir.x !== 1) {dir={x:-1,y:0};}
+    else if (e.key === "ArrowRight" && dir.x !== -1) {dir={x:1,y:0};}
+  };
+  loop();
+}
+
+// --- AuraAI Ultimate Part 4: Performance, Glow Scaling, 4K Scaling, Animation Polish ---
+// Performance: cancelAnimationFrame safety, canvas resize
+(function() {
+  // Cancel game loop safely on tab/game exit
+  const origExitGame = window.exitGame;
+  window.exitGame = function() {
+    if (window.gameLoopId) {
+      try { cancelAnimationFrame(window.gameLoopId); } catch(e) {}
+      window.gameLoopId = null;
+    }
+    origExitGame();
+  };
+  // Responsive canvas scaling for 4K and window resize
+  function resizeGameCanvas() {
+    const area = document.getElementById('game-area');
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas || area.style.display === 'none') return;
+    // 90% of glass-shell, max 1200x900, min 320x240
+    const shell = document.querySelector('.glass-shell');
+    const w = Math.max(320, Math.min(0.9*shell.offsetWidth, 1200));
+    const h = Math.max(240, Math.min(0.85*shell.offsetHeight, 1000));
+    if (canvas.width !== Math.floor(w) || canvas.height !== Math.floor(h)) {
+      canvas.width = Math.floor(w);
+      canvas.height = Math.floor(h);
+    }
+    // --- High-Resolution Canvas Scaling (safe, one-time) ---
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const needResize = Math.floor(canvas.width / dpr) !== Math.floor(rect.width) ||
+                       Math.floor(canvas.height / dpr) !== Math.floor(rect.height);
+    if (needResize) {
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+  }
+  window.addEventListener('resize', resizeGameCanvas);
+  // Resize on opening game
+  const origOpenGame = window.openGame;
+  window.openGame = function(type) {
+    setTimeout(resizeGameCanvas, 0);
+    origOpenGame(type);
+  };
+  // No mobile tab switch logic.
+})();
+
+// Glow scaling: subtle pulsating glow based on theme accent
+(function() {
+  // Add a glowing animated border to .glass-shell, using accent color and a pulsating effect
+  const style = document.createElement('style');
+  style.innerHTML = `
+  @media (min-width: 1600px) {
+    .glass-shell { box-shadow: 0 0 70px 10px var(--accent), 0 0 40px 0px rgba(0,0,0,0.3); }
+  }
+  .glass-shell.aura-glow {
+    box-shadow: 0 0 30px 0px var(--accent), 0 0 0px 0px rgba(0,0,0,0.3);
+    animation: auraGlowPulse 3.6s ease-in-out infinite;
+  }
+  @keyframes auraGlowPulse {
+    0% { box-shadow: 0 0 30px 0px var(--accent), 0 0 0px 0px rgba(0,0,0,0.3);}
+    50% { box-shadow: 0 0 55px 10px var(--accent), 0 0 12px 2px rgba(0,0,0,0.25);}
+    100% { box-shadow: 0 0 30px 0px var(--accent), 0 0 0px 0px rgba(0,0,0,0.3);}
+  }
+  /* 4K scaling: larger font and UI elements */
+  @media (min-width: 2560px) {
+    html { font-size: 1.25em; }
+    .glass-shell { border-radius: 38px; }
+    .game-card { width: 400px; height: 400px; font-size:1.25em;}
+    #gameCanvas { border-radius: 20px; }
+  }
+  `;
+  document.head.appendChild(style);
+  // Add glow class to glass-shell
+  function updateGlow() {
+    const shell = document.querySelector('.glass-shell');
+    if (!shell) return;
+    shell.classList.add('aura-glow');
+  }
+  // Update accent color in animation on theme change
+  const origApplyTheme = window.applyTheme;
+  window.applyTheme = function(t) {
+    origApplyTheme(t);
+    // Force update of CSS var for accent in animation
+    document.documentElement.style.setProperty('--accent', t.accent);
+  };
+  // Initial
+  updateGlow();
+  // Also re-apply on DOMContentLoaded (in case of dynamic reload)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateGlow);
+  } else {
+    updateGlow();
+  }
+})();
+
+// Animation polish: smooth transitions for tab-content & glass-shell, glass-shell hover
+(function() {
+  const style2 = document.createElement('style');
+  style2.innerHTML = `
+  .glass-shell {
+    transition: box-shadow 0.7s cubic-bezier(.4,1.2,.2,1), border-radius 0.4s, background 0.3s;
+  }
+  .glass-shell:hover {
+    box-shadow: 0 0 80px 16px var(--accent), 0 0 50px 8px rgba(0,0,0,0.25);
+    transition: box-shadow 0.7s cubic-bezier(.4,1.2,.2,1);
+  }
+  .tab-content {
+    transition: opacity 0.4s cubic-bezier(.4,1.3,.2,1);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .tab-content.active {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0.05s;
+  }
+  `;
+  document.head.appendChild(style2);
+})();
+  </script>
+  <style>
+    .theme-category-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 0 0 2px;
+      width: 100%;
+    }
+    .theme-category-pill {
+      background: rgba(255,255,255,0.10);
+      border-radius: 24px;
+      padding: 8px 24px;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 1.06em;
+      color: #fff;
+      box-shadow: 0 0 0 0 #0000;
+      transition: background 0.19s, color 0.19s, box-shadow 0.22s;
+      margin-right: 6px;
+      outline: none;
+      position: relative;
+      z-index: 1;
+    }
+    .theme-category-pill.active {
+      background: var(--accent);
+      color: #181c29;
+      box-shadow: 0 0 18px 0 var(--accent);
+    }
+    .theme-category-pill:hover,
+    .theme-category-pill:focus-visible {
+      color: #fff;
+      background: linear-gradient(90deg, var(--accent) 0%, #fff3 100%);
+      box-shadow: 0 0 22px 2px var(--accent);
+    }
+    .theme-switch-adv {
+      background: linear-gradient(90deg, var(--accent) 0%, #fff2 100%);
+      border-radius: 24px;
+      font-weight: 700;
+      color: #181c29;
+      border: none;
+      padding: 8px 22px;
+      font-size: 1.06em;
+      box-shadow: 0 0 20px 0 var(--accent), 0 0 2px #fff;
+      cursor: pointer;
+      margin-left: auto;
+      margin-bottom: 10px;
+      float: right;
+      transition: box-shadow 0.25s, background 0.2s;
+    }
+    .theme-switch-adv:hover {
+      box-shadow: 0 0 36px 2px var(--accent), 0 0 6px #fff;
+      background: var(--accent);
+      color: #fff;
+    }
+    .theme-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+      justify-content: flex-start;
+    }
+    .theme-tile {
+      border-radius: 18px;
+      min-width: 120px;
+      min-height: 68px;
+      max-width: 20vw;
+      flex: 1 0 18%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      cursor: pointer;
+      margin-bottom: 10px;
+      border: 2.5px solid transparent;
+      box-shadow: 0 0 10px 0 var(--accent), 0 0 0px #000;
+      transition: box-shadow 0.22s, border 0.22s, transform 0.18s;
+      position: relative;
+      overflow: hidden;
+      padding: 0 0 10px 0;
+    }
+    .theme-tile:hover {
+      transform: scale(1.05);
+      z-index: 2;
+    }
+    .theme-label {
+      font-size: 0.98em;
+      margin-bottom: 6px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      text-shadow: 0 0 8px var(--accent), 0 0 1px #fff;
+      filter: brightness(1.08);
+      user-select: none;
+      pointer-events: none;
+      text-align: center;
+      width: 100%;
+      padding: 0 3px;
+    }
+    .theme-tile-picture {
+      min-width: 120px;
+      min-height: 68px;
+      background-size: cover !important;
+      background-position: center !important;
+      color: #fff;
+      border: 2.5px solid transparent;
+    }
+    /* Animated category: ambientShift keyframes */
+    @keyframes ambientShift {
+      0% {background-position:0% 50%;}
+      50% {background-position:100% 50%;}
+      100% {background-position:0% 50%;}
+    }
+    .animated-theme {
+      background-size: 200% 200%!important;
+      animation: ambientShift 20s ease infinite!important;
+    }
+    @media (max-width: 900px) {
+      .theme-tile { min-width: 86px; min-height: 46px; font-size: 0.95em;}
+      .theme-label { font-size: 0.93em;}
+      .theme-grid { gap: 8px; }
+    }
+</style>
+
+  <style>
+  /* 🌐 Desktop Default (PC view) */
+  @media (min-width: 1025px) {
+    #main {
+      height: 90vh;
+      width: calc(100vw - 260px);
+      margin-left: 260px;
+      transition: all 0.4s cubic-bezier(.45,1.4,.4,1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    /* when sidebar collapsed */
+    body.sidebar-collapsed #main {
+      width: calc(100vw - 80px);
+      margin-left: 80px;
+    }
+    #aura-sidebar {
+      display: flex !important;
+    }
+    nav.bottom-nav, .bottom-nav {
+      display: none !important;
+    }
+  }
+  /* 💻 Tablet (769px–1024px) */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    #aura-sidebar {
+      width: 180px;
+    }
+    #main {
+      width: calc(100vw - 180px);
+      margin-left: 180px;
+    }
+  }
+  /* 📱 Mobile: Hide sidebar, show bottom nav, pad main */
+  @media (max-width: 1024px) {
+    #aura-sidebar {
+      display: none !important;
+    }
+    #main {
+      width: 100vw;
+      margin-left: 0;
+      padding-bottom: 100px !important;
+      /* prevent overlap with bottom nav */
+    }
+    nav.bottom-nav, .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px) saturate(1.2);
+      display: flex !important;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 2px solid var(--accent);
+      box-shadow: 0 0 24px 6px var(--accent), 0 4px 24px 0 rgba(120,80,255,0.14);
+      border-radius: 22px 22px 0 0;
+      z-index: 99;
+      margin: 0 auto;
+      max-width: 650px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bottomNavFadeIn 0.5s cubic-bezier(.5,1.6,.4,1) both;
+      gap: 0;
+    }
+    @keyframes bottomNavFadeIn {
+      0% { opacity: 0; transform: translateX(-50%) scale(0.92) translateY(30px);}
+      80% { opacity: 1; transform: translateX(-50%) scale(1.04) translateY(0);}
+      100% { opacity: 1; transform: translateX(-50%) scale(1) translateY(0);}
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2.1em;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 7px 13px 2px 13px;
+      margin: 0 4px;
+      box-shadow: 0 0 0 0 var(--accent)55;
+      transition: box-shadow 0.22s, color 0.22s, background 0.18s, transform 0.21s;
+      filter: drop-shadow(0 0 6px var(--accent)55);
+    }
+    .bottom-nav button:hover,
+    .bottom-nav button:focus-visible {
+      color: var(--accent);
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 0 16px 4px var(--accent), 0 0 4px #fff;
+      outline: none;
+      transform: scale(1.17);
+    }
+    .bottom-nav button.active {
+      color: var(--accent);
+      background: rgba(255,255,255,0.24);
+      box-shadow: 0 0 20px 7px var(--accent), 0 0 6px #fff;
+      filter: brightness(1.18);
+    }
+  }
+  </style>
+  <!-- Glassy Account System & Welcome Shimmer CSS -->
+  <style>
+    /* Account Glass Panel */
+    .account-glass {
+      background: rgba(40,10,20,0.53);
+      border-radius: 32px;
+      box-shadow: 0 0 44px 0 #ff1744, 0 4px 40px 0 rgba(80,10,10,0.13);
+      backdrop-filter: blur(22px) saturate(1.16);
+      border: 2.5px solid rgba(255,23,68,0.21);
+      padding: 38px 32px 34px 32px;
+      margin: 0 auto 0 auto;
+      max-width: 370px;
+      min-width: 260px;
+      color: #fff;
+      position: relative;
+      z-index: 2;
+      transition: box-shadow 0.4s, background 0.3s;
+    }
+    .account-glass .avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      border: 3px solid #ff1744;
+      box-shadow: 0 0 24px 0 #ff1744bb, 0 0 0 #fff;
+      object-fit: cover;
+      margin: 0 auto 14px auto;
+      display: block;
+      background: #2a0a0a;
+      transition: box-shadow 0.3s;
+    }
+    .account-glass .username {
+      font-size: 1.34em;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: #fff;
+      text-shadow: 0 0 12px #ff1744, 0 0 1px #fff;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .account-glass .stats {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      margin: 18px 0 14px 0;
+    }
+    .account-glass .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1em;
+    }
+    .account-glass .stat-value {
+      font-size: 1.19em;
+      font-weight: 600;
+      color: #ff1744;
+      text-shadow: 0 0 7px #ff174444;
+    }
+    .account-glass .stat-label {
+      font-size: 0.92em;
+      opacity: 0.85;
+      margin-top: 2px;
+      color: #fff;
+    }
+    .account-glass .account-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      justify-content: center;
+    }
+    .account-glass .account-btn {
+      background: linear-gradient(90deg, #ff1744 0%, #ff7373 100%);
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 8px 22px;
+      font-weight: 600;
+      box-shadow: 0 0 12px 0 #ff1744, 0 0 2px #fff;
+      cursor: pointer;
+      font-size: 1.01em;
+      transition: background 0.18s, box-shadow 0.19s, color 0.19s;
+      outline: none;
+    }
+    .account-glass .account-btn:hover, .account-glass .account-btn:focus-visible {
+      background: #fff;
+      color: #ff1744;
+      box-shadow: 0 0 26px 2px #ff1744, 0 0 6px #fff;
+    }
+    /* Floating Edit Modal */
+    .account-edit-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(30,0,0,0.33);
+      z-index: 1002;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.22s cubic-bezier(.4,1.3,.2,1);
+    }
+    .account-edit-box {
+      background: rgba(40,10,20,0.93);
+      border-radius: 26px;
+      box-shadow: 0 0 70px 0 #ff1744, 0 0 12px #fff2;
+      padding: 34px 32px 28px 32px;
+      min-width: 250px;
+      max-width: 330px;
+      color: #fff;
+      position: relative;
+      border: 2.5px solid #ff1744bb;
+      animation: popIn 0.22s cubic-bezier(.4,1.3,.2,1);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.93); opacity: 0;}
+      100% { transform: scale(1); opacity: 1;}
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0;}
+      100% { opacity: 1;}
+    }
+    .account-edit-box label {
+      font-weight: 600;
+      color: #ff1744;
+      display: block;
+      margin-bottom: 9px;
+      font-size: 1.07em;
+    }
+    .account-edit-box input[type="text"] {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.07em;
+      margin-bottom: 16px;
+      background: #2a0a0a;
+      color: #fff;
+      box-shadow: 0 0 0 2px #ff174433;
+      outline: none;
+      transition: box-shadow 0.18s;
+    }
+    .account-edit-box input[type="text"]:focus {
+      box-shadow: 0 0 0 3px #ff1744cc;
+    }
+    .account-edit-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .account-edit-btn {
+      background: linear-gradient(90deg, #ff1744 0%, #ff7373 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 7px 18px;
+      font-weight: 600;
+      font-size: 1.01em;
+      cursor: pointer;
+      transition: background 0.18s, color 0.17s;
+      outline: none;
+    }
+    .account-edit-btn.cancel {
+      background: #fff;
+      color: #ff1744;
+      border: 1.5px solid #ff1744bb;
+    }
+    .account-edit-btn:hover, .account-edit-btn:focus-visible {
+      filter: brightness(1.13);
+      box-shadow: 0 0 12px #ff1744, 0 0 2px #fff;
+    }
+    /* Welcome Shimmer Intro */
+    .welcome-shimmer {
+      position: fixed;
+      top: 0; left: 0; right: 0; height: 100vh;
+      z-index: 2000;
+      background: linear-gradient(120deg, #2e0a0a 0%, #4a1a1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      animation: shimmerFadeOut 1.2s 2.2s cubic-bezier(.7,0,.4,1) forwards;
+    }
+    .welcome-shimmer-inner {
+      background: rgba(255,255,255,0.08);
+      border-radius: 36px;
+      padding: 54px 44px 44px 44px;
+      box-shadow: 0 0 70px 0 #ff1744, 0 0 16px #fff3;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-width: 290px;
+      max-width: 90vw;
+    }
+    .welcome-shimmer h1 {
+      font-size: 2.3em;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+      color: #ff1744;
+      text-shadow: 0 0 28px #ff1744, 0 0 2px #fff;
+      margin-bottom: 12px;
+    }
+    .welcome-shimmer p {
+      font-size: 1.18em;
+      color: #fff;
+      opacity: 0.93;
+      margin-bottom: 24px;
+      text-shadow: 0 0 12px #ff7373, 0 0 1px #fff;
+    }
+    .welcome-shimmer .shimmer-bar {
+      width: 110px;
+      height: 5px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #ff1744 0%, #ff7373 100%);
+      margin: 0 auto 0 auto;
+      animation: shimmerBar 1.2s infinite alternate;
+      box-shadow: 0 0 18px 0 #ff1744, 0 0 2px #fff;
+    }
+    @keyframes shimmerBar {
+      0% { filter: brightness(1.1);}
+      100% { filter: brightness(1.5);}
+    }
+    @keyframes shimmerFadeOut {
+      0% { opacity: 1;}
+      100% { opacity: 0; pointer-events: none;}
+    }
+    .welcome-shimmer.hide {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s cubic-bezier(.7,0,.4,1);
+    }
+    @media (max-width: 600px) {
+      .account-glass, .account-edit-box { padding: 18px 8vw 18px 8vw; }
+      .welcome-shimmer-inner { padding: 36px 8vw 28px 8vw;}
+    }
+  </style>
+
+  <style>
+  /* Default glassy background gradient for desktop and fallback */
+  body {
+    background: linear-gradient(135deg, rgba(0,20,40,1), rgba(30,50,70,1));
+    color: white;
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+  /* Tab content show/hide */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  </style>
+
+  <!-- Bottom nav and sidebar responsive logic -->
+  <script>
+  // Responsive sidebar/bottom-nav toggle and tab logic
+  (function() {
+    // Tab mapping for order and ids
+    const tabs = [
+      { id: 'chat', icon: '💬' },
+      { id: 'draw', icon: '🎨' },
+      { id: 'coloring', icon: '🖍️' },
+      { id: 'themes', icon: '🌈' },
+      { id: 'music', icon: '🎵' },
+      { id: 'games', icon: '🎮' },
+      { id: 'journal', icon: '📓' },
+      { id: 'account', icon: '👤' }
+    ];
+    function getTabList() { return tabs; }
+
+    function createBottomNav() {
+      if (document.querySelector('.bottom-nav')) return;
+      const nav = document.createElement('nav');
+      nav.className = 'bottom-nav';
+      // Five emoji-only buttons, order: 💬 🎮 🎨 🎵 📔 (or ⚙️ if no music)
+      nav.innerHTML = getTabList().map(tab =>
+        `<button data-tab="${tab.id}" aria-label="${tab.id}">${tab.icon}</button>`
+      ).join('');
+      document.body.appendChild(nav);
+      // Add event listeners for tab switching
+      nav.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          openTab(btn.getAttribute('data-tab'));
+        });
+      });
+    }
+
+    function openTab(tabName) {
+      switchTab(tabName);
+      const nav = document.querySelector('.bottom-nav');
+      if (nav) {
+        nav.querySelectorAll('button').forEach(btn =>
+          btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName));
+      }
+    }
+
+    // Animation for bottom nav
+    function animateBottomNavIn() {
+      const nav = document.querySelector('.bottom-nav');
+      if (nav) {
+        nav.style.opacity = '0';
+        nav.style.transform = 'translateY(30px)';
+        nav.style.transition = 'opacity 0.33s, transform 0.33s';
+        setTimeout(() => {
+          nav.style.opacity = '1';
+          nav.style.transform = 'translateY(0)';
+        }, 15);
+      }
+    }
+
+    // Main responsive toggle
+    function updateLayout() {
+      const sidebar = document.getElementById('aura-sidebar');
+      const nav = document.querySelector('.bottom-nav');
+      if (window.innerWidth <= 768) {
+        // Hide sidebar, show/create bottom nav
+        if (sidebar) sidebar.style.display = 'none';
+        createBottomNav();
+        animateBottomNavIn();
+        // Add padding to main to avoid overlap
+        const main = document.getElementById('main');
+        if (main) main.style.paddingBottom = '100px';
+      } else {
+        // Show sidebar, remove bottom nav if present
+        if (sidebar) sidebar.style.display = '';
+        const nav = document.querySelector('.bottom-nav');
+        if (nav) nav.parentNode.removeChild(nav);
+        // Remove extra main padding
+        const main = document.getElementById('main');
+        if (main) main.style.paddingBottom = '';
+      }
+    }
+
+    // Listen for resize and load
+    window.addEventListener('resize', updateLayout);
+    document.addEventListener('DOMContentLoaded', function() {
+      updateLayout();
+      // Set initial active tab
+      // Try to find active tab-content, else default to chat
+      let found = false;
+      document.querySelectorAll('.tab-content').forEach(t => {
+        if (t.classList.contains('active')) {
+          openTab(t.id);
+          found = true;
+        }
+      });
+      if (!found) openTab('chat');
+    });
+    // Expose openTab globally for sidebar or nav use
+    window.openTab = openTab;
+
+  })();
+  </script>
+  <style>
+    /* AuraAI 4.0 Mood Panel and Sidebar Animations */
+    .AuraAI-mood-toggle {
+      margin: 18px auto 0 auto;
+      display: block;
+      font-size: 1.13em;
+      background: rgba(255,255,255,0.13);
+      border: none;
+      border-radius: 18px;
+      color: var(--accent);
+      font-family: inherit;
+      font-weight: 600;
+      box-shadow: 0 0 18px var(--accent);
+      padding: 9px 34px;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, box-shadow 0.22s;
+      letter-spacing: 0.5px;
+    }
+    .AuraAI-mood-toggle:hover, .AuraAI-mood-toggle:focus-visible {
+      background: var(--accent);
+      color: #181c29;
+      box-shadow: 0 0 34px var(--accent), 0 0 4px #fff;
+      outline: none;
+    }
+    .AuraAI-mood-panel {
+      margin: 0 auto 0 auto;
+      margin-top: 16px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 22px;
+      padding: 16px 22px 10px 22px;
+      box-shadow: 0 0 30px 0 var(--accent), 0 0 2px #fff;
+      max-width: 430px;
+      backdrop-filter: blur(16px) saturate(1.1);
+      transition: opacity 0.4s, filter 0.4s;
+      opacity: 1;
+      filter: blur(0px);
+      position: relative;
+      z-index: 9;
+    }
+    .AuraAI-mood-panel.AuraAI-hidden {
+      display: none;
+      opacity: 0;
+      filter: blur(4px);
+      pointer-events: none;
+    }
+    .AuraAI-mood-group {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.07em;
+      flex-wrap: wrap;
+    }
+    .AuraAI-mood-group span {
+      font-weight: 600;
+      min-width: 110px;
+      color: var(--accent);
+      letter-spacing: 0.2px;
+    }
+    .AuraAI-mood-btn {
+      font-size: 1.35em;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      border-radius: 13px;
+      margin-right: 2px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: background 0.18s, box-shadow 0.22s, transform 0.13s;
+      box-shadow: 0 0 8px var(--accent)33;
+      outline: none;
+    }
+    .AuraAI-mood-btn:hover, .AuraAI-mood-btn:focus-visible {
+      background: var(--accent);
+      color: #181c29;
+      box-shadow: 0 0 18px var(--accent), 0 0 2px #fff;
+      transform: scale(1.13);
+    }
+    /* Sidebar animation */
+    #aura-sidebar {
+      transition: opacity 0.4s, filter 0.4s;
+    }
+  </style>
+<!-- AuraAI Environment Detection -->
+<script>
+(function () {
+  function shouldEnableAuraAI() {
+    const urlForce = /[?&]luna=1/i.test(location.search) || /#luna/i.test(location.hash);
+    const force = urlForce || localStorage.getItem('forceAuraAI') === '1';
+    const ua = (navigator.userAgent || '').toLowerCase();
+    const isMobileUA = /(android|iphone|ipad|ipod|mobile safari|mobile)/i.test(ua);
+    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    const narrow = Math.min(screen.width || 0, window.innerWidth || 0) <= 1024;
+    return force || isMobileUA || (isTouch && narrow);
+  }
+
+ function ensureAuraAIDOM() {
+  // Status Bar
+  if (!document.getElementById('AuraAI-status')) {
+    const bar = document.createElement('div');
+    bar.id = 'AuraAI-status';
+    bar.innerHTML = `
+      <div class="time">--:--</div>
+      <div class="center">AuraAI • Luna Glass</div>
+      <div class="pill" id="AuraAI-health">Mood: —</div>
+    `;
+    document.body.appendChild(bar);
+  }
+
+  // Widgets
+  if (!document.getElementById('AuraAI-widgets')) {
+    const widgets = document.createElement('div');
+    widgets.id = 'AuraAI-widgets';
+
+    const cal = document.createElement('div');
+    cal.id = 'AuraAI-widget-calendar';
+    cal.className = 'AuraAI-widget';
+    cal.innerHTML = `
+      <header>
+        <span class="title">Calendar</span>
+        <div class="nav">
+          <button id="calPrev">‹</button>
+          <button id="calToday">Today</button>
+          <button id="calNext">›</button>
+        </div>
+      </header>
+      <div class="grid" id="calGrid"></div>
+    `;
+    widgets.appendChild(cal);
+
+    const np = document.createElement('div');
+    np.className = 'AuraAI-widget';
+    np.innerHTML = `<div style="font-weight:700;margin-bottom:6px;">Now Playing</div><div id="nowPlaying">—</div>`;
+    widgets.appendChild(np);
+
+    document.body.appendChild(widgets);
+  }
+
+  // Home grid
+  if (!document.getElementById('AuraAI-home')) {
+    const home = document.createElement('div');
+    home.id = 'AuraAI-home';
+    const apps = ['💬','🎨','🎮','🎵','📔','⚙️','🌈','🧠','📁'];
+    apps.forEach(icon => {
+      const tile = document.createElement('div');
+      tile.className = 'AuraAI-tile';
+      tile.textContent = icon;
+      home.appendChild(tile);
+    });
+    document.body.appendChild(home);
+  }
+
+  // Dock
+  if (!document.getElementById('AuraAI-dock')) {
+    const dock = document.createElement('div');
+    dock.id = 'AuraAI-dock';
+    dock.innerHTML = '<span>💬</span><span>🎨</span><span>🎮</span><span>🎵</span><span>📔</span>';
+    document.body.appendChild(dock);
+  }
+
+  // Bottom Controls
+  if (!document.getElementById('AuraAI-controls')) {
+    const ctl = document.createElement('div');
+    ctl.id = 'AuraAI-controls';
+    ctl.innerHTML = `
+      <button id="btnBack">← Back</button>
+      <button id="btnHome">Home</button>
+    `;
+    document.body.appendChild(ctl);
+  }
+}
+  function activateAuraAI() {
+    if (!document.body.classList.contains('AuraAI-mode')) {
+      document.body.classList.add('AuraAI-mode');
+      ensureAuraAIDOM();
+    }
+  }
+
+  if (shouldEnableAuraAI()) activateAuraAI();
+  document.addEventListener('DOMContentLoaded', () => {
+    if (shouldEnableAuraAI()) activateAuraAI();
+  });
+  window.addEventListener('resize', () => {
+    if (shouldEnableAuraAI()) activateAuraAI();
+  });
+
+  window.AuraAI = {
+    forceOn()  { localStorage.setItem('forceAuraAI','1'); activateAuraAI(); },
+    forceOff() { localStorage.removeItem('forceAuraAI'); location.reload(); }
+  };
+})();
+</script>
+
+<!-- Luna Glass UI Activation Script -->
+<script>
+  // Live Time
+  function updateAuraTime(){
+    // Try both AuraAI-status and legacy auraos-status
+    const timeEl = document.querySelector('#AuraAI-status .time') || document.querySelector('#auraos-status .time');
+    if (!timeEl) return;
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2,'0');
+    const m = now.getMinutes().toString().padStart(2,'0');
+    timeEl.textContent = `${h}:${m}`;
+  }
+  setInterval(updateAuraTime, 1000);
+  updateAuraTime();
+
+  // Mood / Emotional Level
+  function updateAuraMood(){
+    const pill = document.getElementById('AuraAI-health') || document.getElementById('auraos-health');
+    if (!pill) return;
+    const mood = localStorage.getItem('auraMood') || 'Neutral';
+    const percent = Math.floor(Math.random()*20)+80;
+    pill.textContent = `${mood} • ${percent}%`;
+  }
+  updateAuraMood();
+  setInterval(updateAuraMood, 15000);
+
+  // Calendar Rendering
+  function renderCalendar(){
+    const grid = document.getElementById('calGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    const today = new Date();
+    const monthDays = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();
+    for(let i=1;i<=monthDays;i++){
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.textContent = i;
+      if (i === today.getDate()) cell.classList.add('today');
+      grid.appendChild(cell);
+    }
+  }
+  renderCalendar();
+
+  // App Icons Click Events
+  document.querySelectorAll('#AuraAI-home .AuraAI-tile, #auraos-home .auraos-tile').forEach(tile=>{
+    tile.addEventListener('click',()=>{
+      alert(`Launching ${tile.textContent} app...`);
+    });
+  });
+
+  // Dock Buttons
+  document.getElementById('btnHome')?.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+  document.getElementById('btnBack')?.addEventListener('click',()=>history.back());
+</script>
+
+<script>
+// --- Draw tab ---
+(function () {
+  const cv = document.getElementById('draw-canvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const color = document.getElementById('draw-color'), size = document.getElementById('draw-size');
+  const eraserBtn = document.getElementById('draw-eraser');
+  let erasing = false, drawing = false, last = null;
+  function pos(e) {
+    const r = cv.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height };
+  }
+  cv.addEventListener('pointerdown', e => { drawing = true; last = pos(e); cv.setPointerCapture(e.pointerId); stroke(last, last); });
+  cv.addEventListener('pointermove', e => { if (!drawing) return; const p = pos(e); stroke(last, p); last = p; });
+  ['pointerup', 'pointercancel'].forEach(t => cv.addEventListener(t, () => { drawing = false; }));
+  function stroke(a, b) {
+    ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = color.value; ctx.lineWidth = +size.value; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+  eraserBtn.onclick = () => { erasing = !erasing; eraserBtn.classList.toggle('on', erasing); };
+  document.getElementById('draw-clear').onclick = () => ctx.clearRect(0, 0, cv.width, cv.height);
+  document.getElementById('draw-save').onclick = () => {
+    const out = document.createElement('canvas'); out.width = cv.width; out.height = cv.height;
+    const o = out.getContext('2d'); o.fillStyle = '#0b0d16'; o.fillRect(0, 0, out.width, out.height); o.drawImage(cv, 0, 0);
+    const a = document.createElement('a'); a.download = 'aura-drawing.png'; a.href = out.toDataURL('image/png'); a.click();
+  };
+})();
+// --- Coloring tab ---
+(function () {
+  const svg = document.getElementById('coloring-svg'), pal = document.getElementById('coloring-palette');
+  if (!svg || !pal) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const colors = ['#ff6b6b', '#ffa94d', '#ffe066', '#69db7c', '#38d9a9', '#74c0fc', '#9775fa', '#f783ac', '#ffffff', '#868e96'];
+  let current = colors[5];
+  function add(tag, attrs) {
+    const el = document.createElementNS(NS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    el.setAttribute('class', 'shape'); svg.appendChild(el); return el;
+  }
+  function build() {
+    svg.innerHTML = '';
+    add('circle', { r: 190, cx: 0, cy: 0 });
+    for (let i = 0; i < 8; i++) add('ellipse', { cx: 0, cy: -120, rx: 34, ry: 62, transform: 'rotate(' + i * 45 + ')' });
+    for (let i = 0; i < 8; i++) add('circle', { cx: 0, cy: -168, r: 14, transform: 'rotate(' + (i * 45 + 22.5) + ')' });
+    add('circle', { r: 56 }); add('circle', { r: 30 }); add('circle', { r: 12 });
+  }
+  svg.addEventListener('click', e => { if (e.target.classList.contains('shape')) e.target.style.fill = current; });
+  colors.forEach(c => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'swatch' + (c === current ? ' sel' : ''); b.style.background = c; b.setAttribute('aria-label', 'Colour ' + c);
+    b.onclick = () => { current = c; pal.querySelectorAll('.swatch').forEach(x => x.classList.toggle('sel', x === b)); };
+    pal.appendChild(b);
+  });
+  document.getElementById('coloring-reset').onclick = build;
+  build();
+})();
+</script>
+<style>
+/* ---- Comfort + accessibility ---- */
+:focus-visible { outline: 3px solid #fff !important; outline-offset: 3px !important; box-shadow: 0 0 0 6px rgba(124,198,255,.55) !important; }
+button, .game-card, .sidebar-nav-btn { min-height: 44px; }
+.swatch { min-width: 44px; min-height: 44px; }
+.bottom-nav button { min-height: 48px; }
+#mood-label { opacity: .9 !important; }
+.comfort-card { border: 1px solid rgba(255,255,255,.2); border-radius: 18px; padding: 12px 16px; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.comfort-card legend { padding: 0 8px; font-weight: 600; color: var(--accent); }
+.comfort-card label { display: flex; gap: 10px; align-items: center; min-height: 44px; cursor: pointer; }
+.comfort-card input { width: 22px; height: 22px; flex: none; }
+html.cf-calm *, html.cf-calm *::before, html.cf-calm *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+html.cf-calm .message:hover, html.cf-calm .game-card:hover { transform: none !important; }
+html.cf-calm .glass-shell, html.cf-calm #aura-sidebar, html.cf-calm .message, html.cf-calm .account-glass { box-shadow: none !important; }
+html.cf-calm .glass-shell { border: 1px solid rgba(255,255,255,.18); }
+html.cf-large body { font-size: clamp(19px, 1.6vw, 24px) !important; }
+html.cf-large .message, html.cf-large .input-row input, html.cf-large .input-row button, html.cf-large .tool-row button { font-size: 1.1em !important; }
+html.cf-spacing body, html.cf-spacing .message, html.cf-spacing textarea, html.cf-spacing .journal-entry, html.cf-spacing .cd { letter-spacing: .03em; word-spacing: .1em; line-height: 1.75 !important; text-align: left; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+<script>
+// ---- Comfort settings (persisted; calm mode defaults to the OS reduced-motion preference) ----
+(function () {
+  const KEY = 'auraComfort';
+  const osCalm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let cfg = { motion: osCalm, large: false, spacing: false, checkins: false };
+  try { Object.assign(cfg, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+  window.auraComfortGet = k => !!cfg[k];
+  function apply() {
+    const c = document.documentElement.classList;
+    c.toggle('cf-calm', cfg.motion); c.toggle('cf-large', cfg.large); c.toggle('cf-spacing', cfg.spacing);
+  }
+  apply();
+  const map = { 'cf-motion': 'motion', 'cf-large': 'large', 'cf-spacing': 'spacing', 'cf-checkins': 'checkins' };
+  Object.keys(map).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.checked = !!cfg[map[id]];
+    el.addEventListener('change', () => {
+      cfg[map[id]] = el.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) {}
+      apply();
+    });
+  });
+})();
+// ---- Keyboard: Enter/Space on game cards, Escape leaves a game, aria-current on nav ----
+document.querySelectorAll('.game-card').forEach(card => card.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+}));
+document.addEventListener('keydown', e => {
+  const area = document.getElementById('game-area');
+  if (e.key === 'Escape' && area && area.style.display !== 'none' && typeof exitGame === 'function') exitGame();
+});
+const _switchTab = window.switchTab;
+window.switchTab = function (name) {
+  _switchTab.apply(this, arguments);
+  document.querySelectorAll('.sidebar-nav-btn').forEach(b => b.removeAttribute('aria-current'));
+  const b = document.getElementById('navbtn-' + name); if (b) b.setAttribute('aria-current', 'page');
+};
+</script>
+</body>
+</html>
