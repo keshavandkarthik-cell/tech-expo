@@ -486,7 +486,11 @@ html, body { box-sizing: border-box; }
   <button id="toggle-sidebar" title="Toggle sidebar" aria-label="Toggle sidebar">&#9776;</button>
   <div class="sidebar-title">AuraAI</div>
   <nav class="sidebar-nav">
-    <button class="sidebar-nav-btn active" id="navbtn-chat" onclick="switchTab('chat')">
+    <button class="sidebar-nav-btn active" id="navbtn-home" onclick="switchTab('home')">
+      <span class="icon" aria-hidden="true">🏠</span>
+      <span class="label">Home</span>
+    </button>
+    <button class="sidebar-nav-btn" id="navbtn-chat" onclick="switchTab('chat')">
       <span class="icon" aria-hidden="true">💬</span>
       <span class="label">Aura</span>
     </button>
@@ -522,30 +526,69 @@ html, body { box-sizing: border-box; }
 </aside>
 <div id="main" role="main">
   <div class="glass-shell">
-    <div class="tab-content active" id="chat">
+    <div class="tab-content active" id="home">
+      <div class="home">
+        <h2 class="home-hello" id="home-hello">Hello</h2>
+        <p class="home-sub">What would you like to do today?</p>
+        <div class="home-big">
+          <button type="button" class="home-btn" data-go="chat"><span class="hi" aria-hidden="true">💬</span>Talk</button>
+          <button type="button" class="home-btn" data-go="draw"><span class="hi" aria-hidden="true">🎨</span>Draw</button>
+          <button type="button" class="home-btn" data-go="games"><span class="hi" aria-hidden="true">🎮</span>Play</button>
+        </div>
+        <div class="home-small">
+          <button type="button" class="acct-btn ghost" data-go="calm">🫧 Calm bubbles</button>
+          <button type="button" class="acct-btn ghost" data-go="coloring">🖍️ Colour</button>
+          <button type="button" class="acct-btn ghost" data-go="music">🎵 Music</button>
+          <button type="button" class="acct-btn ghost" data-go="journal">📓 Journal</button>
+        </div>
+        <p class="home-note">You can come back here any time by pressing Home.</p>
+      </div>
+    </div>
+    <div class="tab-content" id="chat">
       <div id="aura-chat">
         <!-- AuraAI 4.0: Mood-aware header -->
         <div id="aura-header" style="text-align:center;font-size:2rem;font-weight:700;color:var(--accent);margin-bottom:12px;letter-spacing:1px;">
           Aura 🌈 — Neutral Mode
+        </div>
+        <div class="quick-moods" role="group" aria-label="How are you feeling?">
+          <button type="button" data-say="I feel happy">😊 Happy</button>
+          <button type="button" data-say="I feel sad">😢 Sad</button>
+          <button type="button" data-say="I feel angry">😠 Angry</button>
+          <button type="button" data-say="I feel nervous">😰 Nervous</button>
         </div>
         <div class="chat-window" id="chat-window" role="log" aria-live="polite" aria-label="Conversation with Aura"></div>
         <div class="input-row">
           <input id="chat-input" placeholder="Talk to Aura..." aria-label="Message to Aura" autocomplete="off" />
           <button type="button" onclick="sendAuraAIMessage()" aria-label="Send message">Send</button>
         </div>
+        <div class="chat-tools">
+          <button type="button" id="mic-btn" aria-pressed="false">🎤 Speak</button>
+          <button type="button" id="speak-btn" aria-pressed="false">🔈 Read replies aloud</button>
+        </div>
         <!-- Mood panel injected here by JS -->
       </div>
     </div>
     <div class="tab-content" id="draw">
       <h2>Draw</h2>
-      <div class="tool-row">
-        <label>Colour <input type="color" id="draw-color" value="#7cc6ff"></label>
-        <label>Size <input type="range" id="draw-size" min="2" max="40" value="8"></label>
-        <button type="button" id="draw-eraser">Eraser</button>
-        <button type="button" id="draw-clear">Clear</button>
-        <button type="button" id="draw-save">Save</button>
+      <div class="dr-tools" role="toolbar" aria-label="Drawing tools">
+        <button type="button" class="dr-tool on" data-tool="pen" aria-pressed="true">✏️ Pen</button>
+        <button type="button" class="dr-tool" data-tool="eraser" aria-pressed="false">🧽 Eraser</button>
+        <button type="button" class="dr-tool" data-tool="spray" aria-pressed="false">🖌️ Spray</button>
+        <button type="button" class="dr-tool" data-tool="fill" aria-pressed="false">🪣 Fill</button>
+        <button type="button" class="dr-tool" data-tool="line" aria-pressed="false">📏 Line</button>
       </div>
-      <canvas id="draw-canvas" width="900" height="560"></canvas>
+      <div class="dr-row">
+        <label class="dr-lab">Colour <input type="color" id="dr-color" value="#1e88e5"></label>
+        <span class="dr-sw" id="dr-swatches" role="group" aria-label="Quick colours"></span>
+        <label class="dr-lab">Size <input type="range" id="dr-size" min="2" max="60" value="10"></label>
+      </div>
+      <div class="dr-row">
+        <button type="button" class="acct-btn ghost" id="dr-undo">↩ Undo</button>
+        <button type="button" class="acct-btn ghost" id="dr-redo">↪ Redo</button>
+        <button type="button" class="acct-btn ghost" id="dr-clear">Clear</button>
+        <button type="button" class="acct-btn" id="dr-save">Save picture</button>
+      </div>
+      <div class="dr-wrap"><canvas id="dr-canvas" width="1200" height="760" aria-label="Drawing canvas"></canvas></div>
     </div>
     <div class="tab-content" id="coloring">
       <h2>Colour by number</h2>
@@ -619,6 +662,7 @@ html, body { box-sizing: border-box; }
           <label class="acct-row"><span class="acct-text"><b>Calm mode</b><small>No animation, glow or movement.</small></span><input type="checkbox" role="switch" class="acct-switch" id="cf-motion"></label>
           <label class="acct-row"><span class="acct-text"><b>Larger text</b><small>Makes words bigger.</small></span><input type="checkbox" role="switch" class="acct-switch" id="cf-large"></label>
           <label class="acct-row"><span class="acct-text"><b>Easy-read spacing</b><small>More space between letters, words and lines.</small></span><input type="checkbox" role="switch" class="acct-switch" id="cf-spacing"></label>
+          <label class="acct-row"><span class="acct-text"><b>Soft sound effects</b><small>A quiet pop when bubbles burst. Off unless you turn it on.</small></span><input type="checkbox" role="switch" class="acct-switch" id="cf-sound"></label>
           <label class="acct-row"><span class="acct-text"><b>Gentle check-ins</b><small>Aura says hello if the chat is quiet. Off unless you turn it on.</small></span><input type="checkbox" role="switch" class="acct-switch" id="cf-checkins"></label>
         </section>
 
@@ -655,6 +699,7 @@ html, body { box-sizing: border-box; }
           <p class="acct-hint">Your journal, drawings and settings live only on this device.</p>
           <div class="acct-actions">
             <button type="button" id="export-account-btn" class="acct-btn">Download my data</button>
+            <button type="button" id="credits-btn" class="acct-btn ghost">Credits</button>
             <button type="button" id="reset-account-btn" class="acct-btn danger">Reset my account</button>
           </div>
         </section>
@@ -890,11 +935,42 @@ document.addEventListener("DOMContentLoaded", updateAccountAccent);
     </div>
     <div class="tab-content" id="music">
       <h2>Music</h2>
-      <iframe style="border-radius:12px"
-	src="https://open.spotify.com/embed/album/69AaAkdktFGnk9POmHENkT?utm_source=generator"
-	width="100%" height="380" frameBorder="0" allowfullscreen=""
-	allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-	loading="lazy"></iframe>
+      <section class="mu-card" aria-labelledby="mu-h">
+        <h3 id="mu-h">Calm background music</h3>
+        <audio id="mu-audio" src="bgm.mp3" preload="none" loop></audio>
+        <div class="mu-row">
+          <button type="button" id="mu-play" class="acct-btn">▶ Play</button>
+          <span id="mu-time" class="mu-time">0:00</span>
+        </div>
+        <input type="range" id="mu-seek" min="0" max="1000" value="0" aria-label="Position in song">
+        <label class="mu-vol">Volume <input type="range" id="mu-vol" min="0" max="100" value="40"></label>
+        <p class="ai-note" id="mu-status" role="status" aria-live="polite">Music never starts by itself.</p>
+      </section>
+      <section class="mu-card" aria-labelledby="mu-h2" id="sp-card">
+        <h3 id="mu-h2">Spotify</h3>
+        <div class="sp-tabs" id="sp-tabs" role="group" aria-label="Your playlists"></div>
+        <iframe id="sp-frame" style="border-radius:12px" title="Spotify player" src="about:blank" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <p class="ai-note">Spotify plays short previews unless you are logged in to Spotify in this browser. It needs internet.</p>
+        <details class="sp-manage" id="sp-manage">
+          <summary>Add or change my playlists</summary>
+          <div class="sp-add">
+            <h4>Add your own</h4>
+            <label class="ai-field" for="sp-name">Name
+              <input type="text" id="sp-name" maxlength="24" autocomplete="off" placeholder="e.g. Rainy day">
+            </label>
+            <label class="ai-field" for="sp-url">Spotify link
+              <input type="text" id="sp-url" autocomplete="off" spellcheck="false" placeholder="Paste a Spotify link here">
+            </label>
+            <p class="ai-note">In Spotify, press Share, then Copy link.</p>
+            <button type="button" class="acct-btn" id="sp-add">Add playlist</button>
+          </div>
+          <p class="ai-note sp-msg" id="sp-msg" role="status" aria-live="polite"></p>
+          <h4>My playlists</h4>
+          <ul class="sp-list" id="sp-list"></ul>
+          <h4>Ideas to add</h4>
+          <div id="sp-presets"></div>
+        </details>
+      </section>
     </div>
     <div class="tab-content" id="journal">
       <h2>Journal</h2>
@@ -904,9 +980,20 @@ document.addEventListener("DOMContentLoaded", updateAccountAccent);
         <div id="journal-entries" aria-label="Saved journal entries"></div>
       </div>
     </div>
+    <div class="tab-content" id="calm">
+      <h2>Calm Bubbles</h2>
+      <p class="tool-hint">Bubbles drift up slowly. Tap one to pop it. There is no score to beat and no timer.</p>
+      <div class="dr-row">
+        <button type="button" class="acct-btn" id="calm-pop">Pop one for me</button>
+        <button type="button" class="acct-btn ghost" onclick="switchTab('games')">Back to games</button>
+        <span class="calm-count" aria-live="polite">Popped: <b id="calm-n">0</b></span>
+      </div>
+      <div class="calm-wrap"><canvas id="calm-canvas" aria-label="Floating bubbles. Tap a bubble to pop it."></canvas></div>
+    </div>
     <div class="tab-content" id="games">
       <h2>Games</h2>
       <div id="games-container">
+        <div class="game-card" role="button" tabindex="0" onclick="switchTab('calm')">🫧 Calm Bubbles<br><small>slow and relaxing</small></div>
         <div class="game-card" role="button" tabindex="0" onclick="openGame('bubble')">Bubble Pop+</div>
         <div class="game-card" role="button" tabindex="0" onclick="openGame('brick')">Brick Breaker</div>
         <div class="game-card" role="button" tabindex="0" onclick="openGame('snake')">Snake+</div>
@@ -936,6 +1023,8 @@ function switchTab(tabName) {
   document.querySelectorAll('.sidebar-nav-btn').forEach(btn => btn.classList.remove('active'));
   // Map id to button
   let navMap = {
+    home: 'navbtn-home',
+    calm: 'navbtn-games',
     chat: 'navbtn-chat',
     draw: 'navbtn-draw',
     coloring: 'navbtn-coloring',
@@ -954,7 +1043,7 @@ function switchTab(tabName) {
 
 // Auto-load Chat on app start
 window.addEventListener('DOMContentLoaded', () => {
-  switchTab('chat');
+  switchTab('home');
 });
 
 // AuraAI 4.0 Stable — Conversational + Mood Memory
@@ -1666,7 +1755,7 @@ const AuraEngine = {
   respond: function(userMessage) {
     const msg = userMessage.toLowerCase();
     // 🧠 Name Memory — Top Priority
-    const nameMatch = userMessage.match(/\b(call me|my name is|i'?m|im|i am)\s+([a-z]+)/i);
+    const nameMatch = userMessage.match(/\b(call me|my name is)\s+([a-z]+)/i);
     if (nameMatch && nameMatch[2]) {
       const name = nameMatch[2].charAt(0).toUpperCase() + nameMatch[2].slice(1);
       localStorage.setItem("auraUserName", name);
@@ -2320,6 +2409,7 @@ function sendAuraAIMessage() {
   chat.appendChild(userDiv);
   chat.scrollTop = chat.scrollHeight;
   input.value = '';
+  if (/\bcelebration\b/i.test(msg)) { if (window.showCredits) showCredits(); return; }
   if (typeof updateAccountStats === 'function') updateAccountStats('chat');
   if (msg.length > 5 && typeof addAccountMemory === 'function') addAccountMemory(msg);
 
@@ -2337,7 +2427,7 @@ function sendAuraAIMessage() {
   ]).then(([text]) => {
     if (botDiv.parentNode) botDiv.parentNode.removeChild(botDiv);
     if (text) { addAuraMessage(text); resetIdleTimer(); }
-    else AuraEngine.respond(msg);
+    else AuraEngine.respond(window.AuraTypo ? AuraTypo.fix(msg) : msg);
   });
 }
 
@@ -3688,6 +3778,7 @@ function startSnake(ctx, canvas) {
   (function() {
     // Tab mapping for order and ids
     const tabs = [
+      { id: 'home', icon: '🏠' },
       { id: 'chat', icon: '💬' },
       { id: 'draw', icon: '🎨' },
       { id: 'coloring', icon: '🖍️' },
@@ -4030,34 +4121,6 @@ function startSnake(ctx, canvas) {
 </script>
 
 <script>
-// --- Draw tab ---
-(function () {
-  const cv = document.getElementById('draw-canvas');
-  if (!cv) return;
-  const ctx = cv.getContext('2d');
-  const color = document.getElementById('draw-color'), size = document.getElementById('draw-size');
-  const eraserBtn = document.getElementById('draw-eraser');
-  let erasing = false, drawing = false, last = null;
-  function pos(e) {
-    const r = cv.getBoundingClientRect();
-    return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height };
-  }
-  cv.addEventListener('pointerdown', e => { drawing = true; last = pos(e); cv.setPointerCapture(e.pointerId); stroke(last, last); });
-  cv.addEventListener('pointermove', e => { if (!drawing) return; const p = pos(e); stroke(last, p); last = p; });
-  ['pointerup', 'pointercancel'].forEach(t => cv.addEventListener(t, () => { drawing = false; }));
-  function stroke(a, b) {
-    ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
-    ctx.strokeStyle = color.value; ctx.lineWidth = +size.value; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-  }
-  eraserBtn.onclick = () => { erasing = !erasing; eraserBtn.classList.toggle('on', erasing); };
-  document.getElementById('draw-clear').onclick = () => ctx.clearRect(0, 0, cv.width, cv.height);
-  document.getElementById('draw-save').onclick = () => {
-    const out = document.createElement('canvas'); out.width = cv.width; out.height = cv.height;
-    const o = out.getContext('2d'); o.fillStyle = '#0b0d16'; o.fillRect(0, 0, out.width, out.height); o.drawImage(cv, 0, 0);
-    const a = document.createElement('a'); a.download = 'aura-drawing.png'; a.href = out.toDataURL('image/png'); a.click();
-  };
-})();
 // --- Colour by number (jellyfish) ---
 (function () {
   const W = 724, H = 1024;
@@ -4215,7 +4278,7 @@ html.cf-spacing body, html.cf-spacing .message, html.cf-spacing textarea, html.c
 (function () {
   const KEY = 'auraComfort';
   const osCalm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let cfg = { motion: osCalm, large: false, spacing: false, checkins: false };
+  let cfg = { motion: osCalm, large: false, spacing: false, checkins: false, sound: false };
   try { Object.assign(cfg, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
   window.auraComfortGet = k => !!cfg[k];
   function apply() {
@@ -4223,7 +4286,7 @@ html.cf-spacing body, html.cf-spacing .message, html.cf-spacing textarea, html.c
     c.toggle('cf-calm', cfg.motion); c.toggle('cf-large', cfg.large); c.toggle('cf-spacing', cfg.spacing);
   }
   apply();
-  const map = { 'cf-motion': 'motion', 'cf-large': 'large', 'cf-spacing': 'spacing', 'cf-checkins': 'checkins' };
+  const map = { 'cf-motion': 'motion', 'cf-large': 'large', 'cf-spacing': 'spacing', 'cf-checkins': 'checkins', 'cf-sound': 'sound' };
   Object.keys(map).forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -4395,6 +4458,460 @@ window.AuraLLM = (function () {
     if (!confirm('Forget the notes Aura keeps about you?')) return;
     const d = getAccountData(); d.memory = []; saveAccountData(d); renderAccountPanel();
   };
+})();
+</script>
+<style>
+/* ---- Home ---- */
+.home { max-width: 760px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; gap: 18px; padding: 8px 0 24px; }
+.home-hello { margin: 0; font-size: clamp(2.4rem, 7vw, 4rem); line-height: 1.1; color: #fff; overflow-wrap: anywhere; }
+.home-sub { margin: 0; font-size: 1.25rem; opacity: .9; }
+.home-big { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.home-btn { min-height: 130px; border-radius: 22px; border: 2px solid rgba(255,255,255,.35); background: rgba(255,255,255,.08); color: #fff; font: inherit; font-size: 1.35rem; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.home-btn .hi { font-size: 2.6rem; }
+.home-btn:hover { background: rgba(255,255,255,.16); }
+.home-small { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.home-note { margin: 0; font-size: .95rem; opacity: .75; }
+@media (max-width: 520px) { .home-big { grid-template-columns: 1fr; } .home-btn { min-height: 84px; flex-direction: row; justify-content: flex-start; padding: 0 22px; gap: 16px; } .home-btn .hi { font-size: 2rem; } }
+/* ---- Draw ---- */
+.dr-tools, .dr-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 8px 0; }
+.dr-tool { min-height: 44px; border-radius: 12px; border: 2px solid rgba(255,255,255,.35); background: rgba(255,255,255,.07); color: #fff; font: inherit; font-weight: 600; padding: 8px 14px; cursor: pointer; }
+.dr-tool.on { background: var(--accent); border-color: var(--accent); color: #0b0d16; }
+.dr-lab { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.dr-lab input[type=color] { width: 48px; height: 40px; border: 2px solid rgba(255,255,255,.5); border-radius: 10px; background: none; padding: 2px; cursor: pointer; }
+.dr-sw { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.dr-sw button { width: 36px; height: 36px; min-height: 36px; border-radius: 50%; border: 2px solid rgba(255,255,255,.7); cursor: pointer; padding: 0; }
+.dr-wrap { border-radius: 16px; overflow: hidden; background: #fbfaf6; }
+#dr-canvas { display: block; width: 100%; height: auto; touch-action: none; cursor: crosshair; }
+/* ---- Music ---- */
+.mu-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 20px; padding: 18px 20px; margin: 0 0 16px; display: flex; flex-direction: column; gap: 12px; }
+.mu-card h3 { margin: 0; color: var(--accent); }
+.mu-row { display: flex; align-items: center; gap: 14px; }
+.mu-time { font-variant-numeric: tabular-nums; opacity: .9; }
+.mu-card input[type=range] { width: 100%; min-height: 32px; }
+.mu-vol { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+.mu-vol input { flex: 1; }
+/* ---- Calm bubbles ---- */
+.calm-wrap { border-radius: 18px; overflow: hidden; background: linear-gradient(160deg, #16233d, #2a2350); }
+#calm-canvas { display: block; width: 100%; height: 56vh; min-height: 260px; touch-action: manipulation; cursor: pointer; }
+.calm-count { margin-left: auto; opacity: .9; }
+/* ---- Chat extras ---- */
+.quick-moods { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.quick-moods button { flex: 1 1 110px; min-height: 44px; border-radius: 14px; border: 2px solid rgba(255,255,255,.3); background: rgba(255,255,255,.07); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+.quick-moods button:hover { background: rgba(255,255,255,.16); }
+.chat-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.chat-tools button { min-height: 44px; border-radius: 12px; border: 2px solid rgba(255,255,255,.3); background: transparent; color: #fff; font: inherit; font-weight: 600; padding: 8px 14px; cursor: pointer; }
+.chat-tools button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #0b0d16; }
+/* ---- Credits ---- */
+#credits-overlay { position: fixed; inset: 0; z-index: 3000; background: #05070e; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center; padding: 24px; font-size: clamp(1.2rem, 3.5vw, 2rem); }
+#credits-overlay small { opacity: .75; font-size: .7em; }
+</style>
+<script>
+// ================= Ultimate AuraAI additions =================
+// ---- optional soft sounds (off unless the user turns them on in Account > Comfort) ----
+window.AuraSound = (function () {
+  let ctx = null;
+  const on = () => !!(window.auraComfortGet && auraComfortGet('sound'));
+  function tone(freq, dur, gain) {
+    if (!on()) return;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+      ctx = ctx || new AC(); if (ctx.state === 'suspended') ctx.resume();
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      g.gain.setValueAtTime(gain, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+      o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime + dur);
+    } catch (e) {}
+  }
+  return { pop() { tone(620 + Math.random() * 260, 0.12, 0.04); }, tick() { tone(520, 0.06, 0.03); } };
+})();
+
+// ---- Home: big friendly choices ----
+(function () {
+  document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.go)));
+  function hello() {
+    let name = '';
+    try { name = (getAccountData().name || '').trim(); } catch (e) {}
+    const el = document.getElementById('home-hello');
+    if (el) el.textContent = (name && name !== 'You') ? 'Hello, ' + name : 'Hello';
+  }
+  hello();
+  const prev = window.switchTab;
+  window.switchTab = function (name) {
+    prev.apply(this, arguments);
+    if (name === 'home') hello();
+    if (name !== 'calm' && window.AuraCalm) AuraCalm.pause();
+    if (name === 'calm' && window.AuraCalm) AuraCalm.resume();
+  };
+})();
+
+// ---- Draw: pen, eraser, spray, fill, line, undo/redo, touch, saved draft ----
+(function () {
+  const cv = document.getElementById('dr-canvas'); if (!cv) return;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  const colorIn = document.getElementById('dr-color'), sizeIn = document.getElementById('dr-size');
+  const DRAFT = 'auraDrawDraft', MAX = 30;
+  let tool = 'pen', drawing = false, last = null, base = null, start = null;
+  let states = [], idx = -1;
+
+  ['#000000', '#ffffff', '#e53935', '#fb8c00', '#fdd835', '#43a047', '#1e88e5', '#8e24aa'].forEach(c => {
+    const b = document.createElement('button'); b.type = 'button'; b.style.background = c; b.setAttribute('aria-label', 'Colour ' + c);
+    b.onclick = () => { colorIn.value = c; if (tool === 'eraser') setTool('pen'); };
+    document.getElementById('dr-swatches').appendChild(b);
+  });
+  function setTool(t) {
+    tool = t;
+    document.querySelectorAll('.dr-tool').forEach(b => { const on = b.dataset.tool === t; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+  }
+  document.querySelectorAll('.dr-tool').forEach(b => b.onclick = () => setTool(b.dataset.tool));
+
+  function pos(e) { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height }; }
+  function rgba(hex) { return [1, 3, 5].map(i => parseInt(hex.substr(i, 2), 16)).concat(255); }
+  function snapshot() {
+    states = states.slice(0, idx + 1); states.push(cv.toDataURL()); if (states.length > MAX) states.shift(); idx = states.length - 1;
+    try { localStorage.setItem(DRAFT, states[idx]); } catch (e) {}
+  }
+  function restore(url) {
+    const img = new Image(); img.onload = () => { ctx.globalCompositeOperation = 'source-over'; ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(img, 0, 0); }; img.src = url;
+  }
+  function seg(a, b) {
+    ctx.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = colorIn.value; ctx.lineWidth = +sizeIn.value; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.globalCompositeOperation = 'source-over';
+  }
+  function spray(p) {
+    const r = +sizeIn.value * 1.6; ctx.fillStyle = colorIn.value;
+    for (let i = 0; i < 18; i++) { const a = Math.random() * 6.2832, d = Math.random() * r; ctx.fillRect(p.x + Math.cos(a) * d, p.y + Math.sin(a) * d, 2, 2); }
+  }
+  function floodFill(px, py) {
+    const W = cv.width, H = cv.height, img = ctx.getImageData(0, 0, W, H), d = img.data;
+    const x0 = Math.floor(px), y0 = Math.floor(py), i0 = (y0 * W + x0) * 4;
+    const t = [d[i0], d[i0 + 1], d[i0 + 2], d[i0 + 3]], f = rgba(colorIn.value), tol = 40;
+    if (Math.abs(t[0] - f[0]) + Math.abs(t[1] - f[1]) + Math.abs(t[2] - f[2]) + Math.abs(t[3] - f[3]) < 4) return;
+    const match = i => Math.abs(d[i] - t[0]) <= tol && Math.abs(d[i + 1] - t[1]) <= tol && Math.abs(d[i + 2] - t[2]) <= tol && Math.abs(d[i + 3] - t[3]) <= tol;
+    const stack = [[x0, y0]];
+    while (stack.length) {
+      let [x, y] = stack.pop(), i = (y * W + x) * 4;
+      while (x >= 0 && match(i)) { x--; i -= 4; }
+      x++; i += 4; let up = false, dn = false;
+      while (x < W && match(i)) {
+        d[i] = f[0]; d[i + 1] = f[1]; d[i + 2] = f[2]; d[i + 3] = 255;
+        if (y > 0) { const u = i - W * 4; if (match(u)) { if (!up) { stack.push([x, y - 1]); up = true; } } else up = false; }
+        if (y < H - 1) { const v = i + W * 4; if (match(v)) { if (!dn) { stack.push([x, y + 1]); dn = true; } } else dn = false; }
+        x++; i += 4;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+  cv.addEventListener('pointerdown', e => {
+    e.preventDefault(); cv.setPointerCapture(e.pointerId);
+    const p = pos(e); start = last = p;
+    if (tool === 'fill') { floodFill(p.x, p.y); snapshot(); return; }
+    drawing = true;
+    if (tool === 'line') base = ctx.getImageData(0, 0, cv.width, cv.height);
+    else if (tool === 'spray') spray(p); else seg(p, p);
+  });
+  cv.addEventListener('pointermove', e => {
+    if (!drawing) return; const p = pos(e);
+    if (tool === 'line') { ctx.putImageData(base, 0, 0); seg(start, p); }
+    else if (tool === 'spray') spray(p); else seg(last, p);
+    last = p;
+  });
+  const end = () => { if (!drawing) return; drawing = false; base = null; snapshot(); };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  document.getElementById('dr-undo').onclick = () => { if (idx > 0) { idx--; restore(states[idx]); try { localStorage.setItem(DRAFT, states[idx]); } catch (e) {} } };
+  document.getElementById('dr-redo').onclick = () => { if (idx < states.length - 1) { idx++; restore(states[idx]); try { localStorage.setItem(DRAFT, states[idx]); } catch (e) {} } };
+  document.getElementById('dr-clear').onclick = () => { ctx.clearRect(0, 0, cv.width, cv.height); snapshot(); };
+  document.getElementById('dr-save').onclick = () => {
+    const out = document.createElement('canvas'); out.width = cv.width; out.height = cv.height;
+    const o = out.getContext('2d'); o.fillStyle = '#fbfaf6'; o.fillRect(0, 0, out.width, out.height); o.drawImage(cv, 0, 0);
+    const a = document.createElement('a'); a.download = 'aura-drawing.png'; a.href = out.toDataURL('image/png'); a.click();
+  };
+  // start: blank state, then restore the saved draft if there is one
+  states = [cv.toDataURL()]; idx = 0;
+  try { const d = localStorage.getItem(DRAFT); if (d) { restore(d); states = [d]; idx = 0; } } catch (e) {}
+})();
+
+// ---- Calm Bubbles: slow, endless, no timer, no score pressure ----
+window.AuraCalm = (function () {
+  const cv = document.getElementById('calm-canvas'); if (!cv) return {};
+  const ctx = cv.getContext('2d'); let W = 0, H = 0, dpr = 1, bubbles = [], last = 0, run = false, raf = 0, popped = 0, spawnT = 0;
+  const calm = () => document.documentElement.classList.contains('cf-calm');
+  function size() {
+    dpr = window.devicePixelRatio || 1; const r = cv.getBoundingClientRect();
+    W = Math.max(1, Math.floor(r.width)); H = Math.max(1, Math.floor(r.height));
+    cv.width = Math.floor(W * dpr); cv.height = Math.floor(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function spawn() {
+    const r = 22 + Math.random() * 26;
+    bubbles.push({ x: r + Math.random() * Math.max(1, W - 2 * r), y: H + r + 6, r, v: 18 + Math.random() * 22, hue: 190 + Math.random() * 100, ph: Math.random() * 6.28, fade: 1, dead: false });
+  }
+  function draw(b) {
+    ctx.save(); ctx.globalAlpha = Math.max(0, b.fade);
+    const g = ctx.createRadialGradient(b.x - b.r * .3, b.y - b.r * .3, b.r * .15, b.x, b.y, b.r);
+    g.addColorStop(0, 'hsla(' + b.hue + ',80%,92%,.95)'); g.addColorStop(1, 'hsla(' + b.hue + ',60%,62%,.55)');
+    ctx.shadowColor = 'rgba(255,255,255,.7)'; ctx.shadowBlur = 10; ctx.fillStyle = g; ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 6.2832); ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 0; ctx.fillStyle = 'rgba(255,255,255,.65)'; ctx.beginPath(); ctx.arc(b.x - b.r * .38, b.y - b.r * .38, b.r * .2, 0, 6.2832); ctx.fill(); ctx.restore();
+  }
+  function frame(t) {
+    if (!run) return;
+    const dt = Math.min(0.05, (t - last) / 1000 || 0); last = t;
+    ctx.clearRect(0, 0, W, H);
+    spawnT += dt; if (spawnT > 1.1 && bubbles.length < 14) { spawn(); spawnT = 0; }
+    const slow = calm() ? 0.5 : 1;
+    bubbles.forEach(b => {
+      if (b.dead) b.fade -= calm() ? 1 : dt * 6; else { b.y -= b.v * slow * dt; if (!calm()) b.x += Math.sin(t / 1400 + b.ph) * 8 * dt; }
+      draw(b);
+    });
+    bubbles = bubbles.filter(b => b.fade > 0 && b.y > -b.r - 10);
+    raf = requestAnimationFrame(frame);
+  }
+  function popAt(x, y) {
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+      const b = bubbles[i]; if (!b.dead && (x - b.x) ** 2 + (y - b.y) ** 2 <= b.r * b.r) { pop(b); return true; }
+    }
+    return false;
+  }
+  function pop(b) { b.dead = true; popped++; document.getElementById('calm-n').textContent = popped; if (window.AuraSound) AuraSound.pop(); }
+  cv.addEventListener('pointerdown', e => { const r = cv.getBoundingClientRect(); popAt(e.clientX - r.left, e.clientY - r.top); });
+  document.getElementById('calm-pop').onclick = () => { const b = bubbles.filter(x => !x.dead).sort((p, q) => q.y - p.y)[0]; if (b) pop(b); };
+  function resume() { if (run) return; size(); run = true; last = performance.now(); if (!bubbles.length) { for (let i = 0; i < 5; i++) { spawn(); bubbles[i].y = Math.random() * H; } } raf = requestAnimationFrame(frame); }
+  function pause() { run = false; cancelAnimationFrame(raf); }
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); else if (document.getElementById('calm').classList.contains('active')) resume(); });
+  window.addEventListener('resize', () => { if (run) size(); });
+  return { resume, pause, _state: () => ({ bubbles: bubbles.length, popped, running: run }) };
+})();
+
+// ---- Music: a real player (never autoplays; file only downloads when you press play) ----
+(function () {
+  const a = document.getElementById('mu-audio'); if (!a) return;
+  const play = document.getElementById('mu-play'), seek = document.getElementById('mu-seek'), vol = document.getElementById('mu-vol'), time = document.getElementById('mu-time'), st = document.getElementById('mu-status');
+  const fmt = s => isFinite(s) ? Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0') : '0:00';
+  try { const v = localStorage.getItem('auraMusicVol'); if (v !== null) vol.value = v; } catch (e) {}
+  a.volume = vol.value / 100;
+  play.onclick = () => {
+    if (a.paused) { a.play().then(() => { play.textContent = '⏸ Pause'; st.textContent = 'Playing.'; }).catch(() => { st.textContent = 'The music file could not play. Check your connection and try again.'; }); }
+    else { a.pause(); play.textContent = '▶ Play'; st.textContent = 'Paused.'; }
+  };
+  a.addEventListener('error', () => { st.textContent = 'The music file could not be loaded.'; play.textContent = '▶ Play'; });
+  a.addEventListener('timeupdate', () => { if (a.duration) seek.value = Math.round(a.currentTime / a.duration * 1000); time.textContent = fmt(a.currentTime) + ' / ' + fmt(a.duration); });
+  seek.addEventListener('input', () => { if (a.duration) a.currentTime = seek.value / 1000 * a.duration; });
+  vol.addEventListener('input', () => { a.volume = vol.value / 100; try { localStorage.setItem('auraMusicVol', vol.value); } catch (e) {} });
+})();
+
+// ---- Chat extras: quick moods, voice in, read-aloud, gentle typo fixing, credits ----
+(function () {
+  window.AuraTypo = (function () {
+    const WORDS = ['anxious', 'nervous', 'stressed', 'worried', 'overwhelmed', 'frustrated', 'embarrassed', 'depressed', 'bullied', 'exhausted', 'disappointed'];
+    function lev(a, b) {
+      const m = a.length, n = b.length, dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+      for (let i = 0; i <= m; i++) dp[i][0] = i; for (let j = 0; j <= n; j++) dp[0][j] = j;
+      for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      return dp[m][n];
+    }
+    // Only long, distinctive feeling-words are fuzzy-matched, so ordinary words are never rewritten.
+    function fix(text) {
+      return String(text).replace(/(\w)\1{2,}/g, '$1$1').replace(/[A-Za-z']+/g, w => {
+        const l = w.toLowerCase(); if (l.length < 6) return w;
+        if (WORDS.includes(l)) return w;
+        for (const k of WORDS) { if (k.length >= 7 && Math.abs(k.length - l.length) <= 1 && lev(l, k) <= (k.length >= 9 ? 2 : 1)) return k; }
+        return w;
+      });
+    }
+    return { fix };
+  })();
+
+  document.querySelectorAll('.quick-moods button').forEach(b => b.onclick = () => {
+    const i = document.getElementById('chat-input'); i.value = b.dataset.say; sendAuraAIMessage();
+  });
+
+  // read replies aloud
+  const speakBtn = document.getElementById('speak-btn'); let speakOn = false;
+  try { speakOn = localStorage.getItem('auraSpeak') === '1'; } catch (e) {}
+  const synth = window.speechSynthesis;
+  function syncSpeak() { if (speakBtn) { speakBtn.setAttribute('aria-pressed', String(speakOn)); speakBtn.textContent = speakOn ? '🔊 Reading replies aloud' : '🔈 Read replies aloud'; } }
+  if (speakBtn) {
+    if (!synth) speakBtn.style.display = 'none';
+    speakBtn.onclick = () => { speakOn = !speakOn; try { localStorage.setItem('auraSpeak', speakOn ? '1' : '0'); } catch (e) {} if (!speakOn && synth) synth.cancel(); syncSpeak(); };
+    syncSpeak();
+  }
+  const origAdd = window.addAuraMessage;
+  window.addAuraMessage = function (msg) {
+    origAdd.apply(this, arguments);
+    if (speakOn && synth) { try { synth.cancel(); const u = new SpeechSynthesisUtterance(String(msg).replace(/^Aura:\s*/, '')); u.rate = 0.95; synth.speak(u); } catch (e) {} }
+  };
+
+  // one-shot voice input: fills the box so you can check it before sending
+  const mic = document.getElementById('mic-btn'); const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (mic) {
+    if (!SR) mic.style.display = 'none';
+    else mic.onclick = () => {
+      const r = new SR(); r.lang = 'en-US'; r.interimResults = false; r.maxAlternatives = 1;
+      mic.setAttribute('aria-pressed', 'true'); mic.textContent = '🎤 Listening...';
+      r.onresult = e => { const i = document.getElementById('chat-input'); i.value = e.results[0][0].transcript; i.focus(); };
+      r.onend = r.onerror = () => { mic.setAttribute('aria-pressed', 'false'); mic.textContent = '🎤 Speak'; };
+      try { r.start(); } catch (e) { mic.setAttribute('aria-pressed', 'false'); mic.textContent = '🎤 Speak'; }
+    };
+  }
+
+  // credits (the "celebration" Easter egg, calm: no confetti, no sound)
+  window.showCredits = function () {
+    if (document.getElementById('credits-overlay')) return;
+    const o = document.createElement('div'); o.id = 'credits-overlay'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-modal', 'true'); o.setAttribute('aria-label', 'Credits');
+    o.innerHTML = '<div style="font-size:1.4em">AuraAI 💫</div><div>Created by Keshav &amp; Kritika + Aadhya</div><div>Special thanks to all parents and Ms Anjali for the support</div><div>Coolest Projects Malaysia 2025 ✨</div><button type="button" class="acct-btn" id="credits-close">Close</button><small>Press Escape or tap Close to go back</small>';
+    document.body.appendChild(o);
+    const close = () => { o.remove(); document.removeEventListener('keydown', esc); };
+    const esc = e => { if (e.key === 'Escape') close(); };
+    document.addEventListener('keydown', esc); document.getElementById('credits-close').onclick = close; setTimeout(() => { const c = document.getElementById('credits-close'); if (c) c.focus(); }, 300);
+  };
+  const cb = document.getElementById('credits-btn'); if (cb) cb.onclick = () => showCredits();
+})();
+</script>
+<style>
+.sp-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.sp-chip { min-height: 44px; border-radius: 999px; border: 2px solid rgba(255,255,255,.35); background: rgba(255,255,255,.07); color: #fff; font: inherit; font-weight: 600; padding: 8px 16px; cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #0b0d16; }
+.sp-manage summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--accent); }
+.sp-manage h4 { margin: 18px 0 8px; font-size: 1rem; }
+.sp-add { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.sp-add .ai-field { width: 100%; }
+.sp-msg { min-height: 1.4em; margin-top: 10px; }
+.sp-msg.err { color: #ffb9b9; }
+.sp-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.sp-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 8px 12px; }
+.sp-row .sp-name { flex: 1 1 120px; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+.sp-row .acct-btn { padding: 6px 12px; min-height: 44px; }
+.sp-row input[type=text] { flex: 1 1 140px; min-height: 44px; border-radius: 10px; border: 2px solid rgba(255,255,255,.4); background: rgba(255,255,255,.07); color: #fff; padding: 6px 10px; font: inherit; }
+.sp-preset-cat { margin: 14px 0 6px; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+</style>
+<script>
+// ---- Spotify playlists you can customise (modelled on Veda's playlist manager) ----
+window.AuraSpotify = (function () {
+  const KEY = 'auraPlaylists', LAST = 'auraLastPlaylist', MAX = 20;
+  const PRESETS = [
+    { name: 'Lo-fi', id: '69AaAkdktFGnk9POmHENkT', type: 'album', cat: 'Calm' },
+    { name: 'Peaceful Piano', id: '37i9dQZF1DX4sWSpwq3LiO', type: 'playlist', cat: 'Calm' },
+    { name: 'Rain & Ambience', id: '37i9dQZF1DX4PP3DA4J0N8', type: 'playlist', cat: 'Calm' },
+    { name: 'Classical Focus', id: '37i9dQZF1DWWEJlAGA9g88', type: 'playlist', cat: 'Calm' },
+    { name: 'Jazz Vibes', id: '37i9dQZF1DXbITWG1ZJKYt', type: 'playlist', cat: 'Calm' },
+    { name: 'Focus Flow', id: '37i9dQZF1DX8Uebhn9wzrS', type: 'playlist', cat: 'Focus' },
+    { name: 'Deep Work', id: '37i9dQZF1DWZeKCadgRdKQ', type: 'playlist', cat: 'Focus' },
+    { name: 'Interstellar OST', id: '7a78GiEowpaCa7ZJs44xUU', type: 'album', cat: 'Soundtrack' }
+  ];
+  const DEFAULTS = [{ name: 'Aura mix', id: '0mZUMmIk952uuM1xsczDh6', type: 'playlist' }, PRESETS[0], PRESETS[1], PRESETS[2]];
+  const $ = id => document.getElementById(id);
+  let renaming = null;
+
+  const validType = t => ['playlist', 'album', 'track', 'artist'].includes(t);
+  const validId = i => /^[A-Za-z0-9]{10,40}$/.test(i);
+  function clean(list) { return (Array.isArray(list) ? list : []).filter(p => p && validType(p.type) && validId(p.id) && typeof p.name === 'string').map(p => ({ name: p.name.slice(0, 24), id: p.id, type: p.type })); }
+  function get() { try { const l = JSON.parse(localStorage.getItem(KEY) || 'null'); if (l) return clean(l); } catch (e) {} return DEFAULTS.map(p => ({ name: p.name, id: p.id, type: p.type })); }
+  function save(l) { try { localStorage.setItem(KEY, JSON.stringify(l)); } catch (e) {} }
+  function msg(t, err) { const m = $('sp-msg'); if (m) { m.textContent = t; m.classList.toggle('err', !!err); } }
+
+  function parse(url) {
+    url = String(url).trim();
+    let m = url.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(playlist|album|track|artist)\/([A-Za-z0-9]+)/);
+    if (m) return { type: m[1], id: m[2] };
+    m = url.match(/spotify:(playlist|album|track|artist):([A-Za-z0-9]+)/);
+    if (m) return { type: m[1], id: m[2] };
+    if (/^[A-Za-z0-9]{22}$/.test(url)) return { type: 'playlist', id: url };
+    return null;
+  }
+
+  function play(p) {
+    if (!p || !validType(p.type) || !validId(p.id)) return;
+    const f = $('sp-frame');
+    f.height = p.type === 'track' ? 152 : 352;
+    f.src = 'https://open.spotify.com/embed/' + p.type + '/' + p.id + '?utm_source=generator&theme=0';
+    try { localStorage.setItem(LAST, p.id); } catch (e) {}
+    loaded = true;
+    renderTabs();
+  }
+  function current() { try { return localStorage.getItem(LAST); } catch (e) { return null; } }
+
+  function renderTabs() {
+    const box = $('sp-tabs'), list = get(), cur = current();
+    box.textContent = '';
+    if (!list.length) { const s = document.createElement('span'); s.className = 'ai-note'; s.textContent = 'No playlists yet. Open "Add or change my playlists" to add one.'; box.appendChild(s); return; }
+    list.forEach(p => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'sp-chip'; b.textContent = p.name; b.title = p.name;
+      b.setAttribute('aria-pressed', String(p.id === cur)); b.onclick = () => play(p); box.appendChild(b);
+    });
+  }
+  function renderList() {
+    const ul = $('sp-list'), list = get(); ul.textContent = '';
+    if (!list.length) { const li = document.createElement('li'); li.className = 'ai-note'; li.textContent = 'None yet.'; ul.appendChild(li); return; }
+    list.forEach(p => {
+      const li = document.createElement('li'); li.className = 'sp-row';
+      if (renaming === p.id) {
+        const inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 24; inp.value = p.name; inp.setAttribute('aria-label', 'New name for ' + p.name);
+        const ok = document.createElement('button'); ok.type = 'button'; ok.className = 'acct-btn'; ok.textContent = 'Save';
+        const no = document.createElement('button'); no.type = 'button'; no.className = 'acct-btn ghost'; no.textContent = 'Cancel';
+        const done = () => { const n = inp.value.trim(); if (n) { const l = get(), q = l.find(x => x.id === p.id); if (q) { q.name = n.slice(0, 24); save(l); } msg('Renamed.'); } renaming = null; refresh(); };
+        ok.onclick = done; no.onclick = () => { renaming = null; refresh(); };
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') done(); if (e.key === 'Escape') { renaming = null; refresh(); } });
+        li.append(inp, ok, no); ul.appendChild(li); setTimeout(() => inp.focus(), 0); return;
+      }
+      const name = document.createElement('span'); name.className = 'sp-name'; name.textContent = (p.type === 'album' ? '💿 ' : p.type === 'track' ? '🎵 ' : '🎶 ') + p.name;
+      const pl = document.createElement('button'); pl.type = 'button'; pl.className = 'acct-btn'; pl.textContent = 'Play'; pl.setAttribute('aria-label', 'Play ' + p.name); pl.onclick = () => play(p);
+      const rn = document.createElement('button'); rn.type = 'button'; rn.className = 'acct-btn ghost'; rn.textContent = 'Rename'; rn.setAttribute('aria-label', 'Rename ' + p.name); rn.onclick = () => { renaming = p.id; renderList(); };
+      const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'acct-btn danger'; rm.textContent = 'Remove'; rm.setAttribute('aria-label', 'Remove ' + p.name);
+      rm.onclick = () => {
+        const l = get().filter(x => x.id !== p.id); save(l); msg('Removed "' + p.name + '".');
+        if (current() === p.id) { if (l.length) play(l[0]); else { $('sp-frame').src = 'about:blank'; try { localStorage.removeItem(LAST); } catch (e) {} } }
+        refresh();
+      };
+      li.append(name, pl, rn, rm); ul.appendChild(li);
+    });
+  }
+  function renderPresets() {
+    const box = $('sp-presets'), have = get().map(p => p.id), cats = {};
+    box.textContent = ''; PRESETS.forEach(p => (cats[p.cat] = cats[p.cat] || []).push(p));
+    Object.keys(cats).forEach(c => {
+      const h = document.createElement('div'); h.className = 'sp-preset-cat'; h.textContent = c; box.appendChild(h);
+      const ul = document.createElement('ul'); ul.className = 'sp-list';
+      cats[c].forEach(p => {
+        const li = document.createElement('li'); li.className = 'sp-row';
+        const n = document.createElement('span'); n.className = 'sp-name'; n.textContent = (p.type === 'album' ? '💿 ' : '🎶 ') + p.name;
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'acct-btn ghost'; const added = have.includes(p.id);
+        b.textContent = added ? 'Added' : 'Add'; b.disabled = added; b.setAttribute('aria-label', (added ? 'Already added: ' : 'Add ') + p.name);
+        b.onclick = () => { const l = get(); if (l.length >= MAX) { msg('You can keep up to ' + MAX + ' playlists. Remove one first.', true); return; } l.push({ name: p.name, id: p.id, type: p.type }); save(l); msg('Added "' + p.name + '".'); refresh(); };
+        li.append(n, b); ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    });
+  }
+  function refresh() { renderTabs(); renderList(); renderPresets(); }
+
+  function addCustom() {
+    const name = $('sp-name').value.trim(), url = $('sp-url').value.trim();
+    if (!name) { msg('Give it a name first.', true); $('sp-name').focus(); return; }
+    if (!url) { msg('Paste a Spotify link first.', true); $('sp-url').focus(); return; }
+    const p = parse(url);
+    if (!p) { msg('That does not look like a Spotify link. In Spotify, press Share, then Copy link.', true); $('sp-url').focus(); return; }
+    const l = get();
+    if (l.find(x => x.id === p.id)) { msg('That one is already in your list.', true); return; }
+    if (l.length >= MAX) { msg('You can keep up to ' + MAX + ' playlists. Remove one first.', true); return; }
+    const item = { name: name.slice(0, 24), id: p.id, type: p.type }; l.push(item); save(l);
+    $('sp-name').value = ''; $('sp-url').value = ''; msg('Added "' + item.name + '".'); refresh(); play(item);
+  }
+  function init() {
+    if (!$('sp-card')) return;
+    $('sp-add').onclick = addCustom;
+    [$('sp-name'), $('sp-url')].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') addCustom(); }));
+    const list = get(); let cur = current();
+    if (!list.find(p => p.id === cur)) cur = list.length ? list[0].id : null;
+    refresh();
+    if (cur) { try { localStorage.setItem(LAST, cur); } catch (e) {} const first = list.find(p => p.id === cur); renderTabs(); $('sp-frame').dataset.src = 'https://open.spotify.com/embed/' + first.type + '/' + first.id + '?utm_source=generator&theme=0'; }
+  }
+  // Load the player only when the Music tab is first opened (saves data and avoids surprise sound).
+  let loaded = false;
+  function ensureLoaded() { const f = $('sp-frame'); if (loaded || !f || !f.dataset.src) return; loaded = true; f.src = f.dataset.src; }
+  const prev = window.switchTab;
+  window.switchTab = function (name) { prev.apply(this, arguments); if (name === 'music') ensureLoaded(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  return { parse, get, _loaded: () => loaded };
 })();
 </script>
 </body>
