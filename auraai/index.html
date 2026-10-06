@@ -4944,7 +4944,7 @@ function startSudoku(area) {
     area.innerHTML = `
       <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:8px 0;user-select:none;">
         <div style="display:flex;align-items:center;justify-content:space-between;width:min(360px,90vw);">
-          <button class="abtn sec" onclick="exitSudoku()" style="padding:7px 14px;font-size:.75rem;">← Back</button>
+          <span></span>
           <div style="display:flex;gap:10px;align-items:center;">
             <div style="font-family:var(--exo);font-size:.75rem;color:var(--silver);">Mistakes: <span id="sdk-mistakes">${mistakes}</span></div>
             <div style="font-family:var(--orb);font-size:.85rem;color:var(--accent2);" id="sdk-timer">00:00</div>
@@ -4956,8 +4956,8 @@ function startSudoku(area) {
         </div>
 
         <div id="sdk-grid" style="
-          display:grid;grid-template-columns:repeat(9,1fr);
-          width:min(360px,90vw);height:min(360px,90vw);
+          display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);flex:0 0 auto;box-sizing:border-box;
+          width:min(360px,90vw);height:min(360px,90vw);min-height:min(360px,90vw);
           border:2px solid rgba(77,159,255,.5);border-radius:8px;overflow:hidden;
           background:var(--panel-col);gap:0;
         ">${buildGrid(numCounts)}</div>
