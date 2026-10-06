@@ -2430,6 +2430,8 @@ function sendAuraAIMessage() {
   if (/\bcelebration\b/i.test(msg)) { if (window.showCredits) showCredits(); return; }
   if (typeof updateAccountStats === 'function') updateAccountStats('chat');
   if (window.AuraProfile) AuraProfile.learn(msg);
+  resetIdleTimer();
+  if (window.AuraNav && AuraNav.tryOpen(msg)) return;
 
   // Aura is thinking...
   const botDiv = document.createElement('div');
@@ -2459,6 +2461,7 @@ document.addEventListener('DOMContentLoaded', function() {
     input.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') sendAuraAIMessage();
     });
+    input.addEventListener('input', () => resetIdleTimer());
   }
   // Mood label below chat container, centered (Aura 7.0)
   const chatContainer = document.getElementById('aura-chat');
@@ -2479,8 +2482,10 @@ let idleTimer;
 function resetIdleTimer() {
   clearTimeout(idleTimer);
   idleTimer = setTimeout(() => {
+    const inp = document.getElementById('chat-input');
+    if (inp && inp.value.trim()) { resetIdleTimer(); return; }   // they are typing: do not interrupt
     AuraEngine.idleReminder();
-  }, 25000);
+  }, 90000);
 }
 resetIdleTimer();
 
@@ -5885,5 +5890,63 @@ const AuraInterest = (function () {
 }
 </style>
 <style>@media (max-height: 700px) { .home-card h3 { display: none; } .home-feel button { min-height: 40px; padding: 4px 10px; } #account .acct-stats { display: none; } .home-hello { font-size: 1.4rem; } }</style>
+<script>
+/* "I want to draw" opens Draw. Fixed rules, not the AI, so it works the same every time. */
+const AuraNav = (function () {
+  const FEATURES = [
+    ['draw', /\b(draw|drawing|paint|painting|sketch)\b/, 'Draw'],
+    ['calm', /\b(bubbles?|calm bubbles?|pop bubbles?)\b/, 'Calm Bubbles'],
+    ['breathe', /\b(breathe|breathing|breath)\b/, 'Breathe'],
+    ['coloring', /\b(colou?ring|colou?r by number|colou?r in)\b/, 'Colour by number'],
+    ['music', /\b(music|songs?|spotify|playlist)\b/, 'Music'],
+    ['journal', /\b(journal|diary)\b/, 'Journal'],
+    ['interest', /\b(my interests?|interest page)\b/, 'My interest'],
+    ['games', /\b(games?|snake|2048|sudoku|wordle|memory match|brick breaker|flag quiz)\b/, 'Games']
+  ];
+  const GAME = [[/\bsnake\b/, 'Snake'], [/\b2048\b/, '2048'], [/\bsudoku\b/, 'Sudoku'], [/\bwordle\b/, 'Wordle'], [/memory match/, 'Memory Match'], [/brick/, 'Brick Breaker'], [/flag/, 'Flag Quiz']];
+  const ASK = /\b(i )?(want|wanna|would like|wish|feel like|lets?|let us|can i|can we|could i|could we|may i|take me|open|go to|start|do|try|play|show me|i will|ill|choose|pick|how about)\b/;
+  const NEG = /\b(dont|do not|not|no|never|hate|stop|cant|cannot)\b/;
+  const FILLER = /^(the|a|some|my|please|pls|ok|okay|yes|yeah|yea|yep|sure|lets|let us|go|open|to|now|again|some more|more)$/;
+  function norm(t) { return String(t || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function detect(msg) {
+    const m = norm(msg); if (!m) return null;
+    const words = m.split(' '); if (words.length > 10) return null;
+    if (/^(what|why|how|who|when|where|is|are|does|do you|did)\b/.test(m) && !/^(how about|do )/.test(m)) return null;
+    if (NEG.test(m)) return null;
+    for (const [tab, re, label] of FEATURES) {
+      const x = re.exec(m); if (!x) continue;
+      const rest = (m.slice(0, x.index) + ' ' + m.slice(x.index + x[0].length)).split(' ').filter(w => w && !FILLER.test(w));
+      const bare = rest.length === 0;                                   // just "draw" or "calm bubbles please"
+      if (bare || ASK.test(m)) {
+        let game = null; if (tab === 'games') for (const [g, n] of GAME) if (g.test(m)) { game = n; break; }
+        return { tab, label: game || label, game };
+      }
+    }
+    return null;
+  }
+  function safe(msg) {
+    try {
+      if (window.AuraLLM && (AuraLLM.isCrisis(msg) || AuraLLM._soft(msg))) return false;
+      if (window.AuraRisk && (AuraRisk.abuse(msg) || AuraRisk.harmOthers(msg))) return false;
+    } catch (e) {}
+    return true;
+  }
+  function open(hit) {
+    switchTab(hit.tab);
+    if (hit.game) setTimeout(() => {
+      const c = [...document.querySelectorAll('#games-container .game-card')].find(k => (k.querySelector('.gn') || {}).textContent === hit.game);
+      if (c) c.click();
+    }, 250);
+  }
+  function tryOpen(msg) {
+    const hit = detect(msg); if (!hit || !safe(msg)) return false;
+    addAuraMessage('Okay. Opening ' + hit.label + '. Press the chat button to come back to me any time.');
+    setTimeout(() => open(hit), 1100);
+    return true;
+  }
+  return { detect, tryOpen };
+})();
+window.AuraNav = AuraNav;
+</script>
 </body>
 </html>
